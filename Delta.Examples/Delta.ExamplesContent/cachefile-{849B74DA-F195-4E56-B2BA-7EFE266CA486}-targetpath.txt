@@ -1,0 +1,29 @@
+Content\Graphics\MainCharacter.xnb
+Content\Graphics\AnimatedTiles\background-4YellowLight-16x16-16Frames.xnb
+Content\Graphics\AnimatedTiles\compLights-32-32-4.xnb
+Content\Graphics\AnimatedTiles\door-32-32-3.xnb
+Content\Graphics\AnimatedTiles\gear-110-12109.xnb
+Content\Graphics\AnimatedTiles\gear-55-61-9.xnb
+Content\Graphics\AnimatedTiles\light-sheet.xnb
+Content\Graphics\AnimatedTiles\piston17x100.xnb
+Content\Graphics\AnimatedTiles\ticker-16x16-8.xnb
+Content\Graphics\AnimatedTiles\wheelBottom-16x16-13.xnb
+Content\Graphics\AnimatedTiles\wheelTop-16x16-13.xnb
+Content\Graphics\AnimatedTiles\yelloRedSequence16x16-16Frames.xnb
+Content\Graphics\AnimatedTiles\yellowLbars-bottom-64x16-30.xnb
+Content\Graphics\AnimatedTiles\yellowLbars-top-64x16-30.xnb
+Content\Graphics\AnimatedTiles\yellowLightGrid-16-32-10.xnb
+Content\Graphics\AmmoBar.xnb
+Content\Graphics\Background.xnb
+Content\Graphics\Foreground.xnb
+Content\Graphics\HealthBar.xnb
+Content\Graphics\Player.xnb
+Content\Graphics\Metroid.xnb
+Content\Graphics\Atom.xnb
+Content\Fonts\debug.xnb
+Content\Maps\Plains\1.xnb
+Content\Graphics\SpriteSheets\Tilesets.xnb
+Content\Audio\audio.xgs
+Content\Audio\Wave Bank.xwb
+Content\Audio\StreamingBank.xwb
+Content\Audio\Sound Bank.xsb
