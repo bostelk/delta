@@ -18,17 +18,6 @@ namespace Delta.Graphics
         [ContentSerializerIgnore]
         public bool IsLooped { get; private set; }
 
-        [ContentSerializerIgnore]
-        public float SecondsLeft
-        {
-            get
-            {
-                if (Animation == null)
-                    return 0;
-                return TotalFrames * Animation.FrameDuration - ImageFrame * Animation.FrameDuration;
-            }
-        }
-
         public AnimatedSpriteEntity()
             : base()
         {

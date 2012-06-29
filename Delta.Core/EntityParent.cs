@@ -88,14 +88,14 @@ namespace Delta
             if (NeedsToSort)
                 Sort();
             for (int x = 0; x < _children.Count; x++)
-                _children[x].Update(gameTime);
+                _children[x].InternalUpdate(gameTime);
             base.EndUpdate(gameTime);
         }
 
         protected internal override void EndDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             for (int x = 0; x < _children.Count; x++)
-                _children[x].Draw(gameTime, spriteBatch);
+                _children[x].InternalDraw(gameTime, spriteBatch);
             base.EndDraw(gameTime, spriteBatch);
         }
 

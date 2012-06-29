@@ -27,17 +27,17 @@ namespace Delta.Tiled
         [ContentSerializer]
         public string Version { get; private set; }
         [ContentSerializer]
-        public int TileWidth { get; private set; } // measured in pixels
+        public int TileWidth { get; private set; }
         [ContentSerializer]
-        public int TileHeight { get; private set; } // measured in pixels
+        public int TileHeight { get; private set; }
         [ContentSerializer]
-        public int Width { get; private set; } // measured in tiles
+        public int Width { get; private set; }
         [ContentSerializer]
-        public int Height { get; private set; } // measured in tiles
+        public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializerIgnore]
-        public Rectangle ViewingArea { get; set; }
+        [ContentSerializer]
+        public string SpriteSheet { get; set; }
 
         public Map()
             : base()
@@ -111,17 +111,16 @@ namespace Delta.Tiled
             foreach (var asset in G._contentReferences.Keys)
             {
                 SpriteSheet spriteSheet = G._contentReferences[asset] as SpriteSheet;
-                if (spriteSheet != null)
+                if (spriteSheet == null)
+                    continue;
+                for (int x = 0; x < _tilesets.Count; x++)
                 {
-                    for (int x = 0; x < _tilesets.Count; x++)
+                    string assetName = Path.GetFileName(_tilesets[x].ExternalImagePath);
+                    if (spriteSheet._imageFrameReferences.ContainsKey(assetName))
                     {
-                        string assetName = Path.GetFileName(_tilesets[x].ExternalImagePath);
-                        if (spriteSheet._imageFrameReferences.ContainsKey(assetName))
-                        {
-                            //found it!
-                            _spriteSheet = spriteSheet;
-                            return;
-                        }
+                        //found it!
+                        _spriteSheet = spriteSheet;
+                        return;
                     }
                 }
             }

@@ -74,12 +74,12 @@ namespace Delta
 
         void Microsoft.Xna.Framework.IUpdateable.Update(GameTime gameTime)
         {
-            Update(gameTime);
+            InternalUpdate(gameTime);
         }
 
         void IDrawable.Draw(GameTime gameTime)
         {
-            Draw(gameTime, G.SpriteBatch);
+            InternalDraw(gameTime, G.SpriteBatch);
         }
 
         protected internal override void BeginUpdate(GameTime gameTime)

@@ -45,18 +45,18 @@ namespace Delta.Examples
         {
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
             _map = Content.Load<Map>(@"Maps\Plains\1");
-            World.Add(_map);
-            World.Camera.Offset = G.ScreenCenter;
+            G.World.Add(_map);
+            G.World.Camera.Offset = G.ScreenCenter;
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            World.Camera.MoveToImmediate(World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
+            G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
             if (G.Input.Keyboard.Held(Keys.OemPlus))
-                World.Camera.ZoomByAmount(0.2f);
+                G.World.Camera.ZoomByAmount(0.2f);
             if (G.Input.Keyboard.Held(Keys.OemMinus))
-                World.Camera.ZoomByAmount(-0.2f);
+                G.World.Camera.ZoomByAmount(-0.2f);
 
             if (G.Input.Keyboard.JustPressed(Keys.Up))
                 _selectedLayer = DeltaMath.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);
@@ -81,12 +81,12 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDeviceManager.GraphicsDevice.Clear(ClearColor);
+            G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-            SpriteBatch.Begin();
-            SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 40), Color.White);
-            SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            SpriteBatch.End();
+            G.SpriteBatch.Begin();
+            G.SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 40), Color.White);
+            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            G.SpriteBatch.End();
         }
 
         public string InfoText

@@ -80,28 +80,28 @@ namespace Delta.Examples
             {
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);
             }
-            sprite.Update(gameTime);
+            sprite.InternalUpdate(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDeviceManager.GraphicsDevice.Clear(ClearColor);
-            SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
-            sprite.Draw(gameTime, SpriteBatch);
-            SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
-            SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
-            SpriteBatch.End();
+            G.GraphicsDevice.Clear(ClearColor);
+            G.SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
+            sprite.InternalDraw(gameTime, G.SpriteBatch);
+            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            //SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
+            G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
+            G.SpriteBatch.End();
             base.Draw(gameTime);
         }
 
-        public string InfoText
-        {
-            get
-            {
-                return string.Format("Animation: {0}\nFrame: {1} of {2}\nFrame Duration: {3}", sprite.AnimationName, sprite.AnimationFrame, sprite.TotalFrames, sprite.SecondsLeft);
-            }
-        }
+        //public string InfoText
+        //{
+        //    get
+        //    {
+        //        return string.Format("Animation: {0}\nFrame: {1} of {2}\nFrame Duration: {3}", sprite.AnimationName, sprite.AnimationFrame, sprite.TotalFrames, sprite.SecondsLeft);
+        //    }
+        //}
     }
 }

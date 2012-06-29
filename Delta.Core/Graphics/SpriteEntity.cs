@@ -155,7 +155,7 @@ namespace Delta.Graphics
             return base.CanDraw();
         }
 
-        protected internal override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(SpriteSheet.Texture, Position, SourceRectangle, _color, Rotation, _renderOrigin, _scale, SpriteEffects, 0);
         }

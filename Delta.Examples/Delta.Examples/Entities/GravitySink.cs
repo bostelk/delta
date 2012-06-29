@@ -55,7 +55,7 @@ namespace Delta.Examples.Entities
             }
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach(Particle p in _particles)
                 spriteBatch.Draw(G.PixelTexture, p.Position, Color.White);

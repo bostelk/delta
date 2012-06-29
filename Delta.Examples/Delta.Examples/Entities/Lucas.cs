@@ -163,7 +163,7 @@ namespace Delta.Examples.Entities
             }
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 offset = new Vector2(_sheet.Width / 2, _sheet.Height / 2);
             spriteBatch.Draw(_sheet, Position ,null, Color.White, _rotation + MathHelper.Pi * 0.5f, offset,1, SpriteEffects.None, 0);

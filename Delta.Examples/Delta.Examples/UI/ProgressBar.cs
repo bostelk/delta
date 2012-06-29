@@ -161,7 +161,7 @@ namespace Delta.Examples.Entities
             base.LightUpdate(gameTime);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.DrawRectangle(new Rectangle((int)Position.X + 5, (int)(Position.Y + 2 + (1 - _fillPercent) * 60.0f), 8, (int) (60.0f * _fillPercent)), FillColor, true);
             if (Font != null && DrawPercentage)

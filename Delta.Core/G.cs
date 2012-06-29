@@ -15,14 +15,13 @@ using Delta.Physics;
 
 namespace Delta
 {
-    public abstract class G : Microsoft.Xna.Framework.Game
+    public sealed class G
     {
-        bool _isInitialized = false;
         internal static Dictionary<string, object> _contentReferences = new Dictionary<string, object>();
 
-        public static G Instance { get; private set; }
-        public new static GraphicsDevice GraphicsDevice { get; set; }
-        public new static DeltaContentManager Content { get; private set; }
+        public static DeltaGame Instance { get; private set; }
+        public static GraphicsDevice GraphicsDevice { get; private set; }
+        public static DeltaContentManager Content { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static PrimitiveBatch PrimitiveBatch { get; private set; }
         public static InputManager Input { get; private set; }
@@ -46,76 +45,36 @@ namespace Delta
             return default(T);
         }
 
-        ResourceContentManager _embedded;
-
-        public G() : base()
+        internal static void Setup(DeltaGame game, Rectangle screenArea)
         {
-#if DEBUG
-            IsMouseVisible = true;
-#endif
-            Instance = this;
-            ScreenArea = new Rectangle(0, 0, 1280, 720); // need this information from the start
-            ScreenCenter = ScreenArea.Center.ToVector2(); // need this information from the start
-            GraphicsDeviceManager = new GraphicsDeviceManager(this);
-            GraphicsDeviceManager.PreferredBackBufferWidth = ScreenArea.Width;
-            GraphicsDeviceManager.PreferredBackBufferHeight = ScreenArea.Height;
-            base.Content.RootDirectory = "Content";
-            _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
+            Instance = game;
+            ScreenArea = screenArea; // need this information from the start
+            ScreenCenter = screenArea.Center.ToVector2(); // need this information from the start
+            GraphicsDeviceManager = new GraphicsDeviceManager(game);
+            GraphicsDeviceManager.PreferredBackBufferWidth = G.ScreenArea.Width;
+            GraphicsDeviceManager.PreferredBackBufferHeight = G.ScreenArea.Height;
             Random = new Random();
             World = new World();
             UI = new UI();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
             Physics = new DeltaPhysics();
-            G.Content = new Delta.Content.DeltaContentManager(base.Content.ServiceProvider, base.Content.RootDirectory);
+            Content = new Delta.Content.DeltaContentManager(game.Content.ServiceProvider, game.Content.RootDirectory);
         }
 
-        protected override void LoadContent()
+        internal static void LoadContent(DeltaGame game, ResourceContentManager resources)
         {
-            GraphicsDevice = base.GraphicsDevice;
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            GraphicsDevice = game.GraphicsDevice;
+            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
-            PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+            PixelTexture = new Texture2D(game.GraphicsDevice, 1, 1);
             PixelTexture.SetData<Color>(new Color[] { Color.White });
-            Font = _embedded.Load<SpriteFont>("TinyFont");
-            BlendEffect = new BlendEffect(_embedded.Load<Effect>("BlendEffect"));
-            SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
+            Font = resources.Load<SpriteFont>("TinyFont");
+            BlendEffect = new BlendEffect(resources.Load<Effect>("BlendEffect"));
+            SimpleEffect = new SimpleEffect(resources.Load<Effect>("SimpleEffect"));
             ScreenArea = GraphicsDevice.Viewport.Bounds;
             ScreenCenter = ScreenArea.Center.ToVector2();
-            base.LoadContent();
-            GC.Collect(); // force a collection after content is loaded.
-            ResetElapsedTime(); // avoid the update loop trying to play catch-up
         }
-
-        void InternalInitialize()
-        {
-            _isInitialized = true;
-            LateInitialize();
-        }
-
-        protected virtual void LateInitialize()
-        {
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            // HANLDE WITH CARE. LaterInitializes need a preprare audio engine!!
-            SimpleEffect.Time = (float)gameTime.TotalGameTime.TotalMilliseconds;
-            Input.Update(gameTime);
-            Audio.Update(gameTime);
-            Physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
-            if (!_isInitialized) 
-                InternalInitialize();
-            World.Update(gameTime);
-            UI.Update(gameTime);
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-            World.Draw(gameTime, SpriteBatch);
-            UI.Draw(gameTime, SpriteBatch);
-        }
+       
     }
 }

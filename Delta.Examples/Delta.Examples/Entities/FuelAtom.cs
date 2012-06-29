@@ -36,7 +36,7 @@ namespace Delta.Examples.Entities
             base.LightUpdate(gameTime);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.End();
 
@@ -47,7 +47,7 @@ namespace Delta.Examples.Entities
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, World.Instance.Camera.View);
-            base.InternalDraw(gameTime, spriteBatch);
+            base.Draw(gameTime, spriteBatch);
         }
 
     }

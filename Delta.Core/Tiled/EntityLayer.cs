@@ -28,32 +28,7 @@ namespace Delta.Tiled
 
             foreach (XmlNode objectNode in node.SelectNodes("object"))
             {
-                object mapEntity = null;
-                string objectName = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
-                Vector2 position = new Vector2(
-                    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture), 
-                    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
-                    );
-                Vector2 size = new Vector2(
-                    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
-                    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
-                    );
-                List<Vector2> polyVertices = new List<Vector2>();
-                XmlNode polyNode = objectNode["polygon"];
-                if (polyNode == null)
-                    polyNode = objectNode["polyline"];
-                if (polyNode != null)
-                {
-                    foreach (string point in polyNode.Attributes["points"].Value.ToString().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        string[] split = point.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                        if (split.Length == 2)
-                            polyVertices.Add(position + new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture)));
-                        else
-                            throw new Exception(string.Format("The poly point'{0}' is not the format 'x,y'. Map: {1}", point, fileName));
-                    }
-                }
-
+                IEntity mapEntity = null;
                 if (objectNode.Attributes["type"] != null)
                 {
                     string typeName = objectNode.Attributes["type"].Value;
@@ -61,19 +36,46 @@ namespace Delta.Tiled
                     {
                         Type type = assembly.GetType(typeName, false, true);
                         if (type != null)
-                            mapEntity = Activator.CreateInstance(type);
+                            mapEntity = Activator.CreateInstance(type) as IEntity;
                     }
-                    if (mapEntity == null)
-                        throw new Exception(String.Format("Could not bind the Tiled object '{0}' to the map. Could not find the type '{1}'.", objectName, typeName));
                 }
                 else
+
+                if (mapEntity == null)
                     continue;
 
-                IEntity entity = mapEntity as IEntity;
-                if (entity != null)
-                {
-                    entity.ID = objectName;
-                    entity.Position = position;
+                mapEntity.ID = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
+                mapEntity.Position = new Vector2(
+                    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture), 
+                    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
+                    );
+                 
+                mapEntity.Size = new Vector2(
+                    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
+                    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
+                    );
+
+                //List<Vector2> polyVertices = new List<Vector2>();
+                //XmlNode polyNode = objectNode["polygon"];
+                //if (polyNode == null)
+                //    polyNode = objectNode["polyline"];
+                //if (polyNode != null)
+                //{
+                //    foreach (string point in polyNode.Attributes["points"].Value.ToString().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries))
+                //    {
+                //        string[] split = point.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                //        if (split.Length == 2)
+                //            polyVertices.Add(position + new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture)));
+                //        else
+                //            throw new Exception(string.Format("The poly point'{0}' is not the format 'x,y'. Map: {1}", point, fileName));
+                //    }
+                //}
+
+                //IEntity entity = mapEntity as IEntity;
+                //if (entity != null)
+                //{
+                //    entity.ID = objectName;
+                //    entity.Position = position;
 
                     
 
@@ -107,8 +109,8 @@ namespace Delta.Tiled
                     //}
 
                     mapEntity.ImportXmlProperties(objectNode["properties"]);
-                    Add(entity);
-                }
+                    Add(mapEntity);
+                //}
             }
         }
 #endif

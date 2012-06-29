@@ -141,11 +141,11 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDeviceManager.GraphicsDevice.Clear(ClearColor);
-            SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
-            SpriteBatch.DrawString(G.Font, _controlText, _controlTextPosition, Color.White, TextAlignment.Center);
-            SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
-            SpriteBatch.End();
+            G.GraphicsDevice.Clear(ClearColor);
+            G.SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
+            G.SpriteBatch.DrawString(G.Font, _controlText, _controlTextPosition, Color.White, TextAlignment.Center);
+            G.SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
+            G.SpriteBatch.End();
             base.Draw(gameTime);
         }
 

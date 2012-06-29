@@ -88,12 +88,12 @@ namespace Delta.Examples
             base.LightUpdate(gameTime);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Font = G.Font; // loadcontent isn't called yet; not attached to a world.
             spriteBatch.DrawString(Font, _stringBuilder, Position, Color);
             _frames++;
-            base.InternalDraw(gameTime, spriteBatch);
+            base.Draw(gameTime, spriteBatch);
         }
     }
 }

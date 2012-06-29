@@ -37,9 +37,9 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Escape))
                 Exit();
             if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
-                GraphicsDeviceManager.ToggleFullScreen();
+                G.GraphicsDeviceManager.ToggleFullScreen();
 
-            _performanceMetrics.Update(gameTime);
+            _performanceMetrics.InternalUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -57,9 +57,9 @@ namespace Delta.Examples
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch.Begin();
-            _performanceMetrics.Draw(gameTime, SpriteBatch);
-            SpriteBatch.End();
+            G.SpriteBatch.Begin();
+            _performanceMetrics.InternalDraw(gameTime, G.SpriteBatch);
+            G.SpriteBatch.End();
         }
     }
 }

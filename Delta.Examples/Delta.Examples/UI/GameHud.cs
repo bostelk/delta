@@ -79,7 +79,7 @@ namespace Delta.Examples.Entities
             base.LoadContent(content);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.DrawRectangle(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int) (60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(_alpha), true);
             spriteBatch.DrawRectangle(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int) (60.0f * _rightFillPercent)), RightBarColor.SetAlpha(_alpha), true);

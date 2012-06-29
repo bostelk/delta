@@ -31,18 +31,18 @@ namespace Delta.Examples
 
         public GameExample() : base("EntityExample")
         {
-            World.Add(new Image(@"Graphics\Background"), (int)DrawLayers.BackgroundLow);
-            World.Add(new Image(@"Graphics\ForeGround"), (int)DrawLayers.Background);
-            World.Add(new GravitySink(), (int)DrawLayers.Ground);
-            World.Add(new Lucas(), (int)DrawLayers.Ground);
-            World.Add(new MovingSpeaker() { Position = new Vector2(200, 0) }, (int)DrawLayers.Ground);
+            G.World.Add(new Image(@"Graphics\Background"), (int)DrawLayers.BackgroundLow);
+            G.World.Add(new Image(@"Graphics\ForeGround"), (int)DrawLayers.Background);
+           G.World.Add(new GravitySink(), (int)DrawLayers.Ground);
+            G.World.Add(new Lucas(), (int)DrawLayers.Ground);
+            G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0) }, (int)DrawLayers.Ground);
 
             FuelAtom fa = new FuelAtom();
-            World.Add(fa, (int)DrawLayers.Ground);
+            G.World.Add(fa, (int)DrawLayers.Ground);
             Transformer.InWorldThisEntity(fa).TranslateTo(fa.Position + new Vector2(200, 0), 10f).TranslateTo(fa.Position, 10f).Repeat(4);
 
-            UI.Add(new GameHud(), 0);
-            UI.Camera.ZoomImmediate(4.0f);
+            G.UI.Add(new GameHud(), 0);
+            G.UI.Camera.ZoomImmediate(4.0f);
         }
 
         protected override void Initialize()
@@ -53,8 +53,8 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-            World.LoadContent(Content);
-            UI.LoadContent(Content);
+            G.World.LoadContent(Content);
+            G.UI.LoadContent(Content);
             base.LoadContent();
         }
 
@@ -63,7 +63,7 @@ namespace Delta.Examples
         /// </summary>
         protected override void LateInitialize()
         {
-            World.Camera.Offset = new Vector2(1280/2, 720/2); // ScreenCenter isn't calculated until LoadContent.
+            G.World.Camera.Offset = new Vector2(1280/2, 720/2); // ScreenCenter isn't calculated until LoadContent.
 
             G.Audio.PlaySound("SFX_Ambiance_1");
             Entity lucas = Entity.Get("Lucas") as Entity;
@@ -77,7 +77,7 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDeviceManager.GraphicsDevice.Clear(ClearColor);
+            G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
         }
     }

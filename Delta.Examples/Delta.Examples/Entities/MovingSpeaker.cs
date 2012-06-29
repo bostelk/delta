@@ -86,10 +86,10 @@ namespace Delta.Examples.Entities
             base.LightUpdate(gameTime);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, Color.White);
-            base.InternalDraw(gameTime, spriteBatch);
+            base.Draw(gameTime, spriteBatch);
         }
 
     }

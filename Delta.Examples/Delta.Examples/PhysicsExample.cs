@@ -25,16 +25,16 @@ namespace Delta.Examples
         {
             ClearColor = Color.Black;
 
-            World.Add(player1 = new BoxCar());
-            World.Add(player2 = new BoxCar());
+            G.World.Add(player1 = new BoxCar());
+            G.World.Add(player2 = new BoxCar());
             player2.Position = player1.Position + new Vector2(100, 0);
-            World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.Offset = G.ScreenCenter;
         }
 
         protected override void LoadContent()
         {
-            World.LoadContent(Content);
-            UI.LoadContent(Content);
+            G.World.LoadContent(Content);
+            G.UI.LoadContent(Content);
             base.LoadContent();
         }
 
@@ -48,9 +48,9 @@ namespace Delta.Examples
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
-            Matrix view = World.Camera.View;
-            Matrix projection = World.Camera.Projection;
-            Physics.DrawDebug(ref view, ref projection);
+            Matrix view = G.World.Camera.View;
+            Matrix projection = G.World.Camera.Projection;
+            G.Physics.DrawDebug(ref view, ref projection);
             base.Draw(gameTime);
         }
     }

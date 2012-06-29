@@ -54,7 +54,7 @@ namespace Delta.Examples.Entities
             base.LoadContent(content);
         }
 
-        protected override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Matrix projection = G.World.Camera.Projection;
             Matrix view = G.World.Camera.View;

@@ -90,7 +90,7 @@ namespace Delta.Tiled
             }
         }
 
-        protected internal override void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 #if DEBUG
             TilesDrawn = 0;

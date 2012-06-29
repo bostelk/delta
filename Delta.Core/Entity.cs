@@ -58,7 +58,8 @@ namespace Delta
         [ContentSerializerIgnore]
         IEntityParent _parent = null;
         public IEntityParent Parent { get; private set; }
-
+        
+        //allow the parent to be set by the interface
         IEntityParent IEntity.Parent
         {
             get { return _parent; }
@@ -80,8 +81,10 @@ namespace Delta
 
         [ContentSerializer]
         public virtual Vector2 Position { get; set; }
+        [ContentSerializer]
+        public virtual Vector2 Size { get; set; }
 
-        float _order = 0;
+        float _order = 0; //allows entities to be sorted for drawing and updating.
         [ContentSerializer]
         public float Order
         {
@@ -97,7 +100,7 @@ namespace Delta
             }
         }
 
-        string _id = string.Empty;
+        string _id = string.Empty; //identification of the entity, forced to be unique when added to a EntityParent
         [ContentSerializer]
         public string ID
         {
@@ -140,7 +143,7 @@ namespace Delta
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Update(GameTime gameTime)
+        public void InternalUpdate(GameTime gameTime)
         {
             if (!IsInitialized)
                 InternalInitialize();
@@ -160,8 +163,8 @@ namespace Delta
 
         protected virtual bool CanUpdate()
         {
-            if (IsUpdating) return false;
-            return IsEnabled;
+            if (!IsEnabled || IsUpdating) return false;
+            return true;
         }
 
         protected virtual void LightUpdate(GameTime gameTime)
@@ -192,20 +195,20 @@ namespace Delta
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (CanDraw())
             {
                 BeginDraw(gameTime, spriteBatch);
-                InternalDraw(gameTime, spriteBatch);
+                Draw(gameTime, spriteBatch);
                 EndDraw(gameTime, spriteBatch);
             }
         }
 
         protected virtual bool CanDraw()
         {
-            if (!IsInitialized || IsDrawing) return false;
-            return IsVisible;
+            if (!IsVisible || !IsInitialized || IsDrawing) return false;
+            return true;
         }
 
         protected virtual void BeginDraw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -213,7 +216,7 @@ namespace Delta
             IsDrawing = true;
         }
 
-        protected internal virtual void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected internal virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
         }
 
