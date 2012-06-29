@@ -6,162 +6,91 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Delta.Graphics
 { 
 
-    public class SpriteEntity : Entity
+    public class SpriteEntity : TransformableEntity
     {
-        Vector2 _renderPosition = Vector2.Zero;
-        Vector2 _renderOrigin = Vector2.Zero;
-        int _currentImageFrame = -1;
+        internal SpriteSheet _spriteSheet = null;
+        internal Rectangle _sourceRectangle = Rectangle.Empty;
+        float _frameDurationTimer = 0f;
+        Animation _animation = null;
 
-        public float Rotation { get; set; }
-        public Vector2 Size { get; set; }
-        [ContentSerializer(ElementName = "SpriteSheet")]
+        [ContentSerializer(ElementName="Frame")] //for Rob's convience
+        public int AnimationFrame { get; private set; }
+        [ContentSerializer(ElementName = "Paused")] //for Rob's convience
+        public bool AnimationIsPaused { get; set; }
+        [ContentSerializer(ElementName = "Looped")] //for Rob's convience
+        public bool AnimationIsLooped { get; set; }
+        [ContentSerializerIgnore]
+        public bool AnimationIsFinished { get; private set; }
+        [ContentSerializer(ElementName="SpriteSheet")] //for Rob's convience
         public string SpriteSheetName { get; set; }
-        [ContentSerializer(ElementName="Animation")]
+        [ContentSerializer(ElementName="Animation")] //for Rob's convience
         public string AnimationName { get; set; }
         [ContentSerializer]
-        public int ImageFrame { get; set; } 
-        [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
-
-        [ContentSerializerIgnore]
-        protected Animation Animation { get; private set; }
-        [ContentSerializerIgnore]
-        protected internal Rectangle SourceRectangle { get; set; }
-        [ContentSerializerIgnore]
-        public SpriteSheet SpriteSheet { get; set; }
-
-        [ContentSerializerIgnore]
-        public int TotalFrames
-        {
-            get
-            {
-                if (Animation == null)
-                    return 0;
-                return Animation.Frames.Count - 1;
-            }
-        }
-
-        Vector2 _scale = Vector2.One;
-        [ContentSerializer]
-        public Vector2 Scale
-        {
-            get { return _scale; }
-            set
-            {
-                if (_scale != value)
-                {
-                    _scale = value;
-                    UpdateRenderPosition();
-                }
-            }
-        }
-
-        Vector2 _origin = new Vector2(0.5f, 0.5f);
-        [ContentSerializer(Optional = true)]
-        public Vector2 Origin
-        {
-            get { return _origin; }
-            set
-            {
-                if (_origin != value)
-                {
-                    _origin = value;
-                    UpdateRenderPosition();
-                }
-            }
-        }
-
-        Color _color = Color.White;
-        //[ContentSerializer(ElementName = "Tint")]
-        //public Color Color
-        //{
-        //    get { return _color; }
-        //    set
-        //    {
-        //        _color.R = value.R;
-        //        _color.G = value.G;
-        //        _color.B = value.B;
-        //    }
-        //}
-
-        //float _alpha = 1.0f;
-        //[ContentSerializer]
-        //public float Alpha
-        //{
-        //    get { return _alpha; }
-        //    set
-        //    {
-        //        if (_alpha != value)
-        //        {
-        //            _alpha = MathHelper.Clamp(value, 0f, 1f);
-        //            _color.A = (byte)(255f * _alpha);
-        //        }
-        //    }
-        //}
-
+        
         protected override void LightUpdate(GameTime gameTime)
         {
-            UpdateAnimation(gameTime);
-            if (Animation != null)
-                UpdateImageFrame(gameTime);
+            UpdateAnimation();
+            if (_animation != null)
+                UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
         }
 
-        protected internal virtual void UpdateAnimation(GameTime gameTime)
+        protected internal void UpdateAnimation()
         {
-            if (SpriteSheet == null)
+            if (_spriteSheet == null)
             {
-                Animation = null;
+                _animation = null;
                 return;
             }
-            if (Animation == null || Animation.Name != AnimationName)
+            if (_animation == null || _animation.Name != AnimationName)
             {
-                Animation = SpriteSheet.GetAnimation(AnimationName);
-                if (Animation != null)
+                _animation = _spriteSheet.GetAnimation(AnimationName);
+                if (_animation != null)
                     OnAnimationChanged();
             }
         }
 
-        protected internal virtual void UpdateImageFrame(GameTime gameTime)
+        protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
         {
-            if (_currentImageFrame != ImageFrame)
+            if (AnimationIsFinished)
+                return;
+            _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_frameDurationTimer <= 0f)
             {
-                _currentImageFrame = ImageFrame;
-                Rectangle previousSourceRectangle = SourceRectangle;
-                SourceRectangle = SpriteSheet.GetFrameSourceRectangle(Animation.ImageName, ImageFrame);
-                if (SourceRectangle != Rectangle.Empty)
+                _frameDurationTimer = _animation.FrameDuration;
+                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, 0, _animation.Frames.Count - 1);
+                if (!AnimationIsLooped && AnimationFrame >= _animation.Frames.Count - 1)
                 {
-                    if (previousSourceRectangle.Width != SourceRectangle.Width || previousSourceRectangle.Height != SourceRectangle.Height)
-                    {
-                        Size = new Vector2(SourceRectangle.Width, SourceRectangle.Height);
-                        UpdateRenderPosition();
-                    }
+                    AnimationIsFinished = true;
+                    _frameDurationTimer = 0;
+                }
+                Rectangle previousSourceRectangle = _sourceRectangle;
+                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[AnimationFrame]);
+                if (_sourceRectangle != Rectangle.Empty)
+                {
+                    if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
+                        Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
                 }
             }
-        }
-        
-        protected void UpdateRenderPosition()
-        {
-            if (SourceRectangle != Rectangle.Empty)
-                _renderOrigin = Origin * Size;
-            else
-                _renderOrigin = Vector2.Zero;
-            _renderPosition = Position + (_renderOrigin * _scale);
         }
 
         protected override bool CanDraw()
         {
-            if (SpriteSheet == null || SpriteSheet.Texture == null || Animation == null) return false;
+            if (_animation == null || _spriteSheet == null || _spriteSheet.Texture == null) return false;
             return base.CanDraw();
         }
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(SpriteSheet.Texture, Position, SourceRectangle, _color, Rotation, _renderOrigin, _scale, SpriteEffects, 0);
+            spriteBatch.Draw(_spriteSheet.Texture, Position, _sourceRectangle, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects, 0);
         }
 
-        protected virtual void OnAnimationChanged()
+        protected internal virtual void OnAnimationChanged()
         {
+            AnimationFrame = 0;
+            _frameDurationTimer = _animation.FrameDuration;
+            AnimationIsFinished = false;
         }
 
     }

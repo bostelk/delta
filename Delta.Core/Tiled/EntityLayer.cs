@@ -45,15 +45,15 @@ namespace Delta.Tiled
                     continue;
 
                 mapEntity.ID = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
-                mapEntity.Position = new Vector2(
-                    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture), 
-                    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
-                    );
+                //mapEntity.Position = new Vector2(
+                //    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture), 
+                //    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
+                //    );
                  
-                mapEntity.Size = new Vector2(
-                    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
-                    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
-                    );
+                //mapEntity.Size = new Vector2(
+                //    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
+                //    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
+                //    );
 
                 //List<Vector2> polyVertices = new List<Vector2>();
                 //XmlNode polyNode = objectNode["polygon"];

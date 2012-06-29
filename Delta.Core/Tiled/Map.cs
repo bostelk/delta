@@ -36,8 +36,8 @@ namespace Delta.Tiled
         public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializer]
-        public string SpriteSheet { get; set; }
+        [ContentSerializer(ElementName = "SpriteSheet")]
+        public string SpriteSheetName { get; set; }
 
         public Map()
             : base()
@@ -92,39 +92,19 @@ namespace Delta.Tiled
         protected override void LateInitialize()
         {
             base.LateInitialize();
-            FindSpriteSheet();
+            _spriteSheet = G.GetContent<SpriteSheet>(SpriteSheetName);
         }
 
-        public TileLayer GetLayer(string layerName)
+        protected override bool CanDraw()
         {
-            foreach (TileLayer layer in Children)
-            {
-                if (layer.ID == layerName)
-                    return layer;
-            }
-            return null;
+            if (_spriteSheet == null) return false;
+            return base.CanDraw();
         }
 
-        void FindSpriteSheet()
+        protected override bool CanUpdate()
         {
-            // hack... find the sprite sheet for this map!
-            foreach (var asset in G._contentReferences.Keys)
-            {
-                SpriteSheet spriteSheet = G._contentReferences[asset] as SpriteSheet;
-                if (spriteSheet == null)
-                    continue;
-                for (int x = 0; x < _tilesets.Count; x++)
-                {
-                    string assetName = Path.GetFileName(_tilesets[x].ExternalImagePath);
-                    if (spriteSheet._imageFrameReferences.ContainsKey(assetName))
-                    {
-                        //found it!
-                        _spriteSheet = spriteSheet;
-                        return;
-                    }
-                }
-            }
-            throw new Exception("Could not find a sprite sheet for this map yo. Did you pre-load the spritesheet?");
+            if (_spriteSheet == null) return false;
+            return base.CanUpdate();
         }
 
     }

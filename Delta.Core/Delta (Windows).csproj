@@ -104,7 +104,6 @@
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\DeltaMath.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
-    <Compile Include="Graphics\AnimatedSpriteEntity.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Effects\BlendEffect.cs" />
     <Compile Include="Graphics\Effects\EffectHelper.cs" />
@@ -115,7 +114,7 @@
     <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheetReader.cs" />
-    <Compile Include="Movement\ITransformable.cs" />
+    <Compile Include="ITransformableEntity.cs" />
     <Compile Include="Movement\StallTransform.cs" />
     <Compile Include="Movement\FadeTransform.cs" />
     <Compile Include="Movement\ITransform.cs" />
@@ -141,6 +140,7 @@
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
     <Compile Include="Tiled\TmxImporterExtensions.cs" />
+    <Compile Include="TransformableEntity.cs" />
     <Compile Include="TransientEntity.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Entity.cs" />

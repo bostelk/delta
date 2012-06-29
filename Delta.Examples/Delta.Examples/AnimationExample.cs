@@ -25,7 +25,7 @@ namespace Delta.Examples
         const string CONTROLS = "[f1] export sheet.[up] next sprite.[down] previous sprite.[left] previous animation.[right] next animation.\n[space] play/pause.";
 
         SpriteSheet mainSheet;
-        AnimatedSpriteEntity sprite = new AnimatedSpriteEntity();
+        SpriteEntity sprite = new SpriteEntity();
 
         ReadOnlyCollection<Animation> _supportedAnimations;
         int _animationIndex = 0;
@@ -45,7 +45,7 @@ namespace Delta.Examples
         {
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
             _supportedAnimations = mainSheet.Animations;
-            sprite.SpriteSheet = mainSheet;
+            sprite.SpriteSheetName = "mainSpriteSheet";
             sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             sprite.Position = G.ScreenCenter;
             base.LoadContent();
@@ -69,13 +69,13 @@ namespace Delta.Examples
                 _animationIndex = DeltaMath.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Space))
-            {
-                if (!sprite.IsPaused)
-                    sprite.Pause();
-                else
-                    sprite.Resume();
-            }
+            //if (G.Input.Keyboard.JustPressed(Keys.Space))
+            //{
+            //    if (!sprite.IsPaused)
+            //        sprite.Pause();
+            //    else
+            //        sprite.Resume();
+            //}
             if (G.Input.Keyboard.JustPressed(Keys.F1))
             {
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);

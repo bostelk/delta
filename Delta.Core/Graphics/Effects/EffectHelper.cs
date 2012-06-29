@@ -14,7 +14,7 @@ namespace Delta.Graphics.Effects
         public static Entity SpriteEffect(string sheet, string animation, float duration)
         {
             SpriteEntity s = new SpriteEntity();
-            s.SpriteSheet = G.Content.Load<SpriteSheet>("mainSpriteSheet");
+            //s.SpriteSheet = G.Content.Load<SpriteSheet>("mainSpriteSheet");
             s.AnimationName = animation;
             return s;
         }

@@ -12,8 +12,6 @@ namespace Delta
         bool IsVisible { get; set; }
         IEntityParent Parent { get; set; }
         float Order { get; set; }
-        Vector2 Position { get; set; }
-        Vector2 Size { get; set; }
 
         void LoadContent(ContentManager content);
 
