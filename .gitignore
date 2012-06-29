@@ -32,6 +32,8 @@ Icon?
 ipch/
 obj/
 [Bb]in
+[Ee]xamplebin
+[Dd]ebug*/
 [Rr]elease*/
 
 # Tooling #
