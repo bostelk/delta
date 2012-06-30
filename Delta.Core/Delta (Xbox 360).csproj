@@ -76,15 +76,35 @@
     <Compile Include="Movement\ScaleTransform.cs" />
     <Compile Include="Movement\Transformer.cs" />
     <Compile Include="Physics\Callbacks.cs" />
-    <Compile Include="Physics\DeltaPhysics.cs" />
-    <Compile Include="Physics\Geometry\Box.cs" />
-    <Compile Include="Physics\Geometry\CollisionGeometry.cs" />
-    <Compile Include="Physics\Geometry\Circle.cs" />
-    <Compile Include="Physics\Geometry\Geometry.cs" />
-    <Compile Include="Physics\Geometry\Polygon.cs" />
-    <Compile Include="Physics\Geometry\IGeometry.cs" />
-    <Compile Include="Physics\PhysicsEngine.cs" />
-    <Compile Include="Physics\SAT.cs" />
+    <Compile Include="Physics\DeltaPhysics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\AABB.cs" />
+    <Compile Include="Physics\Geometry\Box.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\Circle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\CollisionGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\Geometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\IGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Geometry\OBB.cs" />
+    <Compile Include="Physics\Geometry\Polygon.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\PhysicsEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\SAT.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />

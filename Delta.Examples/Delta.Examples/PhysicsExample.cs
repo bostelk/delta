@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-//using Delta.Scripting;
 using Delta.Examples.Entities;
 using Delta.Physics;
+using Delta.Physics.Geometry;
 
 namespace Delta.Examples
 {
@@ -19,14 +19,14 @@ namespace Delta.Examples
     /// </summary>
     public class PhysicsExample : ExampleBase
     {
-        BoxCar player1, player2;
+        const string CONTROLS = "[wasd] movement 1. [tab] change body 1. [arrows] movement 2.[right ctrl] change body 2.";
+        Entity player1, player2;
 
         public PhysicsExample() : base("PhysicsExample")
         {
             ClearColor = Color.Black;
-
-            G.World.Add(player1 = new BoxCar());
-            G.World.Add(player2 = new BoxCar());
+            G.World.Add(player1 = new PhysicsCar());
+            G.World.Add(player2 = new PhysicsCar());
             player2.Position = player1.Position + new Vector2(100, 0);
             G.World.Camera.Offset = G.ScreenCenter;
         }
@@ -40,8 +40,13 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            player1.Input = G.Input.WadsDirection;
-            player2.Input = G.Input.ArrowDirection;
+            if (G.Input.Keyboard.JustPressed(Keys.Tab))
+                (player1 as PhysicsCar).SwitchBody();
+            if (G.Input.Keyboard.JustPressed(Keys.RightControl))
+                (player2 as PhysicsCar).SwitchBody();
+                
+            (player1 as PhysicsCar).Input = G.Input.WadsDirection;
+            (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
             base.Update(gameTime);
         }
 
@@ -50,7 +55,13 @@ namespace Delta.Examples
             GraphicsDevice.Clear(ClearColor);
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
+            G.PrimitiveBatch.Begin(ref projection, ref view);
+            G.PrimitiveBatch.DrawCircle(Vector2.Zero, 100, Color.Red);
+            G.PrimitiveBatch.End();
             G.Physics.DrawDebug(ref view, ref projection);
+            G.SpriteBatch.Begin();
+            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            G.SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

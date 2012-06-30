@@ -124,11 +124,13 @@
     <Compile Include="Movement\Transformer.cs" />
     <Compile Include="Physics\Callbacks.cs" />
     <Compile Include="Physics\DeltaPhysics.cs" />
+    <Compile Include="Physics\Geometry\AABB.cs" />
     <Compile Include="Physics\Geometry\Box.cs" />
     <Compile Include="Physics\Geometry\Circle.cs" />
     <Compile Include="Physics\Geometry\CollisionGeometry.cs" />
     <Compile Include="Physics\Geometry\Geometry.cs" />
     <Compile Include="Physics\Geometry\IGeometry.cs" />
+    <Compile Include="Physics\Geometry\OBB.cs" />
     <Compile Include="Physics\Geometry\Polygon.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
     <Compile Include="Physics\SAT.cs" />

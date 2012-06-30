@@ -52,5 +52,9 @@ namespace Delta.Physics.Geometry
                 position.Y = (float)Math.Sin(theta) * radius;
             }
         }
+
+        public void ProjectOntoAxis(Vector2 axis, out Vector2 projection) {
+            projection = Radius * axis;
+        }
     }
 }

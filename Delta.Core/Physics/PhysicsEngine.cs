@@ -15,6 +15,8 @@ namespace Delta.Physics
 
         public abstract void AddCollisionPolygon(Entity entity, Polygon geometry);
 
+        public abstract void RemoveCollisionPolygon(Polygon geometry);
+
         public abstract void DrawDebug(ref Matrix view, ref Matrix projection);
     }
 }

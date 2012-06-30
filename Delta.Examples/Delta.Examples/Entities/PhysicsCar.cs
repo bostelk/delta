@@ -14,12 +14,12 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class BoxCar : Entity
+    public class PhysicsCar : Entity
     {
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;
 
-        public Box OBB { get; private set; }
+        public Polygon Body { get; private set; }
 
         public Vector2 Input { get; set; }
 
@@ -29,11 +29,12 @@ namespace Delta.Examples.Entities
         {
             get
             {
-                return OBB.Position;
+                return Body.Position;
             }
             set
             {
-                OBB.Position = value;
+                base.Position = value;
+                Body.Position = value;
             }
         }
 
@@ -47,13 +48,30 @@ namespace Delta.Examples.Entities
             set
             {
                 _rotation = value;
-                OBB.Rotation = value;
+                Body.Rotation = value;
             }
         }
 
-        public BoxCar()
+        public PhysicsCar()
         {
-            G.Physics.AddCollisionPolygon(this, OBB = new Box(50, 100));
+            G.Physics.AddCollisionPolygon(this, Body = new OBB(50, 100));
+        }
+
+        public void SwitchBody()
+        {
+            if (Body is Circle)
+            {
+                G.Physics.RemoveCollisionPolygon(Body);
+                G.Physics.AddCollisionPolygon(this, Body = new OBB(50, 100));
+            }
+            else if (Body is OBB)
+            {
+                G.Physics.RemoveCollisionPolygon(Body);
+                G.Physics.AddCollisionPolygon(this, Body = new Circle(50));
+            }
+
+            Body.Position = base.Position;
+            Body.Rotation = Rotation;
         }
 
         protected override void LightUpdate(GameTime gameTime)

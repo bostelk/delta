@@ -29,10 +29,10 @@ namespace Delta.Physics.Geometry
             {
                 if (_normals == null || _normalsDirty)
                 {
-                    _normals = new Vector2[_vertices.Length];
-                    for (int i = 0; i < _vertices.Length; i++)
+                    _normals = new Vector2[Vertices.Length];
+                    for (int i = 0; i < Vertices.Length; i++)
                     {
-                        _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                        _normals[i] = Vector2Extensions.PerpendicularLeft(Vertices[(i + 1) % Vertices.Length] - Vertices[i]);
                         _normals[i].Normalize();
                     }
                 }
@@ -40,6 +40,9 @@ namespace Delta.Physics.Geometry
             }
         }
 
+        /// <summary>
+        /// Vertices relative to the Polygon position.
+        /// </summary>
         public Vector2[] LocalVertices
         {
             get
@@ -61,7 +64,10 @@ namespace Delta.Physics.Geometry
             }
         }
 
-        public Vector2[] Verticies
+        /// <summary>
+        /// Absolute position of the Vertices.
+        /// </summary>
+        public Vector2[] Vertices
         {
             get
             {
