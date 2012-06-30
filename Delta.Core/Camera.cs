@@ -170,7 +170,8 @@ namespace Delta
         {
             get
             {
-                return Matrix.CreateOrthographic(G.ScreenArea.Width, G.ScreenArea.Height, 0, 0);
+                //return Matrix.CreateOrthographic(G.ScreenArea.Width, G.ScreenArea.Height, 0, 0);
+                return Matrix.CreateOrthographicOffCenter(0, G.ScreenArea.Width, G.ScreenArea.Height, 0, 0, 1);
             }
         }
 

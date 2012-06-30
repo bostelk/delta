@@ -55,9 +55,6 @@ namespace Delta.Examples
             GraphicsDevice.Clear(ClearColor);
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
-            G.PrimitiveBatch.Begin(ref projection, ref view);
-            G.PrimitiveBatch.DrawCircle(Vector2.Zero, 100, Color.Red);
-            G.PrimitiveBatch.End();
             G.Physics.DrawDebug(ref view, ref projection);
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
