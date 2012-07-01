@@ -12,32 +12,41 @@ namespace Delta.Physics
 {
     public class DeltaPhysics : PhysicsEngine
     {
+#if !XBOX
         public HashSet<Polygon> _polygons;
         public HashSet<Polygon> _polygonsToAdd;
         public HashSet<Polygon> _polygonsToRemove;
+#endif
 
         public Stack<CollisionResult> _results;
 
         public DeltaPhysics()
         {
+#if !XBOX
             _polygons = new HashSet<Polygon>();
             _polygonsToAdd = new HashSet<Polygon>();
             _polygonsToRemove = new HashSet<Polygon>();
             _results = new Stack<CollisionResult>(10);
+#endif
         }
 
         public override void AddCollisionPolygon(Entity entity, Polygon geometry)
         {
+#if !XBOX
             _polygonsToAdd.Add(geometry);
+#endif
         }
 
         public override void RemoveCollisionPolygon(Polygon geometry)
         {
+#if !XBOX
             _polygonsToRemove.Add(geometry);
+#endif
         }
        
         public override void Simulate(float seconds)
         {
+#if !XBOX
             foreach (Polygon poly in _polygonsToAdd)
             {
                 _polygons.Add(poly);
@@ -99,10 +108,12 @@ namespace Delta.Physics
                     }
                 }
             }
+#endif
         }
 
         public override void DrawDebug(ref Matrix view, ref Matrix projection)
         {
+#if !XBOX
             G.PrimitiveBatch.Begin(ref projection, ref view);
             foreach (Polygon poly in _polygons)
             {
@@ -126,6 +137,7 @@ namespace Delta.Physics
                 G.PrimitiveBatch.DrawSegment(result.Us.Position, result.Us.Position + 10 * result.CollisionResponse, Color.Blue);
             }
             G.PrimitiveBatch.End();
+#endif
         }
 
     }

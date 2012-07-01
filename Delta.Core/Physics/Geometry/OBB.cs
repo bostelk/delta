@@ -70,11 +70,13 @@ namespace Delta.Physics.Geometry
             };
         }
 
+#if !XBOX
         public void ProjectOntoAxis(Vector2 axisNormal, out Vector2 projection)
         {
             projection.X = Vector2.Dot(HalfWidthX, axisNormal);
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);
         }
+#endif
 
         public void ProjectOntoAxis(Vector2 axisNormal, out float min, out float max) {
             min = Vector2.Dot(Vertices[0], axisNormal);
