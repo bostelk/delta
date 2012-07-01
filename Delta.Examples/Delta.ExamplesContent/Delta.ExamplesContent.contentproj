@@ -274,12 +274,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Graphics\SpriteSheets\Tilesets.xml">
+    <Compile Include="Graphics\SpriteSheets\Tilesets.xml">
       <SubType>Designer</SubType>
       <Name>Tilesets</Name>
       <Importer>XmlImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
-    </None>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

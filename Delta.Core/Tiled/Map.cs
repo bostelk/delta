@@ -89,10 +89,11 @@ namespace Delta.Tiled
         }
 #endif
 
-        protected override void LateInitialize()
+        public override void LoadContent()
         {
-            base.LateInitialize();
-            _spriteSheet = G.Content.Load<SpriteSheet>(SpriteSheetName);
+            base.LoadContent();
+            if (!string.IsNullOrEmpty(SpriteSheetName))
+                _spriteSheet = G.Content.Load<SpriteSheet>(SpriteSheetName);
         }
 
         protected override bool CanDraw()
