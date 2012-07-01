@@ -144,10 +144,10 @@ namespace Delta.Examples.Entities
             FillColor = Color.YellowGreen;
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
             Position = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.02f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
-            base.LoadContent(content);
+            base.LoadContent();
         }
 
         protected override void LightUpdate(GameTime gameTime)

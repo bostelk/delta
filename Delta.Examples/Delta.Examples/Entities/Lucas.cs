@@ -42,10 +42,10 @@ namespace Delta.Examples.Entities
             ID = "Lucas";
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
-            _sheet = content.Load<Texture2D>(@"Graphics\Player");
-            base.LoadContent(content);
+            _sheet = G.Content.Load<Texture2D>(@"Graphics\Player");
+            base.LoadContent();
         }
 
         protected override void LateInitialize()

@@ -70,13 +70,13 @@ namespace Delta.Examples.Entities
             LeftBarColor = new Color(208, 48, 208).SetAlpha(0.95f);
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
-            _healthBar = content.Load<Texture2D>(@"Graphics\HealthBar");
-            _ammoBar = content.Load<Texture2D>(@"Graphics\AmmoBar");
+            _healthBar = G.Content.Load<Texture2D>(@"Graphics\HealthBar");
+            _ammoBar = G.Content.Load<Texture2D>(@"Graphics\AmmoBar");
             _leftPosition = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.02f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
             _rightPosition = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.93f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
-            base.LoadContent(content);
+            base.LoadContent();
         }
 
         protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

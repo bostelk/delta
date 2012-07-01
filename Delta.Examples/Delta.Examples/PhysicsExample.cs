@@ -31,12 +31,12 @@ namespace Delta.Examples
             G.World.Camera.Offset = G.ScreenCenter;
         }
 
-        protected override void LoadContent()
-        {
-            G.World.LoadContent(Content);
-            G.UI.LoadContent(Content);
-            base.LoadContent();
-        }
+        //protected override void LoadContent()
+        //{
+        //    G.World.LoadContent(Content);
+        //    G.UI.LoadContent(Content);
+        //    base.LoadContent();
+        //}
 
         protected override void Update(GameTime gameTime)
         {

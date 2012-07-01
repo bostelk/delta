@@ -76,11 +76,10 @@ namespace Delta
             return returnValue;
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
-            base.LoadContent(content);
             for (int x = 0; x < _children.Count; x++)
-                _children[x].LoadContent(content);
+                _children[x].LoadContent();
         }
 
         protected internal override void EndUpdate(GameTime gameTime)

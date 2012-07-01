@@ -22,11 +22,11 @@ namespace Delta.Examples.Entities
             _filepath = filepath;
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
-            _texture = content.Load<Texture2D>(_filepath);
+            _texture = G.Content.Load<Texture2D>(_filepath);
 
-            base.LoadContent(content);
+            base.LoadContent();
         }
 
         protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -19,11 +19,11 @@ namespace Delta.Examples.Entities
             ID = "FuelAtom";
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
             // note: pixeltexture is null here, wtf
-            _texture = content.Load<Texture2D>(@"Graphics\Atom");
-            base.LoadContent(content);
+            _texture = G.Content.Load<Texture2D>(@"Graphics\Atom");
+            base.LoadContent();
         }
 
         protected override void LateInitialize()

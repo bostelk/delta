@@ -45,7 +45,7 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-            _performanceMetrics.LoadContent(Content);
+            _performanceMetrics.LoadContent();
             base.LoadContent();
         }
 

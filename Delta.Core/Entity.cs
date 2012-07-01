@@ -66,6 +66,7 @@ namespace Delta
             set { _parent = value; }
         }
 
+        protected bool ContentIsLoaded { get; private set; }
         [ContentSerializerIgnore]
         protected bool IsInitialized { get; private set; }
         [ContentSerializer]
@@ -138,7 +139,16 @@ namespace Delta
         {
         }
 
-        public virtual void LoadContent(ContentManager content) 
+        internal void InternalLoadContent()
+        {
+            if (!ContentIsLoaded)
+            {
+                ContentIsLoaded = true;
+                LoadContent();
+            }
+        }
+
+        public virtual void LoadContent() 
         {
         }
 
@@ -147,6 +157,8 @@ namespace Delta
         {
             if (!IsInitialized)
                 InternalInitialize();
+            if (!ContentIsLoaded)
+                InternalLoadContent();
             if (CanUpdate())
             {
                 BeginUpdate(gameTime);
