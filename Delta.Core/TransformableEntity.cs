@@ -9,7 +9,7 @@ namespace Delta
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return _position; }
             set 

@@ -20,7 +20,7 @@ namespace Delta
         /// <param name="interval">In degrees.</param>
         /// <param name="spawn">The Entity Constructor.</param>
         /// <returns>A List of positioned Entities.</returns>
-        public static List<T> InACircle<T>(Vector2 origin, float radius, float interval, Func<T> spawn) where T:Entity
+        public static List<T> InACircle<T>(Vector2 origin, float radius, float interval, Func<T> spawn) where T : TransformableEntity
         {
             radius = MathHelper.Max(0, radius);
             interval = MathHelper.Clamp(interval, 0, 360);
@@ -30,7 +30,7 @@ namespace Delta
                 Vector2 spawnPosition = Vector2.Zero;
                 spawnPosition.X = (float) Math.Cos(MathHelper.ToRadians(angle)) * radius;
                 spawnPosition.Y = (float) Math.Sin(MathHelper.ToRadians(angle)) * radius;
-                Entity entity = spawn();
+                TransformableEntity entity = spawn();
                 entity.Position = spawnPosition;
                 result.Add(entity as T);
             }
@@ -46,7 +46,7 @@ namespace Delta
         /// <param name="interval">The seperating distance between each Entity.</param>
         /// <param name="spawn">The Entity Constructor.</param>
         /// <returns>A list of positioned Entities</returns>
-        public static List<T> OnALine<T>(Vector2 start, Vector2 end, float interval, Func<T> spawn) where T:Entity
+        public static List<T> OnALine<T>(Vector2 start, Vector2 end, float interval, Func<T> spawn) where T : TransformableEntity
         {
             float distance = Vector2.Distance(start, end);
             distance = MathHelper.Clamp(interval, 0, distance);
@@ -55,7 +55,7 @@ namespace Delta
             direction.Normalize();
             for (float i = 0; i < distance; i += interval)
             {
-                Entity entity = spawn();
+                TransformableEntity entity = spawn();
                 entity.Position = start + i * direction;
                 result.Add(entity as T); 
             }
@@ -71,10 +71,10 @@ namespace Delta
         /// <param name="maxDistance">The maximum distance from the origin.</param>
         /// <param name="spawn">The Entity Constructor.</param>
         /// <returns>A list of positioned Entities.</returns>
-        public static List<T> Randomly<T>(Vector2 origin, float minDistance, float maxDistance, Func<T> spawn) where T:Entity
+        public static List<T> Randomly<T>(Vector2 origin, float minDistance, float maxDistance, Func<T> spawn) where T : TransformableEntity
         {
             List<T> result = new List<T>();
-            Entity entity = spawn();
+            TransformableEntity entity = spawn();
             entity.Position = origin + new Vector2(G.Random.Between(minDistance, maxDistance), G.Random.Between(minDistance, maxDistance));
             result.Add(entity as T);
             return result;
@@ -91,7 +91,7 @@ namespace Delta
         /// <param name="columnSpace">The space between columns</param>
         /// <param name="spawn">The Entity Constructor.</param>
         /// <returns>A list of positioned entities.</returns>
-        public static List<T> OnAGrid<T>(Vector2 origin, int rows, int columns, float rowSpace, float columnSpace, Func<T> spawn) where T:Entity
+        public static List<T> OnAGrid<T>(Vector2 origin, int rows, int columns, float rowSpace, float columnSpace, Func<T> spawn) where T : TransformableEntity
         {
             float height = rows * rowSpace; float width = columns * columnSpace;
             List<T> result = new List<T>();
@@ -100,7 +100,7 @@ namespace Delta
                 for (float x = origin.X - width / 2; x < origin.X + width / 2; x += columnSpace)
                 {
                     Vector2 spawnPosition = new Vector2(x, y);
-                    Entity entity = spawn();
+                    TransformableEntity entity = spawn();
                     entity.Position = spawnPosition;
                     result.Add(entity as T); 
                 }

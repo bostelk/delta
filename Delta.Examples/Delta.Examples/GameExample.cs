@@ -66,7 +66,7 @@ namespace Delta.Examples
             G.World.Camera.Offset = new Vector2(1280/2, 720/2); // ScreenCenter isn't calculated until LoadContent.
 
             G.Audio.PlaySound("SFX_Ambiance_1");
-            Entity lucas = Entity.Get("Lucas") as Entity;
+            TransformableEntity lucas = Entity.Get("Lucas") as TransformableEntity;
             MovingSpeaker speaker = Entity.Get("Speaker") as MovingSpeaker;
             speaker.Orbit(Vector2.Zero);
             speaker.OrbitLength = 100;

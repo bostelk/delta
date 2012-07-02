@@ -80,11 +80,6 @@ namespace Delta
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
 
-        [ContentSerializer]
-        public virtual Vector2 Position { get; set; }
-        [ContentSerializer]
-        public virtual Vector2 Size { get; set; }
-
         float _order = 0; //allows entities to be sorted for drawing and updating.
         [ContentSerializer]
         public float Order

@@ -12,8 +12,6 @@ namespace Delta
     /// </summary>
     public class Camera
     {
-        internal RasterizerState _rasterizerState = new RasterizerState();
-        internal Rectangle _originalScissor = Rectangle.Empty;
         //float _rotationRate = 0;
         //float _goalRotation;
         float _goalZoom;
@@ -40,45 +38,45 @@ namespace Delta
         Color _flashColor = Color.White;
         bool _isDirty; // flag to recompule the view matrix.
 
-        float _zoom;
-        public float Zoom
+        float _scale;
+        public float Scale
         {
-            get
-            {
-                return _zoom;
-            }
+            get { return _scale;}
             private set
             {
-                _zoom = value;
-                _isDirty = true;
+                if (_scale != value)
+                {
+                    _scale = value;
+                    _isDirty = true;
+                }
             }
         }
 
         float _rotation;
         public float Rotation
         {
-            get
-            {
-                return _rotation;
-            }
+            get { return _rotation; }
             set
             {
-                _rotation = value;
-                _isDirty = true;
+                if (_rotation != value)
+                {
+                    _rotation = value;
+                    _isDirty = true;
+                }
             }
         }
 
         Vector2 _position;
         public Vector2 Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
             set
             {
-                _position = (PixelFix) ? DeltaMath.SimpleRound(value) : value; 
-                _isDirty = true;
+                if (_position != value)
+                {
+                    _position = (PixelFix) ? DeltaMath.SimpleRound(value) : value;
+                    _isDirty = true;
+                }
             }
         }
 
@@ -86,13 +84,14 @@ namespace Delta
         public Vector2 Offset
         {
             get
-            {
-                return _offset;
-            }
+            { return _offset; }
             set
             {
-                _offset = value;
-                _isDirty = true;
+                if (_offset != value)
+                {
+                    _offset = value;
+                    _isDirty = true;
+                }
             }
         }
 
@@ -109,7 +108,7 @@ namespace Delta
         {
             get
             {
-                float invZoom = 1 / Zoom; // careful, if  zoom is zero...
+                float invZoom = 1 / Scale; // careful, if  zoom is zero...
                 Point result = Point.Zero;
                 result.X = (int)((float)G.ScreenArea.Width * invZoom);
                 result.Y = (int)((float)G.ScreenArea.Height * invZoom);
@@ -139,14 +138,14 @@ namespace Delta
                     {
                         _view = Matrix.CreateTranslation(DeltaMath.SimpleRound(-Position.X + _shakeOffset.X), DeltaMath.SimpleRound(-Position.Y + _shakeOffset.Y), 0) *
                             Matrix.CreateRotationZ(DeltaMath.SimpleRound(Rotation)) *
-                            Matrix.CreateScale(Zoom) *
+                            Matrix.CreateScale(Scale) *
                             Matrix.CreateTranslation(DeltaMath.SimpleRound(Offset.X), DeltaMath.SimpleRound(Offset.Y), 0);
                     }
                     else
                     {
                         _view = Matrix.CreateTranslation(-Position.X + _shakeOffset.X, -Position.Y + _shakeOffset.Y, 0) *
                           Matrix.CreateRotationZ(Rotation) *
-                          Matrix.CreateScale(Zoom) *
+                          Matrix.CreateScale(Scale) *
                           Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
                     }
                     _isDirty = false;
@@ -175,15 +174,8 @@ namespace Delta
             }
         }
 
-        public Matrix World
-        {
-            get
-            {
-                return Matrix.Identity;
-            }
-        }
-
-        public Entity Tracking { get; set; }
+        public Matrix World { get; private set; }
+        public TransformableEntity Tracking { get; set; }
 
         public bool IsTracking
         {
@@ -206,9 +198,8 @@ namespace Delta
             _zoomRate = 0.5f;
             //_rotationRate = 0.5f;
             _translationRate = 0.5f;
-            _rasterizerState.ScissorTestEnable = true;
             Position = _goalPosition = Vector2.Zero;
-            Zoom = _goalZoom = 1;
+            Scale = _goalZoom = 1;
             Rotation = 0;
             Tint = Color.White;
             PixelFix = false; // broken.
@@ -296,7 +287,7 @@ namespace Delta
                 _zoomElapsed += seconds;
                 float amount = MathHelper.Clamp(_zoomElapsed / _zoomDuration, 0.0f, 1.0f);
                 //float amount = MathHelper.Clamp((float) Math.Pow(0.02, (double) seconds / _zoomElapsed), 0.0f, 1.0f);
-                Zoom = MathHelper.SmoothStep(Zoom, _goalZoom, amount);
+                Scale = MathHelper.SmoothStep(Scale, _goalZoom, amount);
                 _isDirty = true;
             }
             else
@@ -305,22 +296,22 @@ namespace Delta
                 _zoomDuration = 0.0f;
 
                 float traveledDistance = _zoomRate * seconds;
-                float distanceToGoal = _goalZoom - Zoom;
+                float distanceToGoal = _goalZoom - Scale;
                 if (Math.Abs(distanceToGoal) > traveledDistance)
                 {
                     if (distanceToGoal < 0)
                     {
-                        Zoom -= traveledDistance;
+                        Scale -= traveledDistance;
                     }
                     else
                     {
-                        Zoom += traveledDistance;
+                        Scale += traveledDistance;
                     }
                     _isDirty = true;
                 }
                 else
                 {
-                    Zoom = _goalZoom; // always finish on an integer.
+                    Scale = _goalZoom; // always finish on an integer.
                     IsZooming = false;
                     _isDirty = true;
                 }
@@ -387,7 +378,12 @@ namespace Delta
             }
         }
 
-        public void Follow(Entity target)
+        protected virtual void UpdateWorld()
+        {
+            World = Matrix.Identity;
+        }
+
+        public void Follow(TransformableEntity target)
         {
             if (target == null)
                 return;
@@ -425,7 +421,7 @@ namespace Delta
 
         public void ZoomImmediate(float amount)
         {
-            Zoom = _goalZoom = amount;
+            Scale = _goalZoom = amount;
         }
 
         /// <summary>
@@ -435,7 +431,7 @@ namespace Delta
         public void ZoomByAmount(float amount)
         {
             IsZooming = true;
-            _goalZoom = amount + Zoom;
+            _goalZoom = amount + Scale;
         }
 
         /// <summary>
@@ -512,7 +508,7 @@ namespace Delta
             return ViewingArea.Intersects(rectangle) || ViewingArea.Contains(rectangle.Center.X, rectangle.Center.Y);
         }
 
-        public bool IsViewable(Entity e)
+        public bool IsViewable(TransformableEntity e)
         {
             return IsViewable(e.Position); // TODO: Add hitbox testing too.
         }

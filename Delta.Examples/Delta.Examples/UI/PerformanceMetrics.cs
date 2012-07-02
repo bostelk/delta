@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Delta.Examples
 {
 
-    public class PerformanceMetrics  : Entity 
+    public class PerformanceMetrics  : TransformableEntity 
     {
         Stopwatch _stopwatch;
         StringBuilder _stringBuilder;

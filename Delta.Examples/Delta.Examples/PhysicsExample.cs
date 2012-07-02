@@ -20,7 +20,7 @@ namespace Delta.Examples
     public class PhysicsExample : ExampleBase
     {
         const string CONTROLS = "[wasd] movement 1. [tab] change body 1. [arrows] movement 2.[right ctrl] change body 2.";
-        Entity player1, player2;
+        TransformableEntity player1, player2;
 
         public PhysicsExample() : base("PhysicsExample")
         {

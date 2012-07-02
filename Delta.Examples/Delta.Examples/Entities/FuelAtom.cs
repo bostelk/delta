@@ -9,7 +9,7 @@ using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class FuelAtom : Entity
+    public class FuelAtom : TransformableEntity
     {
 
         Texture2D _texture;

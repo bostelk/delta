@@ -14,8 +14,8 @@ namespace Delta.Audio
         private static StackPool<Sound3D> _pool;
 
         private Cue _cue;
-        private Entity _source;
-        private Entity _dest;
+        private TransformableEntity _source;
+        private TransformableEntity _dest;
         private AudioEmitter _audioEmitter;
         private AudioListener _audioListener;
 
@@ -42,7 +42,7 @@ namespace Delta.Audio
             _audioListener = new AudioListener();
         }
 
-        public static Sound3D Create(string name, Cue cue, Entity source, Entity dest, Action<string> onFinished)
+        public static Sound3D Create(string name, Cue cue, TransformableEntity source, TransformableEntity dest, Action<string> onFinished)
         {
             Sound3D freshSound = _pool.Fetch();
             freshSound.Name = name;

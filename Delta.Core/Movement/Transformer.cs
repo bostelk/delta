@@ -10,17 +10,17 @@ namespace Delta.Movement
     {
         float _elapsed;
         int _repeat;
-        Entity _entity;
+        TransformableEntity _entity;
         Action _onFinish;
         Queue<ITransform> _transforms;
 
-        Transformer(Entity entity)
+        Transformer(TransformableEntity entity)
         {
             _entity = entity;
             _transforms = new Queue<ITransform>();
         }
 
-        public static Transformer InWorldThisEntity(Entity entity)
+        public static Transformer InWorldThisEntity(TransformableEntity entity)
         {
             Transformer transform = new Transformer(entity);
             G.World.Add(transform);

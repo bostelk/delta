@@ -98,18 +98,5 @@ namespace Delta
             spriteBatch.Draw(G.PixelTexture, position, color);
         }
 
-        //public static void Begin(this SpriteBatch spriteBatch, SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, Effect effect, Camera camera)
-        //{
-        //    camera._originalScissor = spriteBatch.GraphicsDevice.ScissorRectangle;
-        //    spriteBatch.GraphicsDevice.ScissorRectangle = camera.ViewingArea;
-        //    spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, camera._rasterizerState, effect, camera.View);
-        //}
-
-        //public static void End(this SpriteBatch spriteBatch, Camera camera)
-        //{
-        //    spriteBatch.End();
-        //    spriteBatch.GraphicsDevice.ScissorRectangle = camera._originalScissor;
-        //}
-
     }
 }
