@@ -27,7 +27,19 @@ namespace Delta.Graphics
         public string AnimationName { get; set; }
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
-        
+
+        public SpriteEntity()
+            : base()
+        {
+            AnimationIsLooped = true;
+        }
+
+        public override void LoadContent()
+        {
+            _spriteSheet = G.Content.Load<SpriteSheet>(SpriteSheetName);
+            base.LoadContent();
+        }
+
         protected override void LightUpdate(GameTime gameTime)
         {
             UpdateAnimation();

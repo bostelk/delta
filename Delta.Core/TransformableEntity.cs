@@ -73,6 +73,8 @@ namespace Delta
         public TransformableEntity()
             : base()
         {
+            Tint = Color.White;
+            Scale = Vector2.One;
         }
 
         protected internal virtual void OnPositionChanged()

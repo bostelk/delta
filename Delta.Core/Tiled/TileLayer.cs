@@ -102,30 +102,30 @@ namespace Delta.Tiled
             for (int i = 0; i < _tiles.Count; i++)
             {
                 Tileset tileset = Map.Instance._tilesets[_tiles[i]._tilesetIndex];
-                _tiles[i]._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileName(tileset.ExternalImagePath), _tiles[i]._imageFrameIndex);
+                _tiles[i]._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), _tiles[i]._imageFrameIndex);
             }
         }
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-#if DEBUG
-            TilesDrawn = 0;
-#endif
+//#if DEBUG
+//            TilesDrawn = 0;
+//#endif
             Tile tile;
-            Rectangle tileArea = Rectangle.Empty;
-            Rectangle viewingArea = World.Instance.Camera.ViewingArea;
-            viewingArea.Inflate(Map.Instance.TileWidth, Map.Instance.TileHeight); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
+//            Rectangle tileArea = Rectangle.Empty;
+//            Rectangle viewingArea = World.Instance.Camera.ViewingArea;
+//            viewingArea.Inflate(Map.Instance.TileWidth, Map.Instance.TileHeight); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
             for (int i = 0; i < _tiles.Count; i++)
             {
                 tile = _tiles[i];
-                tileArea = new Rectangle((int)tile.Position.X, (int)tile.Position.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
-                if (viewingArea.Contains(tileArea) || viewingArea.Intersects(tileArea))
-                {
+                //tileArea = new Rectangle((int)tile.Position.X, (int)tile.Position.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
+                //if (viewingArea.Contains(tileArea) || viewingArea.Intersects(tileArea))
+                //{
                     tile.Draw(spriteBatch);
-#if DEBUG
-                    TilesDrawn++;
-#endif
-                }
+//#if DEBUG
+//                    TilesDrawn++;
+//#endif
+                //}
             }
         }
 

@@ -24,7 +24,6 @@ namespace Delta.Examples
 #endif
         static void Main(string[] args)
         {
-
             Examples example = Examples.Game;
 
             switch (example)
@@ -53,9 +52,7 @@ namespace Delta.Examples
         static void RunExample<T>() where T: DeltaGame, new()
         {
             using (T game = new T())
-            {
                 game.Run();
-            }
         }
     }
 #endif
