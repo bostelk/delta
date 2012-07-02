@@ -134,6 +134,7 @@
     <Compile Include="Physics\Geometry\Polygon.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
     <Compile Include="Physics\SAT.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />

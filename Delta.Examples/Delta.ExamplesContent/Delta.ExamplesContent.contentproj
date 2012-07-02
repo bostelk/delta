@@ -274,11 +274,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\SpriteSheets\Tilesets.xml">
-      <SubType>Designer</SubType>
-      <Name>Tilesets</Name>
+    <Compile Include="Graphics\SpriteSheets\16x16.xml">
+      <Name>16x16</Name>
       <Importer>XmlImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
