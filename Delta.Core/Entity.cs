@@ -115,6 +115,7 @@ namespace Delta
         public Entity()
             : base()
         {
+            NeedsHeavyUpdate = true;
             IsEnabled = true;
             IsVisible = true;
         }
