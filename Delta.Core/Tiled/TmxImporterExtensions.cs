@@ -55,6 +55,21 @@ namespace Delta.Tiled
                             isFound = true;
                             BindProperty(obj, propertyInfo, value);
                         }
+                        if (!isFound)
+                        {
+                            switch (name.ToLower())
+                            {
+                                case "offset":
+                                    TransformableEntity entity = obj as TransformableEntity;
+                                    if (entity != null)
+                                    {
+                                        string[] split = value.Split(new string[] { ",", ":", ".", "/", ";", "'", "-" }, StringSplitOptions.RemoveEmptyEntries);
+                                        entity.Position += new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture));
+                                        isFound = true;
+                                    }
+                                    break;
+                            }
+                        }
                     }
                     MethodInfo[] methods = obj.GetType().GetMethods();
                     foreach (var methodInfo in methods)
@@ -69,20 +84,7 @@ namespace Delta.Tiled
                 else
                     continue;
                 if (!isFound)
-                {
-                    switch (name.ToLower())
-                    {
-                        case "offset":
-                            TransformableEntity entity = obj as TransformableEntity;
-                            if (entity != null)
-                            {
-                                string[] split = value.Split(new string[] { ",", ":", ".", "/", ";", "'", "-"},  StringSplitOptions.RemoveEmptyEntries);
-                                entity.Position += new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture));
-                            }
-                            break;
-                    }
                     throw new Exception(String.Format("Could not find a property or method with the name '{0}' to bind or call in the type '{1}'.", name, obj.GetType().Name));
-                }
             }
         }
 
