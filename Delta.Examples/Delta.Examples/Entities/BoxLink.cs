@@ -14,7 +14,7 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class BoxLink : Entity
+    public class BoxLink : TransformableEntity
     {
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;
@@ -33,21 +33,19 @@ namespace Delta.Examples.Entities
             }
             set
             {
-                base.Position = value;
                 Body.Position = value;
             }
         }
 
-        float _rotation;
         public float Rotation
         {
             get
             {
-                return _rotation;
+                return base.Rotation;
             }
             set
             {
-                _rotation = value;
+                base.Rotation = value;
                 Body.Rotation = value;
             }
         }

@@ -33,7 +33,7 @@ namespace Delta.Examples
         {
             G.World.Add(new Image(@"Graphics\Background"), (int)DrawLayers.BackgroundLow);
             G.World.Add(new Image(@"Graphics\ForeGround"), (int)DrawLayers.Background);
-           G.World.Add(new GravitySink(), (int)DrawLayers.Ground);
+            G.World.Add(new GravitySink(), (int)DrawLayers.Ground);
             G.World.Add(new Lucas(), (int)DrawLayers.Ground);
             G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0) }, (int)DrawLayers.Ground);
 

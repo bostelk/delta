@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,6 @@ namespace Delta.Physics
 
         public DeltaPhysics()
         {
-            _grid = new SpatialGrid();
             _polygons = new HashSet<Polygon>();
             _polygonsToAdd = new HashSet<Polygon>();
             _polygonsToRemove = new HashSet<Polygon>();
@@ -69,6 +68,9 @@ namespace Delta.Physics
 
         public override void Simulate(float seconds)
         {
+            if (_grid == null)
+                return;
+
             _results.Clear();
             _grid.Update();
 

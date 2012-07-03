@@ -14,7 +14,7 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class RaceTrack : Entity
+    public class RaceTrack : TransformableEntity
     {
         public Polygon Body { get; private set; }
 

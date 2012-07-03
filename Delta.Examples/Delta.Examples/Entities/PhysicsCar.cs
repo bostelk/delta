@@ -38,16 +38,15 @@ namespace Delta.Examples.Entities
             }
         }
 
-        float _rotation;
-        public float Rotation
+        public override float Rotation
         {
             get
             {
-                return _rotation;
+                return base.Rotation;
             }
             set
             {
-                _rotation = value;
+                base.Rotation = value;
                 Body.Rotation = value;
             }
         }

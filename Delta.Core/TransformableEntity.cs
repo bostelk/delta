@@ -24,7 +24,7 @@ namespace Delta
 
         Vector2 _size = Vector2.Zero;
         [ContentSerializer]
-        public Vector2 Size
+        public virtual Vector2 Size
         {
             get { return _size; }
             set
@@ -39,7 +39,7 @@ namespace Delta
 
         Vector2 _scale = Vector2.Zero;
         [ContentSerializer]
-        public Vector2 Scale
+        public virtual Vector2 Scale
         {
             get { return _scale; }
             set
@@ -54,7 +54,7 @@ namespace Delta
 
         float _rotation = 0.0f;
         [ContentSerializer]
-        public float Rotation
+        public virtual float Rotation
         {
             get { return _rotation; }
             set

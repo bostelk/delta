@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -20,7 +20,7 @@ namespace Delta.Examples
     public class PhysicsExample : ExampleBase
     {
         const string CONTROLS = "";
-        Entity player1;
+        TransformableEntity player1;
 
         public PhysicsExample() : base("PhysicsExample")
         {
@@ -34,12 +34,12 @@ namespace Delta.Examples
             G.World.AddRange(balls.ToList<IEntity>(), 0);
         }
 
-        protected override void LoadContent()
-        {
-            G.World.LoadContent(Content);
-            G.UI.LoadContent(Content);
-            base.LoadContent();
-        }
+        //protected override void LoadContent()
+        //{
+        //    G.World.LoadContent(Content);
+        //    G.UI.LoadContent(Content);
+        //    base.LoadContent();
+        //}
 
         protected override void Update(GameTime gameTime)
         {

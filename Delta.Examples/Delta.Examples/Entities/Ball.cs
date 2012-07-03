@@ -14,7 +14,7 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class Ball : Entity
+    public class Ball : TransformableEntity
     {
         const float SPEED = 50;
 

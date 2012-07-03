@@ -20,7 +20,7 @@ namespace Delta.Examples
     public class RacingExample : ExampleBase
     {
         const string CONTROLS = "[wasd] movement 1. [tab] change body 1. [arrows] movement 2.[right ctrl] change body 2.";
-        Entity player1, player2, track;
+        TransformableEntity player1, player2, track;
 
         public RacingExample() : base("RacingExample")
         {
@@ -32,12 +32,12 @@ namespace Delta.Examples
             G.World.Camera.Offset = G.ScreenCenter;
         }
 
-        protected override void LoadContent()
-        {
-            G.World.LoadContent(Content);
-            G.UI.LoadContent(Content);
-            base.LoadContent();
-        }
+        //protected override void LoadContent()
+        //{
+        //    G.World.LoadContent(Content);
+        //    G.UI.LoadContent(Content);
+        //    base.LoadContent();
+        //}
 
         protected override void Update(GameTime gameTime)
         {
