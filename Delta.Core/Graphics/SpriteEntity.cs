@@ -13,7 +13,7 @@ namespace Delta.Graphics
         float _frameDurationTimer = 0f;
         Animation _animation = null;
 
-        [ContentSerializer(ElementName="Frame")] //for Rob's convience
+        [ContentSerializer(ElementName = "Frame")] //for Rob's convience
         public int AnimationFrame { get; private set; }
         [ContentSerializer(ElementName = "Paused")] //for Rob's convience
         public bool AnimationIsPaused { get; set; }
@@ -21,17 +21,22 @@ namespace Delta.Graphics
         public bool AnimationIsLooped { get; set; }
         [ContentSerializerIgnore]
         public bool AnimationIsFinished { get; private set; }
-        [ContentSerializer(ElementName="SpriteSheet")] //for Rob's convience
+        [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
         public string SpriteSheetName { get; set; }
-        [ContentSerializer(ElementName="Animation")] //for Rob's convience
+        [ContentSerializer(ElementName = "Animation")] //for Rob's convience
         public string AnimationName { get; set; }
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
+        [ContentSerializer(ElementName = "fOffset")] //for Rob's convience
+        public int AnimationFrameOffset { get; set; }
+        [ContentSerializer(ElementName = "startRandom")]
+        public bool RandomFrameStart { get; set; }
 
         public SpriteEntity()
             : base()
         {
             AnimationIsLooped = true;
+            AnimationFrameOffset = 0;
         }
 
         public override void LoadContent()
@@ -71,7 +76,8 @@ namespace Delta.Graphics
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
-                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, 0, _animation.Frames.Count - 1);
+                AnimationFrameOffset = DeltaMath.Wrap(AnimationFrameOffset, 0, _animation.Frames.Count - 1);
+                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, AnimationFrameOffset, _animation.Frames.Count - 1);
                 if (!AnimationIsLooped && AnimationFrame >= _animation.Frames.Count - 1)
                 {
                     AnimationIsFinished = true;
@@ -100,7 +106,9 @@ namespace Delta.Graphics
 
         protected internal virtual void OnAnimationChanged()
         {
-            AnimationFrame = 0;
+            AnimationFrame = AnimationFrameOffset;
+            if (RandomFrameStart)
+                AnimationFrame = G.Random.Next(AnimationFrameOffset, _animation.Frames.Count - 1);          
             _frameDurationTimer = _animation.FrameDuration;
             AnimationIsFinished = false;
         }

@@ -55,6 +55,10 @@ namespace Delta.Tiled
                         );
                 }
 
+                entity.ImportXmlProperties(objectNode["properties"]);
+
+                if (transformableEntity != null)
+                    transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
                  
                 //mapEntity.Size = new Vector2(
                 //    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
@@ -114,7 +118,6 @@ namespace Delta.Tiled
                     //        polygon.Vertices = polyVertices;
                     //}
 
-                    entity.ImportXmlProperties(objectNode["properties"]);
                     Add(entity);
                 //}
             }

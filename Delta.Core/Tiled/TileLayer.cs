@@ -66,21 +66,6 @@ namespace Delta.Tiled
                         }
                     }
                     break;
-                case "csv":
-                     string[] lines = node.InnerText.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                     // iterate each line
-                     for (int i = 0; i < lines.Length; i++)
-                     {
-                         // split the line into individual pieces
-                         string[] indices = lines[i].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                         // iterate the indices and store in our data
-                         for (int j = 0; j < indices.Length; j++)
-                         {
-                             tileLayerData[i * Map.Instance.Width + j] = uint.Parse(indices[j], CultureInfo.InvariantCulture);
-                         }
-                     }
-                     break;
                 default:
                     throw new NotSupportedException(string.Format("{0} does not support the encoding '{1}' for Tiled layer data. Map: {2}.", Assembly.GetExecutingAssembly().GetName().Name, dataNode.Attributes["encoding"].Value, fileName));
             }
