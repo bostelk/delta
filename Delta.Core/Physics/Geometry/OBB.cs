@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace Delta.Physics.Geometry
 {
     /// <summary>
-    /// An Orientated Box. ie. it will reflect rotations.
+    /// An Orientated Bounding Box. ie. it will reflect rotations.
     /// </summary>
     public class OBB : Box
     {
@@ -76,23 +76,5 @@ namespace Delta.Physics.Geometry
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);
         }
 
-        public void ProjectOntoAxis(Vector2 axisNormal, out float min, out float max) {
-            min = Vector2.Dot(Vertices[0], axisNormal);
-            max = min;
-            float projected = 0;
-
-            for(int i = 1; i < Vertices.Length; i++) {
-                projected = Vector2.Dot(Vertices[i], axisNormal);
-                if (projected > max)
-                    max = projected;
-                if (projected < min)
-                    min = projected;
-            }
-        }
-
-        public Rectangle ToRectangle()
-        {
-            return new Rectangle((int)(Position.X - HalfSize.X), (int)(Position.Y - HalfSize.Y), (int)Width, (int)Height);
-        }
     }
 }

@@ -114,6 +114,11 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
+    <Compile Include="Entities\Ball.cs" />
+    <Compile Include="Entities\BoxLink.cs" />
+    <Compile Include="Entities\WorldBounds.cs" />
+    <Compile Include="RacingExample.cs" />
+    <Compile Include="Entities\RaceTrack.cs" />
     <Compile Include="Entities\PhysicsCar.cs" />
     <Compile Include="PhysicsExample.cs" />
     <Compile Include="SciptingExample.cs" />

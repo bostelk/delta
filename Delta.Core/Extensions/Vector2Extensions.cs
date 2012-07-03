@@ -33,7 +33,10 @@ namespace Delta
 
         public static Vector2 RandomDirection()
         {
-            return DirectionBetween(0, 360);
+            Vector2 result = default(Vector2);
+            result.X = (float)Math.Cos(G.Random.Next() * MathHelper.TwoPi);
+            result.Y = (float)Math.Sin(G.Random.Next() * MathHelper.TwoPi);
+            return result;
         }
 
         public static Vector2 DirectionBetween(float startAngle, float finishAngle)

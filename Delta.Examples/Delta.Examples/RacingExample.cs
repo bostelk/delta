@@ -17,21 +17,19 @@ namespace Delta.Examples
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PhysicsExample : ExampleBase
+    public class RacingExample : ExampleBase
     {
-        const string CONTROLS = "";
-        Entity player1;
+        const string CONTROLS = "[wasd] movement 1. [tab] change body 1. [arrows] movement 2.[right ctrl] change body 2.";
+        Entity player1, player2, track;
 
-        public PhysicsExample() : base("PhysicsExample")
+        public RacingExample() : base("RacingExample")
         {
             ClearColor = Color.Black;
-            G.Physics.DefineWorld(1024, 1024, 32);
+            G.World.Add(player1 = new PhysicsCar());
+            G.World.Add(player2 = new PhysicsCar());
+            G.World.Add(track = new RaceTrack());
+            player2.Position = player1.Position + new Vector2(100, 0);
             G.World.Camera.Offset = G.ScreenCenter;
-
-            G.World.Add(player1 = new BoxLink());
-            G.World.Add(new WorldBounds());
-            List<Ball> balls = EntitySpawner.OnAGrid<Ball>(Vector2.Zero, 5, 5, 32, 32, () => { return new Ball(); });
-            G.World.AddRange(balls.ToList<IEntity>(), 0);
         }
 
         protected override void LoadContent()
@@ -44,13 +42,16 @@ namespace Delta.Examples
         protected override void Update(GameTime gameTime)
         {
             if (G.Input.Keyboard.JustPressed(Keys.Tab))
-                (player1 as BoxLink).SwitchBody();
+                (player1 as PhysicsCar).SwitchBody();
+            if (G.Input.Keyboard.JustPressed(Keys.RightControl))
+                (player2 as PhysicsCar).SwitchBody();
             if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
                 player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
             if (G.Input.Keyboard.JustPressed(Keys.F1))
                 G.World.Camera.Follow(player1);
                 
-            (player1 as BoxLink).Input = G.Input.WadsDirection;
+            (player1 as PhysicsCar).Input = G.Input.WadsDirection;
+            (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
             base.Update(gameTime);
         }
 

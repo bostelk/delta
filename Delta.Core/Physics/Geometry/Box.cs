@@ -13,5 +13,10 @@ namespace Delta.Physics.Geometry
     {
         public float Width;
         public float Height;
+
+        public Rectangle ToRectangle()
+        {
+            return new Rectangle((int)(Position.X - Width / 2), (int)(Position.Y - Height / 2), (int)Width, (int)Height);
+        }
     }
 }

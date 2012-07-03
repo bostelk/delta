@@ -17,6 +17,7 @@ namespace Delta.Examples
             Audio,
             Tiled,
             Physics,
+            Racing,
         }
 
         /// <summary>
@@ -50,6 +51,9 @@ namespace Delta.Examples
                     break;
                 case Examples.Physics:
                     RunExample<PhysicsExample>();
+                    break;
+                case Examples.Racing:
+                    RunExample<RacingExample>();
                     break;
             }
         }

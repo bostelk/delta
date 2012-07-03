@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta (Windows)", "Delta.Core\Delta (Windows).csproj", "{E50545DF-9329-4B3D-8579-943F91A42C66}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta (Xbox 360)", "Delta.Core\Delta (Xbox 360).csproj", "{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Examples (Windows)", "Delta.Examples\Delta.Examples\Delta.Examples (Windows).csproj", "{9AB83C8B-D8DA-4CF4-8312-5B39FB42A0BB}"
 EndProject
@@ -35,16 +33,6 @@ Global
 		{E50545DF-9329-4B3D-8579-943F91A42C66}.Release|x86.Build.0 = Release|x86
 		{E50545DF-9329-4B3D-8579-943F91A42C66}.Release|Xbox 360.ActiveCfg = Release|x86
 		{E50545DF-9329-4B3D-8579-943F91A42C66}.Release|Xbox 360.Build.0 = Release|x86
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Debug|Mixed Platforms.ActiveCfg = Debug|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Debug|Mixed Platforms.Build.0 = Debug|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Debug|x86.ActiveCfg = Debug|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Debug|Xbox 360.ActiveCfg = Debug|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Debug|Xbox 360.Build.0 = Debug|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Release|Mixed Platforms.ActiveCfg = Release|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Release|Mixed Platforms.Build.0 = Release|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Release|x86.ActiveCfg = Release|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Release|Xbox 360.ActiveCfg = Release|Xbox 360
-		{2AEBCB95-6A09-400F-AC76-5C5817DDCC52}.Release|Xbox 360.Build.0 = Release|Xbox 360
 		{9AB83C8B-D8DA-4CF4-8312-5B39FB42A0BB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{9AB83C8B-D8DA-4CF4-8312-5B39FB42A0BB}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{9AB83C8B-D8DA-4CF4-8312-5B39FB42A0BB}.Debug|x86.ActiveCfg = Debug|x86

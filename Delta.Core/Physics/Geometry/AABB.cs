@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace Delta.Physics.Geometry
 {
     /// <summary>
-    /// An Axis-Aligned box. ie. it will not reflect rotations;
+    /// An Axis-Aligned Bounding Box. ie. it will not reflect rotations;
     /// </summary>
     public class AABB : Box
     {
@@ -23,6 +23,22 @@ namespace Delta.Physics.Geometry
                 new Vector2(-width / 2, -height / 2),
                 new Vector2(width / 2, -height / 2),
             };
+        }
+
+        public Vector2 Min
+        {
+            get
+            {
+                return Position - new Vector2(Width * 0.5f, Height * 0.5f);
+            }
+        }
+
+        public Vector2 Max
+        {
+            get
+            {
+                return Position + new Vector2(Width * 0.5f, Height * 0.5f);
+            }
         }
 
     }
