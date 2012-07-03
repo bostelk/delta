@@ -86,7 +86,7 @@ namespace Delta
         {
             Time.ElapsedWorldSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
             Time.TotalWorldSeconds += Time.ElapsedWorldSeconds;
-            Camera.Update(gameTime);
+            Camera.InternalUpdate(gameTime);
             base.BeginUpdate(gameTime);
         }
 
@@ -99,7 +99,7 @@ namespace Delta
         protected internal override void EndDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.EndDraw(gameTime, spriteBatch);
-            Camera.Draw(spriteBatch);
+            Camera.Draw(gameTime, spriteBatch);
             spriteBatch.End();
         }
     }

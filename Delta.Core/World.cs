@@ -28,7 +28,7 @@ namespace Delta
         {
             Time.ElapsedWorldSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
             Time.TotalWorldSeconds += Time.ElapsedWorldSeconds;
-            Camera.Update(gameTime);
+            Camera.InternalUpdate(gameTime);
             base.BeginUpdate(gameTime);
         }
 
@@ -44,7 +44,7 @@ namespace Delta
             spriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
 #endif
             base.EndDraw(gameTime, spriteBatch);
-            Camera.Draw(spriteBatch);
+            Camera.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 #if DEBUG
             spriteBatch.Begin();

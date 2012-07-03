@@ -20,17 +20,12 @@ namespace Delta.Examples
             Racing,
         }
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
 #if WINDOWS
         [STAThread]
 #endif
         static void Main(string[] args)
         {
-            //Scripting.Load(@"../../../Scripts/TestScript.cs", "Test").RunScript();
-
-            Examples example = Examples.Physics;
+            Examples example = Examples.Game;
 
             switch (example)
             {
@@ -61,9 +56,7 @@ namespace Delta.Examples
         static void RunExample<T>() where T: DeltaGame, new()
         {
             using (T game = new T())
-            {
                 game.Run();
-            }
         }
     }
 #endif

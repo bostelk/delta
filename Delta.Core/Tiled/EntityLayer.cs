@@ -28,7 +28,7 @@ namespace Delta.Tiled
 
             foreach (XmlNode objectNode in node.SelectNodes("object"))
             {
-                IEntity mapEntity = null;
+                IEntity entity = null;
                 if (objectNode.Attributes["type"] != null)
                 {
                     string typeName = objectNode.Attributes["type"].Value;
@@ -36,19 +36,29 @@ namespace Delta.Tiled
                     {
                         Type type = assembly.GetType(typeName, false, true);
                         if (type != null)
-                            mapEntity = Activator.CreateInstance(type) as IEntity;
+                            entity = Activator.CreateInstance(type) as IEntity;
                     }
                 }
                 else
 
-                if (mapEntity == null)
+                if (entity == null)
                     continue;
 
-                mapEntity.ID = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
-                //mapEntity.Position = new Vector2(
-                //    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture), 
-                //    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
-                //    );
+                entity.ID = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
+
+                TransformableEntity transformableEntity = entity as TransformableEntity;
+                if (transformableEntity != null)
+                {
+                    transformableEntity.Position = new Vector2(
+                        objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture),
+                        objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
+                        );
+                }
+
+                entity.ImportXmlProperties(objectNode["properties"]);
+
+                if (transformableEntity != null)
+                    transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
                  
                 //mapEntity.Size = new Vector2(
                 //    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
@@ -108,8 +118,7 @@ namespace Delta.Tiled
                     //        polygon.Vertices = polyVertices;
                     //}
 
-                    mapEntity.ImportXmlProperties(objectNode["properties"]);
-                    Add(mapEntity);
+                    Add(entity);
                 //}
             }
         }

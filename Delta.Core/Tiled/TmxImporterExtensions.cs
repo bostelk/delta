@@ -5,6 +5,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Tiled
@@ -26,6 +27,7 @@ namespace Delta.Tiled
             {
                 isFound = false;
                 string name = propertyNode.Attributes["name"] == null ? null : propertyNode.Attributes["name"].Value;
+                string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
                 {
                     PropertyInfo[] properties = obj.GetType().GetProperties();
@@ -42,7 +44,7 @@ namespace Delta.Tiled
                                     if (contentSerializerAttribute.ElementName.ToLower() == name.ToLower())
                                     {
                                         isFound = true;
-                                        BindProperty(obj, propertyInfo, propertyNode.Attributes["value"].Value);
+                                        BindProperty(obj, propertyInfo, value);
                                         break;
                                     }
                                 }
@@ -51,7 +53,22 @@ namespace Delta.Tiled
                         if (!isFound && name.ToLower() == propertyInfo.Name.ToLower())
                         {
                             isFound = true;
-                            BindProperty(obj, propertyInfo, propertyNode.Attributes["value"].Value);
+                            BindProperty(obj, propertyInfo, value);
+                        }
+                        if (!isFound)
+                        {
+                            switch (name.ToLower())
+                            {
+                                case "offset":
+                                    TransformableEntity entity = obj as TransformableEntity;
+                                    if (entity != null)
+                                    {
+                                        string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                                        entity.Position += new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture));
+                                        isFound = true;
+                                    }
+                                    break;
+                            }
                         }
                     }
                     MethodInfo[] methods = obj.GetType().GetMethods();
@@ -60,7 +77,7 @@ namespace Delta.Tiled
                         if (!isFound && name.ToLower() == methodInfo.Name.ToLower())
                         {
                             isFound = true;
-                            InvokeMethod(obj, methodInfo, propertyNode.Attributes["value"].Value);
+                            InvokeMethod(obj, methodInfo, value);
                         }
                     }
                 }

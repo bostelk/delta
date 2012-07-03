@@ -10,18 +10,16 @@ namespace Delta
     /// <summary>
     /// TODO: Add rotation support, add queue zoom support, fix transitions, add interpolation method support.
     /// </summary>
-    public class Camera
+    public class Camera : Entity
     {
-        internal RasterizerState _rasterizerState = new RasterizerState();
-        internal Rectangle _originalScissor = Rectangle.Empty;
         //float _rotationRate = 0;
         //float _goalRotation;
-        float _goalZoom;
-        Vector2 _goalPosition;
+        float _desiredScale;
+        Vector2 _desiredPosition;
         float _translationRate;
-        float _zoomRate;
-        float _zoomDuration;
-        float _zoomElapsed;
+        float _scaleRate;
+        float _scaleDuration;
+        float _scaleElapsed;
         float _moveDuration;
         float _moveElapsed;
         float _shakeDuration;
@@ -38,47 +36,46 @@ namespace Delta
         float _flashElapsed;
         float _flashDuration;
         Color _flashColor = Color.White;
-        bool _isDirty; // flag to recompule the view matrix.
 
-        float _zoom;
-        public float Zoom
+        float _scale;
+        public float Scale
         {
-            get
-            {
-                return _zoom;
-            }
+            get { return _scale;}
             private set
             {
-                _zoom = value;
-                _isDirty = true;
+                if (_scale != value)
+                {
+                    _scale = value;
+                    NeedsHeavyUpdate = true;
+                }
             }
         }
 
         float _rotation;
         public float Rotation
         {
-            get
-            {
-                return _rotation;
-            }
+            get { return _rotation; }
             set
             {
-                _rotation = value;
-                _isDirty = true;
+                if (_rotation != value)
+                {
+                    _rotation = value;
+                    NeedsHeavyUpdate = true;
+                }
             }
         }
 
         Vector2 _position;
         public Vector2 Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
             set
             {
-                _position = (PixelFix) ? DeltaMath.SimpleRound(value) : value; 
-                _isDirty = true;
+                if (_position != value)
+                {
+                    _position = (PixelFix) ? DeltaMath.SimpleRound(value) : value;
+                    NeedsHeavyUpdate = true;
+                }
             }
         }
 
@@ -86,13 +83,14 @@ namespace Delta
         public Vector2 Offset
         {
             get
-            {
-                return _offset;
-            }
+            { return _offset; }
             set
             {
-                _offset = value;
-                _isDirty = true;
+                if (_offset != value)
+                {
+                    _offset = value;
+                    NeedsHeavyUpdate = true;
+                }
             }
         }
 
@@ -109,7 +107,7 @@ namespace Delta
         {
             get
             {
-                float invZoom = 1 / Zoom; // careful, if  zoom is zero...
+                float invZoom = 1 / Scale; // careful, if  zoom is zero...
                 Point result = Point.Zero;
                 result.X = (int)((float)G.ScreenArea.Width * invZoom);
                 result.Y = (int)((float)G.ScreenArea.Height * invZoom);
@@ -128,62 +126,21 @@ namespace Delta
             }
         }
 
-        Matrix _view;
-        public Matrix View
-        {
-            get
-            {
-                if (_isDirty)
-                {
-                    if (PixelFix)
-                    {
-                        _view = Matrix.CreateTranslation(DeltaMath.SimpleRound(-Position.X + _shakeOffset.X), DeltaMath.SimpleRound(-Position.Y + _shakeOffset.Y), 0) *
-                            Matrix.CreateRotationZ(DeltaMath.SimpleRound(Rotation)) *
-                            Matrix.CreateScale(Zoom) *
-                            Matrix.CreateTranslation(DeltaMath.SimpleRound(Offset.X), DeltaMath.SimpleRound(Offset.Y), 0);
-                    }
-                    else
-                    {
-                        _view = Matrix.CreateTranslation(-Position.X + _shakeOffset.X, -Position.Y + _shakeOffset.Y, 0) *
-                          Matrix.CreateRotationZ(Rotation) *
-                          Matrix.CreateScale(Zoom) *
-                          Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
-                    }
-                    _isDirty = false;
-                }
-                return _view;
-            }
-        }
+        ///// <summary>
+        ///// May be needed for 3D applications; like Farseer.
+        ///// </summary>
+        //public Matrix FlippedVerticalView
+        //{
+        //    get
+        //    {
+        //        return View * Matrix.CreateScale(1, -1, 1);
+        //    }
+        //}
 
-        /// <summary>
-        /// May be needed for 3D applications; like Farseer.
-        /// </summary>
-        public Matrix FlippedVerticalView
-        {
-            get
-            {
-                return View * Matrix.CreateScale(1, -1, 1);
-            }
-        }
-
-        public Matrix Projection
-        {
-            get
-            {
-                //return Matrix.CreateOrthographic(G.ScreenArea.Width, G.ScreenArea.Height, 0, 0);
-                return Matrix.CreateOrthographicOffCenter(0, G.ScreenArea.Width, G.ScreenArea.Height, 0, 0, 1);
-            }
-        }
-
-        public Matrix World
-        {
-            get
-            {
-                return Matrix.Identity;
-            }
-        }
-
-        public Entity Tracking { get; set; }
+        public Matrix View { get; private set; }
+        public Matrix Projection { get; private set; }
+        public Matrix World { get; private set; }
+        public TransformableEntity Tracking { get; set; }
 
         public bool IsTracking
         {
@@ -202,19 +159,17 @@ namespace Delta
         
         public Camera() : base()
         {
-            _isDirty = true;
-            _zoomRate = 0.5f;
+            _scaleRate = 0.5f;
             //_rotationRate = 0.5f;
             _translationRate = 0.5f;
-            _rasterizerState.ScissorTestEnable = true;
-            Position = _goalPosition = Vector2.Zero;
-            Zoom = _goalZoom = 1;
+            Position = _desiredPosition = Vector2.Zero;
+            Scale = _desiredScale = 1;
             Rotation = 0;
             Tint = Color.White;
             PixelFix = false; // broken.
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (Filter)
             {
@@ -234,14 +189,14 @@ namespace Delta
             }
         }
 
-        public void Update(GameTime gameTime)
+        protected override void LightUpdate(GameTime gameTime)
         {
             // are we following the tracking entity, the player, or the goal position?
             if (IsTracking && Mode != CameraMode.FollowPlayer)
             {
                 _position.X = MathHelper.SmoothStep(_position.X, Tracking.Position.X, _translationRate);
                 _position.Y = MathHelper.SmoothStep(_position.Y, Tracking.Position.Y, _translationRate);
-                _isDirty = true;
+                NeedsHeavyUpdate = true;
             }
             else if (!IsTracking && _moveDuration > 0.0f)
             {
@@ -249,15 +204,15 @@ namespace Delta
                 {
                     _moveElapsed = 0;
                     _moveDuration = 0;
-                    _goalPosition = Vector2.Zero;
+                    _desiredPosition = Vector2.Zero;
                 }
                 else
                 {
                     _moveElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     float amount = MathHelper.Clamp(_moveElapsed / _moveDuration, 0.0f, 1.0f);
-                    _position.X = MathHelper.SmoothStep(_position.X, _goalPosition.X, amount);
-                    _position.Y = MathHelper.SmoothStep(_position.Y, _goalPosition.Y, amount);
-                    _isDirty = true;
+                    _position.X = MathHelper.SmoothStep(_position.X, _desiredPosition.X, amount);
+                    _position.Y = MathHelper.SmoothStep(_position.Y, _desiredPosition.Y, amount);
+                    NeedsHeavyUpdate = true;
                 }
             }
             //else if (false && Mode == CameraMode.FollowPlayer)
@@ -269,13 +224,13 @@ namespace Delta
             //}
 
             UpdateShake((float)gameTime.ElapsedGameTime.TotalSeconds);
-            UpdateZoom((float)gameTime.ElapsedGameTime.TotalSeconds);
+            UpdateScale((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (StayInsideBounds)
             {
                 _position.X = MathHelper.Clamp(_position.X, BoundedArea.Left, BoundedArea.Right);
                 _position.Y = MathHelper.Clamp(_position.X, BoundedArea.Top, BoundedArea.Bottom);
-                _isDirty = true;
+                NeedsHeavyUpdate = true;
             }
 
             if (_flashDuration > _flashElapsed)
@@ -289,40 +244,40 @@ namespace Delta
             }
         }
 
-        private void UpdateZoom(float seconds)
+        private void UpdateScale(float seconds)
         {
-            if (_zoomDuration > _zoomElapsed)
+            if (_scaleDuration > _scaleElapsed)
             {
-                _zoomElapsed += seconds;
-                float amount = MathHelper.Clamp(_zoomElapsed / _zoomDuration, 0.0f, 1.0f);
+                _scaleElapsed += seconds;
+                float amount = MathHelper.Clamp(_scaleElapsed / _scaleDuration, 0.0f, 1.0f);
                 //float amount = MathHelper.Clamp((float) Math.Pow(0.02, (double) seconds / _zoomElapsed), 0.0f, 1.0f);
-                Zoom = MathHelper.SmoothStep(Zoom, _goalZoom, amount);
-                _isDirty = true;
+                Scale = MathHelper.SmoothStep(Scale, _desiredScale, amount);
+                NeedsHeavyUpdate = true;
             }
             else
             {
-                _zoomElapsed = 0.0f;
-                _zoomDuration = 0.0f;
+                _scaleElapsed = 0.0f;
+                _scaleDuration = 0.0f;
 
-                float traveledDistance = _zoomRate * seconds;
-                float distanceToGoal = _goalZoom - Zoom;
+                float traveledDistance = _scaleRate * seconds;
+                float distanceToGoal = _desiredScale - Scale;
                 if (Math.Abs(distanceToGoal) > traveledDistance)
                 {
                     if (distanceToGoal < 0)
                     {
-                        Zoom -= traveledDistance;
+                        Scale -= traveledDistance;
                     }
                     else
                     {
-                        Zoom += traveledDistance;
+                        Scale += traveledDistance;
                     }
-                    _isDirty = true;
+                    NeedsHeavyUpdate = true;
                 }
                 else
                 {
-                    Zoom = _goalZoom; // always finish on an integer.
+                    Scale = _desiredScale; // always finish on an integer.
                     IsZooming = false;
-                    _isDirty = true;
+                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -375,7 +330,7 @@ namespace Delta
                         */
                     }
                 }
-                _isDirty = true;
+                NeedsHeavyUpdate = true;
             }
             else
             {
@@ -387,7 +342,43 @@ namespace Delta
             }
         }
 
-        public void Follow(Entity target)
+        protected internal override void HeavyUpdate(GameTime gameTime)
+        {
+            base.HeavyUpdate(gameTime);
+            UpdateView();
+            UpdateProjection();
+            UpdateWorld();
+        }
+
+        protected virtual void UpdateView()
+        {
+            if (PixelFix)
+            {
+                View = Matrix.CreateTranslation(DeltaMath.SimpleRound(-Position.X + _shakeOffset.X), DeltaMath.SimpleRound(-Position.Y + _shakeOffset.Y), 0) *
+                    Matrix.CreateRotationZ(DeltaMath.SimpleRound(Rotation)) *
+                    Matrix.CreateScale(Scale) *
+                    Matrix.CreateTranslation(DeltaMath.SimpleRound(Offset.X), DeltaMath.SimpleRound(Offset.Y), 0);
+            }
+            else
+            {
+                View = Matrix.CreateTranslation(-Position.X + _shakeOffset.X, -Position.Y + _shakeOffset.Y, 0) *
+                  Matrix.CreateRotationZ(Rotation) *
+                  Matrix.CreateScale(Scale) *
+                  Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
+            }
+        }
+
+        protected virtual void UpdateProjection()
+        {
+            Projection = Matrix.CreateOrthographicOffCenter(0, G.ScreenArea.Width, G.ScreenArea.Height, 0, 0, 1);
+        }
+
+        protected virtual void UpdateWorld()
+        {
+            World = Matrix.Identity;
+        }
+
+        public void Follow(TransformableEntity target)
         {
             if (target == null)
                 return;
@@ -406,7 +397,7 @@ namespace Delta
             if (_position == position)
                 return;
 
-            _goalPosition = position;
+            _desiredPosition = position;
             _moveDuration = duration;
             _moveElapsed = 0;
             Tracking = null;
@@ -414,7 +405,7 @@ namespace Delta
 
         public void MoveToImmediate(Vector2 position)
         {
-            if (_goalPosition == position)
+            if (_desiredPosition == position)
                 return;
 
             Mode = CameraMode.Stationary;
@@ -425,7 +416,7 @@ namespace Delta
 
         public void ZoomImmediate(float amount)
         {
-            Zoom = _goalZoom = amount;
+            Scale = _desiredScale = amount;
         }
 
         /// <summary>
@@ -435,7 +426,7 @@ namespace Delta
         public void ZoomByAmount(float amount)
         {
             IsZooming = true;
-            _goalZoom = amount + Zoom;
+            _desiredScale = amount + Scale;
         }
 
         /// <summary>
@@ -445,12 +436,12 @@ namespace Delta
         /// <param name="duration">Duration of zoom in seconds.</param>
         public void ZoomOverDuration(float zoom, float duration)
         {
-            if (_goalZoom == zoom)
+            if (_desiredScale == zoom)
                 return;
 
             IsZooming = true;
-            _goalZoom = zoom;
-            _zoomDuration = duration;
+            _desiredScale = zoom;
+            _scaleDuration = duration;
         }
 
         public void Shake(float magnitude, float duration, ShakeAxis options)
@@ -512,7 +503,7 @@ namespace Delta
             return ViewingArea.Intersects(rectangle) || ViewingArea.Contains(rectangle.Center.X, rectangle.Center.Y);
         }
 
-        public bool IsViewable(Entity e)
+        public bool IsViewable(TransformableEntity e)
         {
             return IsViewable(e.Position); // TODO: Add hitbox testing too.
         }

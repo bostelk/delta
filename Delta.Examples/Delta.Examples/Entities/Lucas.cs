@@ -14,7 +14,7 @@ using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class Lucas : Entity
+    public class Lucas : TransformableEntity
     {
         const float BOOST_ZOOM = 3.3f;
         const float NORMAL_ZOOM = 4f;
@@ -42,10 +42,10 @@ namespace Delta.Examples.Entities
             ID = "Lucas";
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
-            _sheet = content.Load<Texture2D>(@"Graphics\Player");
-            base.LoadContent(content);
+            _sheet = G.Content.Load<Texture2D>(@"Graphics\Player");
+            base.LoadContent();
         }
 
         protected override void LateInitialize()
@@ -89,7 +89,7 @@ namespace Delta.Examples.Entities
             }
             Position += Velocity * World.Instance.Time.ElapsedWorldSeconds;
 
-            if (G.Input.Keyboard.JustPressed(Keys.Space) && !_isBoosting && World.Instance.Camera.Zoom == NORMAL_ZOOM)
+            if (G.Input.Keyboard.JustPressed(Keys.Space) && !_isBoosting && World.Instance.Camera.Scale == NORMAL_ZOOM)
             {
                 World.Instance.Camera.Flash(Color.White);
                 World.Instance.Camera.Shake(10f, 0.5f, ShakeAxis.X | ShakeAxis.Y);
@@ -102,7 +102,7 @@ namespace Delta.Examples.Entities
 
             if (_isBoosting)
             {
-                HUD.Alpha = MathHelper.SmoothStep(1f, 0f, (NORMAL_ZOOM - World.Instance.Camera.Zoom) / Math.Abs(BOOST_ZOOM - NORMAL_ZOOM));
+                HUD.Alpha = MathHelper.SmoothStep(1f, 0f, (NORMAL_ZOOM - World.Instance.Camera.Scale) / Math.Abs(BOOST_ZOOM - NORMAL_ZOOM));
                 _boostElapsed += World.Instance.Time.ElapsedWorldSeconds;
                 _speed = BOOST_SPEED;
                 if (_boostElapsed > _boostDuration && !G.Input.Keyboard.Held(Keys.Space))
@@ -117,7 +117,7 @@ namespace Delta.Examples.Entities
             }
             else if (!_isBoosting && HUD.Alpha < 1)
             {
-                HUD.Alpha = MathHelper.SmoothStep(0f, 1f, 1 - (NORMAL_ZOOM - World.Instance.Camera.Zoom) / Math.Abs(BOOST_ZOOM - NORMAL_ZOOM));
+                HUD.Alpha = MathHelper.SmoothStep(0f, 1f, 1 - (NORMAL_ZOOM - World.Instance.Camera.Scale) / Math.Abs(BOOST_ZOOM - NORMAL_ZOOM));
             }
             else 
             {

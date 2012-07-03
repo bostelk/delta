@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class GravitySink : Entity
+    public class GravitySink : TransformableEntity
     {
         const int NUM_PARTICLES = 1000;
         const float GRAVITY = 6.6f;

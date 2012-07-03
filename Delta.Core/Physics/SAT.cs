@@ -37,6 +37,7 @@ namespace Delta.Physics
 
         public static CollisionResult BoxBox(OBB a, OBB b)
         {
+#if !XBOX
             float projectedDistance = 0;
             float minPenetration = float.MaxValue;
             Vector2 distance = a.Position - b.Position;
@@ -82,14 +83,17 @@ namespace Delta.Physics
                     }
                 }
             }
+#endif
 
             // seperating axis could not be found; the boxes overlap.
             return new CollisionResult()
             {
                 Us = a,
                 Them = b,
+#if !XBOX
                 CollisionResponse = minPenetration * mtv,
                 IsColliding = true
+#endif
             };
         }
 

@@ -8,7 +8,7 @@ namespace Delta.Movement
 {
     internal class TranslateTransform : ITransform
     {
-        Entity _entity;
+        TransformableEntity _entity;
         Vector2 _goalPosition;
         Vector2 _startPosition;
 
@@ -32,7 +32,7 @@ namespace Delta.Movement
             private set;
         }
 
-        public TranslateTransform(Entity entity, Vector2 goalPosition, float duration)
+        public TranslateTransform(TransformableEntity entity, Vector2 goalPosition, float duration)
         {
             _entity = entity;
             _goalPosition = goalPosition;

@@ -105,6 +105,7 @@
     <Compile Include="Physics\SAT.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />

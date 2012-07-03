@@ -66,6 +66,7 @@ namespace Delta
             set { _parent = value; }
         }
 
+        protected bool ContentIsLoaded { get; private set; }
         [ContentSerializerIgnore]
         protected bool IsInitialized { get; private set; }
         [ContentSerializer]
@@ -78,11 +79,6 @@ namespace Delta
         protected bool IsDrawing { get; private set; }
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
-
-        [ContentSerializer]
-        public virtual Vector2 Position { get; set; }
-        [ContentSerializer]
-        public virtual Vector2 Size { get; set; }
 
         float _order = 0; //allows entities to be sorted for drawing and updating.
         [ContentSerializer]
@@ -119,6 +115,7 @@ namespace Delta
         public Entity()
             : base()
         {
+            NeedsHeavyUpdate = true;
             IsEnabled = true;
             IsVisible = true;
         }
@@ -138,7 +135,16 @@ namespace Delta
         {
         }
 
-        public virtual void LoadContent(ContentManager content) 
+        internal void InternalLoadContent()
+        {
+            if (!ContentIsLoaded)
+            {
+                ContentIsLoaded = true;
+                LoadContent();
+            }
+        }
+
+        public virtual void LoadContent() 
         {
         }
 
@@ -147,6 +153,8 @@ namespace Delta
         {
             if (!IsInitialized)
                 InternalInitialize();
+            if (!ContentIsLoaded)
+                InternalLoadContent();
             if (CanUpdate())
             {
                 BeginUpdate(gameTime);

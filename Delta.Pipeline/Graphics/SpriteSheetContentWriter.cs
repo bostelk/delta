@@ -24,7 +24,7 @@ namespace Delta.Graphics
                 Dictionary<int, Rectangle> frameReferences = new Dictionary<int, Rectangle>();
                 foreach (var frameReference in image._frameReferences)
                     frameReferences.Add(frameReference.Key, frameReference.Value.DestinationRegion);
-                imageFrameReferences.Add(Path.GetFileName(image.Path), frameReferences);
+                imageFrameReferences.Add(Path.GetFileNameWithoutExtension(image.Path), frameReferences);
             }
             output.WriteObject<List<Animation>>(animations);
             output.WriteObject<Dictionary<string, Dictionary<int, Rectangle>>>(imageFrameReferences);

@@ -9,7 +9,7 @@ namespace Delta
         bool _isInitialized = false;
         ResourceContentManager _embedded = null;
 
-        public DeltaGame()
+        public DeltaGame(Rectangle screenArea)
             : base()
         {
 #if DEBUG
@@ -17,7 +17,12 @@ namespace Delta
 #endif
             _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
             base.Content.RootDirectory = "Content";
-            G.Setup(this, new Rectangle(0, 0, 1280, 720));
+            G.Setup(this, screenArea);
+        }
+
+        public DeltaGame()
+            : this(new Rectangle(0, 0, 1280, 720))
+        {
         }
 
         protected override void LoadContent()

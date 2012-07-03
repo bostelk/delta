@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Delta.Examples
 {
 
-    public class PerformanceMetrics  : Entity 
+    public class PerformanceMetrics  : TransformableEntity 
     {
         Stopwatch _stopwatch;
         StringBuilder _stringBuilder;
@@ -56,11 +56,11 @@ namespace Delta.Examples
             Color = Color.White;
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent()
         {
             Font = G.Font;
             _stopwatch.Start();
-            base.LoadContent(content);
+            base.LoadContent();
         }
 
         protected override void LightUpdate(Microsoft.Xna.Framework.GameTime gameTime)
