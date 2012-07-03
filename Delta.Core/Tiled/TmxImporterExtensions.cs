@@ -63,7 +63,7 @@ namespace Delta.Tiled
                                     TransformableEntity entity = obj as TransformableEntity;
                                     if (entity != null)
                                     {
-                                        string[] split = value.Split(new string[] { ",", ":", ".", "/", ";", "'", "-" }, StringSplitOptions.RemoveEmptyEntries);
+                                        string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
                                         entity.Position += new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture));
                                         isFound = true;
                                     }
