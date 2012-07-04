@@ -31,6 +31,20 @@ namespace Delta
             return (float) Math.Cos(Vector2.Dot(a, b));
         }
 
+        /// <summary>
+        /// Rotate the vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="theta">Angle in radians.</param>
+        /// <returns></returns>
+        public static Vector2 Rotate(this Vector2 v, float theta)
+        {
+            Vector2 result = Vector2.Zero;
+            result.X = v.X * (float)Math.Cos(theta) - v.Y * (float)Math.Sin(theta);
+            result.Y = v.X * (float)Math.Sin(theta) + v.Y * (float)Math.Cos(theta);
+            return result;
+        }
+
         public static Vector2 RandomDirection()
         {
             Vector2 result = default(Vector2);

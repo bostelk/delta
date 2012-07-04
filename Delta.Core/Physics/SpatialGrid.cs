@@ -155,7 +155,7 @@ namespace Delta.Physics
                         for (int k = j + 1; k < cell.CollisionGeoms.Count; k++)
                         {
                             cgb = cell.CollisionGeoms[k];
-                            if (Polygon.AABBIntersection(cga.Geom, cgb.Geom))
+                            if (AABB.TestOverlap(cga.Geom.AABB, cgb.Geom.AABB))
                             {
                                 _pairs.Add(new CollisionPair()
                                 {
