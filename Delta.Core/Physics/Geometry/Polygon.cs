@@ -86,26 +86,20 @@ namespace Delta.Physics.Geometry
         /// </summary>
         protected virtual void Calculate()
         {
-            // transform the vertices by the rotation and position
             _vertices = new Vector2[LocalVertices.Length];
-            for (int i = 0; i < _vertices.Length; i++)
-            {
-                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
-            }
-            
-            // calculate the new normals
-            _normals = new Vector2[_vertices.Length];
-            for (int i = 0; i < _vertices.Length; i++)
-            {
-                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
-                _normals[i].Normalize();
-            }
-
-            // calculate the new aabb
+            _normals = new Vector2[LocalVertices.Length];
             float farthestVertexX = -float.MaxValue;
             float farthestVertexY = -float.MaxValue;
             for (int i = 0; i < _vertices.Length; i++)
             {
+                // transform the vertices by the rotation and position
+                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
+
+                // calculate the new normals
+                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                _normals[i].Normalize();
+
+                // calculate the new aabb
                 float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
                 float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
                 if (vertexDistanceX > farthestVertexX)
