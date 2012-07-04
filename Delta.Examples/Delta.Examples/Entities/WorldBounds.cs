@@ -32,10 +32,10 @@ namespace Delta.Examples.Entities
             p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
             p4.Position = new Vector2(600, 0);
 
-            G.Physics.AddCollisionPolygon(this, p1);
-            G.Physics.AddCollisionPolygon(this, p2);
-            G.Physics.AddCollisionPolygon(this, p3);
-            G.Physics.AddCollisionPolygon(this, p4);
+            G.Physics.AddCollider(new Collider(p1));
+            G.Physics.AddCollider(new Collider(p2));
+            G.Physics.AddCollider(new Collider(p3));
+            G.Physics.AddCollider(new Collider(p4));
         }
 
         protected override void LightUpdate(GameTime gameTime)

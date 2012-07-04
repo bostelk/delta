@@ -7,7 +7,7 @@ using Delta.Physics;
 
 namespace Delta.Physics
 {
-    public class CollisionGeometry
+    public class Collider
     {
         public Entity Tag;
 
@@ -25,7 +25,7 @@ namespace Delta.Physics
         public bool IsStatic;
 
         /// <summary>
-        /// An inflated bounding area to encompass the geom for fast detections.
+        /// A bounding area for fast detections.
         /// </summary>
         public AABB AABB { get; set; }
 
@@ -46,9 +46,15 @@ namespace Delta.Physics
 
         public OnSeparationEventHandler OnSeperation;
 
-        public CollisionGeometry() { }
+        public Collider() { }
 
-        public CollisionGeometry(Polygon geom)
+        public Collider(Entity tag, Polygon geom)
+        {
+            Tag = tag;
+            Geom = geom;
+        }
+
+        public Collider(Polygon geom)
         {
             Geom = geom;
             AABB = geom.AABB;

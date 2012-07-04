@@ -7,30 +7,30 @@ namespace Delta.Physics
 {
     public class SpatialCell
     {
-        public List<CollisionGeometry> CollisionGeoms;
+        public List<Collider> Colliders;
 
         public bool Occupied
         {
             get
             {
-                return CollisionGeoms.Count > 0;
+                return Colliders.Count > 0;
             }
         }
 
         public SpatialCell()
         {
-            CollisionGeoms = new List<CollisionGeometry>(100);
+            Colliders = new List<Collider>(100);
         }
 
-        public void AddGeom(CollisionGeometry cg)
+        public void AddCollider(Collider cg)
         {
-            if (!CollisionGeoms.Contains(cg))
-                CollisionGeoms.Add(cg);
+            if (!Colliders.Contains(cg))
+                Colliders.Add(cg);
         }
 
-        public void RemoveGeom(CollisionGeometry cg)
+        public void RemoveCollider(Collider cg)
         {
-            CollisionGeoms.FastRemove<CollisionGeometry>(cg);
+            Colliders.FastRemove<Collider>(cg);
         }
     }
 }

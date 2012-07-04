@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Delta.Physics.Geometry;
+using System.Collections.Generic;
 
 namespace Delta.Physics
 {
@@ -33,26 +33,26 @@ namespace Delta.Physics
             _results = new Stack<CollisionResult>(10);
         }
 
+        /// <summary>
+        /// Define the SpatialGrid dimensions.
+        /// </summary>
+        /// <param name="width">Width in pixels.</param>
+        /// <param name="height">Height in pixels.</param>
+        /// <param name="size">Cell size in pixels.</param>
         public override void DefineWorld(int width, int height, int size)
         {
             _grid = new SpatialGrid(width, height, size);
         }
 
-        public override void AddCollisionPolygon(CollisionGeometry cg)
+        public override void AddCollider(Collider collider)
         {
-            _polygonsToAdd.Add(cg.Geom);
-            _grid.AddCollsionGeom(cg);
+            _polygonsToAdd.Add(collider.Geom);
+            _grid.AddCollider(collider);
         }
 
-        public override void AddCollisionPolygon(Entity entity, Polygon geometry)
+        public override void RemoveColider(Collider collider)
         {
-            _polygonsToAdd.Add(geometry);
-            _grid.AddCollsionGeom(new CollisionGeometry(geometry));
-        }
-
-        public override void RemoveCollisionPolygon(Polygon geometry)
-        {
-            _polygonsToRemove.Add(geometry);
+            _polygonsToRemove.Add(collider.Geom);
             //_grid.RemoveCollisionGeom();
         }
 
@@ -85,8 +85,8 @@ namespace Delta.Physics
             {
                 CollisionResult result;
                 Polygon polyA, polyB;
-                polyA = pair.CGA.Geom;
-                polyB = pair.CGB.Geom;
+                polyA = pair.ColliderA.Geom;
+                polyB = pair.ColliderB.Geom;
 
                 if (polyA is OBB && polyB is OBB)
                 {
@@ -115,10 +115,10 @@ namespace Delta.Physics
                     // translate the polygon to a safe non-interecting position.
                     polyA.Position += result.CollisionResponse;
                     // on collision events
-                    if (pair.CGA.OnCollision != null)
-                        pair.CGA.OnCollision(null, Vector2.Zero);
-                    if (pair.CGB.OnCollision != null)
-                        pair.CGB.OnCollision(null, Vector2.Zero);
+                    if (pair.ColliderA.OnCollision != null)
+                        pair.ColliderA.OnCollision(pair.ColliderB, Vector2.Zero);
+                    if (pair.ColliderB.OnCollision != null)
+                        pair.ColliderB.OnCollision(pair.ColliderA, Vector2.Zero);
                 }
             }
         }

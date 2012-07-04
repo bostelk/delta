@@ -15,11 +15,9 @@ namespace Delta.Physics
 
         public abstract void DefineWorld(int width, int height, int size);
 
-        public abstract void AddCollisionPolygon(CollisionGeometry cg);
+        public abstract void AddCollider(Collider colider);
 
-        public abstract void AddCollisionPolygon(Entity entity, Polygon geometry);
-
-        public abstract void RemoveCollisionPolygon(Polygon geometry);
+        public abstract void RemoveColider(Collider colider);
 
         public abstract List<Polygon> Raycast(Vector2 start, Vector2 end, bool returnFirst);
 

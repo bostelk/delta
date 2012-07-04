@@ -19,7 +19,7 @@ namespace Delta.Examples.Entities
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;
 
-        public Polygon Body { get; private set; }
+        public Collider Collider { get; private set; }
 
         public Vector2 Input { get; set; }
 
@@ -29,12 +29,12 @@ namespace Delta.Examples.Entities
         {
             get
             {
-                return Body.Position;
+                return Collider.Geom.Position;
             }
             set
             {
                 base.Position = value;
-                Body.Position = value;
+                Collider.Geom.Position = value;
             }
         }
 
@@ -47,30 +47,31 @@ namespace Delta.Examples.Entities
             set
             {
                 base.Rotation = value;
-                Body.Rotation = value;
+                Collider.Geom.Rotation = value;
             }
         }
 
         public PhysicsCar()
         {
-            G.Physics.AddCollisionPolygon(this, Body = new OBB(50, 100));
+            G.Physics.AddCollider(new Collider()
+            {
+                Geom = new OBB(50, 100)
+            });
         }
 
         public void SwitchBody()
         {
-            if (Body is Circle)
+            if (Collider.Geom is Circle)
             {
-                G.Physics.RemoveCollisionPolygon(Body);
-                G.Physics.AddCollisionPolygon(this, Body = new OBB(50, 100));
+                Collider.Geom = new OBB(50, 100);
             }
-            else if (Body is OBB)
+            else if (Collider.Geom is OBB)
             {
-                G.Physics.RemoveCollisionPolygon(Body);
-                G.Physics.AddCollisionPolygon(this, Body = new Circle(50));
+                Collider.Geom = new Circle(50);
             }
 
-            Body.Position = base.Position;
-            Body.Rotation = Rotation;
+            Collider.Geom.Position = base.Position;
+            Collider.Geom.Rotation = Rotation;
         }
 
         protected override void LightUpdate(GameTime gameTime)
