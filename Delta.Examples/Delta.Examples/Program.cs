@@ -18,6 +18,7 @@ namespace Delta.Examples
             Tiled,
             Physics,
             Racing,
+            Zelda,
         }
 
 #if WINDOWS
@@ -25,7 +26,7 @@ namespace Delta.Examples
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Physics;
+            Examples example = Examples.Zelda;
 
             switch (example)
             {
@@ -49,6 +50,9 @@ namespace Delta.Examples
                     break;
                 case Examples.Racing:
                     RunExample<RacingExample>();
+                    break;
+                case Examples.Zelda:
+                    RunExample<ZeldaExample>();
                     break;
             }
         }

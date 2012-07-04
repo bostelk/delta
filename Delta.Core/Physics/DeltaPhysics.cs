@@ -113,7 +113,7 @@ namespace Delta.Physics
                 {
                     _results.Push(result);
                     // translate the polygon to a safe non-interecting position.
-                    if (!pair.ColliderA.IsStatic)
+                    if (!pair.ColliderA.IsSensor)
                         polyA.Position += result.CollisionResponse;
                     // on collision events
                     if (pair.ColliderA.OnCollision != null)

@@ -32,10 +32,10 @@ namespace Delta.Examples.Entities
             p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
             p4.Position = new Vector2(600, 0);
 
-            G.Physics.AddCollider(new Collider(p1) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p2) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p3) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p4) { IsStatic = true });
+            G.Physics.AddCollider(new Collider(p1) { IsSensor = true });
+            G.Physics.AddCollider(new Collider(p2) { IsSensor = true });
+            G.Physics.AddCollider(new Collider(p3) { IsSensor = true });
+            G.Physics.AddCollider(new Collider(p4) { IsSensor = true });
         }
 
         protected override void LightUpdate(GameTime gameTime)

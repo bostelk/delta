@@ -49,6 +49,12 @@ namespace Delta.Physics.Geometry
             }
         }
 
+
+        /// <summary>
+        /// Create an Orientated Bounding Box
+        /// </summary>
+        /// <param name="width">Box width in pixels.</param>
+        /// <param name="height">Box height in pixels.</param>
         public OBB(float width, float height) : base()
         {
             HalfWidth = width / 2;

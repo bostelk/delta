@@ -20,9 +20,9 @@ namespace Delta.Physics
         public float Mass;
 
         /// <summary>
-        /// No collision response. ie. Stays stationary.
+        /// Will not be moved due to collision. (No collision response).
         /// </summary>
-        public bool IsStatic;
+        public bool IsSensor;
 
         /// <summary>
         /// A bounding area for fast detections.
@@ -30,12 +30,12 @@ namespace Delta.Physics
         public AABB AABB { get; set; }
 
         /// <summary>
-        /// The Geom is about to collide.
+        /// The Geom is about to collide. (Broad-phase intersection).
         /// </summary>
         public BeforeCollisionEventHandler BeforeCollision;
 
         /// <summary>
-        /// The Geom is colliding.
+        /// The Geom is colliding. (Narrow-phase intersection).
         /// </summary>
         public OnCollisionEventHandler OnCollision;
 

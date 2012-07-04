@@ -114,7 +114,8 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
-    <Compile Include="Entities\Ball.cs" />
+    <Compile Include="ZeldaExample.cs" />
+    <Compile Include="Entities\Obstacle.cs" />
     <Compile Include="Entities\BoxLink.cs" />
     <Compile Include="Entities\WorldBounds.cs" />
     <Compile Include="RacingExample.cs" />
