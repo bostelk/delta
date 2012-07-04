@@ -9,9 +9,12 @@ namespace Delta.Physics.Geometry
     /// <summary>
     /// An Orientated Bounding Box. ie. it will reflect rotations.
     /// </summary>
-    public class OBB : Box
+    public class OBB : Polygon
     {
         public object Tag;
+        
+        public float HalfWidth;
+        public float HalfHeight;
 
         /// <summary>
         /// The Unit vector that points along the x-axis.
@@ -32,19 +35,11 @@ namespace Delta.Physics.Geometry
             }
         }
 
-        public Vector2 HalfSize
-        {
-            get
-            {
-                return new Vector2(Width / 2, Height / 2);
-            }
-        }
-
         public Vector2 HalfWidthX
         {
             get
             {
-                return new Vector2(HalfSize.X, HalfSize.X) * Facing;
+                return new Vector2(HalfWidth, HalfWidth) * Facing;
             }
         }
 
@@ -52,31 +47,29 @@ namespace Delta.Physics.Geometry
         {
             get
             {
-                return new Vector2(HalfSize.Y, HalfSize.Y) * Vector2Extensions.PerpendicularLeft(Facing);
+                return new Vector2(HalfHeight, HalfHeight) * Vector2Extensions.PerpendicularLeft(Facing);
             }
         }
 
         public OBB(float width, float height) : base()
         {
-            Width = width;
-            Height = height;
+            HalfWidth = width / 2;
+            HalfHeight = height / 2;
 
-            // define the vertices: top-left, top-right, bottom-right, bottom left.
             LocalVertices = new Vector2[] {
-                new Vector2(width / 2, height / 2),
-                new Vector2(-width / 2, height / 2),
-                new Vector2(-width / 2, -height / 2),
-                new Vector2(width / 2, -height / 2),
+                new Vector2(HalfWidth, HalfHeight),
+                new Vector2(-HalfWidth, HalfHeight),
+                new Vector2(-HalfWidth, -HalfHeight),
+                new Vector2(HalfWidth, -HalfHeight),
             };
+            Calculate();
         }
 
-#if !XBOX
         public void ProjectOntoAxis(Vector2 axisNormal, out Vector2 projection)
         {
             projection.X = Vector2.Dot(HalfWidthX, axisNormal);
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);
         }
-#endif
 
     }
 }

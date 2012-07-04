@@ -9,19 +9,112 @@ namespace Delta.Physics.Geometry
 {
     public class Polygon : IGeometry
     {
-        protected Vector2[] _normals;
-        protected Vector2[] _localVertices;
-        bool _normalsDirty;
-
         /// <summary>
         /// Defined as the center of the Polygon.
         /// </summary>
-        public Vector2 Position;
-
+        Vector2 _position;
+        public Vector2 Position
+        {
+            get { return _position; }
+            set { _position = value; Calculate(); }
+        }
+        
         /// <summary>
         /// The Rotation of the Polygon in radians.
         /// </summary>
-        public float Rotation;
+        float _rotation;
+        public float Rotation
+        {
+            get { return _rotation; }
+            set { _rotation = value; Calculate(); }
+        }
+
+        /// <summary>
+        /// Vertices relative to the Polygon position.
+        /// </summary>
+        protected Vector2[] _localVertices;
+        public Vector2[] LocalVertices
+        {
+            get
+            {
+                return _localVertices;
+            }
+            set
+            {
+                _localVertices = value;
+            }
+        }
+
+        /// <summary>
+        /// Absolute position of the Vertices. Transformed by polygon center and rotation.
+        /// </summary>
+        protected Vector2[] _vertices;
+        public Vector2[] Vertices
+        {
+            get
+            {
+                return _vertices;
+            }
+        }
+
+        /// <summary>
+        /// Normals to polygon edges.
+        /// </summary>
+        protected Vector2[] _normals;
+        public Vector2[] Normals
+        {
+            get
+            {
+                return _normals;
+            }
+        }
+
+        /// <summary>
+        /// Minimum bounding area of the polygon.
+        /// </summary>
+        AABB _aabb;
+        public AABB AABB
+        {
+            get
+            {
+                return _aabb;
+            }
+        }
+
+        /// <summary>
+        /// Keeping the polygon fresh.
+        /// </summary>
+        protected virtual void Calculate()
+        {
+            // transform the vertices by the rotation and position
+            _vertices = new Vector2[LocalVertices.Length];
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
+            }
+            
+            // calculate the new normals
+            _normals = new Vector2[_vertices.Length];
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                _normals[i].Normalize();
+            }
+
+            // calculate the new aabb
+            float farthestVertexX = -float.MaxValue;
+            float farthestVertexY = -float.MaxValue;
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
+                float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
+                if (vertexDistanceX > farthestVertexX)
+                    farthestVertexX = vertexDistanceX;
+                if (vertexDistanceY > farthestVertexY)
+                    farthestVertexY = vertexDistanceY;
+            }
+            _aabb = new AABB((int)farthestVertexX, (int)farthestVertexY) { Position = Position };
+        }
 
         /// <summary>
         /// The minimum radius required to encapsulate the entire polygon.
@@ -43,81 +136,11 @@ namespace Delta.Physics.Geometry
             }
         }
 
-        public AABB AABB
-        {
-            get
-            {
-                float farthestVertexX = float.MinValue;
-                float farthestVertexY = float.MinValue;
-                for (int i = 0; i < Vertices.Length; i++)
-                {
-                    float vertexDistanceX = Math.Abs(Position.X - Vertices[i].X);
-                    float vertexDistanceY = Math.Abs(Position.Y - Vertices[i].Y);
-                    if (vertexDistanceX > farthestVertexX)
-                        farthestVertexX = vertexDistanceX;
-                    if (vertexDistanceY > farthestVertexY)
-                        farthestVertexY = vertexDistanceY;
-                }
-                return new AABB(farthestVertexX * 2, farthestVertexY * 2) { Position = Position };
-            }
-        }
-
-        public Vector2[] Normals
-        {
-            get
-            {
-                if (_normals == null || _normalsDirty)
-                {
-                    _normals = new Vector2[Vertices.Length];
-                    for (int i = 0; i < Vertices.Length; i++)
-                    {
-                        _normals[i] = Vector2Extensions.PerpendicularLeft(Vertices[(i + 1) % Vertices.Length] - Vertices[i]);
-                        _normals[i].Normalize();
-                    }
-                    //_normalsDirty = false;
-                }
-                return _normals;
-            }
-        }
-
-        /// <summary>
-        /// Vertices relative to the Polygon position.
-        /// </summary>
-        public Vector2[] LocalVertices
-        {
-            get
-            {
-                return _localVertices;
-            }
-            set
-            {
-                _localVertices = value;
-                _normalsDirty = true;
-            }
-        }
-
         public Matrix Transform
         {
             get
             {
                 return Matrix.CreateRotationZ(Rotation) * Matrix.CreateTranslation(Position.X, Position.Y, 0);
-            }
-        }
-
-        /// <summary>
-        /// Absolute position of the Vertices. Transformed by polygon center and rotation.
-        /// </summary>
-        public Vector2[] Vertices
-        {
-            get
-            {
-                Vector2[] result = new Vector2[LocalVertices.Length];
-                Matrix transform = Matrix.CreateRotationZ(Rotation) * Matrix.CreateTranslation(Position.X, Position.Y, 0);
-                for (int i = 0; i < LocalVertices.Length; i++)
-                {
-                    result[i] = Vector2.Transform(LocalVertices[i], transform);
-                }
-                return result;
             }
         }
 
@@ -143,6 +166,7 @@ namespace Delta.Physics.Geometry
                 _localVertices[i].X = -center.X + vertices[i].X;
                 _localVertices[i].Y = -center.Y + vertices[i].Y;
             }
+            Calculate();
         }
 
         public void ProjectOntoAxis(Vector2 axisNormal, out float min, out float max)
@@ -151,7 +175,8 @@ namespace Delta.Physics.Geometry
             max = min;
             float projected = 0;
 
-            for(int i = 1; i < Vertices.Length; i++) {
+            for (int i = 1; i < Vertices.Length; i++)
+            {
                 projected = Vector2.Dot(Vertices[i], axisNormal);
                 if (projected > max)
                     max = projected;
@@ -164,25 +189,10 @@ namespace Delta.Physics.Geometry
         /// A less expensive check before we waste cycles on a narrow phase detection.
         /// </summary>
         /// <returns>If the two polygons are about to interesect.</returns>
-        public static bool BoundingRadiusIntersection(Polygon polyA, Polygon polyB)
+        public static bool TestRadiusOverlap(Polygon polyA, Polygon polyB)
         {
             return (polyA.Position - polyB.Position).LengthSquared() <= DeltaMath.Sqr(polyA.BoundingRadius + polyB.BoundingRadius);
         }
 
-        /// <summary>
-        /// A less expensive check before we waste cycles on a narrow phase detection.
-        /// </summary>
-        /// <returns>If the two polygons are about to intersect.</returns>
-        public static bool AABBIntersection(Polygon polyA, Polygon polyB)
-        {
-            AABB a = polyA.AABB;
-            AABB b = polyB.AABB;
-
-            // Exit with no intersection if separated along an axis
-            if (a.Max.X < b.Min.X || a.Min.X > b.Max.X) return false;
-            if (a.Max.Y < b.Min.Y || a.Min.Y > b.Max.Y) return false;
-            // Overlapping on all axes means AABBs are intersecting
-            return true;
-        }
     }
 }

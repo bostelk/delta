@@ -142,7 +142,7 @@ namespace Delta.Physics
                 }
 #if DEBUG
                 //G.PrimitiveBatch.DrawCircle(poly.Position, poly.BoundingRadius, BoundingColor);
-                G.PrimitiveBatch.DrawPolygon(poly.AABB.Vertices, poly.AABB.Vertices.Length, BoundingColor);
+                G.PrimitiveBatch.DrawPolygon(poly.AABB.Vertices, 4, BoundingColor);
 #endif
                 G.PrimitiveBatch.DrawPolygon(poly.Vertices, poly.Vertices.Length, PolygonColor);
             }

@@ -9,6 +9,6 @@ namespace Delta.Physics.Geometry
     public interface IGeometry
     {
         Vector2[] Normals { get; }
-        Vector2[] LocalVertices { get; set; }
+        Vector2[] Vertices { get; }
     }
 }
