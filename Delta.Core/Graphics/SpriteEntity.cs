@@ -12,6 +12,23 @@ namespace Delta.Graphics
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         float _frameDurationTimer = 0f;
         Animation _animation = null;
+        Vector2 _renderPosition = Vector2.Zero;
+        Vector2 _renderOrigin = Vector2.Zero;
+
+        Vector2 _pivot = Vector2.Zero;
+        [ContentSerializer]
+        public Vector2 Pivot
+        {
+            get { return _pivot; }
+            set
+            {
+                if (_pivot != value)
+                {
+                    _pivot = value;
+                    OnPivotChanged();
+                }
+            }
+        }
 
         [ContentSerializer(ElementName = "Frame")] //for Rob's convience
         public int AnimationFrame { get; private set; }
@@ -27,9 +44,9 @@ namespace Delta.Graphics
         public string AnimationName { get; set; }
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
-        [ContentSerializer(ElementName = "fOffset")] //for Rob's convience
+        [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
-        [ContentSerializer(ElementName = "startRandom")]
+        [ContentSerializer(ElementName = "StartRandom")]
         public bool RandomFrameStart { get; set; }
 
         public SpriteEntity()
@@ -51,6 +68,16 @@ namespace Delta.Graphics
             if (_animation != null)
                 UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
+        }
+
+        protected virtual void UpdateRenderOrigin()
+        {
+            _renderOrigin = Pivot * Size;
+        }
+
+        protected virtual void UpdateRenderPosition()
+        {
+            _renderPosition = Position + _renderOrigin;
         }
 
         protected internal void UpdateAnimation()
@@ -101,16 +128,29 @@ namespace Delta.Graphics
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_spriteSheet.Texture, Position, _sourceRectangle, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects, 0);
+            spriteBatch.Draw(_spriteSheet.Texture, _renderPosition, _sourceRectangle, Tint, Rotation, _renderOrigin, Scale, SpriteEffects, 0);
+        }
+
+        protected internal override void OnPositionChanged()
+        {
+            base.OnPositionChanged();
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
         }
 
         protected internal virtual void OnAnimationChanged()
         {
             AnimationFrame = AnimationFrameOffset;
             if (RandomFrameStart)
-                AnimationFrame = G.Random.Next(AnimationFrameOffset, _animation.Frames.Count - 1);          
+                AnimationFrame = G.Random.Next(AnimationFrameOffset, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             AnimationIsFinished = false;
+        }
+
+        protected virtual void OnPivotChanged()
+        {
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
         }
 
     }
