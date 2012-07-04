@@ -11,8 +11,8 @@ namespace Delta.Physics
 {
     public struct CollisionPair
     {
-        public CollisionGeometry CGA;
-        public CollisionGeometry CGB;
+        public Collider ColliderA;
+        public Collider ColliderB;
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ namespace Delta.Physics
     {
         SpatialCell[] _cells;
         List<CollisionPair> _pairs;
-        List<CollisionGeometry> _cgs;
+        List<Collider> _collidersGlobal;
         float _invCellSize;
         int[] neighbourOffset;  
 
@@ -62,7 +62,7 @@ namespace Delta.Physics
             Offset = new Point(width / 2, height / 2);
 
             _invCellSize = 1 / cellSize;
-            _cgs = new List<CollisionGeometry>(100);
+            _collidersGlobal = new List<Collider>(100);
             _pairs = new List<CollisionPair>(100);
             _cells = new SpatialCell[TotalCells];
 
@@ -86,7 +86,7 @@ namespace Delta.Physics
         private void ClearGrid()
         {
             for (int i = 0; i < _cells.Length; i++)
-                _cells[i].CollisionGeoms.Clear();
+                _cells[i].Colliders.Clear();
         }
 
         private Point GetCellPosition(Vector2 position)
@@ -99,35 +99,35 @@ namespace Delta.Physics
             return result;
         }
 
-        public void AddCollsionGeom(CollisionGeometry cg)
+        public void AddCollider(Collider collider)
         {
-            Point start = GetCellPosition(cg.Geom.AABB.Min);
-            Point end = GetCellPosition(cg.Geom.AABB.Max);
+            Point start = GetCellPosition(collider.Geom.AABB.Min);
+            Point end = GetCellPosition(collider.Geom.AABB.Max);
 
             for (int y = start.Y; y <= end.Y; y++)
             {
                 for (int x = start.X; x <= end.X; x++)
                 {
-                    _cells[x + y * CellsWide].AddGeom(cg);
+                    _cells[x + y * CellsWide].AddCollider(collider);
                 }
             }
-            if (!_cgs.Contains(cg))
-                _cgs.Add(cg);
+            if (!_collidersGlobal.Contains(collider))
+                _collidersGlobal.Add(collider);
         }
 
-        public void RemoveCollisionGeom(CollisionGeometry cg)
+        public void RemoveCollider(Collider collider)
         {
-            Point start = GetCellPosition(cg.Geom.AABB.Min);
-            Point end = GetCellPosition(cg.Geom.AABB.Max);
+            Point start = GetCellPosition(collider.Geom.AABB.Min);
+            Point end = GetCellPosition(collider.Geom.AABB.Max);
 
             for (int y = start.Y; y < end.Y; y++)
             {
                 for (int x = start.X; x < end.X; x++)
                 {
-                    _cells[x + y * CellsWide].RemoveGeom(cg);
+                    _cells[x + y * CellsWide].RemoveCollider(collider);
                 }
             }
-            _cgs.FastRemove<CollisionGeometry>(cg);
+            _collidersGlobal.FastRemove<Collider>(collider);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Delta.Physics
         /// <returns></returns>
         public List<CollisionPair> GetCollisionPairs() {
             SpatialCell cell;
-            CollisionGeometry cga, cgb;
+            Collider colliderA, colliderB;
 
             _pairs.Clear();
             for (int i = 0; i < _cells.Length; i++)
@@ -149,24 +149,24 @@ namespace Delta.Physics
 
                     cell = _cells[ii];
 
-                    for (int j = 0; j < cell.CollisionGeoms.Count; j++)
+                    for (int j = 0; j < cell.Colliders.Count; j++)
                     {
-                        cga = cell.CollisionGeoms[j];
-                        for (int k = j + 1; k < cell.CollisionGeoms.Count; k++)
+                        colliderA = cell.Colliders[j];
+                        for (int k = j + 1; k < cell.Colliders.Count; k++)
                         {
-                            cgb = cell.CollisionGeoms[k];
-                            if (AABB.TestOverlap(cga.Geom.AABB, cgb.Geom.AABB))
+                            colliderB = cell.Colliders[k];
+                            if (AABB.TestOverlap(colliderA.Geom.AABB, colliderB.Geom.AABB))
                             {
                                 _pairs.Add(new CollisionPair()
                                 {
-                                    CGA = cga,
-                                    CGB = cgb
+                                    ColliderA = colliderA,
+                                    ColliderB = colliderB
                                 });
 
-                                if (cga.BeforeCollision != null)
-                                    cga.BeforeCollision(null, Vector2.Zero);
-                                if (cgb.BeforeCollision != null)
-                                    cgb.BeforeCollision(null, Vector2.Zero);
+                                if (colliderA.BeforeCollision != null)
+                                    colliderA.BeforeCollision(colliderB, Vector2.Zero);
+                                if (colliderB.BeforeCollision != null)
+                                    colliderB.BeforeCollision(colliderA, Vector2.Zero);
                             }
                         }
                     }
@@ -180,9 +180,9 @@ namespace Delta.Physics
         {
             ClearGrid();
 
-            for (int i = 0; i < _cgs.Count; i++)
+            for (int i = 0; i < _collidersGlobal.Count; i++)
             {
-                AddCollsionGeom(_cgs[i]);
+                AddCollider(_collidersGlobal[i]);
             }
         }
 

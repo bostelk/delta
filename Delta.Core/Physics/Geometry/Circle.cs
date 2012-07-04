@@ -36,9 +36,7 @@ namespace Delta.Physics.Geometry
             }
         }
 
-        public Circle(float radius) : this(radius, SEGMENTS)
-        {
-        }
+        public Circle(float radius) : this(radius, SEGMENTS) { }
 
         public Circle(float radius, int segments)
         {
@@ -51,6 +49,7 @@ namespace Delta.Physics.Geometry
                 position.X = (float)Math.Cos(theta) * radius;
                 position.Y = (float)Math.Sin(theta) * radius;
             }
+            Calculate();
         }
 
         public void ProjectOntoAxis(Vector2 axis, out Vector2 projection) {

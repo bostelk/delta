@@ -16,26 +16,26 @@ namespace Delta.Examples.Entities
 {
     public class RaceTrack : TransformableEntity
     {
-        public Polygon Body { get; private set; }
+        public Collider Collider { get; private set; }
 
         public override Vector2 Position
         {
             get
             {
-                return Body.Position;
+                return Collider.Geom.Position;
             }
             set
             {
                 base.Position = value;
-                Body.Position = value;
+                Collider.Geom.Position = value;
             }
         }
 
         public RaceTrack()
         {
-            G.Physics.AddCollisionPolygon(this, Body = new Polygon(new Vector2(0, -360), new Vector2(0, 360)));
-            G.Physics.AddCollisionPolygon(this, Body = new Polygon(new Vector2(-640, 0), new Vector2(0, 0)));
-            Body.Position = new Vector2(100, 0);
+            G.Physics.AddCollider(Collider = new Collider(new Polygon(new Vector2(0, -360), new Vector2(0, 360))));
+            G.Physics.AddCollider(Collider = new Collider(new Polygon(new Vector2(-640, 0), new Vector2(0, 0))));
+            Position = new Vector2(100, 0);
         }
 
     }

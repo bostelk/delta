@@ -14,11 +14,11 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class Ball : TransformableEntity
+    public class Obstacle : TransformableEntity
     {
         const float SPEED = 50;
 
-        public Polygon Body { get; private set; }
+        public Collider Collider { get; private set; }
 
         public Vector2 Input { get; set; }
 
@@ -28,12 +28,12 @@ namespace Delta.Examples.Entities
         {
             get
             {
-                return Body.Position;
+                return Collider.Geom.Position;
             }
             set
             {
                 base.Position = value;
-                Body.Position = value;
+                Collider.Geom.Position = value;
             }
         }
 
@@ -47,16 +47,16 @@ namespace Delta.Examples.Entities
             set
             {
                 _rotation = value;
-                Body.Rotation = value;
+                Collider.Geom.Rotation = value;
             }
         }
 
-        public Ball()
+        public Obstacle()
         {
-            Body = new OBB(10, 10);
-            G.Physics.AddCollisionPolygon(new CollisionGeometry() {
+            G.Physics.AddCollider(Collider = new Collider() 
+            {
                 Tag = this,
-                Geom = Body,
+                Geom = new OBB(10, 10),
                 OnCollision = OnCollision,
                 BeforeCollision = BeforeCollision
             });
@@ -76,22 +76,22 @@ namespace Delta.Examples.Entities
             base.LightUpdate(gameTime);
         }
 
-        public bool BeforeCollision(Entity them, Vector2 normal)
+        public bool BeforeCollision(Collider them, Vector2 normal)
         {
             return true;
         }
 
-        public bool OnCollision(Entity them, Vector2 normal)
+        public bool OnCollision(Collider them, Vector2 normal)
         {
             Velocity = -Velocity;
             return true;
         }
 
-        public void AfterCollisionEventHandler(Entity them, Vector2 normal)
+        public void AfterCollisionEventHandler(Collider them, Vector2 normal)
         {
         }
 
-        public void OnSeparationEventHandler(Entity them)
+        public void OnSeparationEventHandler(Collider them)
         {
         }
 

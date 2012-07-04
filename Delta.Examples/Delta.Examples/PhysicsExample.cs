@@ -30,8 +30,8 @@ namespace Delta.Examples
 
             G.World.Add(player1 = new BoxLink());
             G.World.Add(new WorldBounds());
-            List<Ball> balls = EntitySpawner.OnAGrid<Ball>(Vector2.Zero, 10, 10, 32, 32, () => { return new Ball(); });
-            G.World.AddRange(balls.ToList<IEntity>(), 0);
+            List<Obstacle> obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
+            G.World.AddRange(obstacles.ToList<IEntity>(), 0);
         }
 
         //protected override void LoadContent()
