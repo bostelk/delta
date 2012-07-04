@@ -85,13 +85,12 @@ namespace Delta.Examples.Entities
             {
                 float speedX = (float)Math.Cos(Rotation + Math.PI / 2) * SPEED * Input.Y;
                 float speedY = (float)Math.Sin(Rotation + Math.PI / 2) * SPEED * Input.Y;
-                Velocity.X = MathHelper.SmoothStep(Velocity.X, speedX, 0.3f);
-                Velocity.Y = MathHelper.SmoothStep(Velocity.Y, speedY, 0.3f);
+                Velocity.X = speedX;
+                Velocity.Y = speedY;
             }
             else
             {
-                Velocity.X = MathHelper.SmoothStep(Velocity.X, 0, 0.1f);
-                Velocity.Y = MathHelper.SmoothStep(Velocity.Y, 0, 0.1f);
+                Velocity = Vector2.Zero;
             }
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             base.LightUpdate(gameTime);
