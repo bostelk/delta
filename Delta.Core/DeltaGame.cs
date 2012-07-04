@@ -49,11 +49,11 @@ namespace Delta
             G.SimpleEffect.Time = (float)gameTime.TotalGameTime.TotalMilliseconds;
             G.Input.Update(gameTime);
             G.Audio.Update(gameTime);
-            G.Physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
             if (!_isInitialized)
                 InternalInitialize();
             G.World.InternalUpdate(gameTime);
             G.UI.InternalUpdate(gameTime);
+            G.Physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
             base.Update(gameTime);
         }
 

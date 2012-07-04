@@ -12,8 +12,8 @@ namespace Delta.Physics.Geometry
     public class AABB
     {
         public Vector2 Position;
-        public int HalfWidth { get; private set; }
-        public int HalfHeight { get; private set; }
+        public int HalfWidth { get; protected set; }
+        public int HalfHeight { get; protected set; }
 
         public AABB(int halfWidth, int halfHeight)
         {
