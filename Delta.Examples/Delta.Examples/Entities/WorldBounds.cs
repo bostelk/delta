@@ -32,19 +32,14 @@ namespace Delta.Examples.Entities
             p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
             p4.Position = new Vector2(600, 0);
 
-            G.Physics.AddCollider(new Collider(p1));
-            G.Physics.AddCollider(new Collider(p2));
-            G.Physics.AddCollider(new Collider(p3));
-            G.Physics.AddCollider(new Collider(p4));
+            G.Physics.AddCollider(new Collider(p1) { IsStatic = true });
+            G.Physics.AddCollider(new Collider(p2) { IsStatic = true });
+            G.Physics.AddCollider(new Collider(p3) { IsStatic = true });
+            G.Physics.AddCollider(new Collider(p4) { IsStatic = true });
         }
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            // HACK: Keep them stationary for now..
-            p1.Position = new Vector2(0, -320);
-            p2.Position = new Vector2(0, 320);
-            p3.Position = new Vector2(-600, 0);
-            p4.Position = new Vector2(600, 0);
             base.LightUpdate(gameTime);
         }
 

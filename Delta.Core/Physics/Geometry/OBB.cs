@@ -11,10 +11,8 @@ namespace Delta.Physics.Geometry
     /// </summary>
     public class OBB : Polygon
     {
-        public object Tag;
-        
-        public float HalfWidth;
-        public float HalfHeight;
+        public float HalfWidth { get; private set; }
+        public float HalfHeight { get; private set; }
 
         /// <summary>
         /// The Unit vector that points along the x-axis.

@@ -9,14 +9,15 @@ namespace Delta.Physics.Geometry
     /// <summary>
     /// A box.
     /// </summary>
-    public class Box : Polygon
+    public class Box
     {
-        public float Width;
-        public float Height;
+        public Vector2 Position;
+        public int HalfWidth { get; protected set; }
+        public int HalfHeight { get; protected set; }
 
         public Rectangle ToRectangle()
         {
-            return new Rectangle((int)(Position.X - Width / 2), (int)(Position.Y - Height / 2), (int)Width, (int)Height);
+            return new Rectangle((int)(Position.X - HalfWidth), (int)(Position.Y - HalfHeight), (int)HalfWidth * 2, (int)HalfHeight * 2);
         }
     }
 }

@@ -57,6 +57,7 @@ namespace Delta.Examples.Entities
             {
                 Tag = this,
                 Geom = new OBB(10, 10),
+                //Geom = new Cirlce(5),
                 OnCollision = OnCollision,
                 BeforeCollision = BeforeCollision
             });
@@ -87,11 +88,11 @@ namespace Delta.Examples.Entities
             return true;
         }
 
-        public void AfterCollisionEventHandler(Collider them, Vector2 normal)
+        public void AfterCollision(Collider them, Vector2 normal)
         {
         }
 
-        public void OnSeparationEventHandler(Collider them)
+        public void OnSeparation(Collider them)
         {
         }
 
