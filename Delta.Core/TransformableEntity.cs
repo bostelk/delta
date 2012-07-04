@@ -83,7 +83,7 @@ namespace Delta
         }
 
         float _alpha = 1f;
-        [ContentSerializer]
+        [ContentSerializer(ElementName = "Opacity")]
         public virtual float Alpha
         {
             get { return _alpha; }
