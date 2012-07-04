@@ -103,15 +103,14 @@ namespace Delta.Graphics
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
-                AnimationFrameOffset = DeltaMath.Wrap(AnimationFrameOffset, 0, _animation.Frames.Count - 1);
-                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, AnimationFrameOffset, _animation.Frames.Count - 1);
+                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, 0, _animation.Frames.Count - 1);
                 if (!AnimationIsLooped && AnimationFrame >= _animation.Frames.Count - 1)
                 {
                     AnimationIsFinished = true;
                     _frameDurationTimer = 0;
                 }
                 Rectangle previousSourceRectangle = _sourceRectangle;
-                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[AnimationFrame]);
+                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[AnimationFrame] + AnimationFrameOffset);
                 if (_sourceRectangle != Rectangle.Empty)
                 {
                     if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
@@ -142,7 +141,7 @@ namespace Delta.Graphics
         {
             AnimationFrame = AnimationFrameOffset;
             if (RandomFrameStart)
-                AnimationFrame = G.Random.Next(AnimationFrameOffset, _animation.Frames.Count - 1);
+                AnimationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             AnimationIsFinished = false;
         }
