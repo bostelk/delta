@@ -18,6 +18,8 @@ namespace Delta.Examples.Entities
     {
         const float SPEED = 50;
 
+        public bool MoveAndRotate;
+
         public Collider Collider { get; private set; }
 
         public Vector2 Input { get; set; }
@@ -38,7 +40,7 @@ namespace Delta.Examples.Entities
         }
 
         float _rotation;
-        public float Rotation
+        public override float Rotation
         {
             get
             {
@@ -72,8 +74,11 @@ namespace Delta.Examples.Entities
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            Rotation += 0.01f;
-            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (MoveAndRotate)
+            {
+                Rotation += 0.01f;
+                Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
             base.LightUpdate(gameTime);
         }
 

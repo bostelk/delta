@@ -17,21 +17,24 @@ namespace Delta.Examples
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PhysicsExample : ExampleBase
+    public class ZeldaExample : ExampleBase
     {
         const string CONTROLS = "";
         TransformableEntity player1;
 
-        public PhysicsExample() : base("PhysicsExample")
+        public ZeldaExample() : base("ZeldaExample")
         {
             ClearColor = Color.Black;
             G.Physics.DefineWorld(1024, 1024, 32);
             G.World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.ZoomImmediate(4);
 
             G.World.Add(player1 = new BoxLink());
             G.World.Add(new WorldBounds());
-            List<Obstacle> obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle() { MoveAndRotate = true }; });
+            List<Obstacle> obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
             G.World.AddRange(obstacles.ToList<IEntity>(), 0);
+
+            G.World.Camera.Follow(player1);
         }
 
         //protected override void LoadContent()
