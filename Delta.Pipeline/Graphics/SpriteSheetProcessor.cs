@@ -150,15 +150,6 @@ namespace Delta.Graphics
                 BitmapContent.Copy(block.Image._bitmapContent, block.SourceRegion, outputBitmap, block.DestinationRegion);
             }
 
-            //PixelBitmapContent<Color> outputBitmap = new PixelBitmapContent<Color>(200, 200);
-            //for (int x = 0; x < 200; x++)
-            //{
-            //    for (int y = 0; y < 200; y++)
-            //    {
-            //        outputBitmap.SetPixel(x, y, Color.White);
-            //    }
-            //}
-
             input._texture = new Texture2DContent();
             input._texture.Mipmaps.Add(outputBitmap);
             return input;
