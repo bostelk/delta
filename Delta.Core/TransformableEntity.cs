@@ -67,8 +67,35 @@ namespace Delta
             }
         }
 
+        Color _tint = Color.White;
         [ContentSerializer]
-        public virtual Color Tint { get; set; }
+        public virtual Color Tint
+        {
+            get { return _tint; }
+            set
+            {
+                if (_tint != value)
+                {
+                    _tint = value;
+                    _tint.A = (byte)(255 * _alpha);
+                }
+            }
+        }
+
+        float _alpha = 1f;
+        [ContentSerializer]
+        public virtual float Alpha
+        {
+            get { return _alpha; }
+            set
+            {
+                if (_alpha != value)
+                {
+                    _alpha = value;
+                    _tint.A = (byte)(255 * _alpha);
+                }
+            }
+        }
 
         public TransformableEntity()
             : base()
