@@ -72,7 +72,7 @@ namespace Delta.Graphics
 
         protected virtual void UpdateRenderOrigin()
         {
-            _renderOrigin = Pivot * Size;
+            _renderOrigin = Pivot;
         }
 
         protected virtual void UpdateRenderPosition()

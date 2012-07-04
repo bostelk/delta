@@ -93,12 +93,21 @@ namespace Delta.Tiled
             property.SetValue(bindObject, ChangeType(rawValue, property.PropertyType), null);
         }
 
-        static object ChangeType(object value, Type conversionType)
+        static object ChangeType(string value, Type conversionType)
         {
             if (typeof(IConvertible).IsAssignableFrom(conversionType))
                 return Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
             else
-                throw new Exception(String.Format("Cannot convert the value '{0}' to the type '{1}'.", value, conversionType.ToString()));
+            {
+                switch (conversionType.FullName.ToLower())
+                {
+                    case "microsoft.xna.framework.vector2":
+                        string[] split = value.Split(new string[] { "," },  StringSplitOptions.RemoveEmptyEntries);
+                        return new Vector2(float.Parse(split[0]), float.Parse(split[1]));
+                    default:
+                        throw new Exception(String.Format("Cannot convert the value '{0}' to the type '{1}'.", value, conversionType.ToString()));
+                }
+            }
         }
 
         static void InvokeMethod(object invokeObject, MethodInfo method, string parameters)
