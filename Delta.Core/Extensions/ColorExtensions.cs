@@ -58,9 +58,11 @@ namespace Delta
         {
             if (value.StartsWith("#"))
                 value = value.Substring(1); //just remove the hash symbol
-            while (value.Length < 8)
-                value = "0" + value;
-            return new Color() { PackedValue = uint.Parse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture) };
+            while (value.Length < 8) //ensure we have a proper uint string, allows us to parse RGB strings by adding in the A value.
+                value = "F" + value;
+            uint packedValue = uint.Parse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            //we can't do just: return new Color() { PackedValue = packedValue); XNA Color.PackedValue format is AABBGGRR, but We want AARRGGBB!
+            return new Color() { PackedValue = packedValue, R = (byte)(packedValue >> 16), B = (byte)packedValue };
         }
     }
 }
