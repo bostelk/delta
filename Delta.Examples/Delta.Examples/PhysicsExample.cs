@@ -19,8 +19,9 @@ namespace Delta.Examples
     /// </summary>
     public class PhysicsExample : ExampleBase
     {
-        const string CONTROLS = "";
-        TransformableEntity player1;
+        const string CONTROLS = "[wasd] move.[f2] switch geometry.";
+        TransformableEntity player;
+        List<Obstacle> _obstacles;
 
         public PhysicsExample() : base("PhysicsExample")
         {
@@ -28,22 +29,26 @@ namespace Delta.Examples
             G.Physics.DefineWorld(1024, 1024, 32);
             G.World.Camera.Offset = G.ScreenCenter;
 
-            G.World.Add(player1 = new BoxLink());
+            G.World.Add(player = new BoxLink());
             G.World.Add(new WorldBounds());
-            List<Obstacle> obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle() { MoveAndRotate = true }; });
-            G.World.AddRange(obstacles.ToList<IEntity>(), 0);
+            _obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle() { MoveAndRotate = true }; });
+            G.World.AddRange(_obstacles.ToList<IEntity>(), 0);
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (G.Input.Keyboard.JustPressed(Keys.Tab))
-                (player1 as BoxLink).SwitchBody();
+                (player as BoxLink).SwitchBody();
             if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
-                player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
+                player.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
             if (G.Input.Keyboard.JustPressed(Keys.F1))
-                G.World.Camera.Follow(player1);
-                
-            (player1 as BoxLink).Input = G.Input.WadsDirection;
+                G.World.Camera.Follow(player);
+            if (G.Input.Keyboard.JustPressed(Keys.F2))
+            {
+                foreach (Obstacle obstacle in _obstacles)
+                    obstacle.SwitchBody();
+            }
+            (player as BoxLink).Input = G.Input.WadsDirection;
             base.Update(gameTime);
         }
 

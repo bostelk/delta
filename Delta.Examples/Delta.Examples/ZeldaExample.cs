@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Physics;
 using Delta.Physics.Geometry;
+using Delta.Graphics;
+using Delta.Tiled;
 
 namespace Delta.Examples
 {
@@ -20,6 +22,7 @@ namespace Delta.Examples
     public class ZeldaExample : ExampleBase
     {
         const string CONTROLS = "[wads] movement.[tab] switch geometry.[f1] obstacle rotate on/off.[f2] switch obstacle geometry.";
+        Map _map;
         TransformableEntity _player;
         List<Obstacle> _obstacles;
 
@@ -31,11 +34,19 @@ namespace Delta.Examples
             G.World.Camera.ZoomImmediate(4);
 
             G.World.Add(_player = new BoxLink());
+            //_player.Position = new Vector2(-1000, -800);
             //G.World.Add(new WorldBounds());
-            _obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
-            G.World.AddRange(_obstacles.ToList<IEntity>(), 0);
-
+            //_obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
+            //G.World.AddRange(_obstacles.ToList<IEntity>(), 0);
             G.World.Camera.Follow(_player);
+        }
+
+        protected override void LoadContent()
+        {
+            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
+            _map = Content.Load<Map>(@"Maps\Plains\2");
+            G.World.Add(_map);
+            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,13 +70,13 @@ namespace Delta.Examples
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
+            base.Draw(gameTime);
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
             G.Physics.DrawDebug(ref view, ref projection);
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();
-            base.Draw(gameTime);
         }
     }
 }

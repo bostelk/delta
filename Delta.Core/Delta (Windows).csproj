@@ -98,6 +98,7 @@
     <Compile Include="Audio\Sound3D.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
+    <Compile Include="CollideableEntity.cs" />
     <Compile Include="DeltaContentManager.cs" />
     <Compile Include="DeltaGame.cs" />
     <Compile Include="EntityParentReader.cs" />
@@ -131,7 +132,7 @@
     <Compile Include="Physics\Geometry\AABB.cs" />
     <Compile Include="Physics\Geometry\Box.cs" />
     <Compile Include="Physics\Geometry\Circle.cs" />
-    <Compile Include="Physics\Colider.cs" />
+    <Compile Include="Physics\Collider.cs" />
     <Compile Include="Physics\Geometry\Geometry.cs" />
     <Compile Include="Physics\Geometry\IGeometry.cs" />
     <Compile Include="Physics\Geometry\OBB.cs" />

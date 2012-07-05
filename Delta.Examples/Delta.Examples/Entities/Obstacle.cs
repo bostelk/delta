@@ -14,56 +14,28 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class Obstacle : TransformableEntity
+    public class Obstacle : CollideableEntity
     {
         const float SPEED = 50;
 
         public bool AutoRotate, MoveAndRotate;
 
-        public Collider Collider { get; private set; }
 
         public Vector2 Input { get; set; }
 
         public Vector2 Velocity;
 
-        public override Vector2 Position
-        {
-            get
-            {
-                return Collider.Geom.Position;
-            }
-            set
-            {
-                base.Position = value;
-                Collider.Geom.Position = value;
-            }
-        }
-
-        float _rotation;
-        public override float Rotation
-        {
-            get
-            {
-                return _rotation;
-            }
-            set
-            {
-                _rotation = value;
-                Collider.Geom.Rotation = value;
-            }
-        }
 
         public Obstacle()
         {
-            G.Physics.AddCollider(Collider = new Collider() 
+            Collider = new Collider() 
             {
                 Tag = this,
                 Mass = 0f,
                 Geom = new OBB(10, 10),
-                //Geom = new Circle(5),
                 OnCollision = OnCollision,
                 BeforeCollision = BeforeCollision
-            });
+            };
         }
 
         protected override void LateInitialize()
@@ -75,17 +47,14 @@ namespace Delta.Examples.Entities
 
         public void SwitchBody()
         {
-            if (Collider.Geom is Circle)
+            if (Polygon is Circle)
             {
-                Collider.Geom = new OBB(10, 10);
+                Polygon = new OBB(10, 10);
             }
-            else if (Collider.Geom is OBB)
+            else if (Polygon is OBB)
             {
-                Collider.Geom = new Circle(5);
+                Polygon = new Circle(5);
             }
-
-            Collider.Geom.Position = base.Position;
-            Collider.Geom.Rotation = base.Rotation;
         }
 
         protected override void LightUpdate(GameTime gameTime)
@@ -97,23 +66,10 @@ namespace Delta.Examples.Entities
             base.LightUpdate(gameTime);
         }
 
-        public bool BeforeCollision(Collider them, Vector2 normal)
-        {
-            return true;
-        }
-
-        public bool OnCollision(Collider them, Vector2 normal)
+        public override bool OnCollision(Collider them, Vector2 normal)
         {
             Velocity = -Velocity;
             return true;
-        }
-
-        public void AfterCollision(Collider them, Vector2 normal)
-        {
-        }
-
-        public void OnSeparation(Collider them)
-        {
         }
 
     }

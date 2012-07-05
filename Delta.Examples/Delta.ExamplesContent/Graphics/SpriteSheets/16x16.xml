@@ -5,6 +5,63 @@
 		  <Path>Graphics\Tilesets\interior.png</Path>
 		  <FrameWidth>16</FrameWidth>
 		  <FrameHeight>16</FrameHeight>
-	  </Image>
+      </Image>
+      <Image>
+          <Path>Graphics\Tilesets\MainGrass.png</Path>
+          <FrameWidth>16</FrameWidth>
+          <FrameHeight>16</FrameHeight>
+      </Image>
+     <Image>
+         <Path>Graphics\Tilesets\CastleTile.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\SecondTown.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\GrassTile2.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\mire.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\GypsyCamp.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <!--
+     <Image>
+         <Path>Graphics\Tilesets\stoneHenge.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     -->
+     <Image>
+         <Path>Graphics\Tilesets\ground.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\DarkWoodTileset.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\wallTest.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\Tilesets\Statue.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
   </Asset>
 </XnaContent>
