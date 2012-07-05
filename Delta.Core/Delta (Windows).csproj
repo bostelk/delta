@@ -107,8 +107,7 @@
     <Compile Include="Extensions\DeltaMath.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
     <Compile Include="Graphics\Animation.cs" />
-    <Compile Include="Graphics\Effects\BlendEffect.cs" />
-    <Compile Include="Graphics\Effects\EffectHelper.cs" />
+    <Compile Include="Graphics\Effects\DeltaEffect.cs" />
     <Compile Include="Graphics\Effects\SimpleEffect.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
@@ -184,7 +183,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BlendEffect.xnb" />
+    <None Include="Resources\DeltaEffect.xnb" />
     <None Include="Resources\SimpleEffect.xnb" />
     <None Include="Resources\TinyFont.xnb" />
   </ItemGroup>

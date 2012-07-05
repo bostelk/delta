@@ -11,37 +11,27 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Delta.Graphics.Effects
 {
-    public class BlendEffect : Effect
+    public class DeltaEffect : Effect
     {
-
-        public Texture2D Src
-        {
-            set
-            {
-                GraphicsDevice.Textures[1] = value;
-            }
-        }
-
-        public Texture2D Dst
-        {
-            set
-            {
-                GraphicsDevice.Textures[2] = value;
-            }
-        }
 
         public enum Technique
         {
-            Overlay,
+            Tint,
+            FillColor,
+            Grayscale,
+            Negative,
+            Overlay
         }
 
-       public BlendEffect(Effect e) : base(e)
+        public DeltaEffect(Effect e) 
+            : base(e)
         {
+            SetTechnique(Technique.Tint);
         }
 
         public void SetTechnique(Technique technique)
         {
-            CurrentTechnique = Techniques[(int)technique];
+            CurrentTechnique = Techniques[technique.ToString()];
         }
     }
 }

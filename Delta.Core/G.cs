@@ -35,7 +35,7 @@ namespace Delta
         public static UI UI { get; private set; }
         public static Rectangle ScreenArea { get; private set; }
         public static Vector2 ScreenCenter { get; private set; }
-        public static BlendEffect BlendEffect { get; private set; }
+        public static DeltaEffect DeltaEffect { get; private set; }
         public static SimpleEffect SimpleEffect { get; private set; }
 
         public static T GetContent<T>(string assetName)
@@ -70,7 +70,7 @@ namespace Delta
             PixelTexture = new Texture2D(game.GraphicsDevice, 1, 1);
             PixelTexture.SetData<Color>(new Color[] { Color.White });
             Font = resources.Load<SpriteFont>("TinyFont");
-            BlendEffect = new BlendEffect(resources.Load<Effect>("BlendEffect"));
+            DeltaEffect = new DeltaEffect(resources.Load<Effect>("DeltaEffect"));
             SimpleEffect = new SimpleEffect(resources.Load<Effect>("SimpleEffect"));
             ScreenArea = GraphicsDevice.Viewport.Bounds;
             ScreenCenter = ScreenArea.Center.ToVector2();
