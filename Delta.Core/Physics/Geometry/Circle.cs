@@ -43,16 +43,37 @@ namespace Delta.Physics.Geometry
             Radius = radius;
             LocalVertices = new Vector2[segments];
             double angleInterval = Math.PI * 2 / segments;
-            for (double theta = 0; theta < Math.PI * 2; theta+= angleInterval)
+            double theta = 0;
+            for (int i = 0; i < segments; i ++)
             {
-                Vector2 position = default(Vector2);
-                position.X = (float)Math.Cos(theta) * radius;
-                position.Y = (float)Math.Sin(theta) * radius;
+                LocalVertices[i] = default(Vector2);
+                LocalVertices[i].X = (float)Math.Cos(theta) * radius;
+                LocalVertices[i].Y = (float)Math.Sin(theta) * radius;
+                theta+= angleInterval;
             }
             Calculate();
         }
 
-        public void ProjectOntoAxis(Vector2 axis, out Vector2 projection) {
+        /// <summary>
+        /// Keeping the polygon fresh.
+        /// </summary>
+        protected override void Calculate()
+        {
+            _vertices = new Vector2[LocalVertices.Length];
+            _normals = new Vector2[LocalVertices.Length];
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                // transform the vertices by the rotation and position
+                _vertices[i] = LocalVertices[i];
+
+                // calculate the new normals
+                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                _normals[i].Normalize();
+            }
+            _aabb = new AABB((int)Radius, (int)Radius) { Position = Position };
+        }
+
+        public void ProjectOntoAxis(ref Vector2 axis, out Vector2 projection) {
             projection = Radius * axis;
         }
     }

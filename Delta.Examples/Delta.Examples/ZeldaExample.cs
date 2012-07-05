@@ -19,8 +19,9 @@ namespace Delta.Examples
     /// </summary>
     public class ZeldaExample : ExampleBase
     {
-        const string CONTROLS = "";
-        TransformableEntity player1;
+        const string CONTROLS = "[wads] movement.[tab] switch geometry.[f1] obstacle rotate on/off.[f2] switch obstacle geometry.";
+        TransformableEntity _player;
+        List<Obstacle> _obstacles;
 
         public ZeldaExample() : base("ZeldaExample")
         {
@@ -29,24 +30,29 @@ namespace Delta.Examples
             G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
 
-            G.World.Add(player1 = new BoxLink());
-            G.World.Add(new WorldBounds());
-            List<Obstacle> obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
-            G.World.AddRange(obstacles.ToList<IEntity>(), 0);
+            G.World.Add(_player = new BoxLink());
+            //G.World.Add(new WorldBounds());
+            _obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle(); });
+            G.World.AddRange(_obstacles.ToList<IEntity>(), 0);
 
-            G.World.Camera.Follow(player1);
+            G.World.Camera.Follow(_player);
         }
-
-        //protected override void LoadContent()
-        //{
-        //    G.World.LoadContent(Content);
-        //    G.UI.LoadContent(Content);
-        //    base.LoadContent();
-        //}
 
         protected override void Update(GameTime gameTime)
         {
-            (player1 as BoxLink).Input = G.Input.WadsDirection;
+            if (G.Input.Keyboard.JustPressed(Keys.Tab))
+                (_player as BoxLink).SwitchBody();
+            (_player as BoxLink).Input = G.Input.WadsDirection * ((G.Input.Keyboard.Held(Keys.RightShift)) ? 2.5f : 1);
+            if (G.Input.Keyboard.JustPressed(Keys.F1))
+            {
+                foreach (Obstacle obstacle in _obstacles)
+                    obstacle.AutoRotate = !obstacle.AutoRotate;
+            }
+            if (G.Input.Keyboard.JustPressed(Keys.F2))
+            {
+                foreach (Obstacle obstacle in _obstacles)
+                    obstacle.SwitchBody();
+            }
             base.Update(gameTime);
         }
 

@@ -72,7 +72,7 @@ namespace Delta.Physics.Geometry
         /// <summary>
         /// Minimum bounding area of the polygon.
         /// </summary>
-        AABB _aabb;
+        protected AABB _aabb;
         public AABB AABB
         {
             get
@@ -163,15 +163,15 @@ namespace Delta.Physics.Geometry
             Calculate();
         }
 
-        public void ProjectOntoAxis(Vector2 axisNormal, out float min, out float max)
+        public void ProjectOntoAxis(ref Vector2 axisNormal, out float min, out float max)
         {
-            min = Vector2.Dot(Vertices[0], axisNormal);
+            Vector2.Dot(ref Vertices[0], ref axisNormal, out min);
             max = min;
             float projected = 0;
 
             for (int i = 1; i < Vertices.Length; i++)
             {
-                projected = Vector2.Dot(Vertices[i], axisNormal);
+                Vector2.Dot(ref Vertices[i], ref axisNormal, out projected);
                 if (projected > max)
                     max = projected;
                 if (projected < min)

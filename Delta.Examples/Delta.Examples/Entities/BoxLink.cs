@@ -54,6 +54,7 @@ namespace Delta.Examples.Entities
         {
             G.Physics.AddCollider(Collider = new Collider()
             {
+                Mass = 1f,
                 Geom = new OBB(16, 16)
             });
         }
@@ -66,11 +67,11 @@ namespace Delta.Examples.Entities
             }
             else if (Collider.Geom is OBB)
             {
-                Collider.Geom = new Circle(16);
+                Collider.Geom = new Circle(8);
             }
 
             Collider.Geom.Position = base.Position;
-            Collider.Geom.Rotation = Rotation;
+            Collider.Geom.Rotation = base.Rotation;
         }
 
         protected override void LightUpdate(GameTime gameTime)

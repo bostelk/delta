@@ -80,11 +80,15 @@ namespace Delta.Physics
             {
                 _colliders.Add(collider);
             }
-
+                
+            _narrowDetections = 0;
             List<CollisionPair> pairs = _grid.GetCollisionPairs();
-            _narrowDetections = pairs.Count;
             foreach (CollisionPair pair in pairs)
             {
+                if (pair.ColliderA.Mass == 0 && pair.ColliderB.Mass == 0)
+                    continue;
+                _narrowDetections++;
+
                 CollisionResult result;
                 Polygon polyA, polyB;
                 polyA = pair.ColliderA.Geom;
@@ -114,10 +118,10 @@ namespace Delta.Physics
                 if (result.IsColliding)
                 {
                     _results.Push(result);
-                    // translate the polygon to a safe non-interecting position.
-                    if (!pair.ColliderA.IsStatic)
-                        polyA.Position += result.CollisionResponse;
 
+                    // translate the polygon to a safe non-interecting position.
+                    result.Us.Position += pair.ColliderA.Mass * result.CollisionResponse;
+                    result.Them.Position += -pair.ColliderB.Mass * result.CollisionResponse;
                     // on collision events
                     if (pair.ColliderA.OnCollision != null)
                         pair.ColliderA.OnCollision(pair.ColliderB, Vector2.Zero);

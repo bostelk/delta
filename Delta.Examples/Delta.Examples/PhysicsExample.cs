@@ -34,13 +34,6 @@ namespace Delta.Examples
             G.World.AddRange(obstacles.ToList<IEntity>(), 0);
         }
 
-        //protected override void LoadContent()
-        //{
-        //    G.World.LoadContent(Content);
-        //    G.UI.LoadContent(Content);
-        //    base.LoadContent();
-        //}
-
         protected override void Update(GameTime gameTime)
         {
             if (G.Input.Keyboard.JustPressed(Keys.Tab))
