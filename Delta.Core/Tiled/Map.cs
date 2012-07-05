@@ -39,10 +39,14 @@ namespace Delta.Tiled
         [ContentSerializer(ElementName = "SpriteSheet")]
         public string SpriteSheetName { get; set; }
 
+        [ContentSerializer]
+        public EntityParent<SpriteEntity> OverlayLayer { get; private set; }
+
         public Map()
             : base()
         {
             Instance = this;
+            OverlayLayer = new EntityParent<SpriteEntity>();
         }
 
 #if WINDOWS

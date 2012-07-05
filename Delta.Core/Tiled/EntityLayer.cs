@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Delta.Graphics;
 #endif
 
 namespace Delta.Tiled
@@ -41,8 +42,8 @@ namespace Delta.Tiled
                 }
                 else
 
-                if (entity == null)
-                    continue;
+                    if (entity == null)
+                        continue;
 
                 entity.ID = objectNode.Attributes["name"] == null ? null : objectNode.Attributes["name"].Value;
 
@@ -59,7 +60,7 @@ namespace Delta.Tiled
 
                 if (transformableEntity != null)
                     transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
-                 
+
                 //mapEntity.Size = new Vector2(
                 //    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
                 //    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
@@ -87,37 +88,48 @@ namespace Delta.Tiled
                 //    entity.ID = objectName;
                 //    entity.Position = position;
 
-                    
 
-                    //IDrawable2D drawable2D = mapObject as IDrawable2D;
-                    //if (drawable2D != null)
-                    //{
-                    //    drawable2D.Position = position;
-                    //    drawable2D.Size = size;
-                    //}
 
-                    //WrappedFixture wrappedFixture = mapObject as WrappedFixture;
-                    //if (wrappedFixture != null)
-                    //{
-                    //    wrappedFixture.Position = position;
+                //IDrawable2D drawable2D = mapObject as IDrawable2D;
+                //if (drawable2D != null)
+                //{
+                //    drawable2D.Position = position;
+                //    drawable2D.Size = size;
+                //}
 
-                    //    Delta.Physics.Geometry.Rectangle rectangle = mapObject as Delta.Physics.Geometry.Rectangle;
-                    //    if (rectangle != null)
-                    //        rectangle.Size = size;
+                //WrappedFixture wrappedFixture = mapObject as WrappedFixture;
+                //if (wrappedFixture != null)
+                //{
+                //    wrappedFixture.Position = position;
 
-                    //    Delta.Physics.Geometry.Polyline polyline = mapObject as Delta.Physics.Geometry.Polyline;
-                    //    if (polyline != null)
-                    //    {
-                    //        if (polyVertices[0] == polyVertices[polyVertices.Count - 1])
-                    //            polyVertices.RemoveAt(polyVertices.Count - 1);
-                    //        polyline.Vertices = polyVertices;
-                    //    }
+                //    Delta.Physics.Geometry.Rectangle rectangle = mapObject as Delta.Physics.Geometry.Rectangle;
+                //    if (rectangle != null)
+                //        rectangle.Size = size;
 
-                    //    Delta.Physics.Geometry.Polygon polygon = mapObject as Delta.Physics.Geometry.Polygon;
-                    //    if (polygon != null)
-                    //        polygon.Vertices = polyVertices;
-                    //}
+                //    Delta.Physics.Geometry.Polyline polyline = mapObject as Delta.Physics.Geometry.Polyline;
+                //    if (polyline != null)
+                //    {
+                //        if (polyVertices[0] == polyVertices[polyVertices.Count - 1])
+                //            polyVertices.RemoveAt(polyVertices.Count - 1);
+                //        polyline.Vertices = polyVertices;
+                //    }
 
+                //    Delta.Physics.Geometry.Polygon polygon = mapObject as Delta.Physics.Geometry.Polygon;
+                //    if (polygon != null)
+                //        polygon.Vertices = polyVertices;
+                //}
+
+                bool added = false;
+                SpriteEntity sprite = entity as SpriteEntity;
+                if (sprite != null)
+                {
+                    if (sprite.IsOverlay)
+                    {
+                        added = Map.Instance.OverlayLayer.Add(sprite);
+                    }
+                }
+
+                if (!added)
                     Add(entity);
                 //}
             }
