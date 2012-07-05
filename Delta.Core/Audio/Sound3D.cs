@@ -60,7 +60,7 @@ namespace Delta.Audio
             {
                 return Vector2.Zero;
             }
-            float amount = MathHelper.Min(value.LengthSquared() /  DeltaMath.Sqr((float) G.ScreenArea.Width / 2.0f), 1.0f);
+            float amount = MathHelper.Min(value.LengthSquared() /  DeltaMath.Square((float) G.ScreenArea.Width / 2.0f), 1.0f);
             value.Normalize();
             return Vector2.Lerp(value, Vector2.UnitY, amount);
         }

@@ -13,35 +13,35 @@ namespace Delta
 {
     public static class DeltaMath
     {
-        public static float Wrap(float value, float min, float max)
+        public static float Wrap(this float value, float min, float max)
         {
             if (value > max) return min;
             if (value < min) return max;
             return value;
         }
 
-        public static int Wrap(int value, int min, int max)
+        public static int Wrap(this int value, int min, int max)
         {
             if (value > max) return min;
             if (value < min) return max;
             return value;
         }
 
-        public static float Clamp(float value, float min, float max)
+        public static float Clamp(this float value, float min, float max)
         {
             if (value > max) return max;
             if (value < min) return min;
             return value;
         }
 
-        public static int Clamp(int value, int min, int max)
+        public static int Clamp(this int value, int min, int max)
         {
             if (value > max) return max;
             if (value < min) return min;
             return value;
         }
 
-        public static float Sqr(float value)
+        public static float Square(this float value)
         {
             return value * value;
         }
