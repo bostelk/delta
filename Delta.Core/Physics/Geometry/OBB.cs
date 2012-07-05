@@ -69,7 +69,7 @@ namespace Delta.Physics.Geometry
             Calculate();
         }
 
-        public void ProjectOntoAxis(Vector2 axisNormal, out Vector2 projection)
+        public void ProjectOntoAxis(ref Vector2 axisNormal, out Vector2 projection)
         {
             projection.X = Vector2.Dot(HalfWidthX, axisNormal);
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);

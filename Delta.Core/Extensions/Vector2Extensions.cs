@@ -16,18 +16,19 @@ namespace Delta
     {
         public const double EPSILON = 9.9999997473787516E-05;
         public const double EPSILONSQR = EPSILON * EPSILON;
-        
-        public static void TryNormalize(this Vector2 v)
+
+        public static void SafeNormalize(ref Vector2 v)
         {
+            // if (v.LengthSquared() < EPSILONSQR) a more safe check.
             if (v != Vector2.Zero)
-                v.Normalize();
+                Vector2.Normalize(ref v, out v);
             Debug.Assert(v.X.IsValid() && v.Y.IsValid());
         }
 
         public static float AngleBetween(this Vector2 a, Vector2 b)
         {
-            a.TryNormalize();
-            b.TryNormalize();
+            SafeNormalize(ref a);
+            SafeNormalize(ref b);
             return (float) Math.Cos(Vector2.Dot(a, b));
         }
 
@@ -39,9 +40,12 @@ namespace Delta
         /// <returns></returns>
         public static Vector2 Rotate(this Vector2 v, float theta)
         {
+            // early exit if theta is 0 or PI ?
             Vector2 result = Vector2.Zero;
-            result.X = v.X * (float)Math.Cos(theta) - v.Y * (float)Math.Sin(theta);
-            result.Y = v.X * (float)Math.Sin(theta) + v.Y * (float)Math.Cos(theta);
+            float cos = (float)Math.Cos(theta);
+            float sin = (float)Math.Sin(theta);
+            result.X = v.X * cos - v.Y * sin;
+            result.Y = v.X * sin + v.Y * cos;
             return result;
         }
 
@@ -78,7 +82,7 @@ namespace Delta
         public static Vector2 ProjectOnto(Vector2 a, Vector2 b)
         {
             Vector2 result = Vector2.Zero;
-            b.TryNormalize();
+            SafeNormalize(ref b);
             result = Vector2.Dot(a, b) * b; 
             return result;
         }

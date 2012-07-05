@@ -20,7 +20,7 @@ namespace Delta.Physics
         public float Mass;
 
         /// <summary>
-        /// Will not be moved due to collision. (No collision response).
+        /// Will not move due to collision. (No collision response).
         /// </summary>
         public bool IsStatic;
 
@@ -30,12 +30,12 @@ namespace Delta.Physics
         public AABB AABB { get; set; }
 
         /// <summary>
-        /// The Geom is about to collide. (Broad-phase intersection).
+        /// The Geom is about to collide. (broad-phase intersection).
         /// </summary>
         public BeforeCollisionEventHandler BeforeCollision;
 
         /// <summary>
-        /// The Geom is colliding. (Narrow-phase intersection).
+        /// The Geom is colliding. (narrow-phase intersection).
         /// </summary>
         public OnCollisionEventHandler OnCollision;
 

@@ -60,7 +60,7 @@ namespace Delta.Input
                     direction.Y = 1;
                 if (Keyboard.Held(Keys.D))
                     direction.X= 1;
-                direction.TryNormalize();
+                Vector2Extensions.SafeNormalize(ref direction);
                 return direction;
             }
         }
@@ -78,7 +78,7 @@ namespace Delta.Input
                     direction.Y = 1;
                 if (Keyboard.Held(Keys.Right))
                     direction.X = 1;
-                direction.TryNormalize();
+                Vector2Extensions.SafeNormalize(ref direction);
                 return direction;
             }
         }
@@ -96,7 +96,7 @@ namespace Delta.Input
                     direction.Y = 1;
                 if (Gamepad[1].Held(Buttons.DPadRight))
                     direction.X = 1;
-                direction.TryNormalize();
+                Vector2Extensions.SafeNormalize(ref direction);
                 return direction;
             }
         }

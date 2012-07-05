@@ -18,7 +18,7 @@ namespace Delta.Examples.Entities
     {
         const float SPEED = 50;
 
-        public bool MoveAndRotate;
+        public bool AutoRotate, MoveAndRotate;
 
         public Collider Collider { get; private set; }
 
@@ -58,8 +58,9 @@ namespace Delta.Examples.Entities
             G.Physics.AddCollider(Collider = new Collider() 
             {
                 Tag = this,
+                Mass = 0f,
                 Geom = new OBB(10, 10),
-                //Geom = new Cirlce(5),
+                //Geom = new Circle(5),
                 OnCollision = OnCollision,
                 BeforeCollision = BeforeCollision
             });
@@ -72,13 +73,27 @@ namespace Delta.Examples.Entities
             Velocity = Vector2Extensions.RandomDirection() * SPEED;
         }
 
+        public void SwitchBody()
+        {
+            if (Collider.Geom is Circle)
+            {
+                Collider.Geom = new OBB(10, 10);
+            }
+            else if (Collider.Geom is OBB)
+            {
+                Collider.Geom = new Circle(5);
+            }
+
+            Collider.Geom.Position = base.Position;
+            Collider.Geom.Rotation = base.Rotation;
+        }
+
         protected override void LightUpdate(GameTime gameTime)
         {
-            if (MoveAndRotate)
-            {
+            if (AutoRotate || MoveAndRotate)
                 Rotation += 0.01f;
+            if (MoveAndRotate)
                 Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
             base.LightUpdate(gameTime);
         }
 

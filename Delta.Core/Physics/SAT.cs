@@ -14,7 +14,7 @@ namespace Delta.Physics
         public Polygon Them;
 
         /// <summary>
-        /// The two polygons interesct each other.
+        /// The polygons interesct each other.
         /// </summary>
         public bool IsColliding;
 
@@ -58,14 +58,14 @@ namespace Delta.Physics
             {
                 Vector2 projectionA, projectionB;
                 projectedDistance = Math.Abs(Vector2.Dot(distance, axisToCheck[i]));
-                a.ProjectOntoAxis(axisToCheck[i], out projectionA);
-                b.ProjectOntoAxis(axisToCheck[i], out projectionB);
+                a.ProjectOntoAxis(ref axisToCheck[i], out projectionA);
+                b.ProjectOntoAxis(ref axisToCheck[i], out projectionB);
                 float aSize = Math.Abs(projectionA.X) + Math.Abs(projectionA.Y);
                 float bSize = Math.Abs(projectionB.X) + Math.Abs(projectionB.Y);
                 float abSize = aSize + bSize;
                 float penetration = abSize - projectedDistance;
 
-                // there is no intersection, a seperating axis found; the boxes do not overlap.
+                // a seperating axis found; there is no collision.
                 if (penetration <= 0)
                 {
                     return NoCollision;
@@ -75,20 +75,105 @@ namespace Delta.Physics
                 {
                     minPenetration = penetration;
                     mtv = axisToCheck[i];
-
-                    // this is fucked!!!
-                    if (Vector2.Dot(distance, mtv) < 0f)
-                    {
-                        mtv = -mtv;
-                    }
                 }
             }
-
-            // seperating axis could not be found; the boxes overlap.
+            // the distance vector determines the direction of movement. the distance and mtv
+            // should always oppose each other to repel collisions.
+            if (Vector2.Dot(distance, mtv) < 0f)
+                mtv = -mtv;
+            // seperating axis could not be found; a collision occurs.
             return new CollisionResult()
             {
                 Us = a,
                 Them = b,
+                CollisionResponse = minPenetration * mtv,
+                IsColliding = true
+            };
+        }
+
+        public static CollisionResult CircleCircle(Circle circleA, Circle circleB)
+        {
+            Vector2 distance = circleA.Position - circleB.Position;
+            float abSize = circleA.Radius + circleB.Radius;
+            float penetration = abSize - distance.Length();
+            Vector2 mtv = default(Vector2);
+            if (penetration <= 0)
+            {
+                return NoCollision;
+            }
+            mtv = distance;
+            Vector2Extensions.SafeNormalize(ref mtv);
+            // the distance vector determines the direction of movement. the distance and mtv
+            // should always oppose each other to repel collisions.
+            if (Vector2.Dot(distance, mtv) < 0f)
+                mtv = -mtv;
+            return new CollisionResult()
+            {
+                Us = circleA,
+                Them = circleB,
+                CollisionResponse = penetration * mtv,
+                IsColliding = true
+            };
+        }
+
+        public static CollisionResult CircleBox(Circle circleA, OBB boxB)
+        {
+            float projectedDistance = 0;
+            float minPenetration = float.MaxValue;
+            Vector2 distance = circleA.Position - boxB.Position;
+            Vector2 mtv = default(Vector2); // the minimum translation vector
+
+            Vector2[] axisToCheck = new Vector2[3];
+            axisToCheck[0] = boxB.Facing;
+            axisToCheck[1] = boxB.PerpFacing;
+            float minDistance = float.MaxValue;
+            Vector2 closestVertex = default(Vector2);
+            for (int i = 0; i < boxB.Vertices.Length; i++)
+            {
+                float vertexDistance = Vector2.DistanceSquared(circleA.Position, boxB.Vertices[i]);
+                if (vertexDistance < minDistance)
+                {
+                    minDistance = vertexDistance;
+                    closestVertex = circleA.Position - boxB.Vertices[i];
+                }
+            }
+            axisToCheck[2] = closestVertex;
+            Vector2Extensions.SafeNormalize(ref axisToCheck[2]);
+
+            for (int i = 0; i < axisToCheck.Length; i++)
+            {
+                Vector2 projectionA, projectionB;
+
+                projectedDistance = Math.Abs(Vector2.Dot(distance, axisToCheck[i]));
+                circleA.ProjectOntoAxis(ref axisToCheck[i], out projectionA);
+                boxB.ProjectOntoAxis(ref axisToCheck[i], out projectionB);
+
+                float aSize = projectionA.Length(); //Math.Abs(projectionA.X) + Math.Abs(projectionA.Y);
+                float bSize = Math.Abs(projectionB.X) + Math.Abs(projectionB.Y);
+                float abSize = aSize + bSize;
+                float penetration = abSize - projectedDistance;
+
+                // a seperating axis found; there is no collision.
+                if (penetration <= 0)
+                {
+                    return NoCollision;
+                }
+                // project the object along the axis with the smalled penetration depth.
+                else if (Math.Abs(penetration) < Math.Abs(minPenetration))
+                {
+                    minPenetration = penetration;
+                    mtv = axisToCheck[i];
+                }
+            }
+            // the distance vector determines the direction of movement. the distance and mtv
+            // should always oppose each other to repel collisions.
+            if (Vector2.Dot(distance, mtv) < 0f)
+                mtv = -mtv;
+            // seperating axis could not be found; a collision occurs.
+            return new CollisionResult()
+            {
+                Us = circleA,
+                Them = boxB,
                 CollisionResponse = minPenetration * mtv,
                 IsColliding = true
             };
@@ -116,11 +201,11 @@ namespace Delta.Physics
                 minA = maxA = minB = maxB = 0;
 
                 projectedDistance = Math.Abs(Vector2.Dot(distance, axisToCheck[i]));
-                a.ProjectOntoAxis(axisToCheck[i], out minA, out maxA);
-                b.ProjectOntoAxis(axisToCheck[i], out minB, out maxB);
+                a.ProjectOntoAxis(ref axisToCheck[i], out minA, out maxA);
+                b.ProjectOntoAxis(ref axisToCheck[i], out minB, out maxB);
                 float penetration = maxB - minA;
 
-                // there is no intersection, a seperating axis found; the boxes do not overlap.
+                // a seperating axis has been found; there is no collision.
                 if (minA - maxB > 0f || minB - maxA >0f)
                 {
                     return NoCollision;
@@ -130,16 +215,13 @@ namespace Delta.Physics
                 {
                     minPenetration = penetration;
                     mtv = axisToCheck[i];
-
-                    //// this is fucked!!!
-                    if (Vector2.Dot(distance, mtv) < 0f)
-                    {
-                        mtv = -mtv;
-                    }
                 }
             }
-
-            // seperating axis could not be found; the boxes overlap.
+            // the distance vector determines the direction of movement. the distance and mtv
+            // should always oppose each other to repel collisions.
+            if (Vector2.Dot(distance, mtv) < 0f)
+                mtv = -mtv;
+            // seperating axis could not be found; a collision occurs.
             return new CollisionResult()
             {
                 Us = a,
@@ -148,95 +230,5 @@ namespace Delta.Physics
                 IsColliding = true
             };
         } 
-
-        public static CollisionResult CircleCircle(Circle circleA, Circle circleB)
-        {
-            Vector2 distance = circleA.Position - circleB.Position;
-            float abSize = circleA.Radius + circleB.Radius;
-            float penetration = abSize - distance.Length();
-            Vector2 mtv = default(Vector2);
-
-            if (penetration <= 0)
-            {
-                return NoCollision;
-            }
-            mtv = distance;
-            mtv.Normalize();
-            if (Vector2.Dot(distance, mtv) < 0f)
-                mtv = -mtv;
-            return new CollisionResult()
-            {
-                Us = circleA,
-                Them = circleB,
-                CollisionResponse = penetration * mtv,
-                IsColliding = true
-            };
-        }
-
-        public static CollisionResult CircleBox(Circle circleA, OBB boxB)
-        {
-            float projectedDistance = 0;
-            float minPenetration = float.MaxValue;
-            Vector2 distance = circleA.Position - boxB.Position;
-            Vector2 mtv = default(Vector2); // the minimum translation vector
-
-            Vector2[] axisToCheck = new Vector2[boxB.Vertices.Length + 1];
-            float minDistance = float.MaxValue;
-            Vector2 closestVertex = default(Vector2);
-            for (int i = 0; i < boxB.Vertices.Length; i++)
-            {
-                if (i < boxB.Vertices.Length)
-                    axisToCheck[i] = boxB.Normals[i];
-                float vertexDistance = Vector2.DistanceSquared(circleA.Position, boxB.Vertices[i]);
-                if (vertexDistance < minDistance)
-                {
-                    minDistance = vertexDistance;
-                    closestVertex = circleA.Position - boxB.Vertices[i];
-                }
-            }
-            axisToCheck[boxB.Vertices.Length] = closestVertex;
-            axisToCheck[boxB.Vertices.Length].Normalize();
-
-            for (int i = 0; i < axisToCheck.Length; i++)
-            {
-                Vector2 projectionA, projectionB;
-
-                projectedDistance = Math.Abs(Vector2.Dot(distance, axisToCheck[i]));
-                circleA.ProjectOntoAxis(axisToCheck[i], out projectionA);
-                boxB.ProjectOntoAxis(axisToCheck[i], out projectionB);
-
-                float aSize = projectionA.Length(); //Math.Abs(projectionA.X) + Math.Abs(projectionA.Y);
-                float bSize = Math.Abs(projectionB.X) + Math.Abs(projectionB.Y);
-                float abSize = aSize + bSize;
-                float penetration = abSize - projectedDistance;
-
-                // there is no intersection, a seperating axis found; the boxes do not overlap.
-                if (penetration <= 0)
-                {
-                    return NoCollision;
-                }
-                // project the object along the axis with the smalled penetration depth.
-                else if (Math.Abs(penetration) < Math.Abs(minPenetration))
-                {
-                    minPenetration = penetration;
-                    mtv = axisToCheck[i];
-
-                    // this is fucked!!!
-                    if (Vector2.Dot(distance, mtv) < 0f)
-                    {
-                        mtv = -mtv;
-                    }
-                }
-            }
-            // seperating axis could not be found; the boxes overlap.
-            return new CollisionResult()
-            {
-                Us = circleA,
-                Them = boxB,
-                CollisionResponse = minPenetration * mtv,
-                IsColliding = true
-            };
-        }
-
     }
 }

@@ -11,31 +11,31 @@ namespace Delta.Physics.Geometry
     /// </summary>
     public class AABB
     {
-        public Vector2 Position;
+        Vector2 _position;
+        public Vector2 Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                Min = _position - new Vector2(HalfWidth, HalfHeight);
+                Max = _position + new Vector2(HalfWidth, HalfHeight);
+            }
+        }
+
         public int HalfWidth { get; protected set; }
         public int HalfHeight { get; protected set; }
+        public Vector2 Min { get; private set; }
+        public Vector2 Max { get; private set; }
 
         public AABB(int halfWidth, int halfHeight)
         {
             Position = default(Vector2);
             HalfWidth = halfWidth;
             HalfHeight = halfHeight;
-        }
-
-        public Vector2 Min
-        {
-            get
-            {
-                return Position - new Vector2(HalfWidth, HalfHeight);
-            }
-        }
-
-        public Vector2 Max
-        {
-            get
-            {
-                return Position + new Vector2(HalfWidth, HalfHeight);
-            }
         }
 
         public Vector2[] Vertices
