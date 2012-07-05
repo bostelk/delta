@@ -14,14 +14,14 @@ namespace Delta.Physics
         public Polygon Them;
 
         /// <summary>
-        /// The minimum translation vector to seperate the two poloygons.
-        /// </summary>
-        public Vector2 CollisionResponse;
-
-        /// <summary>
         /// The two polygons interesct each other.
         /// </summary>
         public bool IsColliding;
+
+        /// <summary>
+        /// The minimum translation vector to seperate the two poloygons.
+        /// </summary>
+        public Vector2 CollisionResponse;
     }
 
     /// <summary>

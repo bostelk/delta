@@ -19,17 +19,17 @@ namespace Delta.Physics
         int _narrowDetections = 0;
 
         SpatialGrid _grid;
-        HashSet<Polygon> _polygons;
-        HashSet<Polygon> _polygonsToAdd;
-        HashSet<Polygon> _polygonsToRemove;
+        HashSet<Collider> _colliders;
+        HashSet<Collider> _collidersToAdd;
+        HashSet<Collider> _collidersToRemove;
 
         Stack<CollisionResult> _results;
 
         public DeltaPhysics()
         {
-            _polygons = new HashSet<Polygon>();
-            _polygonsToAdd = new HashSet<Polygon>();
-            _polygonsToRemove = new HashSet<Polygon>();
+            _colliders = new HashSet<Collider>();
+            _collidersToAdd = new HashSet<Collider>();
+            _collidersToRemove = new HashSet<Collider>();
             _results = new Stack<CollisionResult>(10);
         }
 
@@ -46,14 +46,16 @@ namespace Delta.Physics
 
         public override void AddCollider(Collider collider)
         {
-            _polygonsToAdd.Add(collider.Geom);
-            _grid.AddCollider(collider);
+            if (!_colliders.Contains(collider))
+            {
+                _collidersToAdd.Add(collider);
+                _grid.AddCollider(collider);
+            }
         }
 
         public override void RemoveColider(Collider collider)
         {
-            _polygonsToRemove.Add(collider.Geom);
-            //_grid.RemoveCollisionGeom();
+            _collidersToRemove.Add(collider);
         }
 
         public override List<Polygon> Raycast(Vector2 start, Vector2 end, bool returnFirst)
@@ -74,9 +76,9 @@ namespace Delta.Physics
             _results.Clear();
             _grid.Update();
 
-            foreach (Polygon poly in _polygonsToAdd)
+            foreach (Collider collider in _collidersToAdd)
             {
-                _polygons.Add(poly);
+                _colliders.Add(collider);
             }
 
             List<CollisionPair> pairs = _grid.GetCollisionPairs();
@@ -113,8 +115,9 @@ namespace Delta.Physics
                 {
                     _results.Push(result);
                     // translate the polygon to a safe non-interecting position.
-                    if (!pair.ColliderA.IsSensor)
+                    if (!pair.ColliderA.IsStatic)
                         polyA.Position += result.CollisionResponse;
+
                     // on collision events
                     if (pair.ColliderA.OnCollision != null)
                         pair.ColliderA.OnCollision(pair.ColliderB, Vector2.Zero);
@@ -127,8 +130,9 @@ namespace Delta.Physics
         public override void DrawDebug(ref Matrix view, ref Matrix projection)
         {
             G.PrimitiveBatch.Begin(ref projection, ref view);
-            foreach (Polygon poly in _polygons)
+            foreach (Collider collider in _colliders)
             {
+                Polygon poly = collider.Geom;
                 if (poly is OBB)
                 {
                     OBB box = poly as OBB;
@@ -163,7 +167,7 @@ namespace Delta.Physics
         {
             get
             {
-                return String.Format("Polygons:{0}\nBruteforce Checks:{1}\nSpatialGrid Checks:{2}\n", _polygons.Count, DeltaMath.Sqr(_polygons.Count), _narrowDetections);
+                return String.Format("Polygons:{0}\nBruteforce Checks:{1}\nSpatialGrid Checks:{2}\n", _colliders.Count, DeltaMath.Sqr(_colliders.Count), _narrowDetections);
             }
         }
 
