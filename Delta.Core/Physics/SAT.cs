@@ -14,14 +14,14 @@ namespace Delta.Physics
         public Polygon Them;
 
         /// <summary>
-        /// The minimum translation vector to seperate the two poloygons.
-        /// </summary>
-        public Vector2 CollisionResponse;
-
-        /// <summary>
         /// The two polygons interesct each other.
         /// </summary>
         public bool IsColliding;
+
+        /// <summary>
+        /// The minimum translation vector to seperate the two poloygons.
+        /// </summary>
+        public Vector2 CollisionResponse;
     }
 
     /// <summary>
@@ -45,11 +45,12 @@ namespace Delta.Physics
             // merge normals from both polygons
             // NOTE: For OBB's we only need to check their half widths. ie. 4 axis total.
             // For AABB's we only need to check 2 axis since they don't rotate.
-            Vector2[] axisToCheck = new Vector2[a.Normals.Length + b.Normals.Length];
-            for (int i = 0; i < a.Normals.Length; i++)
-                axisToCheck[i] = a.Normals[i];
-            for (int i = a.Normals.Length; i < axisToCheck.Length; i++)
-                axisToCheck[i] = b.Normals[i - a.Normals.Length];
+            Vector2[] axisToCheck = new Vector2[] {
+                a.Facing,
+                a.PerpFacing,
+                b.Facing,
+                b.PerpFacing
+            };
 
             // TODO: remove parallel normals
 

@@ -15,29 +15,29 @@ namespace Delta
     {
         public static float Wrap(float value, float min, float max)
         {
-            value = (value > max) ? min : value;
-            value = (value < min) ? max : value;
+            if (value > max) return min;
+            if (value < min) return max;
             return value;
         }
 
         public static int Wrap(int value, int min, int max)
         {
-            value = (value > max) ? min : value;
-            value = (value < min) ? max : value;
+            if (value > max) return min;
+            if (value < min) return max;
             return value;
         }
 
         public static float Clamp(float value, float min, float max)
         {
-            value = (value > max) ? max : value;
-            value = (value < min) ? min : value;
+            if (value > max) return max;
+            if (value < min) return min;
             return value;
         }
 
         public static int Clamp(int value, int min, int max)
         {
-            value = (value > max) ? max : value;
-            value = (value < min) ? min : value;
+            if (value > max) return max;
+            if (value < min) return min;
             return value;
         }
 

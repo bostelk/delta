@@ -46,13 +46,6 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            if (G.Input.Keyboard.JustPressed(Keys.Tab))
-                (player1 as BoxLink).SwitchBody();
-            if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
-                player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
-            if (G.Input.Keyboard.JustPressed(Keys.F1))
-                G.World.Camera.Follow(player1);
-                
             (player1 as BoxLink).Input = G.Input.WadsDirection;
             base.Update(gameTime);
         }
