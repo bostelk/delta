@@ -14,24 +14,20 @@ namespace Delta.Graphics.Effects
     public class DeltaEffect : Effect
     {
 
-        public enum Technique
-        {
-            Tint,
-            FillColor,
-            Grayscale,
-            Negative,
-            Overlay
-        }
+        public EffectTechnique None { get; private set; }
+        public EffectTechnique Grayscale { get; private set; }
+        public EffectTechnique Negative { get; private set; }
+        public EffectTechnique Overlay { get; private set; }
 
-        public DeltaEffect(Effect e) 
+        internal DeltaEffect(Effect e) 
             : base(e)
         {
-            SetTechnique(Technique.Tint);
+            None = Techniques["Tint"];
+            Grayscale = Techniques["Grayscale"];
+            Negative = Techniques["Negative"];
+            Overlay = Techniques["Overlay"];
+            CurrentTechnique = None;
         }
 
-        public void SetTechnique(Technique technique)
-        {
-            CurrentTechnique = Techniques[technique.ToString()];
-        }
     }
 }
