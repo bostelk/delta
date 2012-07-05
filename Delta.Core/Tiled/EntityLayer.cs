@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 #if WINDOWS
 using System.Xml;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Delta.Physics.Geometry;
 using Delta.Physics;
+using Delta.Graphics;
 #endif
 
 namespace Delta.Tiled
@@ -81,7 +82,6 @@ namespace Delta.Tiled
                 TransformableEntity transformableEntity = entity as TransformableEntity;
                 if (transformableEntity != null)
                 {
-                    transformableEntity.ID = position.ToString();
                     transformableEntity.Position = position;
                 }
 
@@ -116,8 +116,19 @@ namespace Delta.Tiled
                 // tiled doesn't store rotation so we're using a property to set an entity's rotation.
                 if (transformableEntity != null)
                     transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
+                   
+                bool added = false;
+                SpriteEntity sprite = entity as SpriteEntity;
+                if (sprite != null)
+                {
+                    if (sprite.IsOverlay)
+                    {
+                        added = Map.Instance.OverlayLayer.Add(sprite);
+                    }
+                }
 
-                Add(entity);
+                if (!added)
+                    Add(entity);
             }
         }
 #endif
