@@ -27,7 +27,7 @@ namespace Delta
         }
 
         /// <summary>
-        /// Creates an ARGB or RGB hexadecimal string representation of the <see cref="Color"/> value.
+        /// Creates an ARGB hexadecimal string representation of the <see cref="Color"/> value.
         /// </summary>
         /// <param name="color">The <see cref="Color"/> value to parse.</param>
         /// <param name="includeHash">Determines whether to include the hash symbol (#) at the beginning of the string.</param>
