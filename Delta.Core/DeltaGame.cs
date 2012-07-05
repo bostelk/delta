@@ -45,7 +45,7 @@ namespace Delta
 
         protected override void Update(GameTime gameTime)
         {
-            // HANLDE WITH CARE. LaterInitializes need a preprare audio engine!!
+            // HANLDE WITH CARE. LaterInitializes need a preprared audio engine!!
             G.SimpleEffect.Time = (float)gameTime.TotalGameTime.TotalMilliseconds;
             G.Input.Update(gameTime);
             G.Audio.Update(gameTime);

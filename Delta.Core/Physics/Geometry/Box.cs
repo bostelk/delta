@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Physics.Geometry
 {
     /// <summary>
     /// A box.
     /// </summary>
-    public class Box
+    public class Box : Polygon
     {
         public Vector2 Position;
-        public int HalfWidth { get; protected set; }
-        public int HalfHeight { get; protected set; }
+
+        [ContentSerializer]
+        public int HalfWidth { get; set; }
+        
+        [ContentSerializer]
+        public int HalfHeight { get; set; }
+
+        public Box() { _localVertices = new Vector2[0]; }
 
         public Rectangle ToRectangle()
         {
             return new Rectangle((int)(Position.X - HalfWidth), (int)(Position.Y - HalfHeight), (int)HalfWidth * 2, (int)HalfHeight * 2);
         }
+
     }
 }

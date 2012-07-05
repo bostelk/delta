@@ -48,6 +48,11 @@
       <Processor>SpriteSheetProcessor</Processor>
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="Maps\Plains\2.tmx">
+      <Name>2</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\MainCharacter.png">

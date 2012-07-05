@@ -44,7 +44,7 @@ namespace Delta.Physics
         /// </summary>
         public AfterCollisionEventHandler AfterCollision;
 
-        public OnSeparationEventHandler OnSeperation;
+        public OnSeparationEventHandler OnSeparation;
 
         public Collider() { }
 

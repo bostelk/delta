@@ -49,6 +49,7 @@ namespace Delta.Physics.Geometry
             }
         }
 
+        public OBB(Box box) : this(box.HalfWidth * 2, box.HalfHeight * 2) { }
 
         /// <summary>
         /// Create an Orientated Bounding Box

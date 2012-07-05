@@ -14,64 +14,35 @@ using Delta.Physics.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class BoxLink : TransformableEntity
+    public class BoxLink : CollideableEntity
     {
         const float SPEED = 50;
-
-        public Collider Collider { get; private set; }
 
         public Vector2 Input { get; set; }
 
         public Vector2 Velocity;
 
-        public override Vector2 Position
-        {
-            get
-            {
-                return Collider.Geom.Position;
-            }
-            set
-            {
-                base.Position = value;
-                Collider.Geom.Position = value;
-            }
-        }
-
-        public override float Rotation
-        {
-            get
-            {
-                return base.Rotation;
-            }
-            set
-            {
-                base.Rotation = value;
-                Collider.Geom.Rotation = value;
-            }
-        }
-
         public BoxLink()
         {
-            G.Physics.AddCollider(Collider = new Collider()
+            Collider = new Collider()
             {
                 Mass = 1f,
-                Geom = new OBB(16, 16)
-            });
+                //Geom = new OBB(16, 16)
+                Geom = new Circle(8)
+            };
+            G.Physics.AddCollider(Collider);
         }
 
         public void SwitchBody()
         {
-            if (Collider.Geom is Circle)
+            if (Polygon is Circle)
             {
-                Collider.Geom = new OBB(16, 16);
+                Polygon = new OBB(16, 16);
             }
-            else if (Collider.Geom is OBB)
+            else if (Polygon is OBB)
             {
-                Collider.Geom = new Circle(8);
+                Polygon = new Circle(8);
             }
-
-            Collider.Geom.Position = base.Position;
-            Collider.Geom.Rotation = base.Rotation;
         }
 
         protected override void LightUpdate(GameTime gameTime)

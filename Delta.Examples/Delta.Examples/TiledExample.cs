@@ -43,7 +43,7 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
+            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
             G.World.Add(_map);
             G.World.Camera.Offset = G.ScreenCenter;
