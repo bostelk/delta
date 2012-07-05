@@ -22,7 +22,7 @@ namespace Delta.Physics
         /// <summary>
         /// Will not be moved due to collision. (No collision response).
         /// </summary>
-        public bool IsSensor;
+        public bool IsStatic;
 
         /// <summary>
         /// A bounding area for fast detections.
