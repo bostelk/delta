@@ -49,6 +49,10 @@ namespace Delta.Graphics
         [ContentSerializer(ElementName = "StartRandom")]
         public bool RandomFrameStart { get; set; }
 
+        //temporary?
+        [ContentSerializer]
+        public bool IsOverlay { get; set; }
+
         public SpriteEntity()
             : base()
         {

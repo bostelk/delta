@@ -104,6 +104,8 @@ namespace Delta.Tiled
                     case "microsoft.xna.framework.vector2":
                         string[] split = value.Split(new string[] { "," },  StringSplitOptions.RemoveEmptyEntries);
                         return new Vector2(float.Parse(split[0]), float.Parse(split[1]));
+                    case "microsoft.xna.framework.color":
+                        return value.ToColor();
                     default:
                         throw new Exception(String.Format("Cannot convert the value '{0}' to the type '{1}'.", value, conversionType.ToString()));
                 }
