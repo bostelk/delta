@@ -77,7 +77,7 @@ namespace Delta
                 if (_tint != value)
                 {
                     _tint = value;
-                    _tint.A = (byte)(255 * _alpha);
+                    _tint *= _alpha;
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace Delta
                 if (_alpha != value)
                 {
                     _alpha = value;
-                    _tint.A = (byte)(255 * _alpha);
+                    _tint *= _alpha;
                 }
             }
         }
