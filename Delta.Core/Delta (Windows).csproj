@@ -130,7 +130,6 @@
     <Compile Include="Collision\SpatialStructure.cs" />
     <Compile Include="Collision\CollisionManager.cs" />
     <Compile Include="Collision\Geometry\AABB.cs" />
-    <Compile Include="Collision\Geometry\Box.cs" />
     <Compile Include="Collision\Geometry\Circle.cs" />
     <Compile Include="Collision\Collider.cs" />
     <Compile Include="Collision\Geometry\Geometry.cs" />

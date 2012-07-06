@@ -99,17 +99,24 @@ namespace Delta.Tiled
                         collideableEntity.Polygon = new OBB(size.X, size.Y);
                         // tiled's position is the top-left position of a tile. position the entity at the tile center.
                         collideableEntity.Position += new Vector2(size.X / 2, size.Y / 2);
-                    }
-                    else if (IsPolygon)
-                    {
-                        collideableEntity.Polygon = new Polygon(polyVertices.ToArray());
-                    }
-                    else
-                    {
+                    } else {
+                        /*
                         // remove the closing vertex
                         if (polyVertices[0] == polyVertices[polyVertices.Count - 1])
                             polyVertices.RemoveAt(polyVertices.Count - 1);
-                        collideableEntity.Polygon = new Polygon(polyVertices.ToArray());
+                        */
+                        // unless the polygon is convex decompose it into polylines.
+                        Vector2 distance = Vector2.Zero;
+                        Vector2 totalDistance = Vector2.Zero;
+                        for (int i = 0; i < polyVertices.Count; i++)
+                        {
+                            CollideableEntity line = new CollideableEntity();
+                            line.Polygon = new Polygon(polyVertices[i], polyVertices[(i+1)%(polyVertices.Count-1)]);
+                            distance =  (polyVertices[(i + 1) % (polyVertices.Count - 1)] - polyVertices[i]);
+                            totalDistance += distance;
+                            line.Position = position + totalDistance - distance / 2;
+                            Add(line);
+                        }
                     }
                 }
                    
