@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.Collections.ObjectModel;
-using Delta.Physics.Geometry;
+using Delta.Collision.Geometry;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
     public struct CollisionPair
     {
@@ -51,6 +51,8 @@ namespace Delta.Physics
 
         public SpatialGrid() { }
 
+        public Dictionary<Collider, bool> _tested;
+
         public SpatialGrid(int width, int height, int cellSize)
         {
             Width = width;
@@ -64,6 +66,7 @@ namespace Delta.Physics
             _invCellSize = 1 / cellSize;
             _collidersGlobal = new List<Collider>(100);
             _pairs = new List<CollisionPair>(100);
+            _tested = new Dictionary<Collider, bool>(100);
             _cells = new SpatialCell[TotalCells];
 
             for (int i = 0; i < _cells.Length; i++)

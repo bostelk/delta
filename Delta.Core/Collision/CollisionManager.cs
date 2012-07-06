@@ -5,12 +5,12 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Delta.Physics.Geometry;
+using Delta.Collision.Geometry;
 using System.Collections.Generic;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
-    public class DeltaPhysics : PhysicsEngine
+    public class CollisionManager : CollisionEngine
     {
         static Color PolygonColor = Color.White;
         static Color BoundingColor = Color.DarkBlue;
@@ -25,7 +25,7 @@ namespace Delta.Physics
 
         Stack<CollisionResult> _results;
 
-        public DeltaPhysics()
+        public CollisionManager()
         {
             _colliders = new HashSet<Collider>();
             _collidersToAdd = new HashSet<Collider>();

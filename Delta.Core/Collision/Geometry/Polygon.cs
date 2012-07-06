@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     public class Polygon : IGeometry
     {
@@ -33,6 +34,7 @@ namespace Delta.Physics.Geometry
         /// Vertices relative to the Polygon position.
         /// </summary>
         protected Vector2[] _localVertices;
+        [ContentSerializer]
         public Vector2[] LocalVertices
         {
             get
@@ -79,35 +81,6 @@ namespace Delta.Physics.Geometry
             {
                 return _aabb;
             }
-        }
-
-        /// <summary>
-        /// Keeping the polygon fresh.
-        /// </summary>
-        protected virtual void Calculate()
-        {
-            _vertices = new Vector2[LocalVertices.Length];
-            _normals = new Vector2[LocalVertices.Length];
-            float farthestVertexX = -float.MaxValue;
-            float farthestVertexY = -float.MaxValue;
-            for (int i = 0; i < _vertices.Length; i++)
-            {
-                // transform the vertices by the rotation and position
-                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
-
-                // calculate the new normals
-                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
-                _normals[i].Normalize();
-
-                // calculate the new aabb
-                float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
-                float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
-                if (vertexDistanceX > farthestVertexX)
-                    farthestVertexX = vertexDistanceX;
-                if (vertexDistanceY > farthestVertexY)
-                    farthestVertexY = vertexDistanceY;
-            }
-            _aabb = new AABB((int)farthestVertexX, (int)farthestVertexY) { Position = Position };
         }
 
         /// <summary>
@@ -161,6 +134,35 @@ namespace Delta.Physics.Geometry
                 _localVertices[i].Y = -center.Y + vertices[i].Y;
             }
             Calculate();
+        }
+
+        /// <summary>
+        /// Realign the bounding box and calulate transformations.
+        /// </summary>
+        protected virtual void Calculate()
+        {
+            _vertices = new Vector2[LocalVertices.Length];
+            _normals = new Vector2[LocalVertices.Length];
+            float farthestVertexX = -float.MaxValue;
+            float farthestVertexY = -float.MaxValue;
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                // transform the vertices by the rotation and position
+                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
+
+                // calculate the new normals
+                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                _normals[i].Normalize();
+
+                // calculate the new aabb
+                float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
+                float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
+                if (vertexDistanceX > farthestVertexX)
+                    farthestVertexX = vertexDistanceX;
+                if (vertexDistanceY > farthestVertexY)
+                    farthestVertexY = vertexDistanceY;
+            }
+            _aabb = new AABB((int)farthestVertexX, (int)farthestVertexY) { Position = Position };
         }
 
         public void ProjectOntoAxis(ref Vector2 axisNormal, out float min, out float max)

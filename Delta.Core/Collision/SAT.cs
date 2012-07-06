@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Physics.Geometry;
+using Delta.Collision.Geometry;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
 
     public struct CollisionResult

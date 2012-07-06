@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     public class Circle : Polygon
     {

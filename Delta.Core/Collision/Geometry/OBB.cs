@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     /// <summary>
     /// An Orientated Bounding Box. ie. it will reflect rotations.
@@ -72,6 +72,7 @@ namespace Delta.Physics.Geometry
 
         public void ProjectOntoAxis(ref Vector2 axisNormal, out Vector2 projection)
         {
+            //Vector2.Dot(ref HalfWidthX, ref axisNormal, out projection.X);
             projection.X = Vector2.Dot(HalfWidthX, axisNormal);
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);
         }

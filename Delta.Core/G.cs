@@ -11,7 +11,7 @@ using Delta.Graphics.Effects;
 
 using Delta.Content;
 using Delta.Graphics;
-using Delta.Physics;
+using Delta.Collision;
 
 namespace Delta
 {
@@ -26,7 +26,7 @@ namespace Delta
         public static PrimitiveBatch PrimitiveBatch { get; private set; }
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
-        public static DeltaPhysics Physics { get; private set; }
+        public static CollisionManager Collision { get; private set; }
         public static GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         public static Texture2D PixelTexture { get; private set; }
         public static SpriteFont Font { get; private set; }
@@ -58,7 +58,7 @@ namespace Delta
             UI = new UI();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
-            Physics = new DeltaPhysics();
+            Collision = new CollisionManager();
             Content = new Delta.Content.DeltaContentManager(game.Content.ServiceProvider, game.Content.RootDirectory);
         }
 
