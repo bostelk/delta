@@ -78,9 +78,6 @@ namespace Delta.Tiled
                 // all entities get a name.
                 entity.ID = name;
 
-                // populate entity properties with tiled properties or try invoking a method.
-                entity.ImportXmlProperties(objectNode["properties"]);
-
                 // attempt to set entity specific properties.
                 TransformableEntity transformableEntity = entity as TransformableEntity;
                 if (transformableEntity != null)
@@ -119,6 +116,9 @@ namespace Delta.Tiled
                         }
                     }
                 }
+
+                // populate entity properties with tiled properties or try invoking a method. NOTE: Do this last!
+                entity.ImportXmlProperties(objectNode["properties"]);
                    
                 bool added = false;
                 SpriteEntity sprite = entity as SpriteEntity;
