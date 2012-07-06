@@ -19,17 +19,17 @@ namespace Delta.Collision
         int _narrowDetections = 0;
 
         SpatialGrid _grid;
-        HashSet<Collider> _colliders;
-        HashSet<Collider> _collidersToAdd;
-        HashSet<Collider> _collidersToRemove;
+        List<Collider> _colliders;
+        List<Collider> _collidersToAdd;
+        List<Collider> _collidersToRemove;
 
         Stack<CollisionResult> _results;
 
         public CollisionManager()
         {
-            _colliders = new HashSet<Collider>();
-            _collidersToAdd = new HashSet<Collider>();
-            _collidersToRemove = new HashSet<Collider>();
+            _colliders = new List<Collider>(200);
+            _collidersToAdd = new List<Collider>(50);
+            _collidersToRemove = new List<Collider>(50);
             _results = new Stack<CollisionResult>(10);
         }
 
@@ -49,13 +49,15 @@ namespace Delta.Collision
             if (!_colliders.Contains(collider))
             {
                 _collidersToAdd.Add(collider);
-                _grid.AddCollider(collider);
             }
         }
 
         public override void RemoveColider(Collider collider)
         {
-            _collidersToRemove.Add(collider);
+            if (_colliders.Contains(collider))
+            {
+                _collidersToRemove.Add(collider);
+            }
         }
 
         public override List<Polygon> Raycast(Vector2 start, Vector2 end, bool returnFirst)
@@ -73,14 +75,20 @@ namespace Delta.Collision
             if (_grid == null)
                 return;
 
-            _results.Clear();
-            _grid.Update();
-
             foreach (Collider collider in _collidersToAdd)
             {
                 _colliders.Add(collider);
             }
-                
+            foreach (Collider collider in _collidersToRemove)
+            {
+                _colliders.Remove(collider);
+            }
+            _collidersToAdd.Clear();
+            _collidersToRemove.Clear();
+ 
+            _results.Clear();
+            _grid.Update(_colliders);
+                              
             _narrowDetections = 0;
             List<CollisionPair> pairs = _grid.GetCollisionPairs();
             foreach (CollisionPair pair in pairs)

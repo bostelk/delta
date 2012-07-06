@@ -102,7 +102,7 @@ namespace Delta.Collision
             return result;
         }
 
-        public void AddCollider(Collider collider)
+        public void AddColliderToCells(Collider collider)
         {
             Point start = GetCellPosition(collider.Geom.AABB.Min);
             Point end = GetCellPosition(collider.Geom.AABB.Max);
@@ -114,11 +114,9 @@ namespace Delta.Collision
                     _cells[x + y * CellsWide].AddCollider(collider);
                 }
             }
-            if (!_collidersGlobal.Contains(collider))
-                _collidersGlobal.Add(collider);
         }
 
-        public void RemoveCollider(Collider collider)
+        public void RemoveColliderFromCells(Collider collider)
         {
             Point start = GetCellPosition(collider.Geom.AABB.Min);
             Point end = GetCellPosition(collider.Geom.AABB.Max);
@@ -130,7 +128,6 @@ namespace Delta.Collision
                     _cells[x + y * CellsWide].RemoveCollider(collider);
                 }
             }
-            _collidersGlobal.FastRemove<Collider>(collider);
         }
 
         /// <summary>
@@ -179,13 +176,14 @@ namespace Delta.Collision
             return _pairs;
         }
 
-        public void Update()
+        public void Update(List<Collider> colliders)
         {
             ClearGrid();
 
+            _collidersGlobal = colliders;
             for (int i = 0; i < _collidersGlobal.Count; i++)
             {
-                AddCollider(_collidersGlobal[i]);
+                AddColliderToCells(_collidersGlobal[i]);
             }
         }
 
