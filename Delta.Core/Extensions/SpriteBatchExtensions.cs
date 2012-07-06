@@ -19,7 +19,7 @@ namespace Delta
         Center = 2 << 3,
         Middle = 2 << 4,
         Top = 2 << 5,
-        Bottom =2 << 6,
+        Bottom = 2 << 6,
     }
 
     public static class SpriteBatchExtensions
@@ -37,27 +37,18 @@ namespace Delta
         {
             Vector2 textSize = font.MeasureString(text);
             Vector2 offset = Vector2.Zero;
-            switch (alignment)
-            {
-                case TextAlignment.Left:
-                    offset.X = 0;
-                    break;
-                case TextAlignment.Center:
-                    offset.X = -textSize.X / 2;
-                    break;
-                case TextAlignment.Right:
-                    offset.X = textSize.X;
-                    break;
-                case TextAlignment.Bottom:
-                    offset.Y = -textSize.Y;
-                    break;
-                case TextAlignment.Middle:
-                    offset.Y = textSize.X;
-                    break;
-                case TextAlignment.Top:
-                    offset.Y = 0;
-                    break;
-            }
+            if (alignment.HasFlag(TextAlignment.Left))
+                offset.X = 0;
+            else if (alignment.HasFlag(TextAlignment.Center))
+                offset.X = -textSize.X / 2;
+            else if (alignment.HasFlag(TextAlignment.Right))
+                offset.X = -textSize.X;
+            if (alignment.HasFlag(TextAlignment.Top))
+                offset.Y = 0;
+            else if (alignment.HasFlag(TextAlignment.Middle))
+                offset.Y = textSize.X;
+            else if (alignment.HasFlag(TextAlignment.Bottom))
+                offset.Y = -textSize.Y;
             spriteBatch.DrawString(font, text, position + offset, color);
         }
 
