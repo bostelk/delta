@@ -71,13 +71,12 @@ namespace Delta
         [ContentSerializer]
         public virtual Color Tint
         {
-            get { return _tint; }
+            get { return _tint * _alpha; }
             set
             {
                 if (_tint != value)
                 {
                     _tint = value;
-                    _tint *= _alpha;
                 }
             }
         }
@@ -92,7 +91,6 @@ namespace Delta
                 if (_alpha != value)
                 {
                     _alpha = value;
-                    _tint *= _alpha;
                 }
             }
         }
