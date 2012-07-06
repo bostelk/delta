@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Collision.Geometry
 {
@@ -10,8 +11,10 @@ namespace Delta.Collision.Geometry
     {
         const int SEGMENTS = 32;
 
+        [ContentSerializer]
         public float Radius;
 
+        [ContentSerializerIgnore]
         public float Circumference
         {
             get
@@ -20,6 +23,7 @@ namespace Delta.Collision.Geometry
             }
         }
 
+        [ContentSerializerIgnore]
         public float Area
         {
             get
@@ -28,6 +32,7 @@ namespace Delta.Collision.Geometry
             }
         }
 
+        [ContentSerializerIgnore]
         public Vector2 Orientation
         {
             get
@@ -35,6 +40,8 @@ namespace Delta.Collision.Geometry
                 return new Vector2((float)Math.Cos(Rotation) * Radius, (float)Math.Sin(Rotation) * Radius);
             }
         }
+
+        public Circle() { }
 
         public Circle(float radius) : this(radius, SEGMENTS) { }
 
@@ -60,6 +67,9 @@ namespace Delta.Collision.Geometry
         /// </summary>
         protected override void Calculate()
         {
+            if (LocalVertices == null)
+                return;
+
             _vertices = new Vector2[LocalVertices.Length];
             _normals = new Vector2[LocalVertices.Length];
             for (int i = 0; i < _vertices.Length; i++)
