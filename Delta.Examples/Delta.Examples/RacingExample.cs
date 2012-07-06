@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
-using Delta.Physics;
-using Delta.Physics.Geometry;
+using Delta.Collision;
+using Delta.Collision.Geometry;
 
 namespace Delta.Examples
 {
@@ -60,7 +60,7 @@ namespace Delta.Examples
             GraphicsDevice.Clear(ClearColor);
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
-            G.Physics.DrawDebug(ref view, ref projection);
+            G.Collision.DrawDebug(ref view, ref projection);
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();

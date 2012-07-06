@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     public class Polygon : IGeometry
     {
@@ -13,6 +14,7 @@ namespace Delta.Physics.Geometry
         /// Defined as the center of the Polygon.
         /// </summary>
         Vector2 _position;
+        [ContentSerializer]
         public Vector2 Position
         {
             get { return _position; }
@@ -23,6 +25,7 @@ namespace Delta.Physics.Geometry
         /// The Rotation of the Polygon in radians.
         /// </summary>
         float _rotation;
+        [ContentSerializer]
         public float Rotation
         {
             get { return _rotation; }
@@ -33,6 +36,7 @@ namespace Delta.Physics.Geometry
         /// Vertices relative to the Polygon position.
         /// </summary>
         protected Vector2[] _localVertices;
+        [ContentSerializer]
         public Vector2[] LocalVertices
         {
             get
@@ -42,6 +46,7 @@ namespace Delta.Physics.Geometry
             set
             {
                 _localVertices = value;
+                Calculate();
             }
         }
 
@@ -49,6 +54,7 @@ namespace Delta.Physics.Geometry
         /// Absolute position of the Vertices. Transformed by polygon center and rotation.
         /// </summary>
         protected Vector2[] _vertices;
+        [ContentSerializerIgnore]
         public Vector2[] Vertices
         {
             get
@@ -61,6 +67,7 @@ namespace Delta.Physics.Geometry
         /// Normals to polygon edges.
         /// </summary>
         protected Vector2[] _normals;
+        [ContentSerializerIgnore]
         public Vector2[] Normals
         {
             get
@@ -73,6 +80,7 @@ namespace Delta.Physics.Geometry
         /// Minimum bounding area of the polygon.
         /// </summary>
         protected AABB _aabb;
+        [ContentSerializerIgnore]
         public AABB AABB
         {
             get
@@ -82,37 +90,9 @@ namespace Delta.Physics.Geometry
         }
 
         /// <summary>
-        /// Keeping the polygon fresh.
-        /// </summary>
-        protected virtual void Calculate()
-        {
-            _vertices = new Vector2[LocalVertices.Length];
-            _normals = new Vector2[LocalVertices.Length];
-            float farthestVertexX = -float.MaxValue;
-            float farthestVertexY = -float.MaxValue;
-            for (int i = 0; i < _vertices.Length; i++)
-            {
-                // transform the vertices by the rotation and position
-                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
-
-                // calculate the new normals
-                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
-                _normals[i].Normalize();
-
-                // calculate the new aabb
-                float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
-                float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
-                if (vertexDistanceX > farthestVertexX)
-                    farthestVertexX = vertexDistanceX;
-                if (vertexDistanceY > farthestVertexY)
-                    farthestVertexY = vertexDistanceY;
-            }
-            _aabb = new AABB((int)farthestVertexX, (int)farthestVertexY) { Position = Position };
-        }
-
-        /// <summary>
         /// The minimum radius required to encapsulate the entire polygon.
         /// </summary>
+        [ContentSerializerIgnore]
         public float BoundingRadius
         {
             get
@@ -130,6 +110,7 @@ namespace Delta.Physics.Geometry
             }
         }
 
+        [ContentSerializerIgnore]
         public Matrix Transform
         {
             get
@@ -163,6 +144,37 @@ namespace Delta.Physics.Geometry
             Calculate();
         }
 
+        /// <summary>
+        /// Realign the bounding box and calulate transformations.
+        /// </summary>
+        protected virtual void Calculate()
+        {
+            if (LocalVertices == null || LocalVertices.Length == 0)
+                return;
+            _vertices = new Vector2[LocalVertices.Length];
+            _normals = new Vector2[LocalVertices.Length];
+            float farthestVertexX = -float.MaxValue;
+            float farthestVertexY = -float.MaxValue;
+            for (int i = 0; i < _vertices.Length; i++)
+            {
+                // transform the vertices by the rotation and position
+                _vertices[i] = Position + Vector2Extensions.Rotate(LocalVertices[i], Rotation);
+
+                // calculate the new normals
+                _normals[i] = Vector2Extensions.PerpendicularLeft(_vertices[(i + 1) % _vertices.Length] - _vertices[i]);
+                _normals[i].Normalize();
+
+                // calculate the new aabb
+                float vertexDistanceX = Math.Abs(Position.X - _vertices[i].X);
+                float vertexDistanceY = Math.Abs(Position.Y - _vertices[i].Y);
+                if (vertexDistanceX > farthestVertexX)
+                    farthestVertexX = vertexDistanceX;
+                if (vertexDistanceY > farthestVertexY)
+                    farthestVertexY = vertexDistanceY;
+            }
+            _aabb = new AABB((int)farthestVertexX, (int)farthestVertexY) { Position = Position };
+        }
+
         public void ProjectOntoAxis(ref Vector2 axisNormal, out float min, out float max)
         {
             Vector2.Dot(ref Vertices[0], ref axisNormal, out min);
@@ -177,6 +189,17 @@ namespace Delta.Physics.Geometry
                 if (projected < min)
                     min = projected;
             }
+        }
+
+        public static Polygon CreateRectangle(float width, float height)
+        {
+            float halfWidth = width / 2; float halfHeight = height / 2;
+            return new Polygon(new Vector2[] {
+                new Vector2(halfWidth, -halfHeight),
+                new Vector2(halfWidth, halfHeight),
+                new Vector2(-halfWidth, halfHeight),
+                new Vector2(-halfWidth, -halfHeight),
+            });
         }
 
         /// <summary>

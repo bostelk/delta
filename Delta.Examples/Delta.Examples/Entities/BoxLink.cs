@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using Delta.Physics;
-using Delta.Physics.Geometry;
+using Delta.Collision;
+using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
@@ -27,10 +27,8 @@ namespace Delta.Examples.Entities
             Collider = new Collider()
             {
                 Mass = 1f,
-                //Geom = new OBB(16, 16)
                 Geom = new Circle(8)
             };
-            G.Physics.AddCollider(Collider);
         }
 
         public void SwitchBody()

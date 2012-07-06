@@ -63,7 +63,7 @@
  </layer>
  <layer name="obstacles" width="40" height="40">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3SsQ2AMAxE0bSMAiukCevQMUK2yLiJxAAYWQ4n+E9yez5ZTgn4nrxco2xGR2/+3254l6V+j6cO8f+L7udFPx/1fvXFfqdhdwvqt47czZBt6RihjL27+O8AAAAAAHR0zF9Z0AAZAAA=
+   H4sIAAAAAAAAC+2UOw7CMAyGPbQDR4ErsJTrsHEEdihsTZkAAQfgcb/+EhtKIJFx6oI/6Z8quZ/8CJFh/B7T0TOayeHIrf9vPfxUS3s/Upkr3z9pPy4+v1VJtEbqMr/PKz4/B68W2Sn1O8HrjFwU+C173L9FxL+dkN8YdScRtWMcY0i9mQr/nWWcjaab8ZH7ZkLz0vL2healZY6heWl6+wzjm1wLohtyRx5F3zZpDNldknd9CX2zXhoS1NilDSNb4V1sUN8x0gr77VH/wMjRbtkYGB0cvhgzABkAAA==
   </data>
  </layer>
  <objectgroup name="objects" width="40" height="40">
@@ -79,6 +79,16 @@
   <object type="Delta.CollideableEntity" x="368" y="80" width="32" height="16"/>
   <object type="Delta.CollideableEntity" x="384" y="96" width="16" height="32"/>
   <object type="Delta.CollideableEntity" x="400" y="112" width="16" height="16"/>
-  <object type="Delta.CollideableEntity" x="384" y="144" width="16" height="112"/>
+  <object type="Delta.CollideableEntity" x="392" y="145" width="9" height="111"/>
+  <object type="Delta.CollideableEntity" x="352" y="304" width="48" height="48"/>
+  <object type="Delta.CollideableEntity" x="448" y="304" width="48" height="48"/>
+  <object type="Delta.CollideableEntity" x="544" y="256" width="48" height="48"/>
+  <object type="Delta.CollideableEntity" x="464" y="176" width="48" height="48"/>
+  <object type="Delta.CollideableEntity" x="176" y="528" width="272" height="48"/>
+  <object type="Delta.CollideableEntity" x="240" y="464" width="64" height="16"/>
+  <object type="Delta.CollideableEntity" x="336" y="464" width="64" height="16"/>
+  <object type="Delta.CollideableEntity" x="288" y="432" width="64" height="16"/>
+  <object type="Delta.CollideableEntity" x="128" y="464" width="64" height="16"/>
+  <object type="Delta.CollideableEntity" x="176" y="416" width="64" height="16"/>
  </objectgroup>
 </map>

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Physics.Geometry;
-using Delta.Physics;
+using Delta.Collision.Geometry;
+using Delta.Collision;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
     public class Collider
     {

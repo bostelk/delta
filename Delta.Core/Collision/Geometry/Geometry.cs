@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     public abstract class Geometry
     {

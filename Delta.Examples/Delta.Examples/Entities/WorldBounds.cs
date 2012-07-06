@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using Delta.Physics;
-using Delta.Physics.Geometry;
+using Delta.Collision;
+using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
@@ -32,10 +32,10 @@ namespace Delta.Examples.Entities
             p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
             p4.Position = new Vector2(600, 0);
 
-            G.Physics.AddCollider(new Collider(p1) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p2) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p3) { IsStatic = true });
-            G.Physics.AddCollider(new Collider(p4) { IsStatic = true });
+            G.Collision.AddCollider(new Collider(p1) { IsStatic = true });
+            G.Collision.AddCollider(new Collider(p2) { IsStatic = true });
+            G.Collision.AddCollider(new Collider(p3) { IsStatic = true });
+            G.Collision.AddCollider(new Collider(p4) { IsStatic = true });
         }
 
         protected override void LightUpdate(GameTime gameTime)

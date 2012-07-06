@@ -53,7 +53,7 @@ namespace Delta
                 InternalInitialize();
             G.World.InternalUpdate(gameTime);
             G.UI.InternalUpdate(gameTime);
-            G.Physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
+            G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
             base.Update(gameTime);
         }
 

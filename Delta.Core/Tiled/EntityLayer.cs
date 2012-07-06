@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Delta.Physics.Geometry;
-using Delta.Physics;
+using Delta.Collision.Geometry;
+using Delta.Collision;
 using Delta.Graphics;
 #endif
 
@@ -78,11 +78,17 @@ namespace Delta.Tiled
                 // all entities get a name.
                 entity.ID = name;
 
+                // populate entity properties with tiled properties or try invoking a method.
+                entity.ImportXmlProperties(objectNode["properties"]);
+
                 // attempt to set entity specific properties.
                 TransformableEntity transformableEntity = entity as TransformableEntity;
                 if (transformableEntity != null)
                 {
                     transformableEntity.Position = position;
+                
+                    // tiled doesn't store rotation so we're using a property to set an entity's rotation.
+                    transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
                 }
 
                 CollideableEntity collideableEntity = entity as CollideableEntity;
@@ -90,32 +96,22 @@ namespace Delta.Tiled
                 {
                     if (size != Vector2.Zero)
                     {
-                        collideableEntity.Polygon = new Box()
-                        {
-                            HalfWidth = (int)size.X / 2,
-                            HalfHeight = (int)size.Y / 2,
-                        };
+                        collideableEntity.Polygon = new OBB(size.X, size.Y);
+                        // tiled's position is the top-left position of a tile. position the entity at the tile center.
+                        collideableEntity.Position += new Vector2(size.X / 2, size.Y / 2);
                     }
                     else if (IsPolygon)
                     {
                         collideableEntity.Polygon = new Polygon(polyVertices.ToArray());
-                        //collideableEntity.Position = position; // side effect due to how polygons are constructed.
                     }
                     else
                     {
+                        // remove the closing vertex
                         if (polyVertices[0] == polyVertices[polyVertices.Count - 1])
                             polyVertices.RemoveAt(polyVertices.Count - 1);
                         collideableEntity.Polygon = new Polygon(polyVertices.ToArray());
-                        //collideableEntity.Position = position; // side effect due to how polygons are constructed.
                     }
                 }
-
-                // populate entity properties with tiled properties or try invoking a method.
-                entity.ImportXmlProperties(objectNode["properties"]);
-
-                // tiled doesn't store rotation so we're using a property to set an entity's rotation.
-                if (transformableEntity != null)
-                    transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
                    
                 bool added = false;
                 SpriteEntity sprite = entity as SpriteEntity;

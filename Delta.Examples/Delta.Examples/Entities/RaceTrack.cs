@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using Delta.Physics;
-using Delta.Physics.Geometry;
+using Delta.Collision;
+using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
@@ -33,8 +33,8 @@ namespace Delta.Examples.Entities
 
         public RaceTrack()
         {
-            G.Physics.AddCollider(Collider = new Collider(new Polygon(new Vector2(0, -360), new Vector2(0, 360))));
-            G.Physics.AddCollider(Collider = new Collider(new Polygon(new Vector2(-640, 0), new Vector2(0, 0))));
+            G.Collision.AddCollider(Collider = new Collider(new Polygon(new Vector2(0, -360), new Vector2(0, 360))));
+            G.Collision.AddCollider(Collider = new Collider(new Polygon(new Vector2(-640, 0), new Vector2(0, 0))));
             Position = new Vector2(100, 0);
         }
 

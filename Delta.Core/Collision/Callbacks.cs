@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
        public delegate bool BeforeCollisionEventHandler(Collider them, Vector2 normal);
 

@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     /// <summary>
     /// An Orientated Bounding Box. ie. it will reflect rotations.
     /// </summary>
     public class OBB : Polygon
     {
+        [ContentSerializer]
         public float HalfWidth { get; private set; }
+        [ContentSerializer]
         public float HalfHeight { get; private set; }
 
         /// <summary>
         /// The Unit vector that points along the x-axis.
         /// </summary>
-        public Vector2 Facing
+        public Vector2 Orientation
         {
             get
             {
@@ -25,11 +28,11 @@ namespace Delta.Physics.Geometry
             }
         }
 
-        public Vector2 PerpFacing
+        public Vector2 PerpOrientation
         {
             get
             {
-                return Vector2Extensions.PerpendicularLeft(Facing);
+                return Vector2Extensions.PerpendicularLeft(Orientation);
             }
         }
 
@@ -37,7 +40,7 @@ namespace Delta.Physics.Geometry
         {
             get
             {
-                return new Vector2(HalfWidth, HalfWidth) * Facing;
+                return new Vector2(HalfWidth, HalfWidth) * Orientation;
             }
         }
 
@@ -45,11 +48,11 @@ namespace Delta.Physics.Geometry
         {
             get
             {
-                return new Vector2(HalfHeight, HalfHeight) * Vector2Extensions.PerpendicularLeft(Facing);
+                return new Vector2(HalfHeight, HalfHeight) * PerpOrientation;
             }
         }
 
-        public OBB(Box box) : this(box.HalfWidth * 2, box.HalfHeight * 2) { }
+        public OBB() { }
 
         /// <summary>
         /// Create an Orientated Bounding Box
@@ -72,6 +75,7 @@ namespace Delta.Physics.Geometry
 
         public void ProjectOntoAxis(ref Vector2 axisNormal, out Vector2 projection)
         {
+            //Vector2.Dot(ref HalfWidthX, ref axisNormal, out projection.X);
             projection.X = Vector2.Dot(HalfWidthX, axisNormal);
             projection.Y = Vector2.Dot(HalfWidthY, axisNormal);
         }

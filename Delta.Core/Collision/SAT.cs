@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Physics.Geometry;
+using Delta.Collision.Geometry;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Physics
+namespace Delta.Collision
 {
 
     public struct CollisionResult
@@ -46,10 +46,10 @@ namespace Delta.Physics
             // NOTE: For OBB's we only need to check their half widths. ie. 4 axis total.
             // For AABB's we only need to check 2 axis since they don't rotate.
             Vector2[] axisToCheck = new Vector2[] {
-                a.Facing,
-                a.PerpFacing,
-                b.Facing,
-                b.PerpFacing
+                a.Orientation,
+                a.PerpOrientation,
+                b.Orientation,
+                b.PerpOrientation
             };
 
             // TODO: remove parallel normals
@@ -124,8 +124,8 @@ namespace Delta.Physics
             Vector2 mtv = default(Vector2); // the minimum translation vector
 
             Vector2[] axisToCheck = new Vector2[3];
-            axisToCheck[0] = boxB.Facing;
-            axisToCheck[1] = boxB.PerpFacing;
+            axisToCheck[0] = boxB.Orientation;
+            axisToCheck[1] = boxB.PerpOrientation;
             float minDistance = float.MaxValue;
             Vector2 closestVertex = default(Vector2);
             for (int i = 0; i < boxB.Vertices.Length; i++)
@@ -206,7 +206,7 @@ namespace Delta.Physics
                 float penetration = maxB - minA;
 
                 // a seperating axis has been found; there is no collision.
-                if (minA - maxB > 0f || minB - maxA >0f)
+                if (minA - maxB > 0f || minB - maxA > 0f)
                 {
                     return NoCollision;
                 }

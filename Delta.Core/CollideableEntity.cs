@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Physics;
+using Delta.Collision;
 using Microsoft.Xna.Framework;
-using Delta.Physics.Geometry;
+using Delta.Collision.Geometry;
 using Microsoft.Xna.Framework.Content;
 
 namespace Delta
 {
     public class CollideableEntity : TransformableEntity
     {
+        [ContentSerializer]
+        public bool ColliderEnabled = true;
+
         protected Collider _collider;
         [ContentSerializerIgnore]
         public Collider Collider
@@ -21,24 +24,15 @@ namespace Delta
             }
             set
             {
-                _collider = value;
-                /*
-                if (value == null)
-                    return;
-                if (_collider != null && G.Physics != null)
-                    G.Physics.RemoveColider(_collider);
-                _collider = value;
-                _collider.BeforeCollision = BeforeCollision;
-                _collider.OnCollision = OnCollision;
-                _collider.AfterCollision = AfterCollision;
-                _collider.OnSeparation = OnSeparation;
-                if (G.Physics != null)
-                    G.Physics.AddCollider(_collider);
-                */
+                if (value != null)
+                {
+                    _collider = value;
+                    OnColliderChanged();
+                }
             }
         }
 
-        private Polygon _polygon;
+        Polygon _polygon;
         [ContentSerializer]
         public Polygon Polygon
         {
@@ -48,15 +42,10 @@ namespace Delta
             }
             set
             {
-                if (value == null)
-                    return;
-                if (_polygon == null)
-                _polygon = value;
-                if (_collider != null)
+                if (value != null)
                 {
-                    _collider.Geom = value;
-                    _collider.Geom.Position = base.Position;
-                    _collider.Geom.Rotation = base.Rotation;
+                    _polygon = value;
+                    OnPolygonChanged();
                 }
             }
         }
@@ -66,7 +55,7 @@ namespace Delta
         {
             get
             {
-                if (Collider != null)
+                if (Collider != null && ColliderEnabled)
                     return Collider.Geom.Position;
                 else
                     return base.Position;
@@ -84,7 +73,10 @@ namespace Delta
         {
             get
             {
-                return base.Rotation;
+                if (Collider != null && ColliderEnabled)
+                    return Collider.Geom.Rotation;
+                else
+                    return base.Rotation;
             }
             set
             {
@@ -102,18 +94,32 @@ namespace Delta
         {
             if (Collider == null && _polygon != null)
             {
-                if (_polygon is Box)
-                    _polygon = new OBB(_polygon as Box);
                 Collider = new Collider(this, _polygon);
-                Collider.Geom.Position = base.Position + new Vector2((_polygon as OBB).HalfWidth, (_polygon as OBB).HalfHeight);
-                Collider.Geom.Rotation = base.Rotation;
-                G.Physics.AddCollider(Collider);
-            }
-            else if (Collider == null)
-            {
-                G.Physics.AddCollider(Collider);
             }
             base.LateInitialize();
+        }
+
+        protected internal virtual void OnColliderChanged()
+        {
+            if (_collider != null && G.Collision != null)
+                G.Collision.RemoveColider(_collider);
+            _collider.BeforeCollision = BeforeCollision;
+            _collider.OnCollision = OnCollision;
+            _collider.AfterCollision = AfterCollision;
+            _collider.OnSeparation = OnSeparation;
+            Polygon = _collider.Geom;
+            if (G.Collision != null)
+                G.Collision.AddCollider(_collider);
+        }
+
+        protected internal virtual void OnPolygonChanged()
+        {
+            if (_collider != null)
+            {
+                _collider.Geom = _polygon;
+                _collider.Geom.Position = base.Position;
+                _collider.Geom.Rotation = base.Rotation;
+            }
         }
 
         public virtual bool BeforeCollision(Collider them, Vector2 normal)

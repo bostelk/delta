@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace Delta.Physics.Geometry
+namespace Delta.Collision.Geometry
 {
     /// <summary>
     /// A box.
