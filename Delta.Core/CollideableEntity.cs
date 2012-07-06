@@ -11,6 +11,7 @@ namespace Delta
 {
     public class CollideableEntity : TransformableEntity
     {
+        [ContentSerializer]
         public bool ColliderEnabled = true;
 
         protected Collider _collider;
@@ -93,12 +94,7 @@ namespace Delta
         {
             if (Collider == null && _polygon != null)
             {
-                if (_polygon is Box)
-                    _polygon = new OBB(_polygon as Box);
                 Collider = new Collider(this, _polygon);
-                Collider.Geom.Position = base.Position + new Vector2((_polygon as OBB).HalfWidth, (_polygon as OBB).HalfHeight);
-                Collider.Geom.Rotation = base.Rotation;
-                G.Collision.AddCollider(Collider);
             }
             base.LateInitialize();
         }
@@ -111,7 +107,7 @@ namespace Delta
             _collider.OnCollision = OnCollision;
             _collider.AfterCollision = AfterCollision;
             _collider.OnSeparation = OnSeparation;
-            _polygon = _collider.Geom;
+            Polygon = _collider.Geom;
             if (G.Collision != null)
                 G.Collision.AddCollider(_collider);
         }

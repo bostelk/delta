@@ -21,22 +21,14 @@ namespace Delta.Collision.Geometry
             set
             {
                 _position = value;
-                Min = _position - new Vector2(HalfWidth, HalfHeight);
-                Max = _position + new Vector2(HalfWidth, HalfHeight);
+                Realign();
             }
         }
 
-        public int HalfWidth { get; protected set; }
-        public int HalfHeight { get; protected set; }
+        public int HalfWidth { get; private set; }
+        public int HalfHeight { get; private set; }
         public Vector2 Min { get; private set; }
         public Vector2 Max { get; private set; }
-
-        public AABB(int halfWidth, int halfHeight)
-        {
-            Position = default(Vector2);
-            HalfWidth = halfWidth;
-            HalfHeight = halfHeight;
-        }
 
         public Vector2[] Vertices
         {
@@ -50,7 +42,20 @@ namespace Delta.Collision.Geometry
                 };
             }
         }
-     
+
+        public AABB(int halfWidth, int halfHeight)
+        {
+            Position = Vector2.Zero;
+            HalfWidth = halfWidth;
+            HalfHeight = halfHeight;
+        }
+
+        private void Realign()
+        {
+            Min = _position - new Vector2(HalfWidth, HalfHeight);
+            Max = _position + new Vector2(HalfWidth, HalfHeight);
+        }
+             
         /// <summary>
         /// A less expensive check before we waste cycles on a narrow phase detection.
         /// </summary>

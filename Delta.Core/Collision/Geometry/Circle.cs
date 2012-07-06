@@ -42,8 +42,9 @@ namespace Delta.Collision.Geometry
         {
             Radius = radius;
             LocalVertices = new Vector2[segments];
-            double angleInterval = Math.PI * 2 / segments;
+
             double theta = 0;
+            double angleInterval = Math.PI * 2 / segments;
             for (int i = 0; i < segments; i ++)
             {
                 LocalVertices[i] = default(Vector2);
@@ -73,7 +74,8 @@ namespace Delta.Collision.Geometry
             _aabb = new AABB((int)Radius, (int)Radius) { Position = Position };
         }
 
-        public void ProjectOntoAxis(ref Vector2 axis, out Vector2 projection) {
+        public void ProjectOntoAxis(ref Vector2 axis, out Vector2 projection) 
+        {
             projection = Radius * axis;
         }
     }

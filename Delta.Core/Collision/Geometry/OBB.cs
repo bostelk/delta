@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Collision.Geometry
 {
@@ -11,13 +12,15 @@ namespace Delta.Collision.Geometry
     /// </summary>
     public class OBB : Polygon
     {
+        [ContentSerializer]
         public float HalfWidth { get; private set; }
+        [ContentSerializer]
         public float HalfHeight { get; private set; }
 
         /// <summary>
         /// The Unit vector that points along the x-axis.
         /// </summary>
-        public Vector2 Facing
+        public Vector2 Orientation
         {
             get
             {
@@ -25,11 +28,11 @@ namespace Delta.Collision.Geometry
             }
         }
 
-        public Vector2 PerpFacing
+        public Vector2 PerpOrientation
         {
             get
             {
-                return Vector2Extensions.PerpendicularLeft(Facing);
+                return Vector2Extensions.PerpendicularLeft(Orientation);
             }
         }
 
@@ -37,7 +40,7 @@ namespace Delta.Collision.Geometry
         {
             get
             {
-                return new Vector2(HalfWidth, HalfWidth) * Facing;
+                return new Vector2(HalfWidth, HalfWidth) * Orientation;
             }
         }
 
@@ -45,11 +48,11 @@ namespace Delta.Collision.Geometry
         {
             get
             {
-                return new Vector2(HalfHeight, HalfHeight) * Vector2Extensions.PerpendicularLeft(Facing);
+                return new Vector2(HalfHeight, HalfHeight) * PerpOrientation;
             }
         }
 
-        public OBB(Box box) : this(box.HalfWidth * 2, box.HalfHeight * 2) { }
+        public OBB() { }
 
         /// <summary>
         /// Create an Orientated Bounding Box

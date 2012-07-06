@@ -96,11 +96,9 @@ namespace Delta.Tiled
                 {
                     if (size != Vector2.Zero)
                     {
-                        collideableEntity.Polygon = new Box()
-                        {
-                            HalfWidth = (int)size.X / 2,
-                            HalfHeight = (int)size.Y / 2,
-                        };
+                        collideableEntity.Polygon = new OBB(size.X, size.Y);
+                        // tiled's position is the top-left position of a tile. position the entity at the tile center.
+                        collideableEntity.Position += new Vector2(size.X / 2, size.Y / 2);
                     }
                     else if (IsPolygon)
                     {
@@ -108,6 +106,7 @@ namespace Delta.Tiled
                     }
                     else
                     {
+                        // remove the closing vertex
                         if (polyVertices[0] == polyVertices[polyVertices.Count - 1])
                             polyVertices.RemoveAt(polyVertices.Count - 1);
                         collideableEntity.Polygon = new Polygon(polyVertices.ToArray());

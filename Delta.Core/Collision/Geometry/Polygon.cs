@@ -14,6 +14,7 @@ namespace Delta.Collision.Geometry
         /// Defined as the center of the Polygon.
         /// </summary>
         Vector2 _position;
+        [ContentSerializer]
         public Vector2 Position
         {
             get { return _position; }
@@ -24,6 +25,7 @@ namespace Delta.Collision.Geometry
         /// The Rotation of the Polygon in radians.
         /// </summary>
         float _rotation;
+        [ContentSerializer]
         public float Rotation
         {
             get { return _rotation; }
@@ -44,6 +46,7 @@ namespace Delta.Collision.Geometry
             set
             {
                 _localVertices = value;
+                Calculate();
             }
         }
 
@@ -51,6 +54,7 @@ namespace Delta.Collision.Geometry
         /// Absolute position of the Vertices. Transformed by polygon center and rotation.
         /// </summary>
         protected Vector2[] _vertices;
+        [ContentSerializerIgnore]
         public Vector2[] Vertices
         {
             get
@@ -63,6 +67,7 @@ namespace Delta.Collision.Geometry
         /// Normals to polygon edges.
         /// </summary>
         protected Vector2[] _normals;
+        [ContentSerializerIgnore]
         public Vector2[] Normals
         {
             get
@@ -75,6 +80,7 @@ namespace Delta.Collision.Geometry
         /// Minimum bounding area of the polygon.
         /// </summary>
         protected AABB _aabb;
+        [ContentSerializerIgnore]
         public AABB AABB
         {
             get
@@ -86,6 +92,7 @@ namespace Delta.Collision.Geometry
         /// <summary>
         /// The minimum radius required to encapsulate the entire polygon.
         /// </summary>
+        [ContentSerializerIgnore]
         public float BoundingRadius
         {
             get
@@ -103,6 +110,7 @@ namespace Delta.Collision.Geometry
             }
         }
 
+        [ContentSerializerIgnore]
         public Matrix Transform
         {
             get
@@ -141,6 +149,8 @@ namespace Delta.Collision.Geometry
         /// </summary>
         protected virtual void Calculate()
         {
+            if (LocalVertices == null || LocalVertices.Length == 0)
+                return;
             _vertices = new Vector2[LocalVertices.Length];
             _normals = new Vector2[LocalVertices.Length];
             float farthestVertexX = -float.MaxValue;
@@ -179,6 +189,17 @@ namespace Delta.Collision.Geometry
                 if (projected < min)
                     min = projected;
             }
+        }
+
+        public static Polygon CreateRectangle(float width, float height)
+        {
+            float halfWidth = width / 2; float halfHeight = height / 2;
+            return new Polygon(new Vector2[] {
+                new Vector2(halfWidth, -halfHeight),
+                new Vector2(halfWidth, halfHeight),
+                new Vector2(-halfWidth, halfHeight),
+                new Vector2(-halfWidth, -halfHeight),
+            });
         }
 
         /// <summary>
