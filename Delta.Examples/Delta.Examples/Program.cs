@@ -16,7 +16,7 @@ namespace Delta.Examples
             Game,
             Audio,
             Tiled,
-            Physics,
+            Collision,
             Racing,
             Zelda,
         }
@@ -45,8 +45,8 @@ namespace Delta.Examples
                 case Examples.Tiled:
                     RunExample<TiledExample>();
                     break;
-                case Examples.Physics:
-                    RunExample<PhysicsExample>();
+                case Examples.Collision:
+                    RunExample<CollisionExample>();
                     break;
                 case Examples.Racing:
                     RunExample<RacingExample>();

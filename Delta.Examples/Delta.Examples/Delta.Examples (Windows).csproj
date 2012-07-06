@@ -121,7 +121,7 @@
     <Compile Include="RacingExample.cs" />
     <Compile Include="Entities\RaceTrack.cs" />
     <Compile Include="Entities\PhysicsCar.cs" />
-    <Compile Include="PhysicsExample.cs" />
+    <Compile Include="CollisionExample.cs" />
     <Compile Include="SciptingExample.cs" />
     <Compile Include="TiledExample.cs" />
     <Compile Include="EffectExample.cs" />

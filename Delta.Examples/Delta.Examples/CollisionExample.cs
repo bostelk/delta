@@ -17,13 +17,13 @@ namespace Delta.Examples
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PhysicsExample : ExampleBase
+    public class CollisionExample : ExampleBase
     {
         const string CONTROLS = "[wasd] move.[f2] switch geometry.";
         TransformableEntity player;
         List<Obstacle> _obstacles;
 
-        public PhysicsExample() : base("PhysicsExample")
+        public CollisionExample() : base("CollisionExample")
         {
             ClearColor = Color.Black;
             G.Collision.DefineWorld(1024, 1024, 32);
