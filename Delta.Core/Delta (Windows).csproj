@@ -105,8 +105,8 @@
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="Extensions\DeltaMath.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Effects\DeltaEffect.cs" />
     <Compile Include="Graphics\Effects\SimpleEffect.cs" />
