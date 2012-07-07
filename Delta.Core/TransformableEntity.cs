@@ -6,6 +6,8 @@ namespace Delta
 {
     public class TransformableEntity : Entity
     {
+        protected Vector2 RenderPosition { get; private set; }
+        protected Vector2 RenderOrigin { get; private set; }
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
@@ -67,7 +69,37 @@ namespace Delta
             }
         }
 
+        Vector2 _origin = Vector2.Zero;
         [ContentSerializer]
+        public Vector2 Origin
+        {
+            get { return _origin; }
+            set
+            {
+                if (_origin != value)
+                {
+                    _origin = value;
+                    OnOriginChanged();
+                }
+            }
+        }
+
+        Vector2 _pivot = new Vector2(0.5f, 0.5f); //automatically set the pivot as the center
+        [ContentSerializer]
+        public Vector2 Pivot
+        {
+            get { return _pivot; }
+            set
+            {
+                if (_pivot != value)
+                {
+                    _pivot = value;
+                    OnPivotChanged();
+                }
+            }
+        }
+
+        [ContentSerializer(ElementName = "Tint")]
         Color _tint = Color.White;
         [ContentSerializerIgnore] //we don't want to save the pre-multipled tint!
         public virtual Color Tint
@@ -103,20 +135,47 @@ namespace Delta
             Scale = Vector2.One;
         }
 
+        protected virtual void UpdateRenderOrigin()
+        {
+            RenderOrigin = Pivot * Size * Scale;
+        }
+
+        protected virtual void UpdateRenderPosition()
+        {
+            RenderPosition = Position + RenderOrigin - (Origin * Size * Scale);
+        }
+
         protected internal virtual void OnPositionChanged()
         {
+            UpdateRenderPosition();
         }
 
         protected internal virtual void OnSizeChanged()
         {
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
         }
 
         protected internal virtual void OnScaleChanged()
         {
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
         }
 
         protected internal virtual void OnRotationChanged()
         {
+        }
+
+        protected virtual void OnOriginChanged()
+        {
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
+        }
+
+        protected virtual void OnPivotChanged()
+        {
+            UpdateRenderOrigin();
+            UpdateRenderPosition();
         }
 
     }

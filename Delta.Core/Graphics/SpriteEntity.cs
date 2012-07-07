@@ -12,23 +12,6 @@ namespace Delta.Graphics
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         float _frameDurationTimer = 0f;
         Animation _animation = null;
-        Vector2 _renderPosition = Vector2.Zero;
-        Vector2 _renderOrigin = Vector2.Zero;
-
-        Vector2 _pivot = Vector2.Zero;
-        [ContentSerializer]
-        public Vector2 Pivot
-        {
-            get { return _pivot; }
-            set
-            {
-                if (_pivot != value)
-                {
-                    _pivot = value;
-                    OnPivotChanged();
-                }
-            }
-        }
 
         [ContentSerializer(ElementName = "Frame")] //for Rob's convience
         public int AnimationFrame { get; private set; }
@@ -72,16 +55,6 @@ namespace Delta.Graphics
             if (_animation != null)
                 UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
-        }
-
-        protected virtual void UpdateRenderOrigin()
-        {
-            _renderOrigin = Pivot;
-        }
-
-        protected virtual void UpdateRenderPosition()
-        {
-            _renderPosition = Position + _renderOrigin;
         }
 
         protected internal void UpdateAnimation()
@@ -131,7 +104,7 @@ namespace Delta.Graphics
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_spriteSheet.Texture, _renderPosition, _sourceRectangle, Tint, Rotation, _renderOrigin, Scale, SpriteEffects, 0);
+            spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
         protected internal override void OnPositionChanged()
@@ -148,12 +121,6 @@ namespace Delta.Graphics
                 AnimationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             AnimationIsFinished = false;
-        }
-
-        protected virtual void OnPivotChanged()
-        {
-            UpdateRenderOrigin();
-            UpdateRenderPosition();
         }
 
     }
