@@ -6,12 +6,17 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Movement
 {
+    /// <summary>
+    /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
+    /// Use additional Transformers to create parallel sequences.
+    /// </summary>
     public class Transformer : Entity
     {
         float _elapsed;
         int _repeat;
         TransformableEntity _entity;
-        Action _onFinish;
+        Action _onTransformFinished;
+        Action _onSequenceFinished;
         Queue<ITransform> _transforms;
 
         Transformer(TransformableEntity entity)
@@ -20,7 +25,12 @@ namespace Delta.Movement
             _transforms = new Queue<ITransform>();
         }
 
-        public static Transformer InWorldThisEntity(TransformableEntity entity)
+        /// <summary>
+        /// Start a sequence of Transforms using this Entity.
+        /// </summary>
+        /// <param name="entity">Entity to transform.</param>
+        /// <returns></returns>
+        public static Transformer ThisEntity(TransformableEntity entity)
         {
             Transformer transform = new Transformer(entity);
             G.World.Add(transform);
@@ -28,15 +38,15 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Clear the remainging transforms in the queue.
+        /// Clear the remaining Transforms in the sequence.
         /// </summary>
-        public void ClearRemaining()
+        public void ClearSequence()
         {
             _transforms.Clear();
         }
 
         /// <summary>
-        /// Skip the current transform.
+        /// Skip the current Transform.
         /// </summary>
         public void SkipTransform() 
         {
@@ -44,10 +54,10 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Scale the entity over a period of time.
+        /// Add to the sequence of Transforms; Scale the entity over a period of time.
         /// </summary>
-        /// <param name="scale">The goal scale.</param>
-        /// <param name="duration">Duration of the transform in seconds.</param>
+        /// <param name="scale">The scale to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal scale. (seconds)</param>
         /// <returns></returns>
         public Transformer ScaleTo(Vector2 size, float duration)
         {
@@ -57,10 +67,10 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Translate the Entity over a period of time.
+        /// Add to the sequence of Transforms; Translate the Entity over a period of time.
         /// </summary>
-        /// <param name="position">The goal position.</param>
-        /// <param name="duration">Duration of the transform in seconds.</param>
+        /// <param name="position">The position to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal position. (seconds)</param>
         /// <returns></returns>
         public Transformer TranslateTo(Vector2 position, float duration)
         {
@@ -70,23 +80,23 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Rotate the Entity over a period of time.
+        /// Add to the sequence of Transforms; Rotate the Entity over a period of time.
         /// </summary>
-        /// <param name="angle">The goal angle in degrees.</param>
-        /// <param name="duration">Duration of the transform in seconds.</param>
+        /// <param name="angle">The angle to transition to. (degrees)</param>
+        /// <param name="duration">Time taken to reach the goal angle. (seconds)</param>
         /// <returns></returns>
         public Transformer RotateTo(float angle, float duration)
         {
-            RotateTransform translate = new RotateTransform(_entity, angle, duration);
+            RotateTransform translate = new RotateTransform(_entity, MathHelper.ToRadians(angle), duration);
             _transforms.Enqueue(translate);
             return this;
         }
 
         /// <summary>
-        /// Rotate the Entity over a period of time.
+        /// Add to the sequence of Transforms; Fade the Entity over a period of time.
         /// </summary>
-        /// <param name="angle">The goal angle in degrees.</param>
-        /// <param name="duration">Duration of the transform in seconds.</param>
+        /// <param name="angle">The alpha to transition to. (percent)</param>
+        /// <param name="duration">Time taken to reach the goal alpha. (seconds)</param>
         /// <returns></returns>
         public Transformer FadeTo(float alpha, float duration)
         {
@@ -106,7 +116,7 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Loop the sequence for transforms.
+        /// Repeat the sequence of transforms indefinitely.
         /// </summary>
         public void Loop()
         {
@@ -114,7 +124,7 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Repeat the sequence of transforms.
+        /// Repeat the sequence of transforms for a limited number of times.
         /// </summary>
         /// <param name="times">Number of times to repeat for.</param>
         public void Repeat(int times)
@@ -123,12 +133,21 @@ namespace Delta.Movement
         }
 
         /// <summary>
-        /// Execute the callback once all the transformations have finished.
+        /// Execute the callback each time a Transform finishes.
         /// </summary>
         /// <param name="callback">Function to call.</param>
-        public void OnFinished(Action callback)
+        public void OnTransformFinished(Action callback)
         {
-            _onFinish = callback;
+            _onTransformFinished = callback;
+        }
+
+        /// <summary>
+        /// Execute the callback once all the Transforms have finished.
+        /// </summary>
+        /// <param name="callback">Function to call.</param>
+        public void OnSequenceFinished(Action callback)
+        {
+            _onSequenceFinished = callback;
         }
 
         protected override void LightUpdate(GameTime gameTime)
@@ -139,6 +158,8 @@ namespace Delta.Movement
                 if (_elapsed > currentTransform.Duration)
                 {
                     ITransform oldTransform = _transforms.Dequeue();
+                    
+                    // either loop if -1 or repeat the desired about of times.
                     if (_repeat < 0)
                     {
                         _transforms.Enqueue(oldTransform);
@@ -148,10 +169,14 @@ namespace Delta.Movement
                         _transforms.Enqueue(oldTransform);
                         _repeat--;
                     }
-                    if (_transforms.Count == 0 && _onFinish != null)
-                    {
-                        _onFinish();
-                    }
+
+                    // the transform has finished.
+                    if (_onTransformFinished != null)
+                        _onTransformFinished();
+                    // the transform sequence has finished; no remaining transforms.
+                    if (_transforms.Count == 0 && _onSequenceFinished != null)
+                        _onSequenceFinished();
+
                     _elapsed = 0;
                 }
                 else
