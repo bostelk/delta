@@ -78,7 +78,7 @@ namespace Delta
             {
                 if (_origin != value)
                 {
-                    _origin = value;
+                    _origin = value.Clamp(Vector2.Zero, Vector2.One);
                     OnOriginChanged();
                 }
             }
@@ -93,7 +93,7 @@ namespace Delta
             {
                 if (_pivot != value)
                 {
-                    _pivot = value;
+                    _pivot = value.Clamp(Vector2.Zero, Vector2.One);
                     OnPivotChanged();
                 }
             }

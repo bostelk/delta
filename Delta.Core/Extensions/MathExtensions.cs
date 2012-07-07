@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Delta
 {
-    public static class DeltaMath
+    public static class MathExtensions
     {
         public static float Wrap(this float value, float min, float max)
         {
@@ -39,6 +39,11 @@ namespace Delta
             if (value > max) return max;
             if (value < min) return min;
             return value;
+        }
+
+        public static Vector2 Clamp(this Vector2 value, Vector2 min, Vector2 max)
+        {
+            return Vector2.Clamp(value, min, max);
         }
 
         public static float Square(this float value)
