@@ -14,6 +14,7 @@ namespace Delta
         float Order { get; set; }
 
         void LoadContent();
+        bool ImportCustomValues(string name, string value);
 
         void InternalUpdate(GameTime gameTime);
         void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
@@ -133,6 +134,21 @@ namespace Delta
         {
             Tint = Color.White;
             Scale = Vector2.One;
+        }
+
+        protected override bool ImportCustomValues(string name, string value)
+        {
+            switch (name.ToLower())
+            {
+                case "offset":
+                    string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    Position += new Vector2(
+                        float.Parse(split[0], CultureInfo.InvariantCulture), 
+                        float.Parse(split[1], CultureInfo.InvariantCulture)
+                        );
+                    return true;
+            }
+            return base.ImportCustomValues(name, value);
         }
 
         protected virtual void UpdateRenderOrigin()

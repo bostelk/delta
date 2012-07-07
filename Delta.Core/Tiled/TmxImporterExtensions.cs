@@ -18,7 +18,7 @@ namespace Delta.Tiled
             layer.IsVisible = (node.Attributes["visible"] != null) ? int.Parse(node.Attributes["visible"].Value, CultureInfo.InvariantCulture) == 1 : true;
         }
 
-        internal static void ImportXmlProperties(this object obj, XmlNode node)
+        internal static void ImportXmlProperties(this IEntity entity, XmlNode node)
         {
             if (node == null)
                 return;
@@ -30,7 +30,7 @@ namespace Delta.Tiled
                 string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
                 {
-                    PropertyInfo[] properties = obj.GetType().GetProperties();
+                    PropertyInfo[] properties = entity.GetType().GetProperties();
                     foreach (var propertyInfo in properties)
                     {
                         var attributes = propertyInfo.GetCustomAttributes(true);
@@ -44,7 +44,7 @@ namespace Delta.Tiled
                                     if (contentSerializerAttribute.ElementName.ToLower() == name.ToLower())
                                     {
                                         isFound = true;
-                                        BindProperty(obj, propertyInfo, value);
+                                        BindProperty(entity, propertyInfo, value);
                                         break;
                                     }
                                 }
@@ -53,38 +53,25 @@ namespace Delta.Tiled
                         if (!isFound && name.ToLower() == propertyInfo.Name.ToLower())
                         {
                             isFound = true;
-                            BindProperty(obj, propertyInfo, value);
+                            BindProperty(entity, propertyInfo, value);
                         }
                         if (!isFound)
-                        {
-                            switch (name.ToLower())
-                            {
-                                case "offset":
-                                    TransformableEntity entity = obj as TransformableEntity;
-                                    if (entity != null)
-                                    {
-                                        string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
-                                        entity.Position += new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture));
-                                        isFound = true;
-                                    }
-                                    break;
-                            }
-                        }
+                            isFound = entity.ImportCustomValues(name, value);
                     }
-                    MethodInfo[] methods = obj.GetType().GetMethods();
+                    MethodInfo[] methods = entity.GetType().GetMethods();
                     foreach (var methodInfo in methods)
                     {
                         if (!isFound && name.ToLower() == methodInfo.Name.ToLower())
                         {
                             isFound = true;
-                            InvokeMethod(obj, methodInfo, value);
+                            InvokeMethod(entity, methodInfo, value);
                         }
                     }
                 }
                 else
                     continue;
                 if (!isFound)
-                    throw new Exception(String.Format("Could not find a property or method with the name '{0}' to bind or call in the type '{1}'.", name, obj.GetType().Name));
+                    throw new Exception(String.Format("Could not find a property or method with the name '{0}' to bind or call in the type '{1}'.", name, entity.GetType().Name));
             }
         }
 

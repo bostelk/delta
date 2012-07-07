@@ -148,6 +148,16 @@ namespace Delta
         {
         }
 
+        protected virtual bool ImportCustomValues(string name, string value)
+        {
+            return false;
+        }
+
+        bool IEntity.ImportCustomValues(string name, string value)
+        {
+            return ImportCustomValues(name, value);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void InternalUpdate(GameTime gameTime)
         {

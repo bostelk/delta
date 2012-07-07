@@ -4,33 +4,36 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.Graphics
-{ 
+{
+
+    [Flags]
+    public enum SpriteState
+    {
+        None = 0x0,
+        Paused = 0x1,
+        Looped = 0x2,
+        RandomFrameStart = 0x4,
+        Finished = 0x8
+    }
 
     public class SpriteEntity : TransformableEntity
     {
         internal SpriteSheet _spriteSheet = null;
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         float _frameDurationTimer = 0f;
+        int _animationFrame = 0;
         Animation _animation = null;
 
-        [ContentSerializer(ElementName = "Frame")] //for Rob's convience
-        public int AnimationFrame { get; private set; }
-        [ContentSerializer(ElementName = "Paused")] //for Rob's convience
-        public bool AnimationIsPaused { get; set; }
-        [ContentSerializer(ElementName = "Looped")] //for Rob's convience
-        public bool AnimationIsLooped { get; set; }
-        [ContentSerializerIgnore]
-        public bool AnimationIsFinished { get; private set; }
+        [ContentSerializer]
+        public SpriteState State { get; set; }
         [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
         public string SpriteSheetName { get; set; }
         [ContentSerializer(ElementName = "Animation")] //for Rob's convience
         public string AnimationName { get; set; }
-        [ContentSerializer]
-        public SpriteEffects SpriteEffects { get; set; }
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
-        [ContentSerializer(ElementName = "StartRandom")]
-        public bool RandomFrameStart { get; set; }
+        [ContentSerializer]
+        public SpriteEffects SpriteEffects { get; set; }
 
         //temporary?
         [ContentSerializer]
@@ -39,7 +42,7 @@ namespace Delta.Graphics
         public SpriteEntity()
             : base()
         {
-            AnimationIsLooped = true;
+            State = SpriteState.Looped;
             AnimationFrameOffset = 0;
         }
 
@@ -74,20 +77,20 @@ namespace Delta.Graphics
 
         protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
         {
-            if (AnimationIsFinished)
+            if (State.HasFlag(SpriteState.Finished))
                 return;
             _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
-                AnimationFrame = (AnimationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                if (!AnimationIsLooped && AnimationFrame >= _animation.Frames.Count - 1)
+                _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
+                if (!State.HasFlag(SpriteState.Looped) && _animationFrame >= _animation.Frames.Count - 1)
                 {
-                    AnimationIsFinished = true;
+                    State |= SpriteState.Finished;
                     _frameDurationTimer = 0;
                 }
                 Rectangle previousSourceRectangle = _sourceRectangle;
-                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[AnimationFrame] + AnimationFrameOffset);
+                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
                 if (_sourceRectangle != Rectangle.Empty)
                 {
                     if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
@@ -116,11 +119,11 @@ namespace Delta.Graphics
 
         protected internal virtual void OnAnimationChanged()
         {
-            AnimationFrame = AnimationFrameOffset;
-            if (RandomFrameStart)
-                AnimationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
+            _animationFrame = AnimationFrameOffset;
+            if (State.HasFlag(SpriteState.RandomFrameStart))
+                _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
-            AnimationIsFinished = false;
+            State ^= SpriteState.Finished;
         }
 
     }
