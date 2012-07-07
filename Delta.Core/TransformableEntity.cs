@@ -90,7 +90,7 @@ namespace Delta
             {
                 if (_alpha != value)
                 {
-                    _alpha = value;
+                    _alpha = value.Clamp(0.0f, 1.0f);
                 }
             }
         }

@@ -34,7 +34,7 @@ namespace Delta
 
         protected override void BeginDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.View);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
             base.BeginDraw(gameTime, spriteBatch);
         }
 
