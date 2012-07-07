@@ -80,6 +80,10 @@ namespace Delta.Graphics
         {
             switch (name)
             {
+                case "animation":
+                case "animationname":
+                    AnimationName = value;
+                    return true;
                 //temporary?
                 case "islight":
                 case "light":
