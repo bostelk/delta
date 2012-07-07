@@ -67,8 +67,9 @@ namespace Delta
             }
         }
 
-        Color _tint = Color.White;
         [ContentSerializer]
+        Color _tint = Color.White;
+        [ContentSerializerIgnore] //we don't want to save the pre-multipled tint!
         public virtual Color Tint
         {
             get { return _tint * _alpha; }

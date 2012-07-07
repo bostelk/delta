@@ -71,11 +71,11 @@ namespace Delta.Tiled
                         if (split.Length == 2)
                             polyVertices.Add(position + new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture), float.Parse(split[1], CultureInfo.InvariantCulture)));
                         else
-                            throw new Exception(string.Format("The poly point'{0}' is not the format 'x,y'. Map: {1}", point, fileName));
+                            throw new Exception(string.Format("The poly point'{0}' is not in the format 'x,y'. Map: {1}", point, fileName));
                     }
                 }
 
-                // all entities get a name.
+                // all entities get a name. Made unique when added to an EntityParent
                 entity.ID = name;
 
                 // populate entity properties with tiled properties or try invoking a method.
@@ -126,6 +126,8 @@ namespace Delta.Tiled
                 {
                     if (sprite.IsOverlay)
                     {
+                        if (sprite.IsVisible)
+                            sprite.IsVisible = IsVisible;
                         added = Map.Instance.OverlayLayer.Add(sprite);
                     }
                 }
