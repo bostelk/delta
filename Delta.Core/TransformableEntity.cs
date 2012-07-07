@@ -136,9 +136,10 @@ namespace Delta
             Scale = Vector2.One;
         }
 
+#if WINDOWS
         protected override bool ImportCustomValues(string name, string value)
         {
-            switch (name.ToLower())
+            switch (name)
             {
                 case "offset":
                     Position += Vector2Extensions.Parse(value);
@@ -146,6 +147,7 @@ namespace Delta
             }
             return base.ImportCustomValues(name, value);
         }
+#endif
 
         protected virtual void UpdateRenderOrigin()
         {

@@ -7,7 +7,7 @@ namespace Delta.Graphics
 {
 
     [Flags]
-    public enum SpriteState
+    internal enum SpriteState
     {
         None = 0x0,
         Paused = 0x1,
@@ -20,31 +20,106 @@ namespace Delta.Graphics
     {
         internal SpriteSheet _spriteSheet = null;
         internal Rectangle _sourceRectangle = Rectangle.Empty;
-        float _frameDurationTimer = 0f;
-        int _animationFrame = 0;
-        Animation _animation = null;
+        internal float _frameDurationTimer = 0f;
+        internal int _animationFrame = 0;
+        internal Animation _animation = null;
+        //temporary?
+        internal bool _isOverlay = false;
+        internal SpriteState _state = SpriteState.Looped;
 
-        [ContentSerializer]
-        public SpriteState State { get; set; }
         [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
-        public string SpriteSheetName { get; set; }
+        public string SpriteSheetName { get; private set; }
         [ContentSerializer(ElementName = "Animation")] //for Rob's convience
         public string AnimationName { get; set; }
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
-        [ContentSerializer]
-        public SpriteEffects SpriteEffects { get; set; }
 
-        //temporary?
         [ContentSerializer]
-        public bool IsOverlay { get; set; }
+        protected virtual SpriteEffects SpriteEffects { get; set; }
+
+        [ContentSerializerIgnore]
+        public bool IsPaused
+        {
+            get { return _state.HasFlag(SpriteState.Paused); }
+            set
+            {
+                if (value)
+                    _state |= SpriteState.Paused;
+                else
+                    _state ^= SpriteState.Paused;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public bool IsLooped
+        {
+            get { return _state.HasFlag(SpriteState.Looped); }
+            set
+            {
+                if (value)
+                    _state |= SpriteState.Looped;
+                else
+                    _state ^= SpriteState.Looped;
+            }
+        }
 
         public SpriteEntity()
             : base()
         {
-            State = SpriteState.Looped;
             AnimationFrameOffset = 0;
         }
+
+        public SpriteEntity(string spriteSheet)
+            : this()
+        {
+            SpriteSheetName = spriteSheet;
+        }
+
+#if WINDOWS
+        protected override bool ImportCustomValues(string name, string value)
+        {
+            switch (name)
+            {
+                //temporary?
+                case "islight":
+                case "light":
+                case "overlay":
+                case "isoverlay":
+                    _isOverlay = bool.Parse(value);
+                    break;
+                case "mirror":
+                case "flip":
+                    switch (value)
+                    {
+                        case "left":
+                        case "right":
+                        case "horizontal":
+                        case "h":
+                            SpriteEffects = SpriteEffects.FlipHorizontally;
+                            return true;
+                        case "up":
+                        case "down":
+                        case "vertical":
+                        case "v":
+                            SpriteEffects = SpriteEffects.FlipVertically;
+                            return true;
+                    }
+                    break;
+                case "randomframestart":
+                case "randomstart":
+                case "random":
+                    _state |= SpriteState.RandomFrameStart;
+                    return true;
+                case "ispaused":
+                case "paused":
+                case "isstopped":
+                case "stopped":
+                    _state |= SpriteState.Paused;
+                    return true;
+            }
+            return base.ImportCustomValues(name, value);
+        }
+#endif
 
         public override void LoadContent()
         {
@@ -77,16 +152,16 @@ namespace Delta.Graphics
 
         protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
         {
-            if (State.HasFlag(SpriteState.Finished))
+            if (_state.HasFlag(SpriteState.Finished))
                 return;
             _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                if (!State.HasFlag(SpriteState.Looped) && _animationFrame >= _animation.Frames.Count - 1)
+                if (!_state.HasFlag(SpriteState.Looped) && _animationFrame >= _animation.Frames.Count - 1)
                 {
-                    State |= SpriteState.Finished;
+                    _state |= SpriteState.Finished;
                     _frameDurationTimer = 0;
                 }
                 Rectangle previousSourceRectangle = _sourceRectangle;
@@ -120,10 +195,10 @@ namespace Delta.Graphics
         protected internal virtual void OnAnimationChanged()
         {
             _animationFrame = AnimationFrameOffset;
-            if (State.HasFlag(SpriteState.RandomFrameStart))
+            if (_state.HasFlag(SpriteState.RandomFrameStart))
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
-            State ^= SpriteState.Finished;
+            _state ^= SpriteState.Finished;
         }
 
     }

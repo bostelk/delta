@@ -124,7 +124,7 @@ namespace Delta.Tiled
                 SpriteEntity sprite = entity as SpriteEntity;
                 if (sprite != null)
                 {
-                    if (sprite.IsOverlay)
+                    if (sprite._isOverlay)
                     {
                         if (sprite.IsVisible)
                             sprite.IsVisible = IsVisible;

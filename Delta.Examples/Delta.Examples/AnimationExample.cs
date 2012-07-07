@@ -45,7 +45,7 @@ namespace Delta.Examples
         {
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
             _supportedAnimations = mainSheet.Animations;
-            sprite.SpriteSheetName = "mainSpriteSheet";
+            //sprite.SpriteSheetName = "mainSpriteSheet";
             sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             sprite.Position = G.ScreenCenter;
             base.LoadContent();

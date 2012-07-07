@@ -26,8 +26,8 @@ namespace Delta.Tiled
             foreach (XmlNode propertyNode in node.ChildNodes)
             {
                 isFound = false;
-                string name = propertyNode.Attributes["name"] == null ? null : propertyNode.Attributes["name"].Value;
-                string value = propertyNode.Attributes["value"].Value;
+                string name = propertyNode.Attributes["name"] == null ? string.Empty : propertyNode.Attributes["name"].Value.ToLower();
+                string value = propertyNode.Attributes["value"].Value.ToLower();
                 if (!string.IsNullOrEmpty(name))
                 {
                     PropertyInfo[] properties = entity.GetType().GetProperties();
@@ -41,7 +41,7 @@ namespace Delta.Tiled
                             {
                                 if (contentSerializerAttribute.ElementName != null)
                                 {
-                                    if (contentSerializerAttribute.ElementName.ToLower() == name.ToLower())
+                                    if (contentSerializerAttribute.ElementName.ToLower() == name)
                                     {
                                         isFound = true;
                                         BindProperty(entity, propertyInfo, value);
@@ -50,7 +50,7 @@ namespace Delta.Tiled
                                 }
                             }
                         }
-                        if (!isFound && name.ToLower() == propertyInfo.Name.ToLower())
+                        if (!isFound && name == propertyInfo.Name.ToLower())
                         {
                             isFound = true;
                             BindProperty(entity, propertyInfo, value);
@@ -58,15 +58,15 @@ namespace Delta.Tiled
                         if (!isFound)
                             isFound = entity.ImportCustomValues(name, value);
                     }
-                    MethodInfo[] methods = entity.GetType().GetMethods();
-                    foreach (var methodInfo in methods)
-                    {
-                        if (!isFound && name.ToLower() == methodInfo.Name.ToLower())
-                        {
-                            isFound = true;
-                            InvokeMethod(entity, methodInfo, value);
-                        }
-                    }
+                    //MethodInfo[] methods = entity.GetType().GetMethods();
+                    //foreach (var methodInfo in methods)
+                    //{
+                    //    if (!isFound && name == methodInfo.Name.ToLower())
+                    //    {
+                    //        isFound = true;
+                    //        InvokeMethod(entity, methodInfo, value);
+                    //    }
+                    //}
                 }
                 else
                     continue;
