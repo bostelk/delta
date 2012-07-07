@@ -59,6 +59,11 @@ namespace Delta
             return (int)value;
         }
 
+        public static float RandomSign()
+        {
+            return (float)Math.Pow(-1f, (double)G.Random.Next(2));
+        }
+
         //public static float SimpleRound(float value)
         //{
         //    return (float)Math.Round(value, 1);

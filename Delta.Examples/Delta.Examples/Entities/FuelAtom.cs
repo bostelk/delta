@@ -38,15 +38,15 @@ namespace Delta.Examples.Entities
 
         protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.End();
+            //spriteBatch.End();
 
-            G.SimpleEffect.SetTechnique(Graphics.Effects.SimpleEffect.Technique.Flicker);
-            G.SimpleEffect.FlickerRate = 50;
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, World.Instance.Camera.View);
-            spriteBatch.Draw(_texture, Position, Color.White);
-            spriteBatch.End();
+            //G.SimpleEffect.SetTechnique(Graphics.Effects.SimpleEffect.Technique.Flicker);
+            //G.SimpleEffect.FlickerRate = 50;
+            //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, World.Instance.Camera.View);
+            spriteBatch.Draw(_texture, Position, new Rectangle(0, 0, _texture.Width, _texture.Height), Color.White.SetAlpha(Alpha), Rotation, new Vector2(_texture.Width / 2, _texture.Height / 2), Scale, SpriteEffects.None, 0f);
+            //spriteBatch.End();
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, World.Instance.Camera.View);
+            //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, World.Instance.Camera.View);
             base.Draw(gameTime, spriteBatch);
         }
 
