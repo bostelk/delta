@@ -46,7 +46,7 @@ namespace Delta.Examples
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
             _supportedAnimations = mainSheet.Animations;
             //sprite.SpriteSheetName = "mainSpriteSheet";
-            sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
+            //sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             sprite.Position = G.ScreenCenter;
             base.LoadContent();
         }
@@ -59,16 +59,16 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Down))
             {
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Left))
-            {
-                _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
-                sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
-            }
-            if (G.Input.Keyboard.JustPressed(Keys.Right))
-            {
-                _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
-                sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
-            }
+            //if (G.Input.Keyboard.JustPressed(Keys.Left))
+            //{
+            //    _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
+            //    sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
+            //}
+            //if (G.Input.Keyboard.JustPressed(Keys.Right))
+            //{
+            //    _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
+            //    sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
+            //}
             //if (G.Input.Keyboard.JustPressed(Keys.Space))
             //{
             //    if (!sprite.IsPaused)

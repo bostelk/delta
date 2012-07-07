@@ -22,6 +22,8 @@ namespace Delta.Tiled
 
         [ContentSerializer(FlattenContent=true, ElementName="Tileset")]
         internal List<Tileset> _tilesets = new List<Tileset>();
+        [ContentSerializer(ElementName = "SpriteSheet")]
+        internal string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
 
         [ContentSerializer]
@@ -36,8 +38,6 @@ namespace Delta.Tiled
         public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializer(ElementName = "SpriteSheet")]
-        public string SpriteSheetName { get; set; }
 
         [ContentSerializer]
         public EntityParent<SpriteEntity> OverlayLayer { get; private set; }
@@ -91,13 +91,26 @@ namespace Delta.Tiled
 
             this.ImportXmlProperties(node.SelectSingleNode("properties"));
         }
+
+        protected override bool ImportCustomValues(string name, string value)
+        {
+            switch (name)
+            {
+                case "spritesheet":
+                case "spritesheetname":
+                    _spriteSheetName = value;
+                    return true;
+            }
+            return base.ImportCustomValues(name, value);
+        }
+
 #endif
 
         public override void LoadContent()
         {
             base.LoadContent();
-            if (!string.IsNullOrEmpty(SpriteSheetName))
-                _spriteSheet = G.Content.Load<SpriteSheet>(SpriteSheetName);
+            if (!string.IsNullOrEmpty(_spriteSheetName))
+                _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
         }
 
         protected override bool CanDraw()

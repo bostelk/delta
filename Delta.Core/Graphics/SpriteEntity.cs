@@ -20,17 +20,21 @@ namespace Delta.Graphics
 
     public class SpriteEntity : TransformableEntity
     {
+        [ContentSerializer(ElementName = "SpriteSheet")]
+        internal string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
+        [ContentSerializer(ElementName = "Animation")]
+        internal string _animationName = string.Empty;
+        internal Animation _animation = null;
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         internal float _frameDurationTimer = 0f;
+        [ContentSerializer(ElementName = "Frame")]
         internal int _animationFrame = 0;
-        internal Animation _animation = null;
+        [ContentSerializer(ElementName = "State")]
         internal SpriteState _state = SpriteState.Looped;
 
         [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
         public string SpriteSheetName { get; private set; }
-        [ContentSerializer(ElementName = "Animation")] //for Rob's convience
-        public string AnimationName { get; set; }
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
 
@@ -63,6 +67,32 @@ namespace Delta.Graphics
             }
         }
 
+        [ContentSerializerIgnore]
+        public bool IsFinished
+        {
+            get { return _state.HasFlag(SpriteState.Finished); }
+            private set
+            {
+                if (value)
+                    _state |= SpriteState.Finished;
+                else
+                    _state ^= SpriteState.Finished;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public bool IsOverlay
+        {
+            get { return _state.HasFlag(SpriteState.Overlay); }
+            set
+            {
+                if (value)
+                    _state |= SpriteState.Overlay;
+                else
+                    _state ^= SpriteState.Overlay;
+            }
+        }
+
         public SpriteEntity()
             : base()
         {
@@ -80,20 +110,23 @@ namespace Delta.Graphics
         {
             switch (name)
             {
+                case "spritesheet":
+                case "spritesheetname":
+                    _spriteSheetName = value;
+                    return true;
                 case "animation":
                 case "animationname":
-                    AnimationName = value;
+                    _animationName = value;
                     return true;
                 //temporary?
+                case "isshadow":
+                case "shadow":
                 case "islight":
                 case "light":
                 case "overlay":
                 case "isoverlay":
-                    if (bool.Parse(value))
-                        _state |= SpriteState.Overlay;
-                    else
-                        _state ^= SpriteState.Overlay;
-                    break;
+                    IsOverlay = bool.Parse(value);
+                    return true;
                 case "mirror":
                 case "flip":
                     switch (value)
@@ -124,10 +157,7 @@ namespace Delta.Graphics
                 case "paused":
                 case "isstopped":
                 case "stopped":
-                    if (bool.Parse(value))
-                        _state |= SpriteState.Paused;
-                    else
-                        _state ^= SpriteState.Paused;
+                    IsPaused = bool.Parse(value);
                     return true;
             }
             return base.ImportCustomValues(name, value);
@@ -136,43 +166,27 @@ namespace Delta.Graphics
 
         public override void LoadContent()
         {
-            _spriteSheet = G.Content.Load<SpriteSheet>(SpriteSheetName);
+            if (!string.IsNullOrEmpty(_spriteSheetName))
+                _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
+            Play(_animationName);
             base.LoadContent();
         }
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            UpdateAnimation();
-            if (_animation != null)
+            if (_animation != null || !IsFinished)
                 UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
         }
 
-        protected internal void UpdateAnimation()
-        {
-            if (_spriteSheet == null)
-            {
-                _animation = null;
-                return;
-            }
-            if (_animation == null || _animation.Name != AnimationName)
-            {
-                _animation = _spriteSheet.GetAnimation(AnimationName);
-                if (_animation != null)
-                    OnAnimationChanged();
-            }
-        }
-
         protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
         {
-            if (_state.HasFlag(SpriteState.Finished))
-                return;
             _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                if (!_state.HasFlag(SpriteState.Looped) && _animationFrame >= _animation.Frames.Count - 1)
+                if (!IsLooped && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     _state |= SpriteState.Finished;
                     _frameDurationTimer = 0;
@@ -196,6 +210,19 @@ namespace Delta.Graphics
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+        }
+
+        public void Play(string animation)
+        {
+            _animationName = animation;
+            if (_spriteSheet == null)
+            {
+                _animation = null;
+                return;
+            }
+            _animation = _spriteSheet.GetAnimation(_animationName);
+            if (_animation != null)
+                OnAnimationChanged();
         }
 
         protected internal override void OnPositionChanged()
