@@ -61,12 +61,12 @@ namespace Delta.Examples
             }
             if (G.Input.Keyboard.JustPressed(Keys.Left))
             {
-                _animationIndex = DeltaMath.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
+                _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
                 sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             }
             if (G.Input.Keyboard.JustPressed(Keys.Right))
             {
-                _animationIndex = DeltaMath.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
+                _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
             }
             //if (G.Input.Keyboard.JustPressed(Keys.Space))

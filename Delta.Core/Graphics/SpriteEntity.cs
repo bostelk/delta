@@ -80,7 +80,7 @@ namespace Delta.Graphics
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
-                AnimationFrame = DeltaMath.Wrap(AnimationFrame + 1, 0, _animation.Frames.Count - 1);
+                AnimationFrame = (AnimationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
                 if (!AnimationIsLooped && AnimationFrame >= _animation.Frames.Count - 1)
                 {
                     AnimationIsFinished = true;

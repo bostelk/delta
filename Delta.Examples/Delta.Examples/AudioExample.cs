@@ -60,7 +60,7 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Left))
             {
                 G.Audio.StopAllSounds();
-                _soundIndex = DeltaMath.Wrap(_soundIndex - 1, 0, _sounds.Count - 1);
+                _soundIndex = MathExtensions.Wrap(_soundIndex - 1, 0, _sounds.Count - 1);
                 G.Audio.PlaySound(_sounds[_soundIndex]);
                 _pitch = 0.5f;
                 _volume = 1f;
@@ -68,7 +68,7 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Right))
             {
                 G.Audio.StopAllSounds();
-                _soundIndex = DeltaMath.Wrap(_soundIndex + 1, 0, _sounds.Count - 1);
+                _soundIndex = MathExtensions.Wrap(_soundIndex + 1, 0, _sounds.Count - 1);
                 G.Audio.PlaySound(_sounds[_soundIndex]);
                 _pitch = 0.5f;
                 _volume = 1f;

@@ -208,7 +208,7 @@ namespace Delta.Collision.Geometry
         /// <returns>If the two polygons are about to interesect.</returns>
         public static bool TestRadiusOverlap(Polygon polyA, Polygon polyB)
         {
-            return (polyA.Position - polyB.Position).LengthSquared() <= DeltaMath.Square(polyA.BoundingRadius + polyB.BoundingRadius);
+            return (polyA.Position - polyB.Position).LengthSquared() <= (polyA.BoundingRadius + polyB.BoundingRadius).Square();
         }
 
     }

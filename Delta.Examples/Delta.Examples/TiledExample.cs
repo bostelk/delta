@@ -59,9 +59,9 @@ namespace Delta.Examples
                 G.World.Camera.ZoomByAmount(-0.2f);
 
             if (G.Input.Keyboard.JustPressed(Keys.Up))
-                _selectedLayer = DeltaMath.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);
+                _selectedLayer = MathExtensions.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);
             else if (G.Input.Keyboard.JustPressed(Keys.Down))
-                _selectedLayer = DeltaMath.Wrap(_selectedLayer + 1, 0, _map.Children.Count - 1);
+                _selectedLayer = MathExtensions.Wrap(_selectedLayer + 1, 0, _map.Children.Count - 1);
             if (G.Input.Keyboard.JustPressed(Keys.Left))
                 _map.Children[_selectedLayer].IsVisible = false;
             if (G.Input.Keyboard.JustPressed(Keys.Right))

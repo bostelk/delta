@@ -179,7 +179,7 @@ namespace Delta.Collision
         {
             get
             {
-                return String.Format("Polygons:{0}\nBruteforce Checks:{1}\nSpatialGrid Checks:{2}\n", _colliders.Count, DeltaMath.Square(_colliders.Count), _narrowDetections);
+                return String.Format("Polygons:{0}\nBruteforce Checks:{1}\nSpatialGrid Checks:{2}\n", _colliders.Count, _colliders.Count.Square(), _narrowDetections);
             }
         }
 

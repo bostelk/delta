@@ -50,7 +50,7 @@ namespace Delta.Examples.Entities
                 _lucas = Entity.Get("Lucas") as Lucas;
             for(int i = 0; i < NUM_PARTICLES; i++)
             {
-                _particles[i].Velocity = -GRAVITY * (M1 * M2 / DeltaMath.Square(Vector2.Distance(_particles[i].Position, _lucas.Position))) * (_particles[i].Position-_lucas.Position );
+                _particles[i].Velocity = -GRAVITY * (M1 * M2 / MathExtensions.Square(Vector2.Distance(_particles[i].Position, _lucas.Position))) * (_particles[i].Position-_lucas.Position );
                 _particles[i].Position += _particles[i].Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
         }

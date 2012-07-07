@@ -51,14 +51,19 @@ namespace Delta
             return value * value;
         }
 
-        public static Vector2 SimpleRound(Vector2 value)
+        public static int Square(this int value)
+        {
+            return value * value;
+        }
+
+        public static Vector2 SimpleRound(this Vector2 value)
         {
             value.X = SimpleRound(value.X);
             value.Y = SimpleRound(value.Y);
             return value;
         }
 
-        public static float SimpleRound(float value)
+        public static float SimpleRound(this float value)
         {
             value += 0.5f;
             return (int)value;

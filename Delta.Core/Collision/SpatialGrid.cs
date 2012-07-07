@@ -97,8 +97,8 @@ namespace Delta.Collision
             Point result = Point.Zero;
             result.X = (int)(position.X + Offset.X) / CellSize;
             result.Y = (int)(position.Y + Offset.Y) / CellSize;
-            result.X = DeltaMath.Clamp(result.X, 0, CellsWide - 1);
-            result.Y = DeltaMath.Clamp(result.Y, 0, CellsHigh - 1);
+            result.X = result.X.Clamp(0, CellsWide - 1);
+            result.Y = result.Y.Clamp(0, CellsHigh - 1);
             return result;
         }
 

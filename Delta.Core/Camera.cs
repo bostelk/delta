@@ -73,7 +73,7 @@ namespace Delta
             {
                 if (_position != value)
                 {
-                    _position = (PixelFix) ? DeltaMath.SimpleRound(value) : value;
+                    _position = (PixelFix) ? value.SimpleRound() : value;
                     NeedsHeavyUpdate = true;
                 }
             }
@@ -354,10 +354,10 @@ namespace Delta
         {
             if (PixelFix)
             {
-                View = Matrix.CreateTranslation(DeltaMath.SimpleRound(-Position.X + _shakeOffset.X), DeltaMath.SimpleRound(-Position.Y + _shakeOffset.Y), 0) *
-                    Matrix.CreateRotationZ(DeltaMath.SimpleRound(Rotation)) *
+                View = Matrix.CreateTranslation((-Position.X + _shakeOffset.X).SimpleRound(), (-Position.Y + _shakeOffset.Y).SimpleRound(), 0) *
+                    Matrix.CreateRotationZ(Rotation.SimpleRound()) *
                     Matrix.CreateScale(Scale) *
-                    Matrix.CreateTranslation(DeltaMath.SimpleRound(Offset.X), DeltaMath.SimpleRound(Offset.Y), 0);
+                    Matrix.CreateTranslation(Offset.X.SimpleRound(), Offset.Y.SimpleRound(), 0);
             }
             else
             {
