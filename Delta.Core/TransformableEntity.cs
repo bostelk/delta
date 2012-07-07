@@ -141,11 +141,7 @@ namespace Delta
             switch (name.ToLower())
             {
                 case "offset":
-                    string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
-                    Position += new Vector2(
-                        float.Parse(split[0], CultureInfo.InvariantCulture), 
-                        float.Parse(split[1], CultureInfo.InvariantCulture)
-                        );
+                    Position += Vector2Extensions.Parse(value);
                     return true;
             }
             return base.ImportCustomValues(name, value);

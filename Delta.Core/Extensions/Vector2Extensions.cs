@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Delta
 {
@@ -121,5 +122,20 @@ namespace Delta
         {
             return CrossProduct(a, b) < EPSILON;
         }
+
+        public static Vector2 Parse(string value, IFormatProvider provider)
+        {
+            string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+            return new Vector2(
+                float.Parse(split[0], provider), 
+                float.Parse(split[1], provider)
+                );
+        }
+
+        public static Vector2 Parse(string value)
+        {
+            return Parse(value, CultureInfo.InvariantCulture);
+        }
+
     }
 }
