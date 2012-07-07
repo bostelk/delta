@@ -49,10 +49,10 @@ namespace Delta.Movement
         /// <param name="scale">The goal scale.</param>
         /// <param name="duration">Duration of the transform in seconds.</param>
         /// <returns></returns>
-        public Transformer ScaleTo(float newScale, float duration)
+        public Transformer ScaleTo(Vector2 size, float duration)
         {
-            //ScaleTransform st = new ScaleTransform(_entity, duration);
-            //_transforms.Push(st);
+            ScaleTransform scale = new ScaleTransform(_entity, size, duration);
+            _transforms.Enqueue(scale);
             return this;
         }
 
@@ -77,6 +77,21 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer RotateTo(float angle, float duration)
         {
+            RotateTransform translate = new RotateTransform(_entity, angle, duration);
+            _transforms.Enqueue(translate);
+            return this;
+        }
+
+        /// <summary>
+        /// Rotate the Entity over a period of time.
+        /// </summary>
+        /// <param name="angle">The goal angle in degrees.</param>
+        /// <param name="duration">Duration of the transform in seconds.</param>
+        /// <returns></returns>
+        public Transformer FadeTo(float alpha, float duration)
+        {
+            FadeTransform translate = new FadeTransform(_entity, alpha, duration);
+            _transforms.Enqueue(translate);
             return this;
         }
 

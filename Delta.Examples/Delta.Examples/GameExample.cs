@@ -37,9 +37,13 @@ namespace Delta.Examples
             G.World.Add(new Lucas(), (int)DrawLayers.Ground);
             G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0) }, (int)DrawLayers.Ground);
 
-            FuelAtom fa = new FuelAtom();
-            G.World.Add(fa, (int)DrawLayers.Ground);
-            Transformer.InWorldThisEntity(fa).TranslateTo(fa.Position + new Vector2(200, 0), 10f).TranslateTo(fa.Position, 10f).Repeat(4);
+            FuelAtom atom = new FuelAtom();
+            G.World.Add(atom, (int)DrawLayers.Ground);
+            Transformer.InWorldThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f).TranslateTo(atom.Position, 10f).Repeat(4);
+            Transformer.InWorldThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f);
+            Transformer.InWorldThisEntity(atom).RotateTo((float)Math.PI, 10f).RotateTo(0, 10f);
+            Transformer.InWorldThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
+
 
             G.UI.Add(new GameHud(), 0);
             G.UI.Camera.ZoomImmediate(4.0f);
