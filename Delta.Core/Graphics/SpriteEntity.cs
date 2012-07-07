@@ -13,7 +13,9 @@ namespace Delta.Graphics
         Paused = 0x1,
         Looped = 0x2,
         RandomFrameStart = 0x4,
-        Finished = 0x8
+        Finished = 0x8,
+        //temporary?
+        Overlay = 0x10
     }
 
     public class SpriteEntity : TransformableEntity
@@ -23,8 +25,6 @@ namespace Delta.Graphics
         internal float _frameDurationTimer = 0f;
         internal int _animationFrame = 0;
         internal Animation _animation = null;
-        //temporary?
-        internal bool _isOverlay = false;
         internal SpriteState _state = SpriteState.Looped;
 
         [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
@@ -85,7 +85,10 @@ namespace Delta.Graphics
                 case "light":
                 case "overlay":
                 case "isoverlay":
-                    _isOverlay = bool.Parse(value);
+                    if (bool.Parse(value))
+                        _state |= SpriteState.Overlay;
+                    else
+                        _state ^= SpriteState.Overlay;
                     break;
                 case "mirror":
                 case "flip":
@@ -108,13 +111,19 @@ namespace Delta.Graphics
                 case "randomframestart":
                 case "randomstart":
                 case "random":
-                    _state |= SpriteState.RandomFrameStart;
+                    if (bool.Parse(value))
+                        _state |= SpriteState.RandomFrameStart;
+                    else
+                        _state ^= SpriteState.RandomFrameStart;
                     return true;
                 case "ispaused":
                 case "paused":
                 case "isstopped":
                 case "stopped":
-                    _state |= SpriteState.Paused;
+                    if (bool.Parse(value))
+                        _state |= SpriteState.Paused;
+                    else
+                        _state ^= SpriteState.Paused;
                     return true;
             }
             return base.ImportCustomValues(name, value);
