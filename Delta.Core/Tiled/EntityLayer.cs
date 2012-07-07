@@ -86,9 +86,6 @@ namespace Delta.Tiled
                 if (transformableEntity != null)
                 {
                     transformableEntity.Position += position;
-                
-                    // tiled doesn't store rotation so we're using a property to set an entity's rotation.
-                    transformableEntity.Rotation = MathHelper.ToRadians(transformableEntity.Rotation);
                 }
 
                 CollideableEntity collideableEntity = entity as CollideableEntity;

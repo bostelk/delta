@@ -126,10 +126,18 @@ namespace Delta
         public static Vector2 Parse(string value, IFormatProvider provider)
         {
             string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
-            return new Vector2(
-                float.Parse(split[0], provider), 
-                float.Parse(split[1], provider)
-                );
+            if (split.Length >= 2)
+            {
+                return new Vector2(
+                    float.Parse(split[0], provider),
+                    float.Parse(split[1], provider)
+                    );
+            }
+            else
+                return new Vector2(
+                    float.Parse(split[0], provider),
+                    float.Parse(split[0], provider)
+                    );
         }
 
         public static Vector2 Parse(string value)
