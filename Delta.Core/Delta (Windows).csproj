@@ -100,12 +100,16 @@
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
     <Compile Include="CollideableEntity.cs" />
+    <Compile Include="Collision\BaseCollisionEngine.cs" />
+    <Compile Include="Copyable\Copyable.cs" />
+    <Compile Include="Copyable\IInstanceProvider.cs" />
+    <Compile Include="Copyable\InstanceProvider.cs" />
+    <Compile Include="Copyable\ObjectExtensions.cs" />
+    <Compile Include="Copyable\VisitedGraph.cs" />
     <Compile Include="DeltaContentManager.cs" />
     <Compile Include="DeltaGame.cs" />
     <Compile Include="EntityParentReader.cs" />
     <Compile Include="EntitySpawner.cs" />
-    <Compile Include="EntityStyle.cs" />
-    <Compile Include="EntityStyleSheet.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -134,7 +138,6 @@
     <Compile Include="Collision\SpatialCell.cs" />
     <Compile Include="Collision\SpatialGrid.cs" />
     <Compile Include="Collision\SpatialStructure.cs" />
-    <Compile Include="Collision\CollisionManager.cs" />
     <Compile Include="Collision\Geometry\AABB.cs" />
     <Compile Include="Collision\Geometry\Circle.cs" />
     <Compile Include="Collision\Collider.cs" />
