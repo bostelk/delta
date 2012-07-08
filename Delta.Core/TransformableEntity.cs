@@ -2,11 +2,29 @@
 using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Delta.Movement;
+using Delta.Structures;
 
 namespace Delta
 {
     public class TransformableEntity : Entity
     {
+        // TEMP
+        OverRange<float> _fadeRange;
+        [ContentSerializer]
+        public OverRange<float> FadeRange
+        {
+            get { return _fadeRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _fadeRange = value;
+                    Transformer.ThisEntity(this).FadeTo(_fadeRange.Value1, _fadeRange.Duration).FadeTo(_fadeRange.Value2, _fadeRange.Duration).Loop();
+                }
+            }
+        }
+
         protected Vector2 RenderPosition { get; private set; }
         protected Vector2 RenderOrigin { get; private set; }
 
@@ -157,9 +175,13 @@ namespace Delta
                 case "alpha":
                     Alpha = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
+                case "fade":
+                    _fadeRange = OverRange<float>.ParseFloat(value);
+                    return true;
             }
             return base.ImportCustomValues(name, value);
         }
+
 #endif
 
         protected virtual void UpdateRenderOrigin()
