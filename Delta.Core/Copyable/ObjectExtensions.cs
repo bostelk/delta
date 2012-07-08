@@ -134,7 +134,10 @@ namespace Delta
         {
             visited.Add(instance, copy);
 
-            foreach (FieldInfo field in instance.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            //FieldInfo[] fields = instance.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            List<FieldInfo> fields = new List<FieldInfo>();
+            FindFields(fields, instance.GetType());
+            foreach (FieldInfo field in fields)
             {
                 object value = field.GetValue(instance);
                 if (visited.ContainsKey(value))
@@ -143,6 +146,15 @@ namespace Delta
                     field.SetValue(copy, value.Clone(visited));
             }
             return copy;
+        }
+
+        static BindingFlags _fieldFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+        static void FindFields(List<FieldInfo> fields, Type t)
+        {
+            fields.AddRange(t.GetFields(_fieldFlags));
+            var baseType = t.BaseType;
+            if (baseType != null)
+                FindFields(fields, baseType);
         }
 
         private static object DeduceInstance(object instance)

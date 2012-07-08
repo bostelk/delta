@@ -187,7 +187,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            if (_animation != null || !IsFinished)
+            if (_animation != null && !IsFinished)
                 UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
         }

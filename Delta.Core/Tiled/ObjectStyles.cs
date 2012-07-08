@@ -5,17 +5,11 @@ using System.Collections.Generic;
 
 namespace Delta.Tiled
 {
-    internal class ObjectStyle
-    {
-        public IEntity Entity;
-        public Type Type;
-        public XmlNode Node;
-    }
 
     public class ObjectStyles
     {
         static XmlDocument _document = new XmlDocument();
-        static Dictionary<string, ObjectStyle> _objectStyles = new Dictionary<string, ObjectStyle>();
+        static Dictionary<string, IEntity> _objectStyles = new Dictionary<string, IEntity>();
 
         static string _fileName = "ObjectStyles.xml";
         public static string FileName
@@ -37,40 +31,32 @@ namespace Delta.Tiled
                 string typeName = node.Attributes["Type"] == null ? string.Empty : node.Attributes["Type"].Value;
                 if (string.IsNullOrEmpty(typeName))
                     continue;
-                ObjectStyle _style = new ObjectStyle();
-                ObjectStyle _parentStyle = null;
-                _style.Node = node;
+                IEntity entity = null;
                 if (_objectStyles.ContainsKey(typeName))
-                {
-                    _parentStyle = _objectStyles[typeName];
-                    _style.Entity = Activator.CreateInstance(_parentStyle.Type) as IEntity;
-                }
+                     entity = _objectStyles[typeName].Copy() as IEntity;
                 else
-                {
-                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        _style.Type = assembly.GetType(typeName, false, true);
-                        if (_style.Type != null)
-                        {
-                            _style.Entity = Activator.CreateInstance(_style.Type) as IEntity;
-                            break;
-                        }
-                    }
-                    if (_style.Entity == null)
-                        continue;
-                }
-                if (_parentStyle != null)
-                {
-                    foreach (XmlNode childNode in _parentStyle.Node.ChildNodes)
-                        _style.Entity.ImportCustomValues(childNode.Name.ToLower(), childNode.InnerText);
-                }
+                    entity = CreateInstance(typeName);
+                if (entity == null)
+                    continue;
+                entity.ID = node.Name;
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
-                    if (!_style.Entity.ImportCustomValues(childNode.Name.ToLower(), childNode.InnerText))
-                        throw new Exception(String.Format("Could not import XML property '{0}', no such property exists for '{1}'.", childNode.Name.ToLower(), _style.Type.Name));
+                    if (!entity.ImportCustomValues(childNode.Name.ToLower(), childNode.InnerText))
+                        throw new Exception(String.Format("Could not import XML property '{0}', no such property exists for '{1}'.", childNode.Name.ToLower(), entity.GetType().Name));
                 }
-                _objectStyles.Add(node.Name, _style);
+                _objectStyles.Add(node.Name, entity);
             }
+        }
+
+        static IEntity CreateInstance(string typeName)
+        {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type type = assembly.GetType(typeName, false, true);
+                if (type != null)
+                    return Activator.CreateInstance(type) as IEntity;
+            }
+            return null;
         }
 
         public static IEntity Load(string name)
@@ -78,16 +64,8 @@ namespace Delta.Tiled
             if (_document.FirstChild == null)
                 Cache();
             if (!_objectStyles.ContainsKey(name))
-            {
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    Type type = assembly.GetType(name, false, true);
-                    if (type != null)
-                        return Activator.CreateInstance(type) as IEntity;
-                }
-                return null;
-            }
-            IEntity copyedEntity = _objectStyles[name].Entity.Copy() as IEntity;
+                return CreateInstance(name);
+            IEntity copyedEntity = _objectStyles[name].Copy() as IEntity;
             return copyedEntity;
         }
 
