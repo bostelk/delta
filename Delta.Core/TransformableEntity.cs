@@ -9,7 +9,10 @@ namespace Delta
 {
     public class TransformableEntity : Entity
     {
-        // TEMP
+        #region TEMP: Transformer
+        Transformer _transformer;
+
+        bool _randomFade;
         OverRange<float> _fadeRange;
         [ContentSerializer]
         public OverRange<float> FadeRange
@@ -20,10 +23,52 @@ namespace Delta
                 if (!value.IsEmpty())
                 {
                     _fadeRange = value;
-                    Transformer.ThisEntity(this).FadeTo(_fadeRange.Value1, _fadeRange.Duration).FadeTo(_fadeRange.Value2, _fadeRange.Duration).Loop();
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    if (_randomFade)
+                        Alpha = G.Random.Between(_fadeRange.Value1, _fadeRange.Value2);
+                    _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Value1, _fadeRange.Duration).FadeTo(_fadeRange.Value2, _fadeRange.Duration);
+                    _transformer.Loop();
                 }
             }
         }
+
+        OverRange<float> _flickerRange;
+        [ContentSerializer]
+        public OverRange<float> FlickerRange
+        {
+            get { return _flickerRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _flickerRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Value1, _flickerRange.Value2, _flickerRange.Duration);
+                    _transformer.Loop();
+                }
+            }
+        }
+
+        OverRange<float> _blinkRange;
+        [ContentSerializer]
+        public OverRange<float> BlinkRange
+        {
+            get { return _blinkRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _blinkRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Value1, _blinkRange.Duration);
+                    _transformer.Loop();
+                }
+            }
+        }
+#endregion
 
         protected Vector2 RenderPosition { get; private set; }
         protected Vector2 RenderOrigin { get; private set; }
@@ -177,6 +222,16 @@ namespace Delta
                     return true;
                 case "fade":
                     _fadeRange = OverRange<float>.ParseFloat(value);
+                    return true;
+                case "randomfade":
+                    _fadeRange = OverRange<float>.ParseFloat(value);
+                    _randomFade = true;
+                    return true;
+                case "flicker":
+                    _flickerRange = OverRange<float>.ParseFloat(value);
+                    return true;
+                case "blink":
+                    _blinkRange = OverRange<float>.ParseFloat(value);
                     return true;
             }
             return base.ImportCustomValues(name, value);
