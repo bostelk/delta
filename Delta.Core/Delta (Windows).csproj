@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{E50545DF-9329-4B3D-8579-943F91A42C66}</ProjectGuid>
@@ -100,16 +100,12 @@
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
     <Compile Include="CollideableEntity.cs" />
-    <Compile Include="Collision\BaseCollisionEngine.cs" />
-    <Compile Include="Copyable\Copyable.cs" />
-    <Compile Include="Copyable\IInstanceProvider.cs" />
-    <Compile Include="Copyable\InstanceProvider.cs" />
-    <Compile Include="Copyable\ObjectExtensions.cs" />
-    <Compile Include="Copyable\VisitedGraph.cs" />
     <Compile Include="DeltaContentManager.cs" />
     <Compile Include="DeltaGame.cs" />
     <Compile Include="EntityParentReader.cs" />
     <Compile Include="EntitySpawner.cs" />
+    <Compile Include="EntityStyle.cs" />
+    <Compile Include="EntityStyleSheet.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -138,6 +134,7 @@
     <Compile Include="Collision\SpatialCell.cs" />
     <Compile Include="Collision\SpatialGrid.cs" />
     <Compile Include="Collision\SpatialStructure.cs" />
+    <Compile Include="Collision\CollisionEngine.cs" />
     <Compile Include="Collision\Geometry\AABB.cs" />
     <Compile Include="Collision\Geometry\Circle.cs" />
     <Compile Include="Collision\Collider.cs" />
@@ -145,7 +142,7 @@
     <Compile Include="Collision\Geometry\IGeometry.cs" />
     <Compile Include="Collision\Geometry\OBB.cs" />
     <Compile Include="Collision\Geometry\Polygon.cs" />
-    <Compile Include="Collision\CollisionEngine.cs" />
+    <Compile Include="Collision\BaseCollisionEngine.cs" />
     <Compile Include="Collision\SAT.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Structures\HashSet.cs" />

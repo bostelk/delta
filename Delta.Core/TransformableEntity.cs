@@ -13,9 +13,9 @@ namespace Delta
         Transformer _transformer;
 
         bool _randomFade;
-        OverRange<float> _fadeRange;
+        OverRange _fadeRange;
         [ContentSerializer]
-        public OverRange<float> FadeRange
+        public OverRange FadeRange
         {
             get { return _fadeRange; }
             set
@@ -33,9 +33,9 @@ namespace Delta
             }
         }
 
-        OverRange<float> _flickerRange;
+        OverRange _flickerRange;
         [ContentSerializer]
-        public OverRange<float> FlickerRange
+        public OverRange FlickerRange
         {
             get { return _flickerRange; }
             set
@@ -51,9 +51,9 @@ namespace Delta
             }
         }
 
-        OverRange<float> _blinkRange;
+        OverRange _blinkRange;
         [ContentSerializer]
-        public OverRange<float> BlinkRange
+        public OverRange BlinkRange
         {
             get { return _blinkRange; }
             set
@@ -221,17 +221,17 @@ namespace Delta
                     Alpha = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "fade":
-                    _fadeRange = OverRange<float>.ParseFloat(value);
+                    _fadeRange = OverRange.Parse(value);
                     return true;
                 case "randomfade":
-                    _fadeRange = OverRange<float>.ParseFloat(value);
+                    _fadeRange = OverRange.Parse(value);
                     _randomFade = true;
                     return true;
                 case "flicker":
-                    _flickerRange = OverRange<float>.ParseFloat(value);
+                    _flickerRange = OverRange.Parse(value);
                     return true;
                 case "blink":
-                    _blinkRange = OverRange<float>.ParseFloat(value);
+                    _blinkRange = OverRange.Parse(value);
                     return true;
             }
             return base.ImportCustomValues(name, value);
