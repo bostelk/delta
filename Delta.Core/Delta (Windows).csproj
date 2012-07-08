@@ -96,6 +96,7 @@
     <Compile Include="Audio\ISound.cs" />
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
+    <Compile Include="BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
     <Compile Include="CollideableEntity.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="Extensions\RenderTarget2DExtensions.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Effects\DeltaEffect.cs" />
     <Compile Include="Graphics\Effects\SimpleEffect.cs" />

@@ -73,7 +73,7 @@ namespace Delta
             {
                 if (_position != value)
                 {
-                    _position = (PixelFix) ? value.SimpleRound() : value;
+                    _position = value;
                     NeedsHeavyUpdate = true;
                 }
             }

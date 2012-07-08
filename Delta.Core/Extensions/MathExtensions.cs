@@ -76,8 +76,9 @@ namespace Delta
 
         public static float SimpleRound(this float value)
         {
-            value += 0.5f;
-            return (int)value;
+            value = (int)(value + 0.5f);
+            return value;
+            //return (float)Math.Round(value, 1);
         }
 
         public static float RandomSign()
@@ -85,9 +86,16 @@ namespace Delta
             return (float)Math.Pow(-1f, (double)G.Random.Next(2));
         }
 
-        //public static float SimpleRound(float value)
-        //{
-        //    return (float)Math.Round(value, 1);
-        //}
+        /// <summary>
+        /// The magnitude of value1 and the sign of value2.
+        /// </summary>
+        /// <param name="value1">Magnitude.</param>
+        /// <param name="value2">Sign.</param>
+        /// <returns></returns>
+        public static float CopySign(this float value1, float value2)
+        {
+            return Math.Abs(value1) * (value2 / value2);
+        }
+
     }
 }

@@ -44,30 +44,16 @@ namespace Delta.Examples
             Transformer.ThisEntity(atom).RotateTo(180, 10f).RotateTo(0, 10f);
             Transformer.ThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
 
-
             G.UI.Add(new GameHud(), 0);
             G.UI.Camera.ZoomImmediate(4.0f);
         }
-
-        //protected override void Initialize()
-        //{
-
-        //    base.Initialize();
-        //}
-
-        //protected override void LoadContent()
-        //{
-        //    G.World.LoadContent();
-        //    G.UI.LoadContent();
-        //    base.LoadContent();
-        //}
 
         /// <summary>
         /// Everything is safe; Audio is up, Input is up, all Entities have been added.
         /// </summary>
         protected override void LateInitialize()
         {
-            G.World.Camera.Offset = new Vector2(1280/2, 720/2); // ScreenCenter isn't calculated until LoadContent.
+            G.World.Camera.Offset = G.ScreenCenter;
 
             G.Audio.PlaySound("SFX_Ambiance_1");
             TransformableEntity lucas = Entity.Get("Lucas") as TransformableEntity;
