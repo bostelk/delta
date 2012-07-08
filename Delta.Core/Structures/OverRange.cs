@@ -8,42 +8,50 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Structures
 {
-    public struct OverRange<T> where T: IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T> {
-        [ContentSerializer]
-        public T Value1;
+    public struct OverRange/*: IComparable, IFormattable, IConvertible, IComparable<float>, IEquatable<float>*/ {
+        static Regex _rangeRegex = new Regex(@"range\(\s*(?<value1>(\d*\.?\d+))\s*,\s*(?<value2>(\d*\.?\d+))\s*,\s*(?<duration>(\d*\.?\d+)\s*)\)");
+        static Regex _rangeStepRegex = new Regex(@"range\(\s*(?<value1>(\d*\.?\d+))\s*,\s*(?<value2>(\d*\.?\d+))\s*,\s*(?<step>(\d*\.?\d+))\s*,\s*(?<duration>(\d*\.?\d+)\s*)\)");
 
-        [ContentSerializer]
-        public T Value2;
+        public float Value1;
 
-        [ContentSerializer]
+        public float Value2;
+
+        public float Step;
+
         public float Duration;
 
-        public static OverRange<float> ParseFloat(string value) {
-            OverRange<float> range = new OverRange<float>();
-            // don't worry about matching whitespace we'll strip it off instead. also, let float.Parse handle matching floats
-            Regex rangeRegex = new Regex(@"range\((?<value1>(.+)),(?<value2>(.+)),(?<duration>(.+))\)");
-            Match match = rangeRegex.Match(value.Trim());
-            range.Value1 = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
-            range.Value2 = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
-            range.Duration = float.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
-            return range;
-        }
+        public static OverRange EmptyRange = new OverRange();
 
-        public static OverRange<int> ParseInt(string value) {
-            OverRange<int> range = new OverRange<int>();
-            // don't worry about matching whitespace we'll strip it off instead. also, let float.Parse handle matching floats
-            Regex rangeRegex = new Regex(@"range\((?<value1>(.+)),(?<value2>(.+)),(?<duration>(.+))\)");
-            Match match = rangeRegex.Match(value.Trim());
-            range.Value1 = int.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
-            range.Value2 = int.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
-            range.Duration = int.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
+        public static OverRange Parse(string value)
+        {
+            OverRange range = EmptyRange;
+            value = value.Trim();  // don't worry about matching whitespace inside of the string.
+            Match match = _rangeRegex.Match(value);
+            if (match.Success)
+            {
+                range.Value1 = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
+                range.Value2 = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
+                range.Duration = float.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                match = _rangeStepRegex.Match(value);
+                if (match.Success)
+                {
+                    match = _rangeStepRegex.Match(value);
+                    range.Value1 = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
+                    range.Value2 = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
+                    range.Step = float.Parse(match.Groups["step"].Value, CultureInfo.InvariantCulture);
+                    range.Duration = float.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
+                }
+            }
             return range;
         }
     }
 
     public static class OverRangeExtensions
     {
-        public static bool IsEmpty(this OverRange<float> range)
+        public static bool IsEmpty(this OverRange range)
         {
             return range.Value1 == default(float) && range.Value2 == default(float) && range.Duration == default(float);
         }

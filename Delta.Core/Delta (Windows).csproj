@@ -132,7 +132,7 @@
     <Compile Include="Collision\SpatialCell.cs" />
     <Compile Include="Collision\SpatialGrid.cs" />
     <Compile Include="Collision\SpatialStructure.cs" />
-    <Compile Include="Collision\CollisionManager.cs" />
+    <Compile Include="Collision\CollisionEngine.cs" />
     <Compile Include="Collision\Geometry\AABB.cs" />
     <Compile Include="Collision\Geometry\Circle.cs" />
     <Compile Include="Collision\Collider.cs" />
@@ -140,7 +140,7 @@
     <Compile Include="Collision\Geometry\IGeometry.cs" />
     <Compile Include="Collision\Geometry\OBB.cs" />
     <Compile Include="Collision\Geometry\Polygon.cs" />
-    <Compile Include="Collision\CollisionEngine.cs" />
+    <Compile Include="Collision\BaseCollisionEngine.cs" />
     <Compile Include="Collision\SAT.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Structures\HashSet.cs" />
