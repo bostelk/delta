@@ -26,7 +26,7 @@ namespace Delta
         public static PrimitiveBatch PrimitiveBatch { get; private set; }
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
-        public static CollisionManager Collision { get; private set; }
+        public static CollisionEngine Collision { get; private set; }
         public static GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         public static Texture2D PixelTexture { get; private set; }
         public static SpriteFont Font { get; private set; }
@@ -58,7 +58,7 @@ namespace Delta
             UI = new UI();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
-            Collision = new CollisionManager();
+            Collision = new CollisionEngine();
             Content = new Delta.Content.DeltaContentManager(game.Content.ServiceProvider, game.Content.RootDirectory);
         }
 
