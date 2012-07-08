@@ -16,7 +16,11 @@ namespace Delta.Graphics
         RandomFrameStart = 0x4,
         Finished = 0x8,
         //temporary?
-        Overlay = 0x10
+        Overlay = 0x10,
+        OutlineTop = 0x20,
+        OutlineRight = 0x40,
+        OutlineBottom = 0x80,
+        OutlineLeft = 0x100,
     }
 
     public class SpriteEntity : TransformableEntity
@@ -90,6 +94,13 @@ namespace Delta.Graphics
                 else
                     _state ^= SpriteState.Overlay;
             }
+        }
+
+        [ContentSerializerIgnore]
+        public Color OutlineColor
+        {
+            get;
+            set;
         }
 
         public SpriteEntity()
@@ -211,6 +222,24 @@ namespace Delta.Graphics
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            if (_state.HasFlag(SpriteState.OutlineTop) || _state.HasFlag(SpriteState.OutlineRight) || _state.HasFlag(SpriteState.OutlineBottom) || _state.HasFlag(SpriteState.OutlineLeft))
+            {
+                spriteBatch.End();
+                G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
+                G.SimpleEffect.Color = OutlineColor;
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
+                if (_state.HasFlag(SpriteState.OutlineTop))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineRight))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineBottom))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineLeft))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
+            }
+
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
@@ -225,6 +254,26 @@ namespace Delta.Graphics
             _animation = _spriteSheet.GetAnimation(_animationName);
             if (_animation != null)
                 OnAnimationChanged();
+        }
+
+        public void Outline(bool top, bool right, bool bottom, bool left)
+        {
+            if (top)
+                _state |= SpriteState.OutlineTop;
+            else
+                _state ^= SpriteState.OutlineTop;
+            if (right)
+                _state |= SpriteState.OutlineRight;
+            else
+                _state ^= SpriteState.OutlineRight;
+            if (bottom)
+                _state |= SpriteState.OutlineBottom;
+            else
+                _state ^= SpriteState.OutlineBottom;
+            if (left)
+                _state |= SpriteState.OutlineLeft;
+            else
+                _state ^= SpriteState.OutlineLeft;
         }
 
         protected internal override void OnPositionChanged()
