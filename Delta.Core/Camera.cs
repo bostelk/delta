@@ -515,11 +515,12 @@ namespace Delta
         /// <returns></returns>
         public Vector2 ToWorldPosition(Vector2 screenPosition)
         {
-            return Vector2.Transform(screenPosition - G.ScreenCenter, View) - Offset;
+            //return Vector2.Transform(screenPosition - G.ScreenCenter, View) - Offset + Position;
+            return (screenPosition - G.ScreenCenter) / Scale + Position;
         }
 
         /// <summary>
-        /// Transform a position relative to the worl to a position on the screen.
+        /// Transform a position relative to the world to a position on the screen.
         /// </summary>
         /// <param name="worldPosition">Position in the world</param>
         /// <returns></returns>
