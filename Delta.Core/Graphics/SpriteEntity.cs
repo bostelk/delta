@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -145,8 +146,7 @@ namespace Delta.Graphics
                             return true;
                     }
                     break;
-                case "randomframestart":
-                case "randomstart":
+                case "startrandom":
                 case "random":
                     if (bool.Parse(value))
                         _state |= SpriteState.RandomFrameStart;
@@ -158,6 +158,10 @@ namespace Delta.Graphics
                 case "isstopped":
                 case "stopped":
                     IsPaused = bool.Parse(value);
+                    return true;
+                case "foffset":
+                case "frameoffset":
+                    AnimationFrameOffset = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
             return base.ImportCustomValues(name, value);

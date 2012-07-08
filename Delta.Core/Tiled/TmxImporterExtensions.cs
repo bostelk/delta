@@ -27,7 +27,7 @@ namespace Delta.Tiled
             {
                 isFound = false;
                 string name = propertyNode.Attributes["name"] == null ? string.Empty : propertyNode.Attributes["name"].Value.ToLower();
-                string value = propertyNode.Attributes["value"].Value.ToLower();
+                string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
                     isFound = entity.ImportCustomValues(name, value);
                 else

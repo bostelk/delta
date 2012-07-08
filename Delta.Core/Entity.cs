@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using System.Globalization;
 
 namespace Delta
 {
@@ -151,6 +152,22 @@ namespace Delta
 #if WINDOWS
         protected virtual bool ImportCustomValues(string name, string value)
         {
+            switch (name)
+            {
+                case "visible":
+                case "isvisible":
+                    IsVisible = bool.Parse(value);
+                    return true;
+                case "enabled":
+                case "isenabled":
+                    IsEnabled = bool.Parse(value);
+                    return true;
+                case "order":
+                case "draworder":
+                case "updateorder":
+                    Order = float.Parse(value, CultureInfo.InvariantCulture);
+                    return true;
+            }
             return false;
         }
         bool IEntity.ImportCustomValues(string name, string value)
