@@ -261,19 +261,19 @@ namespace Delta.Graphics
             if (top)
                 _state |= SpriteState.OutlineTop;
             else
-                _state &= ~SpriteState.OutlineTop;
+                _state ^= SpriteState.OutlineTop;
             if (right)
                 _state |= SpriteState.OutlineRight;
             else
-                _state &= ~SpriteState.OutlineRight;
+                _state ^= SpriteState.OutlineRight;
             if (bottom)
                 _state |= SpriteState.OutlineBottom;
             else
-                _state &= ~SpriteState.OutlineBottom;
+                _state ^= SpriteState.OutlineBottom;
             if (left)
                 _state |= SpriteState.OutlineLeft;
             else
-                _state &= ~SpriteState.OutlineLeft;
+                _state ^= SpriteState.OutlineLeft;
         }
 
         protected internal override void OnPositionChanged()
