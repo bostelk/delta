@@ -104,6 +104,8 @@
     <Compile Include="DeltaGame.cs" />
     <Compile Include="EntityParentReader.cs" />
     <Compile Include="EntitySpawner.cs" />
+    <Compile Include="EntityStyle.cs" />
+    <Compile Include="EntityStyleSheet.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tiled\MapOrientation.cs" />
+    <Compile Include="Tiled\ObjectStyles.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
