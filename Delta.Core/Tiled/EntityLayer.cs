@@ -31,17 +31,7 @@ namespace Delta.Tiled
 
             foreach (XmlNode objectNode in node.SelectNodes("object"))
             {
-                IEntity entity = null;
-                if (objectNode.Attributes["type"] != null)
-                {
-                    string typeName = objectNode.Attributes["type"].Value;
-                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        Type type = assembly.GetType(typeName, false, true);
-                        if (type != null)
-                            entity = Activator.CreateInstance(type) as IEntity;
-                    }
-                }
+                IEntity entity = ObjectStyles.Load(objectNode.Attributes["type"].Value);
 
                 if (entity == null)
                     continue;

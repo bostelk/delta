@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjectStyles>
+  <Torch Type="Delta.Graphics.SpriteEntity">
+    <Tint>FFFFFF</Tint>
+  </Torch>
+</ObjectStyles> 

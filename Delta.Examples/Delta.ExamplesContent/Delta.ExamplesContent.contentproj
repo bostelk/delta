@@ -42,8 +42,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mainSpriteSheet.xml">
-      <Name>mainSpriteSheet</Name>
+    <None Include="ObjectStyles.xml">
+      <Name>ObjectStyles</Name>
       <Importer>XmlImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
       <SubType>Designer</SubType>

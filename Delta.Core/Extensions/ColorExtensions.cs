@@ -56,6 +56,8 @@ namespace Delta
         /// <remarks>The string may begin with or without the hash symbol (#).</remarks>
         public static Color ToColor(this string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return Color.White;
             if (value.StartsWith("#"))
                 value = value.Substring(1); //just remove the hash symbol
             while (value.Length < 8) //ensure we have a proper uint string, allows us to parse RGB strings by adding in the A value.
