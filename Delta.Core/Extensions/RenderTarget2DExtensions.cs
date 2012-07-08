@@ -12,8 +12,8 @@ namespace Delta.Extensions
     {
         public static void SaveAsPng(this RenderTarget2D target)
         {
-            string filename = DateTime.Now.ToShortTimeString() + ".png";
-            using(FileStream fs = new FileStream(Assembly.GetExecutingAssembly().Location + filename, FileMode.Create)) 
+            string filename = DateTime.Now.ToString("dd.MM-h.mm.sst") + ".png";
+            using(FileStream fs = new FileStream(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), filename), FileMode.Create)) 
             {
                 target.SaveAsPng(fs, target.Width, target.Height);
             };
