@@ -34,8 +34,6 @@ namespace Delta.Graphics
         [ContentSerializer(ElementName = "State")]
         internal SpriteState _state = SpriteState.Looped;
 
-        [ContentSerializer(ElementName = "SpriteSheet")] //for Rob's convience
-        public string SpriteSheetName { get; private set; }
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
 
@@ -103,7 +101,7 @@ namespace Delta.Graphics
         public SpriteEntity(string spriteSheet)
             : this()
         {
-            SpriteSheetName = spriteSheet;
+            _spriteSheetName= spriteSheet;
         }
 
 #if WINDOWS
