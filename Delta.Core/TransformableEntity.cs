@@ -109,9 +109,7 @@ namespace Delta
             set
             {
                 if (_tint != value)
-                {
                     _tint = value;
-                }
             }
         }
 
@@ -123,9 +121,7 @@ namespace Delta
             set
             {
                 if (_alpha != value)
-                {
                     _alpha = value.Clamp(0.0f, 1.0f);
-                }
             }
         }
 
@@ -141,8 +137,25 @@ namespace Delta
         {
             switch (name)
             {
+                case "pos":
+                case "position":
                 case "offset":
                     Position += Vector2Extensions.Parse(value);
+                    return true;
+                case "scale":
+                    Scale = Vector2Extensions.Parse(value);
+                    return true;
+                case "rot":
+                case "rotation":
+                    Rotation = float.Parse(value, CultureInfo.InvariantCulture).ToRadians();
+                    return true;
+                case "tint":
+                case "color":
+                    Tint = value.ToColor();
+                    return true;
+                case "opacity":
+                case "alpha":
+                    Alpha = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
             return base.ImportCustomValues(name, value);

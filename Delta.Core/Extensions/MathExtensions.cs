@@ -13,6 +13,17 @@ namespace Delta
 {
     public static class MathExtensions
     {
+
+        public static float ToRadians(this float value)
+        {
+            return MathHelper.ToRadians(value);
+        }
+
+        public static float ToDegrees(this float value)
+        {
+            return MathHelper.ToDegrees(value);
+        }
+
         public static float Wrap(this float value, float min, float max)
         {
             if (value > max) return min;
