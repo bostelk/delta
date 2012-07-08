@@ -41,7 +41,7 @@ namespace Delta.Movement
 
         public void Update(float elapsed)
         {
-            if (_startScale == Vector2.Zero)
+            if (elapsed == 0)
                 _startScale = _entity.Scale;
             PercentFinished = elapsed / Duration;
             Vector2 newScale = Vector2.Zero;

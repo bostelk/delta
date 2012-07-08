@@ -86,7 +86,38 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer FadeTo(float alpha, float duration)
         {
+            alpha = MathExtensions.Clamp(alpha, 0f, 1f);
             FadeTransform translate = new FadeTransform(_entity, alpha, duration);
+            _transforms.Enqueue(translate);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Flicker the alpha values between a range over a period of time.
+        /// </summary>
+        /// <param name="min">The alpha is equal to or above this value. (percent)</param>
+        /// <param name="max">The alpha is equal to or below this value. (percent)</param>
+        /// <param name="duration">Time to flicker for. (seconds)</param>
+        /// <returns></returns>
+        public Transformer FlickerFor(float min, float max, float duration)
+        {
+            min = MathExtensions.Clamp(min, 0f, max);
+            max = MathExtensions.Clamp(max, min, 1f);
+            FlickerTransform translate = new FlickerTransform(_entity, min, max, duration);
+            _transforms.Enqueue(translate);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Blink the entity between being visible and non-visible over a period of time.
+        /// </summary>
+        /// <param name="min">Time to stay visisble or non-visible for. (seconds)</param>
+        /// <param name="duration">Time to blink for. (seconds)</param>
+        /// <returns></returns>
+        public Transformer BlinkFor(float rate, float duration)
+        {
+            rate = MathExtensions.Clamp(rate, 0f, duration);
+            BlinkTransform translate = new BlinkTransform(_entity, rate, duration);
             _transforms.Enqueue(translate);
             return this;
         }
@@ -133,7 +164,7 @@ namespace Delta.Movement
             _transforms.Dequeue();
         }
         /// <summary>
-        /// Repeat the sequence of transforms indefinitely.
+        /// Terminates the sequence; Repeat the sequence of transforms indefinitely.
         /// </summary>
         public void Loop()
         {

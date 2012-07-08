@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Movement
 {
-    internal class TranslateTransform : ITransform
+    internal class FlickerTransform : ITransform
     {
         TransformableEntity _entity;
-        Vector2 _goalPosition;
-        Vector2 _startPosition;
+        float _minAlpha;
+        float _maxAlpha;
+        float _alpha;
+        float _elapsed;
 
         public float SecondsLeft
         {
@@ -32,22 +34,18 @@ namespace Delta.Movement
             private set;
         }
 
-        public TranslateTransform(TransformableEntity entity, Vector2 goalPosition, float duration)
+        public FlickerTransform(TransformableEntity entity, float min, float max, float duration)
         {
             _entity = entity;
-            _goalPosition = goalPosition;
+            _minAlpha = min;
+            _maxAlpha = max;
             Duration = duration;
         }
 
         public void Update(float elapsed)
         {
             if (elapsed == 0)
-                _startPosition = _entity.Position;
-            PercentFinished =  elapsed / Duration;
-            Vector2 newPosition = Vector2.Zero;
-            newPosition.X = InterpolationMethod(_startPosition.X, _goalPosition.X, PercentFinished);
-            newPosition.Y = InterpolationMethod(_startPosition.Y, _goalPosition.Y, PercentFinished);
-            _entity.Position = newPosition;
+                _entity.Alpha = G.Random.Between(_minAlpha, _maxAlpha);
         }
 
     }

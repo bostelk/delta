@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Movement
 {
-    internal class TranslateTransform : ITransform
+    internal class BlinkTransform : ITransform
     {
         TransformableEntity _entity;
-        Vector2 _goalPosition;
-        Vector2 _startPosition;
+        float _blinkRate;
+        float _nextBlink;
 
         public float SecondsLeft
         {
@@ -32,22 +32,23 @@ namespace Delta.Movement
             private set;
         }
 
-        public TranslateTransform(TransformableEntity entity, Vector2 goalPosition, float duration)
+        public BlinkTransform(TransformableEntity entity, float rate, float duration)
         {
             _entity = entity;
-            _goalPosition = goalPosition;
+            _blinkRate = rate;
+            _nextBlink = rate;
             Duration = duration;
         }
 
         public void Update(float elapsed)
         {
-            if (elapsed == 0)
-                _startPosition = _entity.Position;
-            PercentFinished =  elapsed / Duration;
-            Vector2 newPosition = Vector2.Zero;
-            newPosition.X = InterpolationMethod(_startPosition.X, _goalPosition.X, PercentFinished);
-            newPosition.Y = InterpolationMethod(_startPosition.Y, _goalPosition.Y, PercentFinished);
-            _entity.Position = newPosition;
+            if (elapsed >= _nextBlink)
+            {
+                _entity.Alpha = 1;
+                _nextBlink = _blinkRate + elapsed;
+            }
+            else
+                _entity.Alpha = 0;
         }
 
     }

@@ -121,6 +121,8 @@
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheetReader.cs" />
     <Compile Include="ITransformableEntity.cs" />
+    <Compile Include="Movement\BlinkTransform.cs" />
+    <Compile Include="Movement\FlickerTransform.cs" />
     <Compile Include="Movement\StallTransform.cs" />
     <Compile Include="Movement\FadeTransform.cs" />
     <Compile Include="Movement\ITransform.cs" />

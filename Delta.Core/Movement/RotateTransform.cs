@@ -41,7 +41,7 @@ namespace Delta.Movement
 
         public void Update(float elapsed)
         {
-            if (_startRotation == 0)
+            if (elapsed == 0)
                 _startRotation = _entity.Rotation;
             PercentFinished = elapsed / Duration;
             float newRotation = 0;
