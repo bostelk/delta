@@ -19,6 +19,8 @@ namespace Delta.Movement
         Action _onSequenceFinished;
         Queue<ITransform> _transforms;
 
+        public bool IsPaused { get; private set; }
+
         Transformer(TransformableEntity entity)
         {
             _entity = entity;
@@ -35,22 +37,6 @@ namespace Delta.Movement
             Transformer transform = new Transformer(entity);
             G.World.Add(transform);
             return transform;
-        }
-
-        /// <summary>
-        /// Clear the remaining Transforms in the sequence.
-        /// </summary>
-        public void ClearSequence()
-        {
-            _transforms.Clear();
-        }
-
-        /// <summary>
-        /// Skip the current Transform.
-        /// </summary>
-        public void SkipTransform() 
-        {
-            _transforms.Dequeue();
         }
 
         /// <summary>
@@ -116,6 +102,37 @@ namespace Delta.Movement
         }
 
         /// <summary>
+        /// Resume the Transforms.
+        /// </summary>
+        public void UnPause()
+        {
+            IsPaused = false;
+        }
+
+        /// <summary>
+        /// Pause the Transforms.
+        /// </summary>
+        public void Pause()
+        {
+            IsPaused = true;
+        }
+
+        /// <summary>
+        /// Clear the remaining Transforms in the sequence.
+        /// </summary>
+        public void ClearSequence()
+        {
+            _transforms.Clear();
+        }
+
+        /// <summary>
+        /// Skip the current Transform.
+        /// </summary>
+        public void SkipTransform() 
+        {
+            _transforms.Dequeue();
+        }
+        /// <summary>
         /// Repeat the sequence of transforms indefinitely.
         /// </summary>
         public void Loop()
@@ -152,7 +169,7 @@ namespace Delta.Movement
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            if (_transforms.Count > 0)
+            if (_transforms.Count > 0 && !IsPaused)
             {
                 ITransform currentTransform = _transforms.Peek();
                 if (_elapsed > currentTransform.Duration)
