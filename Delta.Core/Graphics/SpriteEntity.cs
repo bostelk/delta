@@ -53,7 +53,7 @@ namespace Delta.Graphics
                 if (value)
                     _state |= SpriteState.Paused;
                 else
-                    _state ^= SpriteState.Paused;
+                    _state &= ~SpriteState.Paused;
             }
         }
 
@@ -66,7 +66,7 @@ namespace Delta.Graphics
                 if (value)
                     _state |= SpriteState.Looped;
                 else
-                    _state ^= SpriteState.Looped;
+                    _state &= ~SpriteState.Looped;
             }
         }
 
@@ -79,7 +79,7 @@ namespace Delta.Graphics
                 if (value)
                     _state |= SpriteState.Finished;
                 else
-                    _state ^= SpriteState.Finished;
+                    _state &= ~SpriteState.Finished;
             }
         }
 
@@ -92,7 +92,7 @@ namespace Delta.Graphics
                 if (value)
                     _state |= SpriteState.Overlay;
                 else
-                    _state ^= SpriteState.Overlay;
+                    _state &= ~SpriteState.Overlay;
             }
         }
 
@@ -261,19 +261,19 @@ namespace Delta.Graphics
             if (top)
                 _state |= SpriteState.OutlineTop;
             else
-                _state ^= SpriteState.OutlineTop;
+                _state &= ~SpriteState.OutlineTop;
             if (right)
                 _state |= SpriteState.OutlineRight;
             else
-                _state ^= SpriteState.OutlineRight;
+                _state &= ~SpriteState.OutlineRight;
             if (bottom)
                 _state |= SpriteState.OutlineBottom;
             else
-                _state ^= SpriteState.OutlineBottom;
+                _state &= ~SpriteState.OutlineBottom;
             if (left)
                 _state |= SpriteState.OutlineLeft;
             else
-                _state ^= SpriteState.OutlineLeft;
+                _state &= ~SpriteState.OutlineLeft;
         }
 
         protected internal override void OnPositionChanged()
@@ -289,7 +289,7 @@ namespace Delta.Graphics
             if (_state.HasFlag(SpriteState.RandomFrameStart))
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
-            _state ^= SpriteState.Finished;
+            _state &= ~SpriteState.Finished;
         }
 
     }

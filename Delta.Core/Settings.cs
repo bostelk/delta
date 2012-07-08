@@ -8,6 +8,5 @@ namespace Delta
     public class Settings
     {
         public string Map { get; set; }
-        public string DebugObjects { get; set; }
     }
 }
