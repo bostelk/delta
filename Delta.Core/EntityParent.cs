@@ -59,11 +59,12 @@ namespace Delta
 
         public bool Add(T entity)
         {
-            if (!Entity.AddReferenceID(entity, entity.ID))
+            if (!EntityHelper.AddReferenceID(entity, entity.ID))
                 return false;
             _children.Add(entity);
             entity.Parent = this;
             NeedsToSort = true;
+            EntityHelper._globalEntitiesList.Add(entity);
             return true;
         }
 
@@ -72,7 +73,10 @@ namespace Delta
             bool returnValue = false;
             returnValue = _children.Remove(entity);
             if (returnValue)
-                Entity.RemoveReferenceID(entity.ID);
+            {
+                EntityHelper.RemoveReferenceID(entity.ID);
+                EntityHelper._globalEntitiesList.Remove(entity);
+            }
             return returnValue;
         }
 
