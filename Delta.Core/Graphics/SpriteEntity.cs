@@ -139,20 +139,39 @@ namespace Delta.Graphics
                     return true;
                 case "mirror":
                 case "flip":
-                    switch (value)
+                    string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    switch (split[0])
                     {
                         case "left":
                         case "right":
                         case "horizontal":
                         case "h":
-                            SpriteEffects = SpriteEffects.FlipHorizontally;
+                            SpriteEffects |= SpriteEffects.FlipHorizontally;
                             return true;
                         case "up":
                         case "down":
                         case "vertical":
                         case "v":
-                            SpriteEffects = SpriteEffects.FlipVertically;
+                            SpriteEffects |= SpriteEffects.FlipVertically;
                             return true;
+                    }
+                    if (split.Length > 1)
+                    {
+                        switch (split[1])
+                        {
+                            case "left":
+                            case "right":
+                            case "horizontal":
+                            case "h":
+                                SpriteEffects |= SpriteEffects.FlipHorizontally;
+                                return true;
+                            case "up":
+                            case "down":
+                            case "vertical":
+                            case "v":
+                                SpriteEffects |= SpriteEffects.FlipVertically;
+                                return true;
+                        }
                     }
                     break;
                 case "startrandom":
