@@ -12,8 +12,8 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace Delta.Tiled
 {
-    [ContentImporter(".tmx", DisplayName="TmxImporter", DefaultProcessor="TmxProcessor")]
-    public class TmxImporter : ContentImporter<FilenameContent>
+    [ContentImporter(".stylesheet", DisplayName="StyleSheetImporter", DefaultProcessor="StyleSheetProcessor")]
+    public class StyleSheetImporter : ContentImporter<FilenameContent>
     {
         public override FilenameContent Import(string fileName, ContentImporterContext context)
         {

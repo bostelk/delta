@@ -1,31 +1,26 @@
-﻿using System;
+﻿#if WINDOWS
+
+using System;
 using System.Xml;
 using System.Reflection;
 using System.Collections.Generic;
 
 namespace Delta.Tiled
 {
-
-    public class ObjectStyles
+    public class StyleSheet
     {
-        static XmlDocument _document = new XmlDocument();
+        XmlDocument _document = new XmlDocument();
         static Dictionary<string, IEntity> _objectStyles = new Dictionary<string, IEntity>();
 
-        static string _fileName = "ObjectStyles.xml";
-        public static string FileName
+        public StyleSheet()
+            : base()
         {
-            get { return _fileName; }
-            set 
-            {
-                if (_fileName != value)
-                    _fileName = value;
-            }
         }
 
-        public static void Cache()
+        public StyleSheet(string fileName)
+            : this()
         {
-            _document.Load(_fileName);
-            _objectStyles.Clear();
+            _document.Load(fileName);
             foreach (XmlNode node in _document.DocumentElement.ChildNodes)
             {
                 string typeName = node.Attributes["Type"] == null ? string.Empty : node.Attributes["Type"].Value;
@@ -33,7 +28,7 @@ namespace Delta.Tiled
                     continue;
                 IEntity entity = null;
                 if (_objectStyles.ContainsKey(typeName))
-                     entity = _objectStyles[typeName].Copy() as IEntity;
+                    entity = _objectStyles[typeName].Copy() as IEntity;
                 else
                     entity = CreateInstance(typeName);
                 if (entity == null)
@@ -61,13 +56,12 @@ namespace Delta.Tiled
 
         public static IEntity Load(string name)
         {
-            if (_document.FirstChild == null)
-                Cache();
             if (!_objectStyles.ContainsKey(name))
                 return CreateInstance(name);
-            IEntity copyedEntity = _objectStyles[name].Copy() as IEntity;
-            return copyedEntity;
+            return _objectStyles[name].Copy() as IEntity;
         }
 
     }
 }
+
+#endif

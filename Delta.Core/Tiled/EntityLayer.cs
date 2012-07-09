@@ -31,7 +31,7 @@ namespace Delta.Tiled
 
             foreach (XmlNode objectNode in node.SelectNodes("object"))
             {
-                IEntity entity = ObjectStyles.Load(objectNode.Attributes["type"].Value);
+                IEntity entity = StyleSheet.Load(objectNode.Attributes["type"].Value);
 
                 if (entity == null)
                     continue;
