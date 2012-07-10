@@ -16,5 +16,13 @@ namespace Delta
         {
             return (random.NextFloat() * (max - min) + min);
         }
+
+        public static bool FiftyFifty(this Random random)
+        {
+            if (random.NextDouble() >= 0.5f)
+                return true;
+            else
+                return false;
+        }
     }
 }

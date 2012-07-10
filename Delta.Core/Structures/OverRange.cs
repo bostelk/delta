@@ -12,9 +12,9 @@ namespace Delta.Structures
         static Regex _rangeRegex = new Regex(@"range\(\s*(?<value1>(\d*\.?\d+))\s*,\s*(?<value2>(\d*\.?\d+))\s*,\s*(?<duration>(\d*\.?\d+)\s*)\)");
         static Regex _rangeStepRegex = new Regex(@"range\(\s*(?<value1>(\d*\.?\d+))\s*,\s*(?<value2>(\d*\.?\d+))\s*,\s*(?<step>(\d*\.?\d+))\s*,\s*(?<duration>(\d*\.?\d+)\s*)\)");
 
-        public float Value1;
+        public float Lower;
 
-        public float Value2;
+        public float Upper;
 
         public float Step;
 
@@ -29,8 +29,8 @@ namespace Delta.Structures
             Match match = _rangeRegex.Match(value);
             if (match.Success)
             {
-                range.Value1 = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
-                range.Value2 = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
+                range.Lower = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
+                range.Upper = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
                 range.Duration = float.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
             }
             else
@@ -39,8 +39,8 @@ namespace Delta.Structures
                 if (match.Success)
                 {
                     match = _rangeStepRegex.Match(value);
-                    range.Value1 = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
-                    range.Value2 = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
+                    range.Lower = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
+                    range.Upper = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
                     range.Step = float.Parse(match.Groups["step"].Value, CultureInfo.InvariantCulture);
                     range.Duration = float.Parse(match.Groups["duration"].Value, CultureInfo.InvariantCulture);
                 }
@@ -53,7 +53,7 @@ namespace Delta.Structures
     {
         public static bool IsEmpty(this OverRange range)
         {
-            return range.Value1 == default(float) && range.Value2 == default(float) && range.Duration == default(float);
+            return range.Lower == default(float) && range.Upper == default(float) && range.Duration == default(float);
         }
     }
 }
