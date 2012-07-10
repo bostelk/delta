@@ -3,43 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Delta.Structures;
 
 namespace Delta.Movement
 {
-    internal class TranslateTransform : ITransform
+    internal class TranslateTransform : BaseTransform
     {
-        TransformableEntity _entity;
+        static Pool<TranslateTransform> _pool;
+
         Vector2 _goalPosition;
         Vector2 _startPosition;
 
-        public float SecondsLeft
+        static TranslateTransform()
         {
-            get;
-            set;
+            _pool = new Pool<TranslateTransform>(200);
         }
 
-        public float Duration
-        {
-            get;
-            private set;
+        public TranslateTransform() { }
+        
+        public static TranslateTransform Create(TransformableEntity entity, Vector2 goalPosition, float duration) {
+            TranslateTransform transform = _pool.Fetch();
+            transform._entity = entity;
+            transform._goalPosition = goalPosition;
+            transform.Duration = duration;
+            return transform;
         }
 
-        public Func<float, float, float, float> InterpolationMethod = MathHelper.Lerp;
-
-        public float PercentFinished
-        {
-            get;
-            private set;
-        }
-
-        public TranslateTransform(TransformableEntity entity, Vector2 goalPosition, float duration)
-        {
-            _entity = entity;
-            _goalPosition = goalPosition;
-            Duration = duration;
-        }
-
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             if (elapsed == 0)
                 _startPosition = _entity.Position;
@@ -48,6 +38,14 @@ namespace Delta.Movement
             newPosition.X = InterpolationMethod(_startPosition.X, _goalPosition.X, PercentFinished);
             newPosition.Y = InterpolationMethod(_startPosition.Y, _goalPosition.Y, PercentFinished);
             _entity.Position = newPosition;
+        }
+
+        public override void Recycle()
+        { 
+            base.Recycle();            
+            _goalPosition = Vector2.Zero;
+            _startPosition = Vector2.Zero;
+            _pool.Release(this);
         }
 
     }

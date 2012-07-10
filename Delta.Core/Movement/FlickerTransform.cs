@@ -3,49 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Delta.Structures;
 
 namespace Delta.Movement
 {
-    internal class FlickerTransform : ITransform
+    internal class FlickerTransform : BaseTransform
     {
-        TransformableEntity _entity;
+        static Pool<FlickerTransform> _pool;
+
         float _minAlpha;
         float _maxAlpha;
-        float _alpha;
-        float _elapsed;
 
-        public float SecondsLeft
+        static FlickerTransform() 
         {
-            get;
-            set;
+            _pool = new Pool<FlickerTransform>(20);
         }
 
-        public float Duration
+        public FlickerTransform() { }
+
+        public static FlickerTransform Create(TransformableEntity entity, float min, float max, float duration)
         {
-            get;
-            private set;
+            FlickerTransform transform = new FlickerTransform();
+            transform._entity = entity;
+            transform._minAlpha = MathExtensions.Clamp(min, 0f, max);
+            transform._maxAlpha = MathExtensions.Clamp(max, min, 1f);
+            transform.Duration = duration;
+            return transform;
         }
 
-        public Func<float, float, float, float> InterpolationMethod = MathHelper.Lerp;
-
-        public float PercentFinished
-        {
-            get;
-            private set;
-        }
-
-        public FlickerTransform(TransformableEntity entity, float min, float max, float duration)
-        {
-            _entity = entity;
-            _minAlpha = min;
-            _maxAlpha = max;
-            Duration = duration;
-        }
-
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             if (elapsed == 0)
                 _entity.Alpha = G.Random.Between(_minAlpha, _maxAlpha);
+        }
+
+        public override void Recycle()
+        {
+            base.Recycle();
+            _minAlpha = 0;
+            _maxAlpha = 0;
+
+            _pool.Release(this);
         }
 
     }

@@ -10,7 +10,7 @@ namespace Delta.Audio
 {
     public class Sound1D : ISound, IRecyclable
     {
-        private static StackPool<Sound1D> _pool;
+        private static Pool<Sound1D> _pool;
 
         private Cue _cue;
 
@@ -28,7 +28,7 @@ namespace Delta.Audio
 
         static Sound1D()
         {
-            _pool = new StackPool<Sound1D>();
+            _pool = new Pool<Sound1D>();
         }
 
         public Sound1D() { }
