@@ -43,6 +43,8 @@ namespace Delta
         protected bool IsDrawing { get; private set; }
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
+        [ContentSerializerIgnore]
+        public object Tag { get; set; }
 
         bool _isEnabled = false;
         [ContentSerializer]
