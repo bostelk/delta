@@ -3,44 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Delta.Structures;
 
 namespace Delta.Movement
 {
-    internal class BlinkTransform : ITransform
+    internal class BlinkTransform : BaseTransform
     {
-        TransformableEntity _entity;
+        static Pool<BlinkTransform> _pool;
         float _blinkRate;
         float _nextBlink;
 
-        public float SecondsLeft
+        static BlinkTransform()
         {
-            get;
-            set;
+            _pool = new Pool<BlinkTransform>(20);
         }
 
-        public float Duration
+        public BlinkTransform() { }
+
+        public static BlinkTransform Create(TransformableEntity entity, float rate, float duration)
         {
-            get;
-            private set;
+            BlinkTransform transform = _pool.Fetch();
+            transform._entity = entity;
+            transform._blinkRate = transform._nextBlink = MathExtensions.Clamp(rate, 0f, duration);
+            transform.Duration = duration;
+            return transform;
         }
 
-        public Func<float, float, float, float> InterpolationMethod = MathHelper.Lerp;
-
-        public float PercentFinished
-        {
-            get;
-            private set;
-        }
-
-        public BlinkTransform(TransformableEntity entity, float rate, float duration)
-        {
-            _entity = entity;
-            _blinkRate = rate;
-            _nextBlink = rate;
-            Duration = duration;
-        }
-
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             if (elapsed >= _nextBlink)
             {
@@ -49,6 +38,15 @@ namespace Delta.Movement
             }
             else
                 _entity.Alpha = 0;
+        }
+
+        public override void Recycle()
+        {
+            base.Recycle();
+            _blinkRate = 0;
+            _nextBlink = 0;
+
+            _pool.Release(this);
         }
 
     }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Delta.Movement
 {
-    internal class StallTransform : ITransform
+    internal class EmptyTransform : ITransform
     {
         public float Duration { get; set; }
 
-        public StallTransform(Entity entity, float duration)
+        public EmptyTransform(Entity entity, float duration)
         {
         }
 

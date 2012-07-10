@@ -126,8 +126,9 @@
     <Compile Include="Graphics\SpriteSheetReader.cs" />
     <Compile Include="ITransformableEntity.cs" />
     <Compile Include="Movement\BlinkTransform.cs" />
+    <Compile Include="Movement\BaseTransform.cs" />
     <Compile Include="Movement\FlickerTransform.cs" />
-    <Compile Include="Movement\StallTransform.cs" />
+    <Compile Include="Movement\EmptyTransform.cs" />
     <Compile Include="Movement\FadeTransform.cs" />
     <Compile Include="Movement\ITransform.cs" />
     <Compile Include="Movement\TranslateTransform.cs" />
@@ -183,7 +184,7 @@
     </Compile>
     <Compile Include="Structures\IPool.cs" />
     <Compile Include="Structures\IRecyclable.cs" />
-    <Compile Include="Structures\StackPool.cs" />
+    <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldTime.cs" />

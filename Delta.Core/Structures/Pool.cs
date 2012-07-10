@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Delta.Structures
 {
-    public class StackPool<T> : IPool<T> where T:IRecyclable, new()
+    public class Pool<T> : IPool<T> where T:IRecyclable, new()
     {
         private const int DEFAULT_SIZE = 50;
         private const int INCREMENT_AMOUNT = 100;
@@ -13,9 +13,9 @@ namespace Delta.Structures
         private Stack<T> _items;
         private int _initialSize;
 
-        public StackPool() : this(DEFAULT_SIZE) { }
+        public Pool() : this(DEFAULT_SIZE) { }
 
-        public StackPool(int size)
+        public Pool(int size)
         {
             _initialSize = size;
             _items = new Stack<T>(_initialSize);
