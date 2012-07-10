@@ -68,13 +68,6 @@ namespace Delta.Tiled
                 // all entities get a name. Made unique when added to an EntityParent
                 entity.ID = name;
 
-                // attempt to set entity specific properties.
-                TransformableEntity transformableEntity = entity as TransformableEntity;
-                if (transformableEntity != null)
-                {
-                    transformableEntity.Position = position;
-                }
-
                 CollideableEntity collideableEntity = entity as CollideableEntity;
                 if (collideableEntity != null)
                 {
@@ -106,6 +99,13 @@ namespace Delta.Tiled
 
                 // populate entity properties with tiled properties or try invoking a method.
                 entity.ImportXmlProperties(objectNode["properties"]);
+
+                // attempt to set entity specific properties. this is after importing properties so offset doesn't get mucked up
+                TransformableEntity transformableEntity = entity as TransformableEntity;
+                if (transformableEntity != null)
+                {
+                    transformableEntity.Position += position;
+                }
                    
                 bool added = false;
                 SpriteEntity sprite = entity as SpriteEntity;

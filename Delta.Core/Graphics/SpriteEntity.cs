@@ -42,7 +42,7 @@ namespace Delta.Graphics
         public int AnimationFrameOffset { get; set; }
 
         [ContentSerializer]
-        protected virtual SpriteEffects SpriteEffects { get; set; }
+        public SpriteEffects SpriteEffects { get; set; }
 
         [ContentSerializerIgnore]
         public bool IsPaused
