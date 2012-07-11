@@ -40,10 +40,8 @@ namespace Delta.Graphics
         internal int _animationFrame = 0;
         [ContentSerializer(ElementName = "State")]
         internal SpriteState _state = SpriteState.Looped;
-
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
-
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
 

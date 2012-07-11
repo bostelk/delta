@@ -9,6 +9,19 @@ using System.Globalization;
 
 namespace Delta
 {
+    [Flags]
+    internal enum EntityState
+    {
+        None = 0x0,
+        IsInitialized = 0x1,
+        ContentIsLoaded = 0x2,
+        IsUpdating = 0x4,
+        IsDrawing = 0x8,
+        NeedsHeavyUpdate = 0x10,
+        Enabled = 0x20,
+        Visible = 0x40
+    }
+
     public class Entity : IEntity
     {
         public static IEntity Get(string id)
@@ -23,6 +36,8 @@ namespace Delta
             get { return EntityHelper._globalEntities; }
         }
 
+        EntityState _state = EntityState.Enabled | EntityState.Visible;
+
         [ContentSerializerIgnore]
         IEntityParent _parent = null;
         public IEntityParent Parent { get; private set; }
@@ -34,45 +49,94 @@ namespace Delta
             set { _parent = value; }
         }
 
-        protected bool ContentIsLoaded { get; private set; }
         [ContentSerializerIgnore]
-        protected bool IsInitialized { get; private set; }
-        [ContentSerializerIgnore]
-        protected bool IsUpdating { get; private set; }
-        [ContentSerializerIgnore]
-        protected bool IsDrawing { get; private set; }
-        [ContentSerializerIgnore]
-        public bool NeedsHeavyUpdate { get; set; }
-        [ContentSerializerIgnore]
-        public object Tag { get; set; }
-
-        bool _isEnabled = false;
-        [ContentSerializer]
-        public bool IsEnabled
+        public bool IsInitialized
         {
-            get { return _isEnabled; }
+            get { return _state.HasFlag(EntityState.IsInitialized); }
             set
             {
-                if (_isEnabled != value)
-                {
-                    _isEnabled = value;
-                    OnEnabledChanged();
-                }
+                if (value)
+                    _state |= EntityState.IsInitialized;
+                else
+                    _state &= ~EntityState.IsInitialized;
             }
         }
 
-        bool _isVisible = false;
+        [ContentSerializerIgnore]
+        public bool ContentIsLoaded
+        {
+            get { return _state.HasFlag(EntityState.ContentIsLoaded); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.ContentIsLoaded;
+                else
+                    _state &= ~EntityState.ContentIsLoaded;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public bool IsUpdating
+        {
+            get { return _state.HasFlag(EntityState.IsUpdating); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.IsUpdating;
+                else
+                    _state &= ~EntityState.IsUpdating;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public bool IsDrawing
+        {
+            get { return _state.HasFlag(EntityState.IsDrawing); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.IsDrawing;
+                else
+                    _state &= ~EntityState.IsDrawing;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public bool NeedsHeavyUpdate
+        {
+            get { return _state.HasFlag(EntityState.NeedsHeavyUpdate); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.NeedsHeavyUpdate;
+                else
+                    _state &= ~EntityState.NeedsHeavyUpdate;
+            }
+        }
+
+        [ContentSerializer]
+        public bool IsEnabled
+        {
+            get { return _state.HasFlag(EntityState.Enabled); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.Enabled;
+                else
+                    _state &= ~EntityState.Enabled;
+            }
+        }
+
         [ContentSerializer]
         public bool IsVisible
         {
-            get { return _isVisible; }
+            get { return _state.HasFlag(EntityState.Visible); }
             set
             {
-                if (_isVisible != value)
-                {
-                    _isVisible = value;
-                    OnVisibleChanged();
-                }
+                if (value)
+                    _state |= EntityState.Visible;
+                else
+                    _state &= ~EntityState.Visible;
             }
         }
 
