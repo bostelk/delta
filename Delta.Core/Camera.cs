@@ -215,21 +215,14 @@ namespace Delta
                     NeedsHeavyUpdate = true;
                 }
             }
-            //else if (false && Mode == CameraMode.FollowPlayer)
-            //{
-            //    Entity player = null; // getPlayerEntity();
-
-            //    _position.X = MathHelper.SmoothStep(_position.X, player.Position.X, _translationRate);
-            //    _position.Y = MathHelper.SmoothStep(_position.Y, player.Position.Y, _translationRate);
-            //}
 
             UpdateShake((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdateScale((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (StayInsideBounds)
             {
-                _position.X = MathHelper.Clamp(_position.X, BoundedArea.Left, BoundedArea.Right);
-                _position.Y = MathHelper.Clamp(_position.X, BoundedArea.Top, BoundedArea.Bottom);
+                _position.X = MathHelper.Clamp(_position.X, BoundedArea.Left + ViewingArea.Width / 2, BoundedArea.Right - ViewingArea.Width / 2);
+                _position.Y = MathHelper.Clamp(_position.Y, BoundedArea.Top + ViewingArea.Height / 2, BoundedArea.Bottom - ViewingArea.Height / 2);
                 NeedsHeavyUpdate = true;
             }
 
@@ -249,8 +242,8 @@ namespace Delta
             if (_scaleDuration > _scaleElapsed)
             {
                 _scaleElapsed += seconds;
-                float amount = MathHelper.Clamp(_scaleElapsed / _scaleDuration, 0.0f, 1.0f);
-                //float amount = MathHelper.Clamp((float) Math.Pow(0.02, (double) seconds / _zoomElapsed), 0.0f, 1.0f);
+                float amount = MathHelper.Clamp(_scaleElapsed / _scaleDuration, 0f, 1f);
+                //float amount = MathHelper.Clamp((float) Math.Pow(0.02, (double) seconds / _zoomElapsed), 0f, 1f);
                 Scale = MathHelper.SmoothStep(Scale, _desiredScale, amount);
                 NeedsHeavyUpdate = true;
             }
@@ -293,12 +286,7 @@ namespace Delta
                     float progress = _shakeElapsed / _shakeDuration;
                     float magnitude = _shakeMagnitude * (1f - (progress * progress)); //NON-LINEAR (x^2)
                     //float magnitude = _shakeMagnitude * (1f - (progress)); //LINEAR
-                    _shakeOffset = new Vector2( G.Random.NextFloat() , G.Random.NextFloat()) * magnitude;
-
-                    //if ((_shakeOptions & ShakeOptions.Horizontal) == ShakeOptions.Horizontal)
-                    //    _shakeOffset.X = _shakeMagnitude * ((float)_random.NextDouble() * 1280.0f * 2.0f - 1280.0f);
-                    //if ((_shakeOptions & ShakeOptions.Vertical) == ShakeOptions.Vertical)
-                    //    _shakeOffset.Y = _shakeMagnitude * ((float)_random.NextDouble() * 720.0f * 2.0f - 720.0f);
+                    _shakeOffset = new Vector2(G.Random.NextFloat() , G.Random.NextFloat()) * magnitude;
                 }
                 else if (_shakeMode == ShakeMode.Directional)
                 {
