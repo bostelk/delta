@@ -105,6 +105,22 @@ namespace Delta
             }
         }
 
+        //thanks to Rob, we need this. If I had my way I wouldn't have this.
+        Vector2 _offset = Vector2.Zero;
+        [ContentSerializer]
+        public virtual Vector2 Offset
+        {
+            get { return _offset; }
+            set
+            {
+                if (_offset != value)
+                {
+                    _offset = value;
+                    OnPositionChanged();
+                }
+            }
+        }
+
         Vector2 _size = Vector2.Zero;
         [ContentSerializer]
         public virtual Vector2 Size
@@ -219,8 +235,10 @@ namespace Delta
             {
                 case "pos":
                 case "position":
+                    Position = Vector2Extensions.Parse(value);
+                    return true;
                 case "offset":
-                    Position += Vector2Extensions.Parse(value);
+                    Offset = Vector2Extensions.Parse(value);
                     return true;
                 case "scale":
                     Scale = Vector2Extensions.Parse(value);
@@ -263,7 +281,7 @@ namespace Delta
 
         protected virtual void UpdateRenderPosition()
         {
-            RenderPosition = Position + RenderOrigin - (Origin * Size * Scale);
+            RenderPosition = Position + Offset + RenderOrigin - (Origin * Size * Scale);
         }
 
         protected internal virtual void OnPositionChanged()
