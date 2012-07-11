@@ -30,14 +30,20 @@ namespace Delta.Movement
             return transform;
         }
 
+        public override void Begin()
+        {
+            _startRotation = _entity.Rotation;
+        }
+
         public override void Update(float elapsed)
         {
-            if (elapsed == 0)
-                _startRotation = _entity.Rotation;
             PercentFinished = elapsed / Duration;
-            float newRotation = 0;
-            newRotation = InterpolationMethod(_startRotation, _goalRotation, PercentFinished);
-            _entity.Rotation = newRotation;
+            _entity.Rotation = InterpolationMethod(_startRotation, _goalRotation, PercentFinished);
+        }
+
+        public override void End()
+        {
+            _entity.Rotation = _goalRotation;
         }
 
         public override void Recycle()

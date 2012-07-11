@@ -28,7 +28,9 @@ namespace Delta.Movement
 
         public Func<float, float, float, float> InterpolationMethod = MathHelper.Lerp;
 
+        public virtual void Begin() { }
         public virtual void Update(float seconds) { }
+        public virtual void End() { }
 
         public virtual void Recycle()
         {

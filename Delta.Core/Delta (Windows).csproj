@@ -116,6 +116,7 @@
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\RenderTarget2DExtensions.cs" />
     <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\Visuals.cs" />
     <Compile Include="Graphics\Effects\DeltaEffect.cs" />
     <Compile Include="Graphics\Effects\SimpleEffect.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Structures\HashSet.cs" />
     <Compile Include="Structures\OverRange.cs" />
+    <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />

@@ -75,7 +75,7 @@ namespace Delta
             if (returnValue)
             {
                 EntityHelper.RemoveReferenceID(entity.ID);
-                EntityHelper._globalEntitiesList.Remove(entity);
+                EntityHelper._globalEntitiesList.FastRemove<IEntity>(entity);
             }
             return returnValue;
         }

@@ -13,6 +13,12 @@ namespace Delta
 {
     public static class MathExtensions
     {
+        public const double EPSILON = 9.9999997473787516E-05;
+        public const double EPSILONSQR = EPSILON * EPSILON;
+        public const double RADIANS_45 = Math.PI / 4;
+        public const double RADIANS_135 = 3 * Math.PI / 4;
+        public const double RADIANS_225 = 5 * Math.PI / 4;
+        public const double RADIANS_315 = 7 * Math.PI / 4;
 
         public static float ToRadians(this float value)
         {

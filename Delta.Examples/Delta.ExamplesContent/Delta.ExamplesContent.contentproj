@@ -204,6 +204,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Graphics\AnimatedMisc\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

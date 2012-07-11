@@ -217,10 +217,15 @@ namespace Delta.Movement
             if (_transforms.Count > 0 && !IsPaused)
             {
                 ITransform currentTransform = _transforms.Peek();
+
+                // the transform is either just starting, updating or ending.
+                if (_elapsed == 0)
+                    currentTransform.Begin();
                 if (_elapsed > currentTransform.Duration)
                 {
                     ITransform oldTransform = _transforms.Dequeue();
-                    
+                    oldTransform.End();
+
                     // either loop if -1 or repeat the desired about of times. or recycle it.
                     if (_repeat < 0)
                     {
@@ -266,6 +271,7 @@ namespace Delta.Movement
             _onSequenceFinished = null;
             _transforms.Clear();
 
+            G.World.Remove(this);
             _pool.Release(this);
         }
     }

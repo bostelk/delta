@@ -13,8 +13,8 @@ namespace Delta.Movement
         {
         }
 
-        public void Update(float elapsed)
-        {
-        }
+        public void Begin() { }
+        public void End() { }
+        public void Update(float elapsed) { }
     }
 }

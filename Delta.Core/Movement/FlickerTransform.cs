@@ -31,10 +31,9 @@ namespace Delta.Movement
             return transform;
         }
 
-        public override void Update(float elapsed)
+        public override void Begin()
         {
-            if (elapsed == 0)
-                _entity.Alpha = G.Random.Between(_minAlpha, _maxAlpha);
+            _entity.Alpha = G.Random.Between(_minAlpha, _maxAlpha);
         }
 
         public override void Recycle()

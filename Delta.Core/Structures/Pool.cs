@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Delta.Structures
 {
     public class Pool<T> : IPool<T> where T:IRecyclable, new()
     {
-        private const int DEFAULT_SIZE = 50;
-        private const int INCREMENT_AMOUNT = 100;
+        static List<Pool<T>> _pools;
 
-        private Stack<T> _items;
-        private int _initialSize;
+        const int DEFAULT_SIZE = 50;
+        const int INCREMENT_AMOUNT = 100;
 
+        Stack<T> _items;
+        int _initialSize;
+        int _objectsInUse;
+
+        static Pool() {
+            _pools = new List<Pool<T>>();
+        }
+        
         public Pool() : this(DEFAULT_SIZE) { }
 
         public Pool(int size)
         {
+            _pools.Add(this);
             _initialSize = size;
             _items = new Stack<T>(_initialSize);
 
@@ -44,18 +53,36 @@ namespace Delta.Structures
                 }
             }
             newobj = _items.Pop();
+            _objectsInUse++;
             return newobj;
         }
 
         public void Release(T obj)
         {
             _items.Push(obj);
+            _objectsInUse--;
+        }
+
+        public void Clear()
+        {
         }
 
         public override string ToString()
         {
-            return "hi";
-            //return String.Format("Size: {0} , Used: {1}", _items.ccap, _used);
+            return String.Format("Objects Available: {0} / Objects In Use: {1}", _items.Count, _objectsInUse);
+        }
+
+        public static string PerformanceInfo
+        {
+            get
+            {
+                if (_pools.Count == 0)
+                    return "No pools available.";
+                string result = string.Empty;
+                foreach (Pool<T> pool in _pools)
+                    result += pool.ToString() + " / ";
+                return result;
+            }
         }
     }
 }

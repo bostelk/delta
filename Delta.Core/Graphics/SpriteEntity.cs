@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Delta.Structures;
 
 namespace Delta.Graphics
 {
@@ -23,8 +24,10 @@ namespace Delta.Graphics
         OutlineLeft = 0x100,
     }
 
-    public class SpriteEntity : TransformableEntity
+    public class SpriteEntity : TransformableEntity, IRecyclable
     {
+        static Pool<SpriteEntity> _pool;
+
         [ContentSerializer(ElementName = "SpriteSheet")]
         internal string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
@@ -101,6 +104,18 @@ namespace Delta.Graphics
         {
             get;
             set;
+        }
+
+        static SpriteEntity()
+        {
+            _pool = new Pool<SpriteEntity>(100);
+        }
+        
+        public static SpriteEntity Create(string spriteSheet) 
+        {
+            SpriteEntity spriteEntity = _pool.Fetch();
+            spriteEntity._spriteSheetName = spriteSheet;
+            return spriteEntity;
         }
 
         public SpriteEntity()
@@ -311,6 +326,37 @@ namespace Delta.Graphics
             _state &= ~SpriteState.Finished;
         }
 
+        public void Recycle()
+        {
+            Position = Vector2.Zero;
+            Size = Vector2.Zero;
+            Scale = Vector2.One;
+            Rotation = 0f;
+            Origin = Vector2.Zero;
+            Pivot = new Vector2(0.5f, 0.5f);
+            Alpha = 1f;
+            Tint = Color.White; 
+
+            _state = SpriteState.Looped;
+            _spriteSheet = null;
+            _spriteSheetName = string.Empty;
+            _animation = null;
+            _animationName = string.Empty;
+            _animationFrame = 0;
+            _sourceRectangle = Rectangle.Empty;
+            _frameDurationTimer = 0f;
+            AnimationFrameOffset = 0;
+            SpriteEffects = SpriteEffects.None;
+            OutlineColor = Color.White;
+
+            /* not casting etc.
+            EntityParent<Entity> parent = Parent as EntityParent<Entity>;
+            if (parent != null)
+                parent.Remove(this);
+            */
+            G.World.Remove(this); // hack
+            _pool.Release(this);
+        }
     }
 
 }

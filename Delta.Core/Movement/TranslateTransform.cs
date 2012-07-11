@@ -29,15 +29,23 @@ namespace Delta.Movement
             return transform;
         }
 
+        public override void Begin()
+        {
+            _startPosition = _entity.Position;
+        }
+
         public override void Update(float elapsed)
         {
-            if (elapsed == 0)
-                _startPosition = _entity.Position;
             PercentFinished =  elapsed / Duration;
             Vector2 newPosition = Vector2.Zero;
             newPosition.X = InterpolationMethod(_startPosition.X, _goalPosition.X, PercentFinished);
             newPosition.Y = InterpolationMethod(_startPosition.Y, _goalPosition.Y, PercentFinished);
             _entity.Position = newPosition;
+        }
+
+        public override void End()
+        {
+            _entity.Position = _goalPosition;
         }
 
         public override void Recycle()

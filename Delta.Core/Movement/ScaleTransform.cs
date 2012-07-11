@@ -30,15 +30,23 @@ namespace Delta.Movement
             return transform;
         }
 
+        public override void Begin()
+        {
+            _startScale = _entity.Scale;
+        }
+
         public override void Update(float elapsed)
         {
-            if (elapsed == 0)
-                _startScale = _entity.Scale;
             PercentFinished = elapsed / Duration;
             Vector2 newScale = Vector2.Zero;
             newScale.X = InterpolationMethod(_startScale.X, _goalScale.X, PercentFinished);
             newScale.Y = InterpolationMethod(_startScale.Y, _goalScale.Y, PercentFinished);
             _entity.Scale = newScale;
+        }
+
+        public override void End()
+        {
+            _entity.Scale = _goalScale;
         }
 
         public override void Recycle()

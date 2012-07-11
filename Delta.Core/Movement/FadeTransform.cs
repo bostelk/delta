@@ -28,14 +28,20 @@ namespace Delta.Movement
             return transform;
         }
 
+        public override void Begin()
+        {
+            _startAlpha = _entity.Alpha;
+        }
+
         public override void Update(float elapsed)
         {
-            if (elapsed == 0)
-                _startAlpha = _entity.Alpha;
             PercentFinished = elapsed / Duration;
-            float newAlpha = 0;
-            newAlpha = InterpolationMethod(_startAlpha, _goalAlpha, PercentFinished);
-            _entity.Alpha = newAlpha;
+            _entity.Alpha = InterpolationMethod(_startAlpha, _goalAlpha, PercentFinished);
+        }
+
+        public override void End()
+        {
+            _entity.Alpha = _goalAlpha;
         }
 
         public override void Recycle()

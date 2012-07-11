@@ -161,6 +161,15 @@ namespace Delta.Examples.Entities
                         _isRightCooldown = false;
                 }
             }
+
+            if (G.Input.Keyboard.Held(Keys.X))
+            {
+                Visuals.CreateShatter(@"Graphics\SpriteSheets\16x16", "barrelDebris", Position, 13);
+            }
+            if (G.Input.Keyboard.Held(Keys.Z))
+            {
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "barrelDebris", Position);
+            }
         }
 
         protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
