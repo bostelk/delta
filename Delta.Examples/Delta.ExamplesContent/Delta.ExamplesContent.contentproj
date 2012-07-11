@@ -51,7 +51,7 @@
     <Compile Include="Maps\Plains\2.tmx">
       <Name>2</Name>
       <Importer>TmxImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
+      <Processor>TmxProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -200,7 +200,7 @@
     <Compile Include="Maps\Plains\1.tmx">
       <Name>1</Name>
       <Importer>TmxImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
+      <Processor>TmxProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
