@@ -24,8 +24,7 @@ namespace Delta.Collision
 
         public void AddCollider(Collider cg)
         {
-            if (!Colliders.Contains(cg))
-                Colliders.Add(cg);
+            Colliders.Add(cg);
         }
 
         public void RemoveCollider(Collider cg)

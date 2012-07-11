@@ -19,9 +19,11 @@ namespace Delta.Collision
 
         public abstract void RemoveColider(Collider colider);
 
-        public abstract List<Polygon> Raycast(Vector2 start, Vector2 end, bool returnFirst);
+        public abstract List<Collider> Raycast(Vector2 start, Vector2 end, bool returnFirst);
 
-        public abstract List<Polygon> InArea(Rectangle area);
+        public abstract List<Collider> CollidersInArea(Rectangle area);
+
+        public abstract List<Collider> CollidersAtPosition(Vector2 position);
 
         public abstract void DrawDebug(ref Matrix view, ref Matrix projection);
     }

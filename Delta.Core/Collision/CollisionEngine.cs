@@ -60,14 +60,20 @@ namespace Delta.Collision
             }
         }
 
-        public override List<Polygon> Raycast(Vector2 start, Vector2 end, bool returnFirst)
+        public override List<Collider> Raycast(Vector2 start, Vector2 end, bool returnFirst)
         {
             throw new NotImplementedException();
         }
 
-        public override List<Polygon> InArea(Rectangle area)
+        public override List<Collider> CollidersInArea(Rectangle area)
         {
-            throw new NotImplementedException();
+            List<Collider> result = new List<Collider>(10);
+            return result;
+        }
+
+        public override List<Collider> CollidersAtPosition(Vector2 position)
+        {
+            return _grid.CollidersAtPosition(position);
         }
 
         public override void Simulate(float seconds)
@@ -93,8 +99,6 @@ namespace Delta.Collision
             List<CollisionPair> pairs = _grid.GetCollisionPairs();
             foreach (CollisionPair pair in pairs)
             {
-                if (pair.ColliderA.Mass == 0 && pair.ColliderB.Mass == 0)
-                    continue;
                 _narrowDetections++;
 
                 CollisionResult result;
@@ -144,6 +148,7 @@ namespace Delta.Collision
             G.PrimitiveBatch.Begin(ref projection, ref view);
             foreach (Collider collider in _colliders)
             {
+                if (collider.Geom == null) continue;
                 Polygon poly = collider.Geom;
                 if (poly is OBB)
                 {

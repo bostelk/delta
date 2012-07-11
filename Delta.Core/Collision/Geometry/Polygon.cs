@@ -85,6 +85,8 @@ namespace Delta.Collision.Geometry
         {
             get
             {
+                if (_aabb == null)
+                    Calculate();
                 return _aabb;
             }
         }

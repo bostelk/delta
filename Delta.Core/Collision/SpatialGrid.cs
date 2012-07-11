@@ -95,8 +95,8 @@ namespace Delta.Collision
         private Point GetCellPosition(Vector2 position)
         {
             Point result = Point.Zero;
-            result.X = (int)(position.X + Offset.X) / CellSize;
-            result.Y = (int)(position.Y + Offset.Y) / CellSize;
+            result.X = (int)((position.X + Offset.X) * _invCellSize);
+            result.Y = (int)((position.Y + Offset.Y) * _invCellSize);
             result.X = result.X.Clamp(0, CellsWide - 1);
             result.Y = result.Y.Clamp(0, CellsHigh - 1);
             return result;
@@ -104,6 +104,7 @@ namespace Delta.Collision
 
         public void AddColliderToCells(Collider collider)
         {
+            if (collider.Geom == null) return;
             Point start = GetCellPosition(collider.Geom.AABB.Min);
             Point end = GetCellPosition(collider.Geom.AABB.Max);
 
@@ -128,6 +129,19 @@ namespace Delta.Collision
                     _cells[x + y * CellsWide].RemoveCollider(collider);
                 }
             }
+        }
+
+        public List<Collider> CollidersAtPosition(Vector2 position)
+        {
+            List<Collider> result = new List<Collider>(10);
+            Point index = GetCellPosition(position);
+            SpatialCell cell = _cells[index.X + index.Y * CellsWide];
+            foreach (Collider collider in cell.Colliders)
+            {
+                if (AABB.TestContains(collider.Geom.AABB, position))
+                    result.Add(collider);
+            }
+            return result;
         }
 
         /// <summary>
