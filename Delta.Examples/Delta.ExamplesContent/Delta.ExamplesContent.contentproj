@@ -42,10 +42,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ObjectStyles.xml">
+    <None Include="ObjectStyles.stylesheet">
       <Name>ObjectStyles</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>SpriteSheetProcessor</Processor>
+      <Importer>StyleSheetImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
     </None>
     <Compile Include="Maps\Plains\2.tmx">
@@ -204,6 +204,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Graphics\AnimatedMisc\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

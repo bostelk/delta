@@ -2,9 +2,9 @@
 <XnaContent xmlns:Graphics="Delta.Graphics">
   <Asset Type="Graphics:SpriteSheetContent">
     <Image>
-		  <Path>Graphics\Tilesets\interior.png</Path>
-		  <FrameWidth>16</FrameWidth>
-		  <FrameHeight>16</FrameHeight>
+          <Path>Graphics\Tilesets\interior.png</Path>
+          <FrameWidth>16</FrameWidth>
+          <FrameHeight>16</FrameHeight>
       </Image>
       <Image>
           <Path>Graphics\Tilesets\MainGrass.png</Path>
@@ -62,6 +62,31 @@
          <Path>Graphics\Tilesets\Statue.png</Path>
          <FrameWidth>16</FrameWidth>
          <FrameHeight>16</FrameHeight>
+     </Image>
+     <Image>
+         <Path>Graphics\AnimatedMisc\explosiveBarrel16x16.png</Path>
+         <FrameWidth>16</FrameWidth>
+         <FrameHeight>16</FrameHeight>
+     </Image>
+    <Image>
+         <Path>Graphics\AnimatedMisc\explosiveBarrelDebris8x8-10.png</Path>
+         <FrameWidth>8</FrameWidth>
+         <FrameHeight>8</FrameHeight>
+         <Animation>
+            <Name>barrelDebris</Name>
+            <Frames>0,1,2,3,4,5,6,7,9</Frames>
+            <FrameDuration>0.04167</FrameDuration>
+        </Animation>
+     </Image>
+    <Image>
+        <Path>Graphics\AnimatedMisc\mediumExplosion32x32-7.png</Path>
+        <FrameWidth>32</FrameWidth>
+        <FrameHeight>32</FrameHeight>
+        <Animation>
+            <Name>explode</Name>
+            <Frames>0,1,2,3,4,5,6</Frames>
+            <FrameDuration>0.04167</FrameDuration>
+        </Animation>
      </Image>
   </Asset>
 </XnaContent>

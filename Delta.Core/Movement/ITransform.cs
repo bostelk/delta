@@ -8,6 +8,9 @@ namespace Delta.Movement
     public interface ITransform
     {
         float Duration { get; }
+
+        void Begin();
         void Update(float elapsed);
+        void End();
     }
 }

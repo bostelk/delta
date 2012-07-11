@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Delta.Structures;
 
 namespace Delta.Graphics
 {
@@ -23,8 +24,10 @@ namespace Delta.Graphics
         OutlineLeft = 0x100,
     }
 
-    public class SpriteEntity : TransformableEntity
+    public class SpriteEntity : TransformableEntity, IRecyclable
     {
+        static Pool<SpriteEntity> _pool;
+
         [ContentSerializer(ElementName = "SpriteSheet")]
         internal string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
@@ -42,7 +45,7 @@ namespace Delta.Graphics
         public int AnimationFrameOffset { get; set; }
 
         [ContentSerializer]
-        protected virtual SpriteEffects SpriteEffects { get; set; }
+        public SpriteEffects SpriteEffects { get; set; }
 
         [ContentSerializerIgnore]
         public bool IsPaused
@@ -103,6 +106,18 @@ namespace Delta.Graphics
             set;
         }
 
+        static SpriteEntity()
+        {
+            _pool = new Pool<SpriteEntity>(100);
+        }
+        
+        public static SpriteEntity Create(string spriteSheet) 
+        {
+            SpriteEntity spriteEntity = _pool.Fetch();
+            spriteEntity._spriteSheetName = spriteSheet;
+            return spriteEntity;
+        }
+
         public SpriteEntity()
             : base()
         {
@@ -139,20 +154,39 @@ namespace Delta.Graphics
                     return true;
                 case "mirror":
                 case "flip":
-                    switch (value)
+                    string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    switch (split[0])
                     {
                         case "left":
                         case "right":
                         case "horizontal":
                         case "h":
-                            SpriteEffects = SpriteEffects.FlipHorizontally;
+                            SpriteEffects |= SpriteEffects.FlipHorizontally;
                             return true;
                         case "up":
                         case "down":
                         case "vertical":
                         case "v":
-                            SpriteEffects = SpriteEffects.FlipVertically;
+                            SpriteEffects |= SpriteEffects.FlipVertically;
                             return true;
+                    }
+                    if (split.Length > 1)
+                    {
+                        switch (split[1])
+                        {
+                            case "left":
+                            case "right":
+                            case "horizontal":
+                            case "h":
+                                SpriteEffects |= SpriteEffects.FlipHorizontally;
+                                return true;
+                            case "up":
+                            case "down":
+                            case "vertical":
+                            case "v":
+                                SpriteEffects |= SpriteEffects.FlipVertically;
+                                return true;
+                        }
                     }
                     break;
                 case "startrandom":
@@ -187,7 +221,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            if (_animation != null || !IsFinished)
+            if (_animation != null && !IsFinished)
                 UpdateAnimationFrame(gameTime);
             base.LightUpdate(gameTime);
         }
@@ -292,6 +326,28 @@ namespace Delta.Graphics
             _state &= ~SpriteState.Finished;
         }
 
+        public override void Recycle()
+        {
+            base.Recycle();
+            _state = SpriteState.Looped;
+            _spriteSheet = null;
+            _spriteSheetName = string.Empty;
+            _animation = null;
+            _animationName = string.Empty;
+            _animationFrame = 0;
+            _sourceRectangle = Rectangle.Empty;
+            _frameDurationTimer = 0f;
+            AnimationFrameOffset = 0;
+            SpriteEffects = SpriteEffects.None;
+            OutlineColor = Color.White;
+            /* not casting etc.
+            EntityParent<Entity> parent = Parent as EntityParent<Entity>;
+            if (parent != null)
+                parent.Remove(this);
+            */
+            G.World.Remove(this); // hack
+            _pool.Release(this);
+        }
     }
 
 }

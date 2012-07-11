@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -10,57 +11,23 @@ namespace Delta
 {
     public class Entity : IEntity
     {
-        static Dictionary<string, IEntity> _idReferences = new Dictionary<string, IEntity>();
-
         public static IEntity Get(string id)
         {
-            if (_idReferences.ContainsKey(id.ToLower()))
-                return _idReferences[id.ToLower()];
+            if (EntityHelper._idReferences.ContainsKey(id.ToLower()))
+                return EntityHelper._idReferences[id.ToLower()];
             return null;
         }
 
-        internal static bool AddReferenceID(IEntity item, string newID)
+        public static ReadOnlyCollection<IEntity> GlobalEntities
         {
-            if (string.IsNullOrEmpty(newID))
-                newID = Guid.NewGuid().ToString();
-            if (_idReferences.ContainsKey(newID))
-            {
-                for (int x = 0; x < int.MaxValue; x++)
-                {
-                    string offsetID = newID + x;
-                    if (!_idReferences.ContainsKey(offsetID))
-                    {
-                        newID = offsetID;
-                        break;
-                    }
-                }
-            }
-            _idReferences.Add(newID, item);
-            return true;
-        }
-
-        internal static void RemoveReferenceID(string id)
-        {
-            if (_idReferences.ContainsKey(id.ToLower()))
-                _idReferences.Remove(id);
-        }
-
-        internal static bool ChangeReferenceID(string oldID, string newID)
-        {
-            IEntity item = Get(oldID);
-            if (item == null)
-                return false;
-            if (!AddReferenceID(item, newID))
-                return false;
-            RemoveReferenceID(oldID);
-            return true;
+            get { return EntityHelper._globalEntities; }
         }
 
         [ContentSerializerIgnore]
         IEntityParent _parent = null;
         public IEntityParent Parent { get; private set; }
         
-        //allow the parent to be set by the interface
+        //allow the parent to be only set by the interface
         IEntityParent IEntity.Parent
         {
             get { return _parent; }
@@ -70,16 +37,44 @@ namespace Delta
         protected bool ContentIsLoaded { get; private set; }
         [ContentSerializerIgnore]
         protected bool IsInitialized { get; private set; }
-        [ContentSerializer]
-        public bool IsEnabled { get; set; }
         [ContentSerializerIgnore]
         protected bool IsUpdating { get; private set; }
-        [ContentSerializer]
-        public bool IsVisible { get; set; }
         [ContentSerializerIgnore]
         protected bool IsDrawing { get; private set; }
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
+        [ContentSerializerIgnore]
+        public object Tag { get; set; }
+
+        bool _isEnabled = false;
+        [ContentSerializer]
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnEnabledChanged();
+                }
+            }
+        }
+
+        bool _isVisible = false;
+        [ContentSerializer]
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    OnVisibleChanged();
+                }
+            }
+        }
 
         float _order = 0; //allows entities to be sorted for drawing and updating.
         [ContentSerializer]
@@ -108,7 +103,7 @@ namespace Delta
                 {
                     string oldID = _id;
                     _id = value.ToLower();
-                    Entity.ChangeReferenceID(oldID, _id);
+                    EntityHelper.ChangeReferenceID(oldID, _id);
                 }
             }
         }
@@ -259,6 +254,14 @@ namespace Delta
         protected internal virtual void EndDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             IsDrawing = false;
+        }
+
+        protected virtual void OnEnabledChanged()
+        {
+        }
+
+        protected virtual void OnVisibleChanged()
+        {
         }
 
     }

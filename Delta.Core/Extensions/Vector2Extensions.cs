@@ -15,8 +15,6 @@ namespace Delta
 {
     public static class Vector2Extensions
     {
-        public const double EPSILON = 9.9999997473787516E-05;
-        public const double EPSILONSQR = EPSILON * EPSILON;
 
         public static void SafeNormalize(ref Vector2 v)
         {
@@ -90,7 +88,7 @@ namespace Delta
 
        public static bool AlmostEqual(Vector2 a, Vector2 b)
         {
-            return (FloatExtensions.AlmostEqual(a.X, b.X, (float)EPSILON) && FloatExtensions.AlmostEqual(a.Y, b.Y, (float)EPSILON));
+            return (FloatExtensions.AlmostEqual(a.X, b.X, (float)MathExtensions.EPSILON) && FloatExtensions.AlmostEqual(a.Y, b.Y, (float)MathExtensions.EPSILON));
         }
 
         public static bool WithinDistanceQuick(Vector2 a, Vector2 b, float targetDistanceSqr)
@@ -120,7 +118,7 @@ namespace Delta
 
         public static bool IsParallel(Vector2 a, Vector2 b)
         {
-            return CrossProduct(a, b) < EPSILON;
+            return CrossProduct(a, b) < MathExtensions.EPSILON;
         }
 
         public static Vector2 Parse(string value, IFormatProvider provider)

@@ -7,12 +7,13 @@ using Delta.Structures;
 
 namespace Delta
 {
-    public class TransformableEntity : Entity
+    public class TransformableEntity : Entity, IRecyclable
     {
         #region TEMP: Transformer
         Transformer _transformer;
 
-        bool _randomFade;
+        [ContentSerializer]
+        public bool _fadeRandom { get; set; } // won't serialize fields? wtf. totally temp.
         OverRange _fadeRange;
         [ContentSerializer]
         public OverRange FadeRange
@@ -25,10 +26,26 @@ namespace Delta
                     _fadeRange = value;
                     if (_transformer != null)
                         _transformer.ClearSequence();
-                    if (_randomFade)
-                        Alpha = G.Random.Between(_fadeRange.Value1, _fadeRange.Value2);
-                    _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Value1, _fadeRange.Duration).FadeTo(_fadeRange.Value2, _fadeRange.Duration);
-                    _transformer.Loop();
+                    if (_fadeRandom) {
+                        // start the transformer off in a random position within the range.
+                        float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
+                        _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
+                        _transformer.OnTransformFinished(() =>
+                        {
+                            // remove the start-up transform logic.
+                            _transformer.ClearSequence();
+                            _transformer.OnTransformFinished(null);
+                            // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
+                            if (G.Random.FiftyFifty())
+                                _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
+                            else
+                                _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                            _transformer.Loop();
+                        });
+                    } else {
+                        _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                        _transformer.Loop();
+                    }
                 }
             }
         }
@@ -45,7 +62,7 @@ namespace Delta
                     _flickerRange = value;
                     if (_transformer != null)
                         _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Value1, _flickerRange.Value2, _flickerRange.Duration);
+                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
                     _transformer.Loop();
                 }
             }
@@ -63,7 +80,7 @@ namespace Delta
                     _blinkRange = value;
                     if (_transformer != null)
                         _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Value1, _blinkRange.Duration);
+                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
                     _transformer.Loop();
                 }
             }
@@ -83,6 +100,22 @@ namespace Delta
                 if (_position != value)
                 {
                     _position = value;
+                    OnPositionChanged();
+                }
+            }
+        }
+
+        //thanks to Rob, we need this. If I had my way I wouldn't have this.
+        Vector2 _offset = Vector2.Zero;
+        [ContentSerializer]
+        public virtual Vector2 Offset
+        {
+            get { return _offset; }
+            set
+            {
+                if (_offset != value)
+                {
+                    _offset = value;
                     OnPositionChanged();
                 }
             }
@@ -202,8 +235,10 @@ namespace Delta
             {
                 case "pos":
                 case "position":
+                    Position = Vector2Extensions.Parse(value);
+                    return true;
                 case "offset":
-                    Position += Vector2Extensions.Parse(value);
+                    Offset = Vector2Extensions.Parse(value);
                     return true;
                 case "scale":
                     Scale = Vector2Extensions.Parse(value);
@@ -223,9 +258,9 @@ namespace Delta
                 case "fade":
                     _fadeRange = OverRange.Parse(value);
                     return true;
-                case "randomfade":
+                case "faderandom":
                     _fadeRange = OverRange.Parse(value);
-                    _randomFade = true;
+                    _fadeRandom = true;
                     return true;
                 case "flicker":
                     _flickerRange = OverRange.Parse(value);
@@ -246,7 +281,7 @@ namespace Delta
 
         protected virtual void UpdateRenderPosition()
         {
-            RenderPosition = Position + RenderOrigin - (Origin * Size * Scale);
+            RenderPosition = Position + Offset + RenderOrigin - (Origin * Size * Scale);
         }
 
         protected internal virtual void OnPositionChanged()
@@ -282,5 +317,16 @@ namespace Delta
             UpdateRenderPosition();
         }
 
+        public virtual void Recycle()
+        {
+            Position = Vector2.Zero;
+            Size = Vector2.Zero;
+            Scale = Vector2.One;
+            Rotation = 0f;
+            Origin = Vector2.Zero;
+            Pivot = new Vector2(0.5f, 0.5f);
+            Alpha = 1f;
+            Tint = Color.White;
+        }
     }
 }

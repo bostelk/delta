@@ -107,6 +107,7 @@
     <Compile Include="Copyable\VisitedGraph.cs" />
     <Compile Include="DeltaContentManager.cs" />
     <Compile Include="DeltaGame.cs" />
+    <Compile Include="EntityHelper.cs" />
     <Compile Include="EntityParentReader.cs" />
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\RenderTarget2DExtensions.cs" />
     <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\Visuals.cs" />
     <Compile Include="Graphics\Effects\DeltaEffect.cs" />
     <Compile Include="Graphics\Effects\SimpleEffect.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -123,10 +125,12 @@
     <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheetReader.cs" />
+    <Compile Include="Movement\Interpolation.cs" />
     <Compile Include="ITransformableEntity.cs" />
     <Compile Include="Movement\BlinkTransform.cs" />
+    <Compile Include="Movement\BaseTransform.cs" />
     <Compile Include="Movement\FlickerTransform.cs" />
-    <Compile Include="Movement\StallTransform.cs" />
+    <Compile Include="Movement\EmptyTransform.cs" />
     <Compile Include="Movement\FadeTransform.cs" />
     <Compile Include="Movement\ITransform.cs" />
     <Compile Include="Movement\TranslateTransform.cs" />
@@ -150,11 +154,12 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Structures\HashSet.cs" />
     <Compile Include="Structures\OverRange.cs" />
+    <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\ILayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tiled\MapOrientation.cs" />
-    <Compile Include="Tiled\ObjectStyles.cs" />
+    <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
@@ -182,7 +187,7 @@
     </Compile>
     <Compile Include="Structures\IPool.cs" />
     <Compile Include="Structures\IRecyclable.cs" />
-    <Compile Include="Structures\StackPool.cs" />
+    <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldTime.cs" />

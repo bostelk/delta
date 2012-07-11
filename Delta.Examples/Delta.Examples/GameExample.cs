@@ -14,6 +14,8 @@ using Delta.Examples.Entities;
 using System.Collections.ObjectModel;
 using Delta.Audio;
 using Delta.Movement;
+using Delta.Structures;
+using Delta.Graphics;
 
 namespace Delta.Examples
 {
@@ -39,10 +41,12 @@ namespace Delta.Examples
 
             FuelAtom atom = new FuelAtom();
             G.World.Add(atom, (int)DrawLayers.Ground);
-            Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f).TranslateTo(atom.Position, 10f).Repeat(4);
+            Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f, Interpolation.EaseInOutCubic).TranslateTo(atom.Position, 10f, Interpolation.EaseInOutCubic).Repeat(4);
             Transformer.ThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f).Loop();
             Transformer.ThisEntity(atom).RotateTo(180, 10f).RotateTo(0, 10f);
-            Transformer.ThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
+            Transformer.ThisEntity(atom).FlickerFor(0.5f, 1, 0.2f).Loop();
+            //Transformer.ThisEntity(atom).BlinkFor(0.5f, 20);
+            //Transformer.ThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
 
             G.UI.Add(new GameHud(), 0);
             G.UI.Camera.ZoomImmediate(4.0f);
@@ -69,6 +73,8 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
+
+            PoolManager.DebugDraw();
         }
     }
 }

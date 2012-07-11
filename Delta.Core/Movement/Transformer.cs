@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Delta.Structures;
 
 namespace Delta.Movement
 {
@@ -10,8 +11,9 @@ namespace Delta.Movement
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
     /// Use additional Transformers to create parallel sequences.
     /// </summary>
-    public class Transformer : Entity
+    public class Transformer : Entity, IRecyclable
     {
+        static Pool<Transformer> _pool;
         float _elapsed;
         int _repeat;
         TransformableEntity _entity;
@@ -21,10 +23,26 @@ namespace Delta.Movement
 
         public bool IsPaused { get; private set; }
 
-        Transformer(TransformableEntity entity)
+        static Transformer()
         {
-            _entity = entity;
+            _pool = new Pool<Transformer>(100);
+        }
+
+        public Transformer() 
+        { 
             _transforms = new Queue<ITransform>();
+        }
+
+        static Transformer Create(TransformableEntity entity)
+        {
+            Transformer transformer = _pool.Fetch();
+            transformer._entity = entity;
+            return transformer;
+        }
+
+        protected override bool ImportCustomValues(string name, string value)
+        {
+            return base.ImportCustomValues(name, value);
         }
 
         /// <summary>
@@ -34,7 +52,7 @@ namespace Delta.Movement
         /// <returns></returns>
         public static Transformer ThisEntity(TransformableEntity entity)
         {
-            Transformer transform = new Transformer(entity);
+            Transformer transform = Create(entity);
             G.World.Add(transform);
             return transform;
         }
@@ -47,8 +65,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer ScaleTo(Vector2 size, float duration)
         {
-            ScaleTransform scale = new ScaleTransform(_entity, size, duration);
-            _transforms.Enqueue(scale);
+            ScaleTransform transfrom = ScaleTransform.Create(_entity, size, duration);
+            _transforms.Enqueue(transfrom);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Scale the entity over a period of time.
+        /// </summary>
+        /// <param name="scale">The scale to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal scale. (seconds)</param>
+        /// <returns></returns>
+        public Transformer ScaleTo(Vector2 size, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            ScaleTransform transform = ScaleTransform.Create(_entity, size, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -60,8 +92,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer TranslateTo(Vector2 position, float duration)
         {
-            TranslateTransform translate = new TranslateTransform(_entity, position, duration);
-            _transforms.Enqueue(translate);
+            TranslateTransform transform = TranslateTransform.Create(_entity, position, duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Translate the Entity over a period of time.
+        /// </summary>
+        /// <param name="position">The position to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal position. (seconds)</param>
+        /// <returns></returns>
+        public Transformer TranslateTo(Vector2 position, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            TranslateTransform transform = TranslateTransform.Create(_entity, position, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -73,8 +119,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer RotateTo(float angle, float duration)
         {
-            RotateTransform translate = new RotateTransform(_entity, MathHelper.ToRadians(angle), duration);
-            _transforms.Enqueue(translate);
+            RotateTransform transform = RotateTransform.Create(_entity, MathHelper.ToRadians(angle), duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Rotate the Entity over a period of time.
+        /// </summary>
+        /// <param name="angle">The angle to transition to. (degrees)</param>
+        /// <param name="duration">Time taken to reach the goal angle. (seconds)</param>
+        /// <returns></returns>
+        public Transformer RotateTo(float angle, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            RotateTransform transform = RotateTransform.Create(_entity, MathHelper.ToRadians(angle), duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -86,9 +146,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer FadeTo(float alpha, float duration)
         {
-            alpha = MathExtensions.Clamp(alpha, 0f, 1f);
-            FadeTransform translate = new FadeTransform(_entity, alpha, duration);
-            _transforms.Enqueue(translate);
+            FadeTransform transform = FadeTransform.Create(_entity, alpha, duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Fade the Entity over a period of time.
+        /// </summary>
+        /// <param name="angle">The alpha to transition to. (percent)</param>
+        /// <param name="duration">Time taken to reach the goal alpha. (seconds)</param>
+        /// <returns></returns>
+        public Transformer FadeTo(float alpha, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            FadeTransform transform = FadeTransform.Create(_entity, alpha, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -101,10 +174,8 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer FlickerFor(float min, float max, float duration)
         {
-            min = MathExtensions.Clamp(min, 0f, max);
-            max = MathExtensions.Clamp(max, min, 1f);
-            FlickerTransform translate = new FlickerTransform(_entity, min, max, duration);
-            _transforms.Enqueue(translate);
+            FlickerTransform transform = FlickerTransform.Create(_entity, min, max, duration);
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -116,9 +187,8 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer BlinkFor(float rate, float duration)
         {
-            rate = MathExtensions.Clamp(rate, 0f, duration);
-            BlinkTransform translate = new BlinkTransform(_entity, rate, duration);
-            _transforms.Enqueue(translate);
+            BlinkTransform transform = BlinkTransform.Create(_entity, rate, duration);
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -203,11 +273,16 @@ namespace Delta.Movement
             if (_transforms.Count > 0 && !IsPaused)
             {
                 ITransform currentTransform = _transforms.Peek();
+
+                // the transform is either just starting, updating or ending.
+                if (_elapsed == 0)
+                    currentTransform.Begin();
                 if (_elapsed > currentTransform.Duration)
                 {
                     ITransform oldTransform = _transforms.Dequeue();
-                    
-                    // either loop if -1 or repeat the desired about of times.
+                    oldTransform.End();
+
+                    // either loop if -1 or repeat the desired about of times. or recycle it.
                     if (_repeat < 0)
                     {
                         _transforms.Enqueue(oldTransform);
@@ -217,13 +292,20 @@ namespace Delta.Movement
                         _transforms.Enqueue(oldTransform);
                         _repeat--;
                     }
+                    else if (oldTransform is IRecyclable)
+                    {
+                        (oldTransform as IRecyclable).Recycle();
+                    }
 
                     // the transform has finished.
                     if (_onTransformFinished != null)
                         _onTransformFinished();
                     // the transform sequence has finished; no remaining transforms.
                     if (_transforms.Count == 0 && _onSequenceFinished != null)
+                    {
                         _onSequenceFinished();
+                        Recycle();
+                    }
 
                     _elapsed = 0;
                 }
@@ -236,5 +318,17 @@ namespace Delta.Movement
             base.LightUpdate(gameTime);
         }
 
+        public void Recycle()
+        {
+            _elapsed = 0;
+            _repeat = 0;
+            _entity = null;
+            _onTransformFinished = null;
+            _onSequenceFinished = null;
+            _transforms.Clear();
+
+            G.World.Remove(this);
+            _pool.Release(this);
+        }
     }
 }
