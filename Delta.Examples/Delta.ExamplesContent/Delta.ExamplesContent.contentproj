@@ -42,8 +42,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ObjectStyles.stylesheet">
-      <Name>ObjectStyles</Name>
+    <None Include="objects.stylesheet">
+      <Name>objects</Name>
       <Importer>StyleSheetImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
@@ -204,7 +204,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Graphics\AnimatedMisc\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +284,30 @@
       <Importer>XmlImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
       <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\AnimatedMisc\spike.png">
+      <Name>spike</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\AnimatedMisc\explosiveBarrel16x16.png">
+      <Name>explosiveBarrel16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\AnimatedMisc\explosiveBarrelDebris8x8-10.png">
+      <Name>explosiveBarrelDebris8x8-10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\AnimatedMisc\mediumExplosion32x32-7.png">
+      <Name>mediumExplosion32x32-7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -23,6 +23,7 @@ namespace Delta.Graphics
             se.LoadContent();
             se.Position = position;
             se.IsLooped = false;
+            se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation);
             G.World.Add(se, 100);
         }
@@ -39,8 +40,9 @@ namespace Delta.Graphics
             se.LoadContent();
             se.Position = position;
             se.IsLooped = false;
-            se.Play(animation);
+            se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
+            se.Play(animation);
             G.World.Add(se, 100);
 
             Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.Recycle(); });
@@ -64,6 +66,7 @@ namespace Delta.Graphics
                 see.LoadContent();
                 see.Position = position;
                 see.IsLooped = false;
+                see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation);
                 G.World.Add(see, 100);
             }

@@ -67,6 +67,11 @@
          <Path>Graphics\AnimatedMisc\explosiveBarrel16x16.png</Path>
          <FrameWidth>16</FrameWidth>
          <FrameHeight>16</FrameHeight>
+         <Animation>
+            <Name>barrel</Name>
+            <Frames>0</Frames>
+            <FrameDuration>1</FrameDuration>
+        </Animation>
      </Image>
     <Image>
          <Path>Graphics\AnimatedMisc\explosiveBarrelDebris8x8-10.png</Path>
@@ -88,5 +93,21 @@
             <FrameDuration>0.04167</FrameDuration>
         </Animation>
      </Image>
+    <Image>
+        <Path>Graphics\AnimatedMisc\spike.png</Path>
+        <FrameWidth>16</FrameWidth>
+        <FrameHeight>16</FrameHeight>
+        <Animation>
+            <Name>redspike</Name>
+            <Frames>0</Frames>
+            <FrameDuration>1</FrameDuration>
+        </Animation>
+        <Animation>
+            <Name>blackspike</Name>
+            <Frames>1</Frames>
+            <FrameDuration>1</FrameDuration>
+        </Animation>
+     </Image>
+
   </Asset>
 </XnaContent>

@@ -26,7 +26,7 @@ namespace Delta.Examples
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Game;
+            Examples example = Examples.Zelda;
 
             switch (example)
             {

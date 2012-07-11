@@ -71,7 +71,7 @@ namespace Delta
         public bool Remove(T entity)
         {
             bool returnValue = false;
-            returnValue = _children.Remove(entity);
+            returnValue = _children.FastRemove<T>(entity);
             if (returnValue)
             {
                 EntityHelper.RemoveReferenceID(entity.ID);

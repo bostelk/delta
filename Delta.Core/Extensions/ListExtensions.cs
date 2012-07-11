@@ -17,7 +17,7 @@ namespace Delta
         /// Quickly removes the element by swapping it with the last element and removing the last element.
         /// This avoids memory copying...
         /// </summary>
-        public static void FastRemove<T>(this List<T> list, T item)
+        public static bool FastRemove<T>(this List<T> list, T item)
         {
             int index = list.IndexOf(item);
             if (index >= 0)
@@ -25,7 +25,9 @@ namespace Delta
                 int lastIndex = list.Count - 1;
                 list[index] = list[lastIndex];
                 list.RemoveAt(lastIndex);
+                return true;
             }
+            return false;
         }
     }
 }

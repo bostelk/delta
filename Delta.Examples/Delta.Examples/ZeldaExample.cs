@@ -33,9 +33,14 @@ namespace Delta.Examples
             G.World.Camera.ZoomImmediate(4);
 
             G.World.Add(_player = new BoxLink());
-            //_player.Position = new Vector2(-1000, -800);
-            //G.World.Add(new WorldBounds());
             G.World.Camera.Follow(_player);
+
+            G.World.Add(new Barrel() { Position = new Vector2(64, 32) });
+            G.World.Add(new Barrel() { Position = new Vector2(64, 48) });
+            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 1) });
+            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 2) });
+            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 3) });
+            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 4) });
         }
 
         protected override void LoadContent()
@@ -50,7 +55,7 @@ namespace Delta.Examples
         {
             if (G.Input.Keyboard.JustPressed(Keys.Tab))
                 (_player as BoxLink).SwitchBody();
-            (_player as BoxLink).Input = G.Input.WadsDirection * ((G.Input.Keyboard.Held(Keys.RightShift)) ? 2.5f : 1);
+            (_player as BoxLink).Input = G.Input.ArrowDirection * ((G.Input.Keyboard.Held(Keys.LeftShift)) ? 2.5f : 1);
             if (G.Input.Keyboard.JustPressed(Keys.OemTilde))
             {
                 (_player as BoxLink).ColliderEnabled = !(_player as BoxLink).ColliderEnabled;
@@ -62,12 +67,18 @@ namespace Delta.Examples
         {
             GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-            Matrix view = G.World.Camera.View;
-            Matrix projection = G.World.Camera.Projection;
-            G.Collision.DrawDebug(ref view, ref projection);
+
+            if (G.Input.Keyboard.Held(Keys.F1))
+            {
+                Matrix view = G.World.Camera.View;
+                Matrix projection = G.World.Camera.Projection;
+                G.Collision.DrawDebug(ref view, ref projection);
+            }
+
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();
+            
         }
     }
 }

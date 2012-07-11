@@ -91,12 +91,12 @@ namespace Delta.Examples.Entities
 
             if (G.Input.Keyboard.JustPressed(Keys.Space) && !_isBoosting && World.Instance.Camera.Scale == NORMAL_ZOOM)
             {
-                World.Instance.Camera.Flash(Color.White);
-                World.Instance.Camera.Shake(10f, 0.5f, ShakeAxis.X | ShakeAxis.Y);
+                G.World.Camera.Flash(Color.White);
+                G.World.Camera.Shake(10f, 0.5f, ShakeAxis.X | ShakeAxis.Y);
                 G.Audio.PlaySound("SFX_LargeExplosion");
                 G.Audio.FadeChannelByAmount(0.4f, 0.5f, AudioChannel.Music);
                 G.Audio.SetSoundVolume("SFX_Ambiance_1", 1f);
-                World.Instance.Camera.ZoomByAmount(BOOST_ZOOM - NORMAL_ZOOM);
+                G.World.Camera.ZoomByAmount(BOOST_ZOOM - NORMAL_ZOOM);
                 _isBoosting = true;
             }
 
@@ -110,7 +110,7 @@ namespace Delta.Examples.Entities
                     _speed = NORMAL_SPEED;
                     _boostElapsed = 0;
                     _isBoosting = false;
-                    World.Instance.Camera.ZoomByAmount(NORMAL_ZOOM - BOOST_ZOOM);
+                    G.World.Camera.ZoomByAmount(NORMAL_ZOOM - BOOST_ZOOM);
                     G.Audio.FadeChannelIn(0.5f, AudioChannel.Music);
                     G.Audio.SetSoundVolume("SFX_Ambiance_1", 0.8f);
                 }

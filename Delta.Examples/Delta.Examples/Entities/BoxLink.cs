@@ -18,14 +18,20 @@ namespace Delta.Examples.Entities
     {
         const float SPEED = 50;
 
-        public Vector2 Input { get; set; }
+        SpriteEntity _sprite;
 
+        public Vector2 Input { get; set; }
         public Vector2 Velocity;
 
         public BoxLink()
         {
+            _sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
+            _sprite.Origin = new Vector2(0.5f, 0.5f);
+            _sprite.Play("blackspike");
+
             Collider = new Collider()
             {
+                Tag = this,
                 Mass = 1f,
                 Geom = new Circle(8)
             };
@@ -47,8 +53,20 @@ namespace Delta.Examples.Entities
         {
             Velocity = Input * SPEED;
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // if boosting leave a motion trail
+            if (G.Input.Keyboard.JustPressed(Keys.Space))
+                Visuals.CreateTrail("", "", Position);
+
+            _sprite.Position = Position;
+            _sprite.InternalUpdate(gameTime);
             base.LightUpdate(gameTime);
         }
 
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            base.Draw(gameTime, spriteBatch);
+            _sprite.InternalDraw(gameTime, spriteBatch);
+        }
     }
 }
