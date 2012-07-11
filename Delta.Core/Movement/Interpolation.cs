@@ -66,7 +66,7 @@ namespace Delta.Movement
          */
         static float LinearInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * amount + start;
         }
 
@@ -75,7 +75,7 @@ namespace Delta.Movement
          */
         static float EaseInQuadInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end-start) * amount * amount + start;
         }
 
@@ -84,7 +84,7 @@ namespace Delta.Movement
          */
         static float EaseOutQuadInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return -(end - start) * amount * (amount - 2) + start;
         }
 
@@ -94,7 +94,7 @@ namespace Delta.Movement
         static float EaseInOutQuadInterpolation(float start, float end, float amount)
         {
             // clamp amount so that it cannot be greater than duration
-            amount = MathExtensions.Clamp(amount * 2, amount, 2f);
+            amount = MathExtensions.Clamp(amount * 2, 0f, 2f);
             if (amount < 1) return (end - start) / 2 * amount * amount + start;
             amount--;
             return -(end - start) / 2 * (amount * (amount - 2) - 1) + start;
@@ -105,7 +105,7 @@ namespace Delta.Movement
          */
         static float EaseInCubicInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * amount * amount * amount + start;
         }
 
@@ -114,7 +114,7 @@ namespace Delta.Movement
          */
         static float EaseOutCubicInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             amount--;
             return (end - start) * (amount * amount * amount + 1) + start;
         }
@@ -124,7 +124,7 @@ namespace Delta.Movement
          */
         static float EaseInOutCubicInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount * 2, amount, 2f);
+            amount = MathExtensions.Clamp(amount * 2, 0f, 2f);
             if (amount < 1) return (end - start) / 2 * amount * amount * amount + start;
             amount -= 2;
             return (end - start) / 2 * (amount * amount * amount + 2) + start;
@@ -135,7 +135,7 @@ namespace Delta.Movement
          */
         static float EaseInQuartInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * amount * amount * amount * amount + start;
         }
 
@@ -144,7 +144,7 @@ namespace Delta.Movement
          */
         static float EaseOutQuartInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             amount--;
             return -(end - start) * (amount * amount * amount * amount - 1) + start;
         }
@@ -154,7 +154,7 @@ namespace Delta.Movement
          */
         static float EaseInOutQuartInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount * 2, amount, 2f);
+            amount = MathExtensions.Clamp(amount * 2, 0f, 2f);
             if (amount < 1) return (end - start) / 2 * amount * amount * amount * amount + start;
             amount -= 2;
             return -(end - start) / 2 * (amount * amount * amount * amount - 2) + start;
@@ -166,7 +166,7 @@ namespace Delta.Movement
          */
         static float EaseInQuintInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * amount * amount * amount * amount * amount + start;
         }
 
@@ -175,7 +175,7 @@ namespace Delta.Movement
          */
         static float EaseOutQuintInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             amount--;
             return (end - start) * (amount * amount * amount * amount * amount + 1) + start;
         }
@@ -185,7 +185,7 @@ namespace Delta.Movement
          */
         static float EaseInOutQuintInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount * 2, amount, 2f);
+            amount = MathExtensions.Clamp(amount * 2, 0f, 2f);
             if (amount < 1) return (end - start) / 2 * amount * amount * amount * amount * amount + start;
             amount -= 2;
             return (end - start) / 2 * (amount * amount * amount * amount * amount + 2) + start;
@@ -196,7 +196,7 @@ namespace Delta.Movement
          */
         static float EaseInSineInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return -(end - start) * (float)Math.Cos(amount * ((float)MathHelper.PiOver2)) + (end - start) + start;
         }
 
@@ -205,7 +205,7 @@ namespace Delta.Movement
          */
         static float EaseOutSineInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * (float)Math.Sin(amount * ((float)MathHelper.PiOver2)) + start;
         }
 
@@ -214,7 +214,7 @@ namespace Delta.Movement
          */
         static float EaseInOutSineInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return -(end - start) / 2 * ((float)Math.Cos((float)Math.PI * amount) - 1) + start;
         }
 
@@ -223,7 +223,7 @@ namespace Delta.Movement
          */
         static float EaseInExpoInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * (float)Math.Pow(2, 10 * (amount - 1)) + start;
         }
 
@@ -232,7 +232,7 @@ namespace Delta.Movement
          */
         static float EaseOutExpoInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return (end - start) * (-(float)Math.Pow(2, -10 * amount) + 1) + start;
         }
 
@@ -241,7 +241,7 @@ namespace Delta.Movement
          */
         static float EaseInOutExpoInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount * 2, amount, 2f);
+            amount = MathExtensions.Clamp(amount * 2, 0f, 2f);
             if (amount < 1) return (end - start) / 2 * (float)Math.Pow(2, 10 * (amount - 1)) + start;
             amount--;
             return (end - start) / 2 * (-(float)Math.Pow(2, -10 * amount) + 2) + start;
@@ -252,7 +252,7 @@ namespace Delta.Movement
          */
         static float EaseInCircInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             return -(end - start) * ((float)Math.Sqrt(1 - amount * amount) - 1) + start;
         }
 
@@ -261,7 +261,7 @@ namespace Delta.Movement
          */
         static float EaseOutCircInterpolation(float start, float end, float amount)
         {
-            amount = MathExtensions.Clamp(amount, amount, 1f);
+            amount = MathExtensions.Clamp(amount, 0f, 1f);
             amount--;
             return (end - start) * (float)Math.Sqrt(1 - amount * amount) + start;
         }
