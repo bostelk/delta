@@ -125,6 +125,7 @@
     <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheetReader.cs" />
+    <Compile Include="Movement\Interpolation.cs" />
     <Compile Include="ITransformableEntity.cs" />
     <Compile Include="Movement\BlinkTransform.cs" />
     <Compile Include="Movement\BaseTransform.cs" />

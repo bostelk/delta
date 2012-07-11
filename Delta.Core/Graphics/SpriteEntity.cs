@@ -326,17 +326,9 @@ namespace Delta.Graphics
             _state &= ~SpriteState.Finished;
         }
 
-        public void Recycle()
+        public override void Recycle()
         {
-            Position = Vector2.Zero;
-            Size = Vector2.Zero;
-            Scale = Vector2.One;
-            Rotation = 0f;
-            Origin = Vector2.Zero;
-            Pivot = new Vector2(0.5f, 0.5f);
-            Alpha = 1f;
-            Tint = Color.White; 
-
+            base.Recycle();
             _state = SpriteState.Looped;
             _spriteSheet = null;
             _spriteSheetName = string.Empty;
@@ -348,7 +340,6 @@ namespace Delta.Graphics
             AnimationFrameOffset = 0;
             SpriteEffects = SpriteEffects.None;
             OutlineColor = Color.White;
-
             /* not casting etc.
             EntityParent<Entity> parent = Parent as EntityParent<Entity>;
             if (parent != null)

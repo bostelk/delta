@@ -26,7 +26,7 @@ namespace Delta.Movement
             protected set;
         }
 
-        public Func<float, float, float, float> InterpolationMethod = MathHelper.Lerp;
+        public Interpolation.InterpolationMethod InterpolationMethod = Interpolation.Linear;
 
         public virtual void Begin() { }
         public virtual void Update(float seconds) { }

@@ -162,14 +162,10 @@ namespace Delta.Examples.Entities
                 }
             }
 
-            if (G.Input.Keyboard.Held(Keys.X))
-            {
+            if (G.Input.Keyboard.JustPressed(Keys.X))
                 Visuals.CreateShatter(@"Graphics\SpriteSheets\16x16", "barrelDebris", Position, 13);
-            }
-            if (G.Input.Keyboard.Held(Keys.Z))
-            {
+            if (G.Input.Keyboard.JustPressed(Keys.Z))
                 Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "barrelDebris", Position);
-            }
         }
 
         protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

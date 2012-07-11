@@ -7,7 +7,7 @@ using Delta.Structures;
 
 namespace Delta
 {
-    public class TransformableEntity : Entity
+    public class TransformableEntity : Entity, IRecyclable
     {
         #region TEMP: Transformer
         Transformer _transformer;
@@ -317,5 +317,16 @@ namespace Delta
             UpdateRenderPosition();
         }
 
+        public virtual void Recycle()
+        {
+            Position = Vector2.Zero;
+            Size = Vector2.Zero;
+            Scale = Vector2.One;
+            Rotation = 0f;
+            Origin = Vector2.Zero;
+            Pivot = new Vector2(0.5f, 0.5f);
+            Alpha = 1f;
+            Tint = Color.White;
+        }
     }
 }

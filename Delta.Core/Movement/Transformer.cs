@@ -65,8 +65,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer ScaleTo(Vector2 size, float duration)
         {
-            ScaleTransform scale = ScaleTransform.Create(_entity, size, duration);
-            _transforms.Enqueue(scale);
+            ScaleTransform transfrom = ScaleTransform.Create(_entity, size, duration);
+            _transforms.Enqueue(transfrom);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Scale the entity over a period of time.
+        /// </summary>
+        /// <param name="scale">The scale to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal scale. (seconds)</param>
+        /// <returns></returns>
+        public Transformer ScaleTo(Vector2 size, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            ScaleTransform transform = ScaleTransform.Create(_entity, size, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -78,8 +92,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer TranslateTo(Vector2 position, float duration)
         {
-            TranslateTransform translate = TranslateTransform.Create(_entity, position, duration);
-            _transforms.Enqueue(translate);
+            TranslateTransform transform = TranslateTransform.Create(_entity, position, duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Translate the Entity over a period of time.
+        /// </summary>
+        /// <param name="position">The position to transition to.</param>
+        /// <param name="duration">Time taken to reach the goal position. (seconds)</param>
+        /// <returns></returns>
+        public Transformer TranslateTo(Vector2 position, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            TranslateTransform transform = TranslateTransform.Create(_entity, position, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -91,8 +119,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer RotateTo(float angle, float duration)
         {
-            RotateTransform translate = RotateTransform.Create(_entity, MathHelper.ToRadians(angle), duration);
-            _transforms.Enqueue(translate);
+            RotateTransform transform = RotateTransform.Create(_entity, MathHelper.ToRadians(angle), duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Rotate the Entity over a period of time.
+        /// </summary>
+        /// <param name="angle">The angle to transition to. (degrees)</param>
+        /// <param name="duration">Time taken to reach the goal angle. (seconds)</param>
+        /// <returns></returns>
+        public Transformer RotateTo(float angle, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            RotateTransform transform = RotateTransform.Create(_entity, MathHelper.ToRadians(angle), duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -104,8 +146,22 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer FadeTo(float alpha, float duration)
         {
-            FadeTransform translate = FadeTransform.Create(_entity, alpha, duration);
-            _transforms.Enqueue(translate);
+            FadeTransform transform = FadeTransform.Create(_entity, alpha, duration);
+            _transforms.Enqueue(transform);
+            return this;
+        }
+
+        /// <summary>
+        /// Add to the sequence of Transforms; Fade the Entity over a period of time.
+        /// </summary>
+        /// <param name="angle">The alpha to transition to. (percent)</param>
+        /// <param name="duration">Time taken to reach the goal alpha. (seconds)</param>
+        /// <returns></returns>
+        public Transformer FadeTo(float alpha, float duration, Interpolation.InterpolationMethod interpolation)
+        {
+            FadeTransform transform = FadeTransform.Create(_entity, alpha, duration);
+            transform.InterpolationMethod = interpolation;
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -118,8 +174,8 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer FlickerFor(float min, float max, float duration)
         {
-            FlickerTransform translate = FlickerTransform.Create(_entity, min, max, duration);
-            _transforms.Enqueue(translate);
+            FlickerTransform transform = FlickerTransform.Create(_entity, min, max, duration);
+            _transforms.Enqueue(transform);
             return this;
         }
 
@@ -131,8 +187,8 @@ namespace Delta.Movement
         /// <returns></returns>
         public Transformer BlinkFor(float rate, float duration)
         {
-            BlinkTransform translate = BlinkTransform.Create(_entity, rate, duration);
-            _transforms.Enqueue(translate);
+            BlinkTransform transform = BlinkTransform.Create(_entity, rate, duration);
+            _transforms.Enqueue(transform);
             return this;
         }
 

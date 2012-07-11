@@ -41,7 +41,7 @@ namespace Delta.Examples
 
             FuelAtom atom = new FuelAtom();
             G.World.Add(atom, (int)DrawLayers.Ground);
-            Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f).TranslateTo(atom.Position, 10f).Repeat(4);
+            Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f, Interpolation.EaseInOutCubic).TranslateTo(atom.Position, 10f, Interpolation.EaseInOutCubic).Repeat(4);
             Transformer.ThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f).Loop();
             Transformer.ThisEntity(atom).RotateTo(180, 10f).RotateTo(0, 10f);
             Transformer.ThisEntity(atom).FlickerFor(0.5f, 1, 0.2f).Loop();
