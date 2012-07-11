@@ -22,6 +22,7 @@ namespace Delta
             Instance = this;
             Camera = new Camera();
             TimeScale = 1.0f;
+            Comparer = new SortByHeight();
         }
 
         protected internal override void BeginUpdate(GameTime gameTime)

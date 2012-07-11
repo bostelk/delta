@@ -100,12 +100,12 @@
         <Animation>
             <Name>redspike</Name>
             <Frames>0</Frames>
-            <FrameDuration>1</FrameDuration>
+            <FrameDuration>0.1</FrameDuration>
         </Animation>
         <Animation>
             <Name>blackspike</Name>
             <Frames>1</Frames>
-            <FrameDuration>1</FrameDuration>
+            <FrameDuration>0.1</FrameDuration>
         </Animation>
      </Image>
 
