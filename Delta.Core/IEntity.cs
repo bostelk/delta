@@ -17,7 +17,6 @@ namespace Delta
 #if WINDOWS
         bool ImportCustomValues(string name, string value);
 #endif
-
         void InternalUpdate(GameTime gameTime);
         void InternalDraw(GameTime gameTime, SpriteBatch spriteBatch);
     }

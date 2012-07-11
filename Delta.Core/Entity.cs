@@ -19,7 +19,8 @@ namespace Delta
         IsDrawing = 0x8,
         NeedsHeavyUpdate = 0x10,
         Enabled = 0x20,
-        Visible = 0x40
+        Visible = 0x40,
+        RemoveNextUpdate = 0x80
     }
 
     public class Entity : IEntity
@@ -140,6 +141,19 @@ namespace Delta
             }
         }
 
+        [ContentSerializerIgnore]
+        public bool RemoveNextUpdate
+        {
+            get { return _state.HasFlag(EntityState.RemoveNextUpdate); }
+            set
+            {
+                if (value)
+                    _state |= EntityState.RemoveNextUpdate;
+                else
+                    _state &= ~EntityState.RemoveNextUpdate;
+            }
+        }
+
         float _order = 0; //allows entities to be sorted for drawing and updating.
         [ContentSerializer]
         public float Order
@@ -178,6 +192,13 @@ namespace Delta
             NeedsHeavyUpdate = true;
             IsEnabled = true;
             IsVisible = true;
+        }
+
+        public bool Remove()
+        {
+            if (_parent == null)
+                return false;
+            return _parent.Remove(this);
         }
 
         internal void InternalInitialize()
@@ -238,6 +259,11 @@ namespace Delta
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void InternalUpdate(GameTime gameTime)
         {
+            if (RemoveNextUpdate)
+            {
+                RemoveNextUpdate = false;
+                Remove();
+            }
             if (!IsInitialized)
                 InternalInitialize();
             if (!ContentIsLoaded)
@@ -318,14 +344,6 @@ namespace Delta
         protected internal virtual void EndDraw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             IsDrawing = false;
-        }
-
-        protected virtual void OnEnabledChanged()
-        {
-        }
-
-        protected virtual void OnVisibleChanged()
-        {
         }
 
     }

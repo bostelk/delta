@@ -37,7 +37,7 @@ namespace Delta
             : base()
         {
             Children = new ReadOnlyCollection<T>(_children);
-            NeedsToSort = false;
+            NeedsToSort = true;
         }
 
         public List<bool> AddRange(List<T> entityRange, int order)
@@ -46,15 +46,20 @@ namespace Delta
             foreach (T entity in entityRange)
             {
                 entity.Order = order;
-                results.Add(Add(entity, order));
+                results.Add(Add(entity));
             }
             return results;
         }
 
-        public bool Add(T entity, int order)
+        //public bool Add(T entity, int order)
+        //{
+        //    entity.Order = order;
+        //    return Add(entity);
+        //}
+
+        bool IEntityParent.Add(IEntity entity)
         {
-            entity.Order = order;
-            return Add(entity);
+            return Add((T)entity);
         }
 
         public bool Add(T entity)
@@ -66,6 +71,11 @@ namespace Delta
             NeedsToSort = true;
             EntityHelper._globalEntitiesList.Add(entity);
             return true;
+        }
+
+        bool IEntityParent.Remove(IEntity entity)
+        {
+            return Remove((T)entity);
         }
 
         public bool Remove(T entity)
