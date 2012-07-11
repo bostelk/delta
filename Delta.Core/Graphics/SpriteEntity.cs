@@ -250,8 +250,16 @@ namespace Delta.Graphics
 
         protected override bool CanDraw()
         {
-            if (_animation == null || _spriteSheet == null || _spriteSheet.Texture == null) return false;
+            if (_animation == null || _spriteSheet == null || _spriteSheet.Texture == null || !OnCamera()) return false;
             return base.CanDraw();
+        }
+
+        protected virtual bool OnCamera()
+        {
+            Rectangle spriteArea = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale.X), (int)(Size.Y * Size.Y));
+            Rectangle viewingArea = G.World.Camera.ViewingArea;
+            viewingArea.Inflate(16, 16); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
+            return (viewingArea.Contains(spriteArea) || viewingArea.Intersects(spriteArea));
         }
 
         protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
