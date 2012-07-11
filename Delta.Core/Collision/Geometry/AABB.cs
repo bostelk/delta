@@ -55,6 +55,11 @@ namespace Delta.Collision.Geometry
             Min = _position - new Vector2(HalfWidth, HalfHeight);
             Max = _position + new Vector2(HalfWidth, HalfHeight);
         }
+
+        public static bool TestContains(AABB a, Vector2 position)
+        {
+            return true;
+        }
              
         /// <summary>
         /// A less expensive check before we waste cycles on a narrow phase detection.
