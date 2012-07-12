@@ -39,7 +39,7 @@ namespace Delta.Tiled
                     break;
                 }
             }
-
+            UpdateRenderArea();
             // THERE ARE JUST HERE INCASE WE NEED IT, ROB DOESN'T USE MARGIN OR SPACING IN TILED
             //SpriteEffects = SpriteEffects.None;
             //if ((tileID & FlippedHorizontallyFlag) != 0)
@@ -57,9 +57,14 @@ namespace Delta.Tiled
         }
 #endif
 
-        public override void InternalDraw(DeltaTime deltaTime, SpriteBatch spriteBatch)
+        protected internal override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, RenderPosition, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+        }
+
+        protected virtual void UpdateRenderArea()
+        {
+            _renderArea = new Rectangle((int)_renderPosition.X, (int)_renderPosition.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
         }
 
     }

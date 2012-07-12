@@ -12,9 +12,10 @@ namespace Delta
     {
         internal EntityCollection _collectionReference = null;
         internal Vector2 _renderPosition = Vector2.Zero;
+        internal Rectangle _renderArea = Rectangle.Empty;
 
         [ContentSerializerIgnore]
-        protected Rectangle RenderArea { get; protected internal set; }
+        protected internal Rectangle RenderArea { get { return _renderArea; } }
         [ContentSerializerIgnore]
         protected Vector2 RenderPosition { get { return _renderPosition; } }
         [ContentSerializerIgnore]
@@ -55,7 +56,7 @@ namespace Delta
         {
             IsVisible = true;
             IsEnabled = true;
-            RenderArea = Rectangle.Empty;
+            _renderArea = Rectangle.Empty;
         }
 
 #if WINDOWS
@@ -221,8 +222,8 @@ namespace Delta
         {
             _collectionReference = null;
             _renderPosition = Vector2.Zero;
+            _renderArea = Rectangle.Empty;
             _layer = 0.0f;
-            RenderArea = Rectangle.Empty;
             HasLoadedContent = false;
             IsDrawing = false;
             IsEnabled = true;
