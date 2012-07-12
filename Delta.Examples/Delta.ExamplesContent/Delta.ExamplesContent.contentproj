@@ -66,6 +66,10 @@
       <Project>{5465E2B9-93F3-4477-A170-FFEE5210B743}</Project>
       <Name>Delta.Pipeline %28Windows%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Delta.Examples\Delta.Examples %28Windows%29.csproj">
+      <Project>{9AB83C8B-D8DA-4CF4-8312-5B39FB42A0BB}</Project>
+      <Name>Delta.Examples %28Windows%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\AnimatedTiles\background-4YellowLight-16x16-16Frames.png">

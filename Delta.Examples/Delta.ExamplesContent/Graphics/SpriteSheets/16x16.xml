@@ -98,16 +98,15 @@
         <FrameWidth>16</FrameWidth>
         <FrameHeight>16</FrameHeight>
         <Animation>
-            <Name>redspike</Name>
+            <Name>blackspike</Name>
             <Frames>0</Frames>
-            <FrameDuration>0.1</FrameDuration>
+            <FrameDuration>1</FrameDuration>
         </Animation>
         <Animation>
-            <Name>blackspike</Name>
+            <Name>redspike</Name>
             <Frames>1</Frames>
-            <FrameDuration>0.1</FrameDuration>
+            <FrameDuration>1</FrameDuration>
         </Animation>
      </Image>
-
   </Asset>
 </XnaContent>

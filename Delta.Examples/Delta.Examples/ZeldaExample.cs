@@ -33,6 +33,8 @@ namespace Delta.Examples
             G.World.Camera.ZoomImmediate(4);
             G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
             G.World.Camera.StayInsideBounds = true;
+            G.World.Camera.Filter = true; // use tint
+            G.World.Camera.Tint = new Color(0, 0, 0, 140);
         }
 
         protected override void LoadContent()
@@ -40,17 +42,15 @@ namespace Delta.Examples
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\2");
             G.World.Add(_map);
-
             G.World.Add(_player = new BoxLink());
             G.World.Camera.Follow(_player);
-
-            G.World.Add(new Barrel() { Position = new Vector2(64, 32) });
-            G.World.Add(new Barrel() { Position = new Vector2(64, 48) });
-            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 1) });
-            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 2) });
-            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 3) });
-            G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 4) });
             base.LoadContent();
+        }
+
+        protected override void LateInitialize()
+        {
+            G.Audio.PlaySound("BGM_Evil");
+            base.LateInitialize();
         }
 
         protected override void Update(GameTime gameTime)

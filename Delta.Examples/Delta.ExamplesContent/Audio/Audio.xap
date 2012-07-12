@@ -341,7 +341,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::c0830be7-8812-4324-8619-8f59d2c7fe02;
+            Name = Sound::7f8c0502-3441-4dc1-a32e-6c95a801edfc;
             Property = 0;
             Sound = 1;
             Line Color = 4290437751;
@@ -374,7 +374,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::794798df-e08d-405a-a781-fe0ee4e91d00;
+            Name = Sound::4d4b01f3-0756-4e0c-979a-73c4db37c12b;
             Property = 1;
             Sound = 1;
             Line Color = 4278915718;
@@ -449,8 +449,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 926057186;
-            Last Modified High = 30232986;
+            Last Modified Low = 720286234;
+            Last Modified High = 30234177;
         }
     }
 
@@ -472,8 +472,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 577802412;
-            Last Modified High = 30188698;
+            Last Modified Low = 720346237;
+            Last Modified High = 30234177;
         }
     }
 
@@ -495,8 +495,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3668789808;
-            Last Modified High = 30232997;
+            Last Modified Low = 720256232;
+            Last Modified High = 30234177;
         }
     }
 
@@ -580,12 +580,6 @@ Wave Bank
     Streaming = 1;
     Seek Tables = 1;
     Compression Preset Name = Compression Preset;
-    Xbox Bank Last Modified Low = 0;
-    Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 0;
-    PC Bank Last Modified High = 0;
-    Header Last Modified Low = 0;
-    Header Last Modified High = 0;
     Bank Last Revised Low = 712961070;
     Bank Last Revised High = 30231940;
 
@@ -607,8 +601,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 925237139;
-            Last Modified High = 30232986;
+            Last Modified Low = 718200123;
+            Last Modified High = 30234177;
         }
     }
 
@@ -701,7 +695,7 @@ Sound Bank
     Sound
     {
         Name = BGM_Evil;
-        Volume = -800;
+        Volume = -1500;
         Pitch = 0;
         Priority = 0;
 
