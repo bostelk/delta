@@ -14,6 +14,8 @@ namespace Delta
         internal Vector2 _renderPosition = Vector2.Zero;
 
         [ContentSerializerIgnore]
+        protected Rectangle RenderArea { get; protected internal set; }
+        [ContentSerializerIgnore]
         protected Vector2 RenderPosition { get { return _renderPosition; } }
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
@@ -53,6 +55,7 @@ namespace Delta
         {
             IsVisible = true;
             IsEnabled = true;
+            RenderArea = Rectangle.Empty;
         }
 
 #if WINDOWS
@@ -185,6 +188,11 @@ namespace Delta
         protected virtual bool CanDraw()
         {
             if (!IsVisible || !IsLateInitialized || IsDrawing) return false;
+            if (RenderArea != Rectangle.Empty || _collectionReference != null)
+            {
+                if (!_collectionReference.ViewingArea.Contains(RenderArea) || !_collectionReference.ViewingArea.Intersects(RenderArea))
+                    return false;
+            }
             return true;
         }
 
@@ -214,6 +222,7 @@ namespace Delta
             _collectionReference = null;
             _renderPosition = Vector2.Zero;
             _layer = 0.0f;
+            RenderArea = Rectangle.Empty;
             HasLoadedContent = false;
             IsDrawing = false;
             IsEnabled = true;

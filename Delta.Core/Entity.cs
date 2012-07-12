@@ -109,6 +109,8 @@ namespace Delta
         protected Vector2 RenderOrigin { get; private set; }
         [ContentSerializerIgnore]
         protected float RenderRotation { get; private set; }
+        [ContentSerializerIgnore]
+        protected Vector2 RenderSize { get; private set; }
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
@@ -322,19 +324,29 @@ namespace Delta
         }
 #endif
 
+        protected virtual void UpdateRenderSize()
+        {
+            RenderSize = Size * Scale;
+        }
+
         protected virtual void UpdateRenderPosition()
         {
-            _renderPosition = Position + Offset + RenderOrigin - (Origin * Size * Scale);
+            _renderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
         }
 
         protected virtual void UpdateRenderOrigin()
         {
-            RenderOrigin = Pivot * Size * Scale;
+            RenderOrigin = Pivot * RenderSize;
         }
 
         protected virtual void UpdateRenderRotation()
         {
             RenderRotation = Rotation.ToRadians();
+        }
+
+        protected virtual void UpdateRenderArea()
+        {
+            RenderArea = new Rectangle((int)(_position.X + _offset.X), (int)(_position.Y + _offset.Y), (int)RenderSize.X, (int)RenderSize.Y);
         }
 
         protected virtual void UpdateToWrappedBody()
@@ -366,12 +378,14 @@ namespace Delta
 
         protected internal virtual void OnSizeChanged()
         {
+            UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
         }
 
         protected internal virtual void OnScaleChanged()
         {
+            UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
         }
@@ -412,6 +426,7 @@ namespace Delta
             ID = string.Empty;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
+            RenderSize = Vector2.Zero;
             _alpha = 1.0f;
             _offset = Vector2.Zero;
             _origin = Vector2.Zero;

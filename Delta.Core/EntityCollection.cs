@@ -31,6 +31,9 @@ namespace Delta
             }
         }
 
+        [ContentSerializerIgnore]
+        public Rectangle ViewingArea { get; set; }
+
         public EntityCollection()
             : base()
         {
