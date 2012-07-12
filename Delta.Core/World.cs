@@ -39,5 +39,26 @@ namespace Delta
             Camera.Draw(_time, G.SpriteBatch);
             G.SpriteBatch.End();
         }
+
+        public List<T> GetEntitiesUnderMouse<T>() where T: TransformableEntity
+        {
+            List<T> result = new List<T>();
+            foreach (Entity entity in Entity.GlobalEntities)
+            {
+                T entityT = entity as T;
+                if (entityT == null) continue;
+                if ((entityT.Parent == null || !entityT.Parent.IsVisible) && !entityT.IsVisible) continue;
+                Rectangle hitbox = new Rectangle((int)entityT.Position.X, (int)entityT.Position.Y, (int)(entityT.Size.X * entityT.Scale.X), (int)(entityT.Size.Y * entityT.Scale.Y));
+                if (hitbox.Contains(G.World.Camera.ToWorldPosition(G.Input.Mouse.Position).ToPoint()))
+                    result.Add(entityT);
+            }
+            return result;
+        }
+
+        public bool SecondsPast(float seconds)
+        {
+            return Time.TotalWorldSeconds > seconds;
+        }
+
     }
 }

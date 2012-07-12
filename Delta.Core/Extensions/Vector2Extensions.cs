@@ -23,6 +23,13 @@ namespace Delta
                 Vector2.Normalize(ref v, out v);
             Debug.Assert(v.X.IsValid() && v.Y.IsValid());
         }
+        
+        public static void SafeNormalizeFast(ref Vector2 v)
+        {
+            float length = 1 / (v.Length() + float.MinValue);
+            v.X = v.X * length;
+            v.Y = v.Y * length;
+        }
 
         public static float AngleBetween(this Vector2 a, Vector2 b)
         {

@@ -1,6 +1,4 @@
 using System;
-using System.Windows.Forms;
-using Microsoft.Xna.Framework;
 using Delta;
 using System.Diagnostics;
 

@@ -5,7 +5,7 @@
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delta.Examples</RootNamespace>
     <AssemblyName>Delta.Examples</AssemblyName>
@@ -17,7 +17,8 @@
     <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>464bd86e-2fcf-4855-a2f5-4d7d945d2299</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -59,6 +60,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>False</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -139,7 +143,6 @@
     <Compile Include="InputExample.cs" />
     <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -149,15 +152,6 @@
     <ProjectReference Include="..\..\Delta.Core\Delta %28Windows%29.csproj">
       <Project>{E50545DF-9329-4B3D-8579-943F91A42C66}</Project>
       <Name>Delta %28Windows%29</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Delta.Pipeline\Delta.Pipeline %28Windows%29.csproj">
-      <Project>{5465E2B9-93F3-4477-A170-FFEE5210B743}</Project>
-      <Name>Delta.Pipeline %28Windows%29</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Delta.ExamplesContent\Delta.ExamplesContent.contentproj">
-      <Project>{849B74DA-F195-4E56-B2BA-7EFE266CA486}</Project>
-      <Name>Delta.ExamplesContent %28Content%29</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

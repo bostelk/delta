@@ -24,7 +24,7 @@ namespace Delta.Graphics
         OutlineLeft = 0x100,
     }
 
-    public class SpriteEntity : Entity
+    public class SpriteEntity : TransformableEntity, IRecyclable
     {
         static Pool<SpriteEntity> _pool;
 
@@ -129,7 +129,7 @@ namespace Delta.Graphics
         }
 
 #if WINDOWS
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected override bool ImportCustomValues(string name, string value)
         {
             switch (name)
             {
@@ -217,16 +217,16 @@ namespace Delta.Graphics
             base.LoadContent();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(GameTime gameTime)
         {
             if (_animation != null && !IsFinished)
-                UpdateAnimationFrame(time);
-            base.LightUpdate(time);
+                UpdateAnimationFrame(gameTime);
+            base.LightUpdate(gameTime);
         }
 
-        protected internal virtual void UpdateAnimationFrame(DeltaTime time)
+        protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
         {
-            _frameDurationTimer -= time.ElapsedSeconds;
+            _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
@@ -255,30 +255,29 @@ namespace Delta.Graphics
         protected virtual bool OnCamera()
         {
             Rectangle spriteArea = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale.X), (int)(Size.Y * Size.Y));
-            //Rectangle viewingArea = G.World.Camera.ViewingArea;
-            //viewingArea.Inflate(16, 16); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
-            //return (viewingArea.Contains(spriteArea) || viewingArea.Intersects(spriteArea));
-            return false;
+            Rectangle viewingArea = G.World.Camera.ViewingArea;
+            viewingArea.Inflate(16, 16); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
+            return (viewingArea.Contains(spriteArea) || viewingArea.Intersects(spriteArea));
         }
 
-        protected internal override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (_state.HasFlag(SpriteState.OutlineTop) || _state.HasFlag(SpriteState.OutlineRight) || _state.HasFlag(SpriteState.OutlineBottom) || _state.HasFlag(SpriteState.OutlineLeft))
             {
                 spriteBatch.End();
                 G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
                 G.SimpleEffect.Color = OutlineColor;
-                //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
-                //if (_state.HasFlag(SpriteState.OutlineTop))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineRight))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineBottom))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineLeft))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //spriteBatch.End();
-                //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
+                if (_state.HasFlag(SpriteState.OutlineTop))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineRight))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineBottom))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                if (_state.HasFlag(SpriteState.OutlineLeft))
+                    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             }
 
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
@@ -331,6 +330,9 @@ namespace Delta.Graphics
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             _state &= ~SpriteState.Finished;
+            // draw the first frame
+            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
+            Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
         }
 
         public override void Recycle()
@@ -347,12 +349,8 @@ namespace Delta.Graphics
             AnimationFrameOffset = 0;
             SpriteEffects = SpriteEffects.None;
             OutlineColor = Color.White;
-            /* not casting etc.
-            EntityParent<Entity> parent = Parent as EntityParent<Entity>;
-            if (parent != null)
-                parent.Remove(this);
-            */
-            //G.World.Remove(this); // hack
+
+            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }

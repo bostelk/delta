@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -23,45 +23,45 @@ namespace Delta.Examples
     {
         const string CONTROLS = "[wads] movement.[rshift] boost.[tab] switch geometry.[~] enable/disable collider.";
         Map _map;
-        Entity _player;
+        TransformableEntity _player;
 
         public ZeldaExample() : base("ZeldaExample")
         {
             ClearColor = Color.Black;
             G.Collision.DefineWorld(640, 640, 32);
-            //G.World.Camera.Offset = G.ScreenCenter;
-            //G.World.Camera.ZoomImmediate(4);
-            //G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
-            //G.World.Camera.StayInsideBounds = true;
+            G.World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.ZoomImmediate(4);
+            G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
+            G.World.Camera.StayInsideBounds = true;
+            G.World.Camera.Filter = true; // use tint
+            G.World.Camera.Tint = new Color(0, 0, 0, 140);
         }
 
         protected override void LoadContent()
         {
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\2");
-            //G.World.Add(_map);
-
-            //G.World.Add(_player = new BoxLink());
-            //G.World.Camera.Follow(_player);
-
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 32) });
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 48) });
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 1) });
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 2) });
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 3) });
-            //G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 4) });
+            G.World.Add(_map);
+            G.World.Add(_player = new BoxLink());
+            G.World.Camera.Follow(_player);
             base.LoadContent();
+        }
+
+        protected override void LateInitialize()
+        {
+            G.Audio.PlaySound("BGM_Evil");
+            base.LateInitialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            //if (G.Input.Keyboard.JustPressed(Keys.Tab))
-            //    (_player as BoxLink).SwitchBody();
-            //(_player as BoxLink).Input = G.Input.ArrowDirection * ((G.Input.Keyboard.Held(Keys.LeftShift)) ? 2.5f : 1);
-            //if (G.Input.Keyboard.JustPressed(Keys.OemTilde))
-            //{
-            //    (_player as BoxLink).ColliderEnabled = !(_player as BoxLink).ColliderEnabled;
-            //}
+            if (G.Input.Keyboard.JustPressed(Keys.Tab))
+                (_player as BoxLink).SwitchBody();
+            (_player as BoxLink).Input = G.Input.ArrowDirection * ((G.Input.Keyboard.Held(Keys.LeftShift)) ? 2.5f : 1);
+            if (G.Input.Keyboard.JustPressed(Keys.OemTilde))
+            {
+                (_player as BoxLink).ColliderEnabled = !(_player as BoxLink).ColliderEnabled;
+            }
             base.Update(gameTime);
         }
 
@@ -72,9 +72,9 @@ namespace Delta.Examples
 
             if (G.Input.Keyboard.Held(Keys.F1))
             {
-                //Matrix view = G.World.Camera.View;
-                //Matrix projection = G.World.Camera.Projection;
-                //G.Collision.DrawDebug(ref view, ref projection);
+                Matrix view = G.World.Camera.View;
+                Matrix projection = G.World.Camera.Projection;
+                G.Collision.DrawDebug(ref view, ref projection);
             }
 
             G.SpriteBatch.Begin();
