@@ -65,6 +65,7 @@ namespace Delta
         internal static void LoadContent(DeltaGame game, ResourceContentManager resources)
         {
             GraphicsDevice = game.GraphicsDevice;
+            GraphicsDevice.DeviceReset += OnDeviceReset;
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
             PixelTexture = new Texture2D(game.GraphicsDevice, 1, 1);
@@ -74,6 +75,19 @@ namespace Delta
             SimpleEffect = new SimpleEffect(resources.Load<Effect>("SimpleEffect"));
             ScreenArea = GraphicsDevice.Viewport.Bounds;
             ScreenCenter = ScreenArea.Center.ToVector2();
+        }
+
+        /// <summary>
+        /// Called when the presentation parameters have changed. Examples: fullscreen, window is resized, or manual reset.
+        /// </summary>
+        internal static void OnDeviceReset(object sender, EventArgs e)
+        {
+            // xna will try to maintain the backbuffer resolution, however the monitor may not support it.
+            // xna will then pick the next best resolution. eg. 1920x1080 fullscreened becomes 1600x900.
+            // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
+            ScreenArea = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+            ScreenCenter = ScreenArea.Center.ToVector2();
+            World.Camera.Offset = ScreenCenter;
         }
        
     }

@@ -98,7 +98,7 @@ namespace Delta.Tiled
 #endif
             Tile tile;
             Rectangle tileArea = Rectangle.Empty;
-            Rectangle viewingArea = World.Instance.Camera.ViewingArea;
+            Rectangle viewingArea = G.World.Camera.ViewingArea;
             viewingArea.Inflate(Map.Instance.TileWidth, Map.Instance.TileHeight); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
             for (int i = 0; i < _tiles.Count; i++)
             {

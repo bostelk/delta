@@ -18,6 +18,9 @@ namespace Delta.Tiled
         [ContentSerializer]
         internal short _tilesetIndex = -1;
 
+        /// <summary>
+        /// The top-left corner of the Tile.
+        /// </summary>
         public Vector2 Position { get; set; }
 
         public Tile()

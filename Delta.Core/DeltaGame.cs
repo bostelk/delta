@@ -14,6 +14,7 @@ namespace Delta
         {
 #if DEBUG
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
 #endif
             _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
             base.Content.RootDirectory = "Content";
