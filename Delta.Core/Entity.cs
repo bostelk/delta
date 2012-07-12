@@ -12,20 +12,6 @@ using Delta.Physics;
 
 namespace Delta
 {
-    [Flags]
-    internal enum EntityState
-    {
-        None = 0x0,
-        Enabled = 0x1,
-        Visible = 0x2,
-        LateInitialized = 0x4,
-        LoadedContent = 0x8,
-        Updating = 0x10,
-        Drawing = 0x20,
-        NeedsHeavyUpdate = 0x40,
-        RemoveOnNextUpdate = 0x80
-    }
-
     public class Entity : EntityBase
     {
         public static Entity Get(string id)
@@ -117,118 +103,12 @@ namespace Delta
         }
         #endregion
 
-        internal EntityState _state = EntityState.Enabled | EntityState.Visible;
-
         [ContentSerializer]
         public string ID { get; internal set; }
         [ContentSerializerIgnore]
         protected Vector2 RenderOrigin { get; private set; }
         [ContentSerializerIgnore]
         protected float RenderRotation { get; private set; }
-
-        [ContentSerializerIgnore]
-        public bool LateInitialized
-        {
-            get { return _state.HasFlag(EntityState.LateInitialized); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.LateInitialized;
-                else
-                    _state &= ~EntityState.LateInitialized;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool LoadedContent
-        {
-            get { return _state.HasFlag(EntityState.LoadedContent); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.LoadedContent;
-                else
-                    _state &= ~EntityState.LoadedContent;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool IsUpdating
-        {
-            get { return _state.HasFlag(EntityState.Updating); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.Updating;
-                else
-                    _state &= ~EntityState.Updating;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool IsDrawing
-        {
-            get { return _state.HasFlag(EntityState.Drawing); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.Drawing;
-                else
-                    _state &= ~EntityState.Drawing;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool NeedsHeavyUpdate
-        {
-            get { return _state.HasFlag(EntityState.NeedsHeavyUpdate); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.NeedsHeavyUpdate;
-                else
-                    _state &= ~EntityState.NeedsHeavyUpdate;
-            }
-        }
-
-        [ContentSerializer]
-        public bool IsEnabled
-        {
-            get { return _state.HasFlag(EntityState.Enabled); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.Enabled;
-                else
-                    _state &= ~EntityState.Enabled;
-            }
-        }
-
-        [ContentSerializer]
-        public bool IsVisible
-        {
-            get { return _state.HasFlag(EntityState.Visible); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.Visible;
-                else
-                    _state &= ~EntityState.Visible;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool RemoveOnNextUpdate
-        {
-            get { return _state.HasFlag(EntityState.RemoveOnNextUpdate); }
-            set
-            {
-                if (value)
-                    _state |= EntityState.RemoveOnNextUpdate;
-                else
-                    _state &= ~EntityState.RemoveOnNextUpdate;
-            }
-        }
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
@@ -397,49 +277,11 @@ namespace Delta
             ID = id;
         }
 
-        internal void InternalInitialize()
-        {
-            if (!LateInitialized)
-            {
-                if (G.GraphicsDevice == null)
-                    return;
-                LateInitialized = true;
-                LateInitialize();
-            }
-        }
-
-        protected virtual void LateInitialize()
-        {
-        }
-
-        internal void InternalLoadContent()
-        {
-            if (!LoadedContent)
-            {
-                LoadedContent = true;
-                LoadContent();
-            }
-        }
-
 #if WINDOWS
-        protected internal virtual bool ImportCustomValues(string name, string value)
+        protected internal override bool ImportCustomValues(string name, string value)
         {
             switch (name)
             {
-                case "visible":
-                case "isvisible":
-                    IsVisible = bool.Parse(value);
-                    return true;
-                case "enabled":
-                case "isenabled":
-                    IsEnabled = bool.Parse(value);
-                    return true;
-                case "layer":
-                case "order":
-                case "draworder":
-                case "updateorder":
-                    Layer = float.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
                 case "pos":
                 case "position":
                     Position = Vector2Extensions.Parse(value);
@@ -480,42 +322,6 @@ namespace Delta
         }
 #endif
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void InternalUpdate(DeltaTime time)
-        {
-            if (RemoveOnNextUpdate)
-            {
-                RemoveOnNextUpdate = false;
-                Remove();
-            }
-            if (!LateInitialized)
-                InternalInitialize();
-            if (!LoadedContent)
-                InternalLoadContent();
-            if (CanUpdate())
-            {
-                BeginUpdate(time);
-                LightUpdate(time);
-                if (NeedsHeavyUpdate)
-                {
-                    BeginHeavyUpdate(time);
-                    HeavyUpdate(time);
-                    EndHeavyUpdate(time);
-                }
-                EndUpdate(time);
-            }
-        }
-
-        protected virtual bool CanUpdate()
-        {
-            if (!IsEnabled || IsUpdating) return false;
-            return true;
-        }
-
-        protected virtual void LightUpdate(DeltaTime time)
-        {
-        }
-
         protected virtual void UpdateRenderPosition()
         {
             _renderPosition = Position + Offset + RenderOrigin - (Origin * Size * Scale);
@@ -550,60 +356,6 @@ namespace Delta
                 UpdateRenderPosition();
                 UpdateRenderRotation();
             }
-        }
-
-        protected internal virtual void BeginUpdate(DeltaTime time)
-        {
-            IsUpdating = true;
-        }
-
-        protected internal virtual void EndUpdate(DeltaTime time)
-        {
-            IsUpdating = false;
-        }
-
-        protected internal virtual void BeginHeavyUpdate(DeltaTime time)
-        {
-            NeedsHeavyUpdate = false;
-        }
-
-        protected internal virtual void HeavyUpdate(DeltaTime time)
-        {
-        }
-
-        protected internal virtual void EndHeavyUpdate(DeltaTime time)
-        {
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
-        {
-            if (CanDraw())
-            {
-                BeginDraw(time, spriteBatch);
-                Draw(time, spriteBatch);
-                EndDraw(time, spriteBatch);
-            }
-        }
-
-        protected virtual bool CanDraw()
-        {
-            if (!IsVisible || !LateInitialized || IsDrawing) return false;
-            return true;
-        }
-
-        protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
-        {
-            IsDrawing = true;
-        }
-
-        protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
-        {
-        }
-
-        protected internal virtual void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
-        {
-            IsDrawing = false;
         }
 
         protected internal virtual void OnPositionChanged()
@@ -668,7 +420,6 @@ namespace Delta
             _rotation = 0.0f;
             _scale = Vector2.One;
             _size = Vector2.Zero;
-            _state = EntityState.Enabled | EntityState.Visible;
             _tint = Color.White;
             _wrappedBody = null;
         }

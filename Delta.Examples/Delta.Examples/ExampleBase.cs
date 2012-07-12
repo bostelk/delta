@@ -19,7 +19,6 @@ namespace Delta.Examples
     /// </summary>
     public class ExampleBase : G
     {
-
         public Color ClearColor { get; set; }
 
         PerformanceMetrics _performanceMetrics;

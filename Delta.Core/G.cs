@@ -14,13 +14,6 @@ using Delta.Collision;
 
 namespace Delta
 {
-    public struct DeltaTime
-    {
-        public float TotalSeconds { get; internal set; }
-        public float ElapsedSeconds { get; internal set; }
-        public bool IsRunningSlowly { get; internal set; }
-    }
-
     public class G : Game
     {
         internal static ResourceContentManager _embedded = null;

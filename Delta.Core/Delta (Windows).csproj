@@ -96,6 +96,7 @@
     <Compile Include="Audio\ISound.cs" />
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
+    <Compile Include="DeltaTime.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
@@ -152,7 +153,6 @@
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
-    <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Entity.cs" />
