@@ -33,13 +33,13 @@ namespace Delta.Examples
 
         public GameExample() : base("GameExample")
         {
-            G.World.Add(new Image(@"Graphics\Background") { Layer = (int)DrawLayers.BackgroundLow });
-            G.World.Add(new Image(@"Graphics\ForeGround") { Layer = (int)DrawLayers.Background });
-            G.World.Add(new GravitySink() { Layer = (int)DrawLayers.Ground });
-            G.World.Add(new Lucas() { Layer = (int)DrawLayers.Ground });
-            G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0), Layer = (int)DrawLayers.Ground });
+            G.World.Add(new Image(@"Graphics\Background") { MajorLayer = (int)DrawLayers.BackgroundLow });
+            G.World.Add(new Image(@"Graphics\ForeGround") { MajorLayer = (int)DrawLayers.Background });
+            G.World.Add(new GravitySink() { MajorLayer = (int)DrawLayers.Ground });
+            G.World.Add(new Lucas() { MajorLayer = (int)DrawLayers.Ground });
+            G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0), MajorLayer = (int)DrawLayers.Ground });
 
-            FuelAtom atom = new FuelAtom() { Layer = (int)DrawLayers.Ground };
+            FuelAtom atom = new FuelAtom() { MajorLayer = (int)DrawLayers.Ground };
             G.World.Add(atom);
             Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f, Interpolation.EaseInOutCubic).TranslateTo(atom.Position, 10f, Interpolation.EaseInOutCubic).Repeat(4);
             Transformer.ThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f).Loop();

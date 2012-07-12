@@ -16,7 +16,7 @@ namespace Delta
         [ContentSerializerIgnore]
         internal bool NeedsToSort { get; set; }
 
-        IComparer<EntityBase> _comparer = null;
+        IComparer<EntityBase> _comparer = new DefaultEntityComparer();
         [ContentSerializerIgnore]
         internal IComparer<EntityBase> Comparer
         {
@@ -100,14 +100,24 @@ namespace Delta
                 base[x].InternalDraw(time, spriteBatch);
         }
 
-        protected virtual void Sort()
+        protected new virtual void Sort()
         {
-            if (_comparer == null)
-                base.Sort((a, b) => (a.Layer.CompareTo(b.Layer)));
-            else
-                base.Sort(_comparer);
+            base.Sort(_comparer);
             NeedsToSort = false;
         }
+
+        internal class DefaultEntityComparer : Comparer<EntityBase>
+        {
+            public override int Compare(EntityBase x, EntityBase y)
+            {
+                if (x.MajorLayer > y.MajorLayer)
+                    return int.MaxValue;
+                else if (x.MajorLayer < y.MajorLayer)
+                    return int.MinValue;
+                return x.MinorLayer.CompareTo(y.MinorLayer);
+            }
+        }
+
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]

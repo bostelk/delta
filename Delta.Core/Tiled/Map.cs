@@ -152,7 +152,7 @@ namespace Delta.Tiled
                 for (int y = 0; y < Map.Instance.Height; y++)
                 {
                     Tile tile = new Tile(new Vector2(x * Map.Instance.TileWidth, y * Map.Instance.TileHeight), tileLayerData[y * Map.Instance.Width + x]);
-                    tile.Layer = layerOrder;
+                    tile.MajorLayer = layerOrder;
                     if (tile._tilesetIndex >= 0)
                         InternalAdd(tile);
                 }
@@ -168,7 +168,7 @@ namespace Delta.Tiled
                     continue;
 
                 entity.IsVisible = layerIsVisible;
-                entity.Layer = layerOrder;
+                entity.MajorLayer = layerOrder;
 
                 entity.ID = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
                 entity.Position = new Vector2(

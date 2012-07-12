@@ -35,16 +35,32 @@ namespace Delta
         [ContentSerializerIgnore]
         public bool HasLoadedContent { get; internal set; }
 
-        float _layer = 0.0f;
+        float _majorLayer = 0.0f;
         [ContentSerializer]
-        public float Layer
+        public float MajorLayer
         {
-            get { return _layer; }
+            get { return _majorLayer; }
             set
             {
-                if (_layer != value)
+                if (_majorLayer != value)
                 {
-                    _layer = value;
+                    _majorLayer = value;
+                    if (_collectionReference != null)
+                        _collectionReference.NeedsToSort = true;
+                }
+            }
+        }
+
+        float _minorLayer = 0.0f;
+        [ContentSerializer]
+        public float MinorLayer
+        {
+            get { return _minorLayer; }
+            set
+            {
+                if (_minorLayer != value)
+                {
+                    _minorLayer = value;
                     if (_collectionReference != null)
                         _collectionReference.NeedsToSort = true;
                 }
@@ -81,7 +97,7 @@ namespace Delta
                 case "order":
                 case "draworder":
                 case "updateorder":
-                    Layer = float.Parse(value, CultureInfo.InvariantCulture);
+                    MajorLayer = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
              }
             return false;
@@ -223,7 +239,8 @@ namespace Delta
             _collectionReference = null;
             _renderPosition = Vector2.Zero;
             _renderArea = Rectangle.Empty;
-            _layer = 0.0f;
+            _majorLayer = 0.0f;
+            _minorLayer = 0.0f;
             HasLoadedContent = false;
             IsDrawing = false;
             IsEnabled = true;
