@@ -23,6 +23,9 @@ namespace Delta.Examples.Entities
         public Vector2 Input { get; set; }
         public Vector2 Velocity;
 
+        float _trailInterval = 0.09f;
+        float _trailTime = 0;
+
         public BoxLink()
         {
             _sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
@@ -55,8 +58,11 @@ namespace Delta.Examples.Entities
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // if boosting leave a motion trail
-            if (G.Input.Keyboard.Held(Keys.LeftShift))
-                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + Velocity *  (float)gameTime.ElapsedGameTime.TotalSeconds);
+            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.LeftShift))
+            {
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                _trailTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            }
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(gameTime);
