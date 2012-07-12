@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class Image : TransformableEntity
+    public class Image : Entity
     {
         Texture2D _texture;
         string _filepath;
@@ -29,11 +29,11 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            Vector2 offset = new Vector2(_texture.Width / 2, _texture.Height / 2);
-            spriteBatch.Draw(_texture, Position - offset, Color.White);
-        }
+        //protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    Vector2 offset = new Vector2(_texture.Width / 2, _texture.Height / 2);
+        //    spriteBatch.Draw(_texture, Position - offset, Color.White);
+        //}
         
     }
 }

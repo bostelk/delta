@@ -9,24 +9,23 @@ using Microsoft.Xna.Framework.Content.Pipeline;
     {
         [EditorBrowsable(EditorBrowsableState.Never)]
         [ContentTypeWriter]
-        public class EntityParentWriter<T> : ContentTypeWriter<EntityParent<T>> where T : IEntity
+        public class EntityCollectionWriter : ContentTypeWriter<EntityCollection>
         {
-            protected override void Write(ContentWriter output, EntityParent<T> value)
+            protected override void Write(ContentWriter output, EntityCollection value)
             {
-                output.WriteRawObject<Entity>(value as Entity);
-                output.WriteObject<int>(value.Children.Count);
-                for (int x = 0; x < value.Children.Count; x++)
-                    output.WriteObject<T>(value.Children[x]);
+                output.WriteObject<int>(value.Count);
+                for (int x = 0; x < value.Count; x++)
+                    output.WriteObject<EntityBase>(value[x]);
             }
 
             public override string GetRuntimeType(TargetPlatform targetPlatform)
             {
-                return typeof(EntityParent<T>).AssemblyQualifiedName;
+                return typeof(EntityCollection).AssemblyQualifiedName;
             }
 
             public override string GetRuntimeReader(TargetPlatform targetPlatform)
             {
-                return typeof(EntityParentReader<T>).AssemblyQualifiedName;
+                return typeof(EntityCollectionReader).AssemblyQualifiedName;
             }
         }
     }

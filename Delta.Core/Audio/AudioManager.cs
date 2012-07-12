@@ -34,7 +34,7 @@ namespace Delta.Audio
 
          AudioManager _instance;
 
-        TransformableEntity _dest3D;
+        Entity _dest3D;
 
         List<ISound> _sounds;
         List<ISound> _soundsToRemove;
@@ -63,7 +63,7 @@ namespace Delta.Audio
             }
         }
 
-        public TransformableEntity Listener
+        public Entity Listener
         {
             get
             {
@@ -172,12 +172,12 @@ namespace Delta.Audio
             }
         }
 
-        public  void PlayPositionalSound(string soundName, TransformableEntity source)
+        public  void PlayPositionalSound(string soundName, Entity source)
         {
             PlayPositionalSound(soundName, false, source, null);
         }
 
-        public  void PlayPositionalSound(string soundName, bool force, TransformableEntity source, Action<string> onFinished)
+        public  void PlayPositionalSound(string soundName, bool force, Entity source, Action<string> onFinished)
         {
             if (!_waveBank.IsPrepared || !_streamingBank.IsPrepared)
             {
@@ -186,7 +186,7 @@ namespace Delta.Audio
             // play the sound if not already playing, otherwise force play another instance of the sound
             if (!IsPlaying(soundName) || force)
             {
-                TransformableEntity dest = Listener;
+                Entity dest = Listener;
                 Sound3D freshSound = Sound3D.Create(soundName, _soundBank.GetCue(soundName), source, dest, onFinished);
                 freshSound.Play();
 

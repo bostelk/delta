@@ -10,17 +10,17 @@ namespace Delta.Tiled
 {
     public class StyleSheet
     {
-        static Dictionary<string, IEntity> _globalObjectStyles = new Dictionary<string, IEntity>();
-        public static Dictionary<string, IEntity> GlobalObjectStyles {  get { return _globalObjectStyles; } }
+        static Dictionary<string, Entity> _globalObjectStyles = new Dictionary<string, Entity>();
+        public static Dictionary<string, Entity> GlobalObjectStyles {  get { return _globalObjectStyles; } }
 
         XmlDocument _document = new XmlDocument();
         [ContentSerializer(FlattenContent = true, CollectionItemName = "ObjectStyle")]
-        public Dictionary<string, IEntity> ObjectStyles { get; private set; }
+        public Dictionary<string, Entity> ObjectStyles { get; private set; }
 
         public StyleSheet()
             : base()
         {
-            ObjectStyles = new Dictionary<string, IEntity>();
+            ObjectStyles = new Dictionary<string, Entity>();
         }
 
         public StyleSheet(string fileName)
@@ -34,9 +34,9 @@ namespace Delta.Tiled
                 string typeName = node.Attributes["Type"] == null ? string.Empty : node.Attributes["Type"].Value;
                 if (string.IsNullOrEmpty(typeName))
                     continue;
-                IEntity entity = null;
+                Entity entity = null;
                 if (ObjectStyles.ContainsKey(typeName))
-                    entity = ObjectStyles[typeName].Copy() as IEntity;
+                    entity = ObjectStyles[typeName].Copy() as Entity;
                 else
                     entity = CreateInstance(typeName);
                 if (entity == null)
@@ -51,21 +51,21 @@ namespace Delta.Tiled
             }
         }
 
-        static IEntity CreateInstance(string typeName)
+        static Entity CreateInstance(string typeName)
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type type = assembly.GetType(typeName, false, true);
                 if (type != null)
-                    return Activator.CreateInstance(type) as IEntity;
+                    return Activator.CreateInstance(type) as Entity;
             }
             return null;
         }
 
-        public static IEntity Load(string name)
+        public static Entity Load(string name)
         {
             if (_globalObjectStyles.ContainsKey(name))
-                return _globalObjectStyles[name].Copy() as IEntity;
+                return _globalObjectStyles[name].Copy() as Entity;
             return CreateInstance(name);
         }
 

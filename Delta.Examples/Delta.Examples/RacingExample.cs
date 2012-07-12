@@ -20,16 +20,16 @@ namespace Delta.Examples
     public class RacingExample : ExampleBase
     {
         const string CONTROLS = "[wasd] movement 1. [tab] change body 1. [arrows] movement 2.[right ctrl] change body 2.";
-        TransformableEntity player1, player2, track;
+        Entity player1, player2, track;
 
         public RacingExample() : base("RacingExample")
         {
             ClearColor = Color.Black;
-            G.World.Add(player1 = new PhysicsCar());
-            G.World.Add(player2 = new PhysicsCar());
-            G.World.Add(track = new RaceTrack());
+            //G.World.Add(player1 = new PhysicsCar());
+            //G.World.Add(player2 = new PhysicsCar());
+            //G.World.Add(track = new RaceTrack());
             player2.Position = player1.Position + new Vector2(100, 0);
-            G.World.Camera.Offset = G.ScreenCenter;
+            //G.World.Camera.Offset = G.ScreenCenter;
         }
 
         //protected override void LoadContent()
@@ -45,10 +45,10 @@ namespace Delta.Examples
                 (player1 as PhysicsCar).SwitchBody();
             if (G.Input.Keyboard.JustPressed(Keys.RightControl))
                 (player2 as PhysicsCar).SwitchBody();
-            if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
-                player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
-            if (G.Input.Keyboard.JustPressed(Keys.F1))
-                G.World.Camera.Follow(player1);
+            //if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
+            //    player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
+            //if (G.Input.Keyboard.JustPressed(Keys.F1))
+            //    G.World.Camera.Follow(player1);
                 
             (player1 as PhysicsCar).Input = G.Input.WadsDirection;
             (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
@@ -58,12 +58,12 @@ namespace Delta.Examples
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
-            Matrix view = G.World.Camera.View;
-            Matrix projection = G.World.Camera.Projection;
-            G.Collision.DrawDebug(ref view, ref projection);
-            G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            G.SpriteBatch.End();
+            //Matrix view = G.World.Camera.View;
+            //Matrix projection = G.World.Camera.Projection;
+            //G.Collision.DrawDebug(ref view, ref projection);
+            //G.SpriteBatch.Begin();
+            //G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            //G.SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

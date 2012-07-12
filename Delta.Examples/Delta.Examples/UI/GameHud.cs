@@ -63,31 +63,31 @@ namespace Delta.Examples.Entities
 
         public GameHud()
         {
-            ID = "GameHud";
+            //ID = "GameHud";
             RightFillPercent = 0.0f;
             LeftFillPercent = 0.0f;
             RightBarColor = new Color(56, 136, 216).SetAlpha(0.95f);
             LeftBarColor = new Color(208, 48, 208).SetAlpha(0.95f);
         }
 
-        public override void LoadContent()
-        {
-            _healthBar = G.Content.Load<Texture2D>(@"Graphics\HealthBar");
-            _ammoBar = G.Content.Load<Texture2D>(@"Graphics\AmmoBar");
-            _leftPosition = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.02f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
-            _rightPosition = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.93f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
-            base.LoadContent();
-        }
+        //public override void LoadContent()
+        //{
+        //    _healthBar = G.Content.Load<Texture2D>(@"Graphics\HealthBar");
+        //    _ammoBar = G.Content.Load<Texture2D>(@"Graphics\AmmoBar");
+        //    _leftPosition = new Vector2(HUD.Instance.Camera.ViewingArea.Width * 0.02f, HUD.Instance.Camera.ViewingArea.Height * 0.55f);
+        //    _rightPosition = new Vector2(HUD.Instance.Camera.ViewingArea.Width * 0.93f, HUD.Instance.Camera.ViewingArea.Height * 0.55f);
+        //    base.LoadContent();
+        //}
 
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.DrawRectangle(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int) (60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(_alpha), true);
-            spriteBatch.DrawRectangle(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int) (60.0f * _rightFillPercent)), RightBarColor.SetAlpha(_alpha), true);
-            spriteBatch.Draw(_healthBar, _leftPosition, Color.White.SetAlpha(_alpha));
-            spriteBatch.Draw(_ammoBar, _rightPosition, Color.White.SetAlpha(_alpha));
-            spriteBatch.DrawString(G.Font, (int)(_leftFillPercent * 100.0f) + "%", new Vector2(_leftPosition.X + 10, _leftPosition.Y + 2 + 30), Color.White.SetAlpha(_alpha), TextAlignment.Center);
-            spriteBatch.DrawString(G.Font, (int)(_rightFillPercent * 100.0f) + "%", new Vector2(_rightPosition.X + 10, _rightPosition.Y + 2 + 30), Color.White.SetAlpha(_alpha), TextAlignment.Center);
-        }
+        //protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    spriteBatch.DrawRectangle(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int) (60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(_alpha), true);
+        //    spriteBatch.DrawRectangle(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int) (60.0f * _rightFillPercent)), RightBarColor.SetAlpha(_alpha), true);
+        //    spriteBatch.Draw(_healthBar, _leftPosition, Color.White.SetAlpha(_alpha));
+        //    spriteBatch.Draw(_ammoBar, _rightPosition, Color.White.SetAlpha(_alpha));
+        //    spriteBatch.DrawString(G.Font, (int)(_leftFillPercent * 100.0f) + "%", new Vector2(_leftPosition.X + 10, _leftPosition.Y + 2 + 30), Color.White.SetAlpha(_alpha), TextAlignment.Center);
+        //    spriteBatch.DrawString(G.Font, (int)(_rightFillPercent * 100.0f) + "%", new Vector2(_rightPosition.X + 10, _rightPosition.Y + 2 + 30), Color.White.SetAlpha(_alpha), TextAlignment.Center);
+        //}
         
     }
 }

@@ -5,28 +5,25 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Delta.Input;
 
 namespace Delta
 {
-    public class World : EntityCollection
+    public class HUD : EntityCollection
     {
         static DeltaTime _time = new DeltaTime();
 
         public static Camera Camera { get; private set; }
-        public static float TimeScale { get; private set; }
         public static DeltaTime Time { get { return _time; } }
 
-        public World()
+        public HUD()
         {
             Camera = new Camera();
-            TimeScale = 1.0f;
         }
 
-        internal void Update(GameTime gameTime)
+        internal virtual void Update(GameTime gameTime)
         {
             _time.IsRunningSlowly = gameTime.IsRunningSlowly;
-            _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
+            _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time.TotalSeconds += _time.ElapsedSeconds;
             Camera.Update(_time);
             base.Update(_time);
@@ -37,6 +34,9 @@ namespace Delta
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
             base.Draw(_time, G.SpriteBatch);
             Camera.Draw(_time, G.SpriteBatch);
+#if DEBUG
+            G.SpriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
+#endif
             G.SpriteBatch.End();
         }
     }

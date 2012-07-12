@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class ProgressBar : TransformableEntity
+    public class ProgressBar : Entity
     {
         public enum Mode
         {
@@ -138,35 +138,35 @@ namespace Delta.Examples.Entities
 
         public ProgressBar()
         {
-            ID = "ProgressBar";
+            //ID = "ProgressBar";
             FillPercent = 1.0f;
             RechargeRate = 0.01f;
             FillColor = Color.YellowGreen;
         }
 
-        public override void LoadContent()
-        {
-            Position = new Vector2(UI.Instance.Camera.ViewingArea.Width * 0.02f, UI.Instance.Camera.ViewingArea.Height * 0.55f);
-            base.LoadContent();
-        }
+        //public override void LoadContent()
+        //{
+        //    Position = new Vector2(G.HUD.Camera.ViewingArea.Width * 0.02f, G.HUD.Camera.ViewingArea.Height * 0.55f);
+        //    base.LoadContent();
+        //}
 
-        protected override void LightUpdate(GameTime gameTime)
-        {
-            if (AllowRecharge && !IsFull)
-            {
-                FillPercent = MathHelper.Lerp(FillPercent, 1.0f, RechargeRate);
-                if (IsFull && OnFull != null)
-                    OnFull();
-            }
-            base.LightUpdate(gameTime);
-        }
+        //protected override void LightUpdate(GameTime gameTime)
+        //{
+        //    if (AllowRecharge && !IsFull)
+        //    {
+        //        FillPercent = MathHelper.Lerp(FillPercent, 1.0f, RechargeRate);
+        //        if (IsFull && OnFull != null)
+        //            OnFull();
+        //    }
+        //    base.LightUpdate(gameTime);
+        //}
 
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.DrawRectangle(new Rectangle((int)Position.X + 5, (int)(Position.Y + 2 + (1 - _fillPercent) * 60.0f), 8, (int) (60.0f * _fillPercent)), FillColor, true);
-            if (Font != null && DrawPercentage)
-                spriteBatch.DrawString(G.Font, (int)(_fillPercent * 100.0f) + "%", new Vector2(Position.X - 10, Position.Y + 2 + 30), Color.White);
-        }
+        //protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    spriteBatch.DrawRectangle(new Rectangle((int)Position.X + 5, (int)(Position.Y + 2 + (1 - _fillPercent) * 60.0f), 8, (int) (60.0f * _fillPercent)), FillColor, true);
+        //    if (Font != null && DrawPercentage)
+        //        spriteBatch.DrawString(G.Font, (int)(_fillPercent * 100.0f) + "%", new Vector2(Position.X - 10, Position.Y + 2 + 30), Color.White);
+        //}
         
     }
 }

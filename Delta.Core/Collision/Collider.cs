@@ -59,5 +59,6 @@ namespace Delta.Collision
             Geom = geom;
             AABB = geom.AABB;
         }
+
     }
 }

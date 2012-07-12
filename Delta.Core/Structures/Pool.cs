@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Structures
 {
-    public class Pool<T> : IPool<T> where T:IRecyclable, new()
+    public class Pool<T> : IPool<T> where T : IRecyclable, new()
     {
         static List<Pool<T>> _pools;
 

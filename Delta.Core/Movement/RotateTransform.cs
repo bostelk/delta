@@ -21,7 +21,7 @@ namespace Delta.Movement
 
         public RotateTransform() { }
 
-        public static RotateTransform Create(TransformableEntity entity, float goalRotation, float duration)
+        public static RotateTransform Create(Entity entity, float goalRotation, float duration)
         {
             RotateTransform transform = _pool.Fetch();
             transform._entity = entity;

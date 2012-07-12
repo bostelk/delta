@@ -5,18 +5,19 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Delta;
 using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class FuelAtom : TransformableEntity
+    public class FuelAtom : Entity
     {
 
         Texture2D _texture;
 
         public FuelAtom()
         {
-            ID = "FuelAtom";
+            //ID = "FuelAtom";
         }
 
         public override void LoadContent()
@@ -31,12 +32,7 @@ namespace Delta.Examples.Entities
             base.LateInitialize();
         }
 
-        protected override void LightUpdate(GameTime gameTime)
-        {
-            base.LightUpdate(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             //spriteBatch.End();
 
@@ -47,7 +43,7 @@ namespace Delta.Examples.Entities
             //spriteBatch.End();
 
             //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, World.Instance.Camera.View);
-            base.Draw(gameTime, spriteBatch);
+            base.Draw(time, spriteBatch);
         }
 
     }

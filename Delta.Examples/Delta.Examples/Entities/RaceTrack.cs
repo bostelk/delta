@@ -14,7 +14,7 @@ using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class RaceTrack : TransformableEntity
+    public class RaceTrack : Entity
     {
         public Collider Collider { get; private set; }
 

@@ -16,7 +16,7 @@ namespace Delta.Movement
         static Pool<Transformer> _pool;
         float _elapsed;
         int _repeat;
-        TransformableEntity _entity;
+        Entity _entity;
         Action _onTransformFinished;
         Action _onSequenceFinished;
         Queue<ITransform> _transforms;
@@ -33,16 +33,11 @@ namespace Delta.Movement
             _transforms = new Queue<ITransform>();
         }
 
-        static Transformer Create(TransformableEntity entity)
+        static Transformer Create(Entity entity)
         {
             Transformer transformer = _pool.Fetch();
             transformer._entity = entity;
             return transformer;
-        }
-
-        protected override bool ImportCustomValues(string name, string value)
-        {
-            return base.ImportCustomValues(name, value);
         }
 
         /// <summary>
@@ -50,10 +45,10 @@ namespace Delta.Movement
         /// </summary>
         /// <param name="entity">Entity to transform.</param>
         /// <returns></returns>
-        public static Transformer ThisEntity(TransformableEntity entity)
+        public static Transformer ThisEntity(Entity entity)
         {
             Transformer transform = Create(entity);
-            G.World.Add(transform);
+            //SG.World.Add(transform);
             return transform;
         }
 
@@ -268,7 +263,7 @@ namespace Delta.Movement
             _onSequenceFinished = callback;
         }
 
-        protected override void LightUpdate(GameTime gameTime)
+        protected override void LightUpdate(DeltaTime time)
         {
             if (_transforms.Count > 0 && !IsPaused)
             {
@@ -312,10 +307,10 @@ namespace Delta.Movement
                 else
                 {
                     currentTransform.Update(_elapsed);
-                    _elapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    _elapsed += time.TotalSeconds;
                 }
             }
-            base.LightUpdate(gameTime);
+            base.LightUpdate(time);
         }
 
         public void Recycle()
@@ -327,7 +322,7 @@ namespace Delta.Movement
             _onSequenceFinished = null;
             _transforms.Clear();
 
-            G.World.Remove(this);
+            //SG.World.Remove(this);
             _pool.Release(this);
         }
     }

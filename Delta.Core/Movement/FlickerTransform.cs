@@ -21,7 +21,7 @@ namespace Delta.Movement
 
         public FlickerTransform() { }
 
-        public static FlickerTransform Create(TransformableEntity entity, float min, float max, float duration)
+        public static FlickerTransform Create(Entity entity, float min, float max, float duration)
         {
             FlickerTransform transform = new FlickerTransform();
             transform._entity = entity;

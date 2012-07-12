@@ -21,7 +21,7 @@ namespace Delta.Movement
 
         public ScaleTransform() { }
 
-        public static ScaleTransform Create(TransformableEntity entity, Vector2 goalScale, float duration)
+        public static ScaleTransform Create(Entity entity, Vector2 goalScale, float duration)
         {
             ScaleTransform transform = _pool.Fetch();
             transform._entity = entity;

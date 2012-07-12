@@ -20,7 +20,7 @@ namespace Delta.Movement
 
         public BlinkTransform() { }
 
-        public static BlinkTransform Create(TransformableEntity entity, float rate, float duration)
+        public static BlinkTransform Create(Entity entity, float rate, float duration)
         {
             BlinkTransform transform = _pool.Fetch();
             transform._entity = entity;

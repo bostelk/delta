@@ -45,37 +45,37 @@ namespace Delta.Examples
         {
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
-            G.World.Add(_map);
-            G.World.Camera.Offset = G.ScreenCenter;
+            //G.World.Add(_map);
+            //G.World.Camera.Offset = G.ScreenCenter;
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
-            if (G.Input.Keyboard.Held(Keys.OemPlus))
-                G.World.Camera.ZoomByAmount(0.2f);
-            if (G.Input.Keyboard.Held(Keys.OemMinus))
-                G.World.Camera.ZoomByAmount(-0.2f);
+            ////G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
+            //if (G.Input.Keyboard.Held(Keys.OemPlus))
+            //    G.World.Camera.ZoomByAmount(0.2f);
+            //if (G.Input.Keyboard.Held(Keys.OemMinus))
+            //    G.World.Camera.ZoomByAmount(-0.2f);
 
-            if (G.Input.Keyboard.JustPressed(Keys.Up))
-                _selectedLayer = MathExtensions.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);
-            else if (G.Input.Keyboard.JustPressed(Keys.Down))
-                _selectedLayer = MathExtensions.Wrap(_selectedLayer + 1, 0, _map.Children.Count - 1);
-            if (G.Input.Keyboard.JustPressed(Keys.Left))
-                _map.Children[_selectedLayer].IsVisible = false;
-            if (G.Input.Keyboard.JustPressed(Keys.Right))
-                _map.Children[_selectedLayer].IsVisible = true;
-            if (G.Input.Keyboard.JustPressed(Keys.LeftControl))
-            {
-                foreach (TileLayer layer in _map.Children)
-                    layer.IsVisible = true;
-            }
-            if (G.Input.Keyboard.JustPressed(Keys.RightControl))
-            {
-                foreach (TileLayer layer in _map.Children)
-                    layer.IsVisible = false;
-            }
+            //if (G.Input.Keyboard.JustPressed(Keys.Up))
+            //    _selectedLayer = MathExtensions.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);
+            //else if (G.Input.Keyboard.JustPressed(Keys.Down))
+            //    _selectedLayer = MathExtensions.Wrap(_selectedLayer + 1, 0, _map.Children.Count - 1);
+            //if (G.Input.Keyboard.JustPressed(Keys.Left))
+            //    _map.Children[_selectedLayer].IsVisible = false;
+            //if (G.Input.Keyboard.JustPressed(Keys.Right))
+            //    _map.Children[_selectedLayer].IsVisible = true;
+            //if (G.Input.Keyboard.JustPressed(Keys.LeftControl))
+            //{
+            //    foreach (TileLayer layer in _map.Children)
+            //        layer.IsVisible = true;
+            //}
+            //if (G.Input.Keyboard.JustPressed(Keys.RightControl))
+            //{
+            //    foreach (TileLayer layer in _map.Children)
+            //        layer.IsVisible = false;
+            //}
             base.Update(gameTime);
         }
 
@@ -99,15 +99,15 @@ namespace Delta.Examples
                 text.Append(String.Format("Map: {0}x{1} tiles.\nTiles: {2}x{3} pixels.\n\n", _map.Width, _map.Height, _map.TileWidth, _map.TileHeight));
                 text.Append(String.Format("Selected Layer: {0}\n", _selectedLayer));
                 text.Append(String.Format("{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "Index", "Name", "Visible", "Tiles", "Drawn"));
-                for (int i = 0; i < _map.Children.Count; i++)
-                {
-                    TileLayer layer = _map.Children[i]  as TileLayer;
-                    if (i == _selectedLayer)
-                        text.Append("   ");
-                    text.Append(String.Format("{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", i + ".", layer.ID, layer.IsVisible, layer.TileCount, layer.TilesDrawn));
-                    totalTiles += layer.TileCount;
-                    totalDrawn += layer.TilesDrawn;
-                }
+                //for (int i = 0; i < _map.Children.Count; i++)
+                //{
+                //    TileLayer layer = _map.Children[i]  as TileLayer;
+                //    if (i == _selectedLayer)
+                //        text.Append("   ");
+                //    text.Append(String.Format("{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", i + ".", layer.ID, layer.IsVisible, layer.TileCount, layer.TilesDrawn));
+                //    totalTiles += layer.TileCount;
+                //    totalDrawn += layer.TilesDrawn;
+                //}
                 text.Append(String.Format("Total:{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "", "", "", totalTiles, totalDrawn));
                 return text.ToString();
 #else

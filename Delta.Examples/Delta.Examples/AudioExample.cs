@@ -46,12 +46,7 @@ namespace Delta.Examples
         protected override void LoadContent()
         {
             base.LoadContent();
-        }
-
-        protected override void LateInitialize()
-        {
             G.Audio.PlaySound(_sounds[_soundIndex]);
-            base.LateInitialize();
         }
 
         protected override void Update(GameTime gameTime)

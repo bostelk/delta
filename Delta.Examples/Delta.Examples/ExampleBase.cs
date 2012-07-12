@@ -17,14 +17,15 @@ namespace Delta.Examples
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class ExampleBase : DeltaGame
+    public class ExampleBase : G
     {
 
         public Color ClearColor { get; set; }
 
         PerformanceMetrics _performanceMetrics;
 
-        public ExampleBase(string exampleName) : base()
+        public ExampleBase(string exampleName) 
+            : base(800, 600)
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
@@ -36,10 +37,10 @@ namespace Delta.Examples
             // Allows the game to exit
             if (G.Input.Keyboard.JustPressed(Keys.Escape))
                 Exit();
-            if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
-                G.GraphicsDeviceManager.ToggleFullScreen();
+            //if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
+            //    G.GraphicsDeviceManager.ToggleFullScreen();
 
-            _performanceMetrics.InternalUpdate(gameTime);
+            //_performanceMetrics.InternalUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -49,16 +50,11 @@ namespace Delta.Examples
             base.LoadContent();
         }
 
-        protected override void LateInitialize()
-        {
-            base.LateInitialize();
-        }
-
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
             G.SpriteBatch.Begin();
-            _performanceMetrics.InternalDraw(gameTime, G.SpriteBatch);
+            //_performanceMetrics.InternalDraw(gameTime, G.SpriteBatch);
             G.SpriteBatch.End();
         }
     }
