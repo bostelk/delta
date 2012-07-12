@@ -14,8 +14,20 @@ using Delta.Collision;
 
 namespace Delta
 {
+
+    public struct DeltaTime
+    {
+        public float TotalSeconds { get; internal set; }
+        public float ElapsedSeconds { get; internal set; }
+        public bool IsRunningSlowly { get; internal set; }
+    }
+
     public class G : Game
     {
+        internal const bool LETTERBOX = false;
+        internal const float ASPECT_RATIO_SD = 800f / 600f;
+        internal const float ASPECT_RATIO_HD = 1920f / 1080f;
+
         internal static ResourceContentManager _embedded = null;
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
         internal static bool _lateInitialized = false;
@@ -47,20 +59,15 @@ namespace Delta
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.PreferredBackBufferWidth = screenWidth;
             _graphicsDeviceManager.PreferredBackBufferHeight = screenHeight;
-            GraphicsDevice = _graphicsDeviceManager.GraphicsDevice;
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
-            PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
-            PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
-            PixelTexture.SetData<Color>(new Color[] { Color.White });
-            ScreenArea = GraphicsDevice.Viewport.Bounds;
-            ScreenCenter = ScreenArea.Center.ToVector2();
+            _graphicsDeviceManager.DeviceReset += OnDeviceReset;
+            _graphicsDeviceManager.PreparingDeviceSettings += OnPreparingDeviceSettings;
+            _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
 #if DEBUG
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
 #endif
-            _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
-            Font = _embedded.Load<SpriteFont>("TinyFont");
-            DeltaEffect = new DeltaEffect(_embedded.Load<Effect>("DeltaEffect"));
-            SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
+            World = new World();
+            UI = new UI();
             Random = new Random();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
@@ -70,6 +77,20 @@ namespace Delta
         protected override void LoadContent()
         {
             base.LoadContent();
+            GraphicsDevice = _graphicsDeviceManager.GraphicsDevice;
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
+            PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+            PixelTexture.SetData<Color>(new Color[] { Color.White });
+            Font = _embedded.Load<SpriteFont>("TinyFont");
+            DeltaEffect = new DeltaEffect(_embedded.Load<Effect>("DeltaEffect"));
+            SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
+            ScreenArea = GraphicsDevice.Viewport.Bounds;
+            ScreenCenter = ScreenArea.Center.ToVector2();
+
+            World.LoadContent();
+            UI.LoadContent();
+
             GC.Collect();
             ResetElapsedTime();
         }
@@ -83,13 +104,16 @@ namespace Delta
             base.Update(gameTime);
             G.Input.Update(gameTime);
             G.Audio.Update(gameTime);
-            if (_lateInitialized)
+            if (!_lateInitialized)
             {
                 _lateInitialized = true;
                 LateInitialize();
             }
-            G.World.Update(gameTime);
-            G.UI.Update(gameTime);
+            if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
+            {
+                G.World.Update(gameTime);
+                G.UI.Update(gameTime);
+            }
             G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
@@ -100,5 +124,37 @@ namespace Delta
             G.UI.Draw();
         }
        
+        internal void OnDeviceReset(object sender, EventArgs e) 
+        {
+            var pp = GraphicsDevice.PresentationParameters;
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+
+            // scale height to maintain widescreen aspect ratio
+            if (width / height == (int)ASPECT_RATIO_SD && LETTERBOX)
+            {
+                height = (int)((float)width * (1f / ASPECT_RATIO_HD));
+                GraphicsDevice.Viewport = new Viewport(0, (pp.BackBufferHeight - height) / 2, width, height);
+            }
+
+            // xna will try to maintain the backbuffer resolution, however the monitor may not support it.
+            // xna will then pick the next best resolution. eg. 1920x1080 fullscreened becomes 1600x900.
+            // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
+            ScreenArea = new Rectangle(0, 0, width, height);
+            ScreenCenter = ScreenArea.Center.ToVector2();
+            //World.Camera.Offset = ScreenCenter;
+        }
+
+        internal void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            var pp = e.GraphicsDeviceInformation.PresentationParameters;
+            if (pp.IsFullScreen)
+            {
+                // testing: manually set the resolution; needs a supported check.
+                //pp.BackBufferWidth = 1920;
+                //pp.BackBufferHeight = 1080;
+            }
+        }
+
     }
 }

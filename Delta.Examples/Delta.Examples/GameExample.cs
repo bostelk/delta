@@ -55,6 +55,10 @@ namespace Delta.Examples
         protected override void LoadContent()
         {
             base.LoadContent();
+        }
+
+        protected override void LateInitialize()
+        {
             G.Audio.PlaySound("SFX_Ambiance_1");
             Entity lucas = Entity.Get("Lucas") as Entity;
             MovingSpeaker speaker = Entity.Get("Speaker") as MovingSpeaker;
@@ -62,6 +66,7 @@ namespace Delta.Examples
             speaker.OrbitLength = 100;
 
             G.Audio.Listener = lucas;
+            base.LateInitialize();
         }
 
         protected override void Draw(GameTime gameTime)

@@ -37,9 +37,8 @@ namespace Delta.Examples.Entities
 
         public Vector2 Velocity;
 
-        public Lucas()
+        public Lucas() : base("Lucas")
         {
-            //ID = "Lucas";
         }
 
         public override void LoadContent()
@@ -53,10 +52,10 @@ namespace Delta.Examples.Entities
             HUD = Entity.Get("GameHud") as GameHud;
             HUD.Alpha = 0f;
 
-            //World.Instance.Camera.ZoomImmediate(BOOST_ZOOM);
-            //World.Instance.Camera.Offset = G.ScreenCenter;
-            //World.Instance.Camera.Follow(this);
-            //World.Instance.Camera.ZoomOverDuration(NORMAL_ZOOM, 3f);
+            G.World.Camera.ZoomImmediate(BOOST_ZOOM);
+            //G.World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.Follow(this);
+            G.World.Camera.ZoomOverDuration(NORMAL_ZOOM, 3f);
             G.Audio.SetSoundVolume("SFX_Ambiance_1", 0.8f);
             base.LateInitialize();
         }

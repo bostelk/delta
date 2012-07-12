@@ -34,9 +34,8 @@ namespace Delta.Examples.Entities
             private set;
         }
 
-        public MovingSpeaker()
+        public MovingSpeaker(): base("Speaker")
         {
-            //ID = "Speaker";
         }
 
         public void Orbit(Entity e)
