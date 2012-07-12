@@ -330,6 +330,9 @@ namespace Delta.Graphics
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             _state &= ~SpriteState.Finished;
+            // draw the first frame
+            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
+            Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
         }
 
         public override void Recycle()
