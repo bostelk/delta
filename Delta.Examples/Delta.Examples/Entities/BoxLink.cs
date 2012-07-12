@@ -54,7 +54,9 @@ namespace Delta.Examples.Entities
 
         protected override void LightUpdate(GameTime gameTime)
         {
-            Velocity = Input * SPEED;
+            Vector2 direction = G.Input.Mouse.Held(Delta.Input.MouseButton.Left) ? G.World.Camera.ToWorldPosition(G.Input.Mouse.Position) - Position : Vector2.Zero;
+            Vector2Extensions.SafeNormalize(ref direction);
+            Velocity = ((G.Input.Keyboard.Held(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // if boosting leave a motion trail
