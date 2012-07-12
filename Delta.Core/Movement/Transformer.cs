@@ -327,7 +327,7 @@ namespace Delta.Movement
             _onSequenceFinished = null;
             _transforms.Clear();
 
-            G.World.Remove(this);
+            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }
