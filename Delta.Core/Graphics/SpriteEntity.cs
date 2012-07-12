@@ -346,12 +346,8 @@ namespace Delta.Graphics
             AnimationFrameOffset = 0;
             SpriteEffects = SpriteEffects.None;
             OutlineColor = Color.White;
-            /* not casting etc.
-            EntityParent<Entity> parent = Parent as EntityParent<Entity>;
-            if (parent != null)
-                parent.Remove(this);
-            */
-            G.World.Remove(this); // hack
+
+            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }
