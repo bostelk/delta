@@ -31,7 +31,7 @@ namespace Delta.Examples
             Overlay,
         }
 
-        public GameExample() : base("EntityExample")
+        public GameExample() : base("GameExample")
         {
             G.World.Add(new Image(@"Graphics\Background") { Layer = (int)DrawLayers.BackgroundLow });
             G.World.Add(new Image(@"Graphics\ForeGround") { Layer = (int)DrawLayers.Background });

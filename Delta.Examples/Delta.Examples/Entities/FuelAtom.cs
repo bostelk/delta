@@ -15,14 +15,12 @@ namespace Delta.Examples.Entities
 
         Texture2D _texture;
 
-        public FuelAtom()
+        public FuelAtom() : base("FuelAtmo")
         {
-            //ID = "FuelAtom";
         }
 
         public override void LoadContent()
         {
-            // note: pixeltexture is null here, wtf
             _texture = G.Content.Load<Texture2D>(@"Graphics\Atom");
             base.LoadContent();
         }

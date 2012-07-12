@@ -25,19 +25,12 @@ namespace Delta.Examples
         public RacingExample() : base("RacingExample")
         {
             ClearColor = Color.Black;
-            //G.World.Add(player1 = new PhysicsCar());
-            //G.World.Add(player2 = new PhysicsCar());
-            //G.World.Add(track = new RaceTrack());
+            G.World.Add(player1 = new PhysicsCar());
+            G.World.Add(player2 = new PhysicsCar());
+            G.World.Add(track = new RaceTrack());
             player2.Position = player1.Position + new Vector2(100, 0);
-            //G.World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.Offset = G.ScreenCenter;
         }
-
-        //protected override void LoadContent()
-        //{
-        //    G.World.LoadContent(Content);
-        //    G.UI.LoadContent(Content);
-        //    base.LoadContent();
-        //}
 
         protected override void Update(GameTime gameTime)
         {

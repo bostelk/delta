@@ -24,7 +24,7 @@ namespace Delta.Examples
         PerformanceMetrics _performanceMetrics;
 
         public ExampleBase(string exampleName) 
-            : base(800, 600)
+            : base(1280, 720)
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
@@ -37,7 +37,7 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Escape))
                 Exit();
             //if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
-            //    G.GraphicsDeviceManager.ToggleFullScreen();
+                //G.GraphicsDevice.gr
 
             //_performanceMetrics.InternalUpdate(gameTime);
             base.Update(gameTime);
