@@ -189,9 +189,9 @@ namespace Delta
         protected virtual bool CanDraw()
         {
             if (!IsVisible || !IsLateInitialized || IsDrawing) return false;
-            if (RenderArea != Rectangle.Empty || _collectionReference != null)
+            if (RenderArea != Rectangle.Empty && _collectionReference != null)
             {
-                if (!_collectionReference.ViewingArea.Contains(RenderArea) || !_collectionReference.ViewingArea.Intersects(RenderArea))
+                if (_collectionReference.ViewingArea != Rectangle.Empty || !_collectionReference.ViewingArea.Contains(RenderArea) || !_collectionReference.ViewingArea.Intersects(RenderArea))
                     return false;
             }
             return true;
