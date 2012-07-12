@@ -33,6 +33,13 @@ namespace Delta.Examples
             G.World.Camera.ZoomImmediate(4);
             G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
             G.World.Camera.StayInsideBounds = true;
+        }
+
+        protected override void LoadContent()
+        {
+            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
+            _map = Content.Load<Map>(@"Maps\Plains\2");
+            G.World.Add(_map);
 
             G.World.Add(_player = new BoxLink());
             G.World.Camera.Follow(_player);
@@ -43,13 +50,6 @@ namespace Delta.Examples
             G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 2) });
             G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 3) });
             G.World.Add(new Barrel() { Position = new Vector2(64, 48 + 16 * 4) });
-        }
-
-        protected override void LoadContent()
-        {
-            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
-            _map = Content.Load<Map>(@"Maps\Plains\2");
-            G.World.Add(_map);
             base.LoadContent();
         }
 

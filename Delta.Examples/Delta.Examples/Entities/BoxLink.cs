@@ -55,8 +55,8 @@ namespace Delta.Examples.Entities
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // if boosting leave a motion trail
-            if (G.Input.Keyboard.JustPressed(Keys.Space))
-                Visuals.CreateTrail("", "", Position);
+            if (G.Input.Keyboard.Held(Keys.LeftShift))
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + Velocity *  (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(gameTime);

@@ -51,7 +51,6 @@ namespace Delta.Examples.Entities
         {
             Visuals.Create(@"Graphics\SpriteSheets\16x16", "explode", Position);
             Visuals.CreateShatter(@"Graphics\SpriteSheets\16x16", "barrelDebris", Position, 13);
-            G.World.Camera.Flash(Color.White);
             G.World.Camera.Shake(10, 0.5f, ShakeAxis.X | ShakeAxis.Y);
         }
     }

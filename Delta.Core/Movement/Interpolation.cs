@@ -76,7 +76,7 @@ namespace Delta.Movement
         static float EaseInQuadInterpolation(float start, float end, float amount)
         {
             amount = MathExtensions.Clamp(amount, 0f, 1f);
-            return (end-start) * amount * amount + start;
+            return (end - start) * amount * amount + start;
         }
 
         /**

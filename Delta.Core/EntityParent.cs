@@ -76,6 +76,7 @@ namespace Delta
             {
                 EntityHelper.RemoveReferenceID(entity.ID);
                 EntityHelper._globalEntitiesList.FastRemove<IEntity>(entity);
+                NeedsToSort = true;
             }
             return returnValue;
         }
@@ -109,6 +110,19 @@ namespace Delta
             else
                 _children.Sort(_comparer);
             NeedsToSort = false;
+        }
+
+        protected class SortByHeight : IComparer<T>
+        {
+            public int Compare(T b1, T b2)
+            {
+                TransformableEntity te1 = b1 as TransformableEntity;
+                TransformableEntity te2 = b2 as TransformableEntity;
+                if (te1 == null || te2 == null)
+                    return 0;
+                else
+                    return te1.Position.Y.CompareTo(te2.Position.Y);
+            }
         }
 
     }

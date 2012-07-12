@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Delta.Movement;
 
 namespace Delta
 {
@@ -221,8 +222,8 @@ namespace Delta
 
             if (StayInsideBounds)
             {
-                _position.X = MathHelper.Clamp(_position.X, BoundedArea.Left + ViewingArea.Width / 2, BoundedArea.Right - ViewingArea.Width / 2);
-                _position.Y = MathHelper.Clamp(_position.Y, BoundedArea.Top + ViewingArea.Height / 2, BoundedArea.Bottom - ViewingArea.Height / 2);
+                _position.X = MathHelper.Clamp(_position.X + _shakeOffset.X, BoundedArea.Left + ViewingArea.Width / 2, BoundedArea.Right - ViewingArea.Width / 2);
+                _position.Y = MathHelper.Clamp(_position.Y + _shakeOffset.Y, BoundedArea.Top + ViewingArea.Height / 2, BoundedArea.Bottom - ViewingArea.Height / 2);
                 NeedsHeavyUpdate = true;
             }
 
@@ -284,8 +285,7 @@ namespace Delta
                 if (_shakeMode == ShakeMode.Random)
                 {
                     float progress = _shakeElapsed / _shakeDuration;
-                    float magnitude = _shakeMagnitude * (1f - (progress * progress)); //NON-LINEAR (x^2)
-                    //float magnitude = _shakeMagnitude * (1f - (progress)); //LINEAR
+                    float magnitude = _shakeMagnitude * Interpolation.EaseInQuad(1f, 0f, progress);
                     _shakeOffset = new Vector2(G.Random.NextFloat() , G.Random.NextFloat()) * magnitude;
                 }
                 else if (_shakeMode == ShakeMode.Directional)
