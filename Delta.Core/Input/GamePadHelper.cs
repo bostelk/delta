@@ -89,16 +89,6 @@ namespace Delta.Input
             return _thisState.IsButtonDown(button);
         }
 
-        public Vector2 LeftThumbstick()
-        {
-            return Vector2.Zero;
-        }
-
-        public Vector2 RightThumbstick()
-        {
-            return Vector2.Zero;
-        }
-
         public void SetVibration(float left, float right, float duration) {
             SetVibration(left, right);
         }

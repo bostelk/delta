@@ -17,6 +17,9 @@ namespace Delta
 {
     public sealed class G
     {
+        internal const bool LETTERBOX = false;
+        internal const float ASPECT_RATIO_SD = 800f / 600f;
+        internal const float ASPECT_RATIO_HD = 1920f / 1080f;
         internal static Dictionary<string, object> _contentReferences = new Dictionary<string, object>();
 
         public static DeltaGame Instance { get; private set; }
@@ -51,6 +54,8 @@ namespace Delta
             ScreenArea = screenArea; // need this information from the start
             ScreenCenter = screenArea.Center.ToVector2(); // need this information from the start
             GraphicsDeviceManager = new GraphicsDeviceManager(game);
+            GraphicsDeviceManager.PreparingDeviceSettings += OnPreparingDeviceSettings;
+            GraphicsDeviceManager.DeviceReset += OnDeviceReset;
             GraphicsDeviceManager.PreferredBackBufferWidth = G.ScreenArea.Width;
             GraphicsDeviceManager.PreferredBackBufferHeight = G.ScreenArea.Height;
             Random = new Random();
@@ -65,7 +70,6 @@ namespace Delta
         internal static void LoadContent(DeltaGame game, ResourceContentManager resources)
         {
             GraphicsDevice = game.GraphicsDevice;
-            GraphicsDevice.DeviceReset += OnDeviceReset;
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
             PixelTexture = new Texture2D(game.GraphicsDevice, 1, 1);
@@ -82,12 +86,33 @@ namespace Delta
         /// </summary>
         internal static void OnDeviceReset(object sender, EventArgs e)
         {
+            var pp = GraphicsDevice.PresentationParameters;
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+
+            // scale height to maintain widescreen aspect ratio
+            if (width / height == (int)ASPECT_RATIO_SD && LETTERBOX)
+            {
+                height = (int)((float)width * (1f / ASPECT_RATIO_HD));
+                GraphicsDevice.Viewport = new Viewport(0, (pp.BackBufferHeight - height) / 2, width, height);
+            }
+
             // xna will try to maintain the backbuffer resolution, however the monitor may not support it.
             // xna will then pick the next best resolution. eg. 1920x1080 fullscreened becomes 1600x900.
             // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
-            ScreenArea = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+            ScreenArea = new Rectangle(0, 0, width, height);
             ScreenCenter = ScreenArea.Center.ToVector2();
             World.Camera.Offset = ScreenCenter;
+        }
+
+        internal static void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            var pp = e.GraphicsDeviceInformation.PresentationParameters;
+            if (pp.IsFullScreen)
+            {
+                pp.BackBufferWidth = 1024;
+                pp.BackBufferHeight = 768;
+            }
         }
        
     }
