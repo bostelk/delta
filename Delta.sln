@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Pipeline.ContentBuild
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.ExamplesContent", "Delta.Examples\Delta.ExamplesContent\Delta.ExamplesContent.contentproj", "{849B74DA-F195-4E56-B2BA-7EFE266CA486}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Boostrap (Windows)", "Delta.Boostrap\Delta.Boostrap\Delta.Boostrap (Windows).csproj", "{704AAA07-56EE-48EE-B6DB-77E38154F802}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Bootstrap (Windows)", "Delta.Bootstrap\Delta.Bootstrap (Windows).csproj", "{704AAA07-56EE-48EE-B6DB-77E38154F802}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -29,12 +29,12 @@ namespace Delta.Examples
         {
             ClearColor = Color.Black;
             G.Collision.DefineWorld(640, 640, 32);
-            //G.World.Camera.Offset = G.ScreenCenter;
-            //G.World.Camera.ZoomImmediate(4);
-            //G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
-            //G.World.Camera.StayInsideBounds = true;
-            //G.World.Camera.Filter = true; // use tint
-            //G.World.Camera.Tint = new Color(0, 0, 0, 140);
+            //G.World.Camera. = G.ScreenCenter;
+            G.World.Camera.ZoomImmediate(4);
+            G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
+            G.World.Camera.StayInsideBounds = true;
+            G.World.Camera.Filter = true; // use tint
+            G.World.Camera.Tint = new Color(0, 0, 0, 140);
         }
 
         protected override void LoadContent()
@@ -43,7 +43,7 @@ namespace Delta.Examples
             _map = Content.Load<Map>(@"Maps\Plains\2");
             //G.World.Add(_map);
             //G.World.Add(_player = new BoxLink());
-            //G.World.Camera.Follow(_player);
+            G.World.Camera.Follow(_player);
             base.LoadContent();
         }
 

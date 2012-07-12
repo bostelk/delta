@@ -1,8 +1,9 @@
 using System;
 using Delta;
 using System.Diagnostics;
+using Delta.Examples;
 
-namespace Delta.Examples
+namespace Delta.Bootstrap
 {
 #if WINDOWS || XBOX
     static class Program
@@ -24,7 +25,7 @@ namespace Delta.Examples
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Zelda;
+            Examples example = Examples.Game;
 
             switch (example)
             {

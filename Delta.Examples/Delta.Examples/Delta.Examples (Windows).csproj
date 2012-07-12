@@ -19,7 +19,8 @@
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>
     </ApplicationIcon>
-    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <Thumbnail>
+    </Thumbnail>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -143,10 +144,6 @@
     <Compile Include="InputExample.cs" />
     <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Game.ico" />
-    <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Delta.Core\Delta %28Windows%29.csproj">
