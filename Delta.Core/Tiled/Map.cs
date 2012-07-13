@@ -129,7 +129,7 @@ namespace Delta.Tiled
                 }
                 layerOrder++;
             }
-            this.ImportTiledProperties(node.SelectSingleNode("properties"));
+            //this.ImportTiledProperties(node.SelectSingleNode("properties"));
         }
 
         bool IImportable.ImportCustomValues(string name, string value)

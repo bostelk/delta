@@ -11,8 +11,7 @@ namespace Delta.Graphics
     {
         public override SpriteSheetContent Import(string fileName, ContentImporterContext context)
         {
-            XmlImporter xmlImporter = new XmlImporter();
-            return xmlImporter.Import(fileName, context) as SpriteSheetContent;
+            return new SpriteSheetContent(fileName);
         }
     }
 }

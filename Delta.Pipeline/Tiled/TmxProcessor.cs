@@ -10,13 +10,20 @@ using Delta.Graphics;
 
 namespace Delta
 {
-
-    [ContentProcessor(DisplayName = "DependencyProcessor")]
+    [ContentProcessor(DisplayName = "Tiled Map - Delta")]
     public class TmxProcessor : ContentProcessor<Map, Map>
     {
         public override Map Process(Map input, ContentProcessorContext context)
         {
             CheckFilesForDependencies(context);
+            if (input._tilesets.Count > 0)
+            {
+                foreach (var image in SpriteSheetContent._imageReferences)
+                {
+                    if (image.Key == input._tilesets[0].ExternalImagePath)
+                        input._spriteSheetName = image.Value._outputPath;
+                }
+            }
             return input;
         }
 
@@ -54,7 +61,7 @@ namespace Delta
                     if (!_loadedFileNames.Contains(fileName))
                     {
                         _loadedFileNames.Add(fileName);
-                        StyleSheet styleSheet = new StyleSheet(fileName);
+                        StyleSheet styleSheet = new StyleSheet(fileName); //don't built it as XNB. We just want this when building, nothing else.
                         foreach (var objectStyle in styleSheet.ObjectStyles)
                         {
                             if (!StyleSheet._globalObjectStyles.ContainsKey(objectStyle.Key))

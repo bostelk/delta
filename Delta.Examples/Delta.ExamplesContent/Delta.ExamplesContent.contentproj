@@ -42,6 +42,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Maps\Plains\3.tmx">
+      <Name>3</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
     <None Include="objects.stylesheet">
       <Name>objects</Name>
       <Importer>StyleSheetImporter</Importer>
@@ -283,12 +288,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\SpriteSheets\16x16.xml">
+    <None Include="Graphics\SpriteSheets\16x16.spritesheet">
       <Name>16x16</Name>
-      <Importer>XmlImporter</Importer>
+      <Importer>SpriteSheetImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
       <SubType>Designer</SubType>
-    </Compile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\AnimatedMisc\spike.png">

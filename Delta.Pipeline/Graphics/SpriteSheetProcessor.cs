@@ -8,24 +8,25 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Delta.Graphics
 {
-
-    [ContentProcessor(DisplayName = "SpriteSheetProcessor")]
+    [ContentProcessor(DisplayName = "Sprite Sheet - Delta")]
     public class SpriteSheetProcessor : ContentProcessor<SpriteSheetContent, SpriteSheetContent>
     {
         public override SpriteSheetContent Process(SpriteSheetContent input, ContentProcessorContext context)
         {
+            input._outputPath = context.OutputFilename;
             //load external images
             for (int i = 0; i < input.Images.Count; i++)
             {
                 ImageContent externalImage = input.Images[i];
                 externalImage._bitmapContent = context.BuildAndLoadAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(externalImage.Path), "TextureProcessor").Faces[0][0];
+                if (!SpriteSheetContent._imageReferences.ContainsKey(externalImage.Path))
+                    SpriteSheetContent._imageReferences.Add(externalImage.Path, input);
             }
 
             int maxTextureWidth = 0;
             int maxTextureHeight = 0;
             //maxTextureWidth = 1024;
             //maxTextureHeight = 1024;
-
 
             if (context.TargetPlatform == TargetPlatform.Windows)
             {

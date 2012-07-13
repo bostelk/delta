@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:Graphics="Delta.Graphics">
-  <Asset Type="Graphics:SpriteSheetContent">
+<SpriteSheet>
     <Image>
           <Path>Graphics\Tilesets\interior.png</Path>
           <FrameWidth>16</FrameWidth>
@@ -108,5 +107,4 @@
             <FrameDuration>1</FrameDuration>
         </Animation>
      </Image>
-  </Asset>
-</XnaContent>
+</SpriteSheet>

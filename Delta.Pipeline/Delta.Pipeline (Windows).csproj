@@ -113,10 +113,8 @@
     <Compile Include="EntityCollectionWriter.cs" />
     <Compile Include="Graphics\AnimationSerializer.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
-    <Compile Include="Graphics\SpriteSheetContentSerializer.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Graphics\SpriteBlockContent.cs" />
     <Compile Include="Graphics\SpriteSheetContent.cs" />
     <Compile Include="Graphics\SpriteSheetContentWriter.cs" />
     <Compile Include="Graphics\SpriteSheetProcessor.cs" />
