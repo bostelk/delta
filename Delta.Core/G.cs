@@ -51,7 +51,6 @@ namespace Delta
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.PreferredBackBufferWidth = screenWidth;
             _graphicsDeviceManager.PreferredBackBufferHeight = screenHeight;
-            _graphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
             _graphicsDeviceManager.DeviceReset += OnDeviceReset;
             _graphicsDeviceManager.PreparingDeviceSettings += OnPreparingDeviceSettings;
             _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);

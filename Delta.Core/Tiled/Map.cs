@@ -161,6 +161,26 @@ namespace Delta.Tiled
             }
         }
 
+        public void AddToWorld(World world)
+        {
+            foreach (IDrawable layer in _drawables)
+                world.Add(layer);
+            world.BelowGround = Map.Instance.BelowGround;
+            world.Ground = Map.Instance.Ground;
+            world.AboveGround = Map.Instance.AboveGround;
+            world.Add(BelowGround, Ground, AboveGround);
+        }
+
+        public void RemoveFromWorld(World world)
+        {
+            foreach (IDrawable layer in _drawables)
+                world.Remove(layer);
+            world.BelowGround = null;
+            world.Ground = null;
+            world.AboveGround = null;
+            world.Remove(BelowGround, Ground, AboveGround);
+        }
+
     }
 
     internal static class MapHelper
