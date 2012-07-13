@@ -30,41 +30,42 @@ namespace Delta
             NeedsToSort = true;
         }
 
-        public void Add(object obj)
+        public void Add(IUpdateable updateable)
         {
-            IUpdateable updateable = obj as IUpdateable;
-            if (updateable != null)
+            _updateables.Add(updateable);
+            NeedsToSort = true;
+        }
+
+        public void Add(IDrawable drawable)
+        {
+            _drawables.Add(drawable);
+            NeedsToSort = true;
+        }
+
+        public void Add(Entity entity)
+        {
+            if (entity is IUpdateable)
+                Add(entity as IUpdateable);
+            if (entity is IDrawable)
+                Add(entity as IDrawable);
+            entity._collectionReference = this;
+            if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
+                entity.ID = Guid.NewGuid().ToString();
+            if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
             {
-                _updateables.Add(updateable);
-                NeedsToSort = true;
-            }
-            IDrawable drawable = obj as IDrawable;
-            if (drawable != null)
-            {
-                _drawables.Add(drawable);
-                NeedsToSort = true;
-            }
-            Entity entity = obj as Entity;
-            if (entity != null)
-            {
-                entity._collectionReference = this;
-                if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
-                    entity.ID = Guid.NewGuid().ToString();
-                if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
+                for (int x = 1; x < int.MaxValue; x++)
                 {
-                    for (int x = 1; x < int.MaxValue; x++)
+                    string newID = entity.ID + x;
+                    if (!_idReferences.ContainsKey(newID))
                     {
-                        string newID = entity.ID + x;
-                        if (!_idReferences.ContainsKey(newID))
-                        {
-                            entity.ID = newID;
-                            break;
-                        }
+                        entity.ID = newID;
+                        break;
                     }
                 }
-                _idReferences.Add(entity.ID.ToLower(), entity);
             }
+            _idReferences.Add(entity.ID.ToLower(), entity);
         }
+
 
         public void Add(EntityCollection collection)
         {
