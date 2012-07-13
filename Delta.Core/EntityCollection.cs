@@ -109,11 +109,6 @@ namespace Delta
                 _updateables[x].LoadContent();
         }
 
-        void IUpdateable.Update(DeltaTime time)
-        {
-            Update(time);
-        }
-
         public void Update(DeltaTime time)
         {
             if (NeedsToSort)
