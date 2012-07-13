@@ -102,7 +102,7 @@ namespace Delta.Tiled
                         break;
                     case "objectgroup":
                         EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Layer = layerOrder }; 
-                        switch (layerName)
+                        switch (layerName.ToLower())
                         {
                             case "delta.belowground":
                             case "delta.bg":
