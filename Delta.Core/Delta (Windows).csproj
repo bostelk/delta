@@ -100,6 +100,8 @@
     <Compile Include="EntityBase.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="IDrawable.cs" />
+    <Compile Include="ILayerable.cs" />
+    <Compile Include="ILayerableComparer.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
@@ -151,7 +153,7 @@
     <Compile Include="Structures\HashSet.cs" />
     <Compile Include="Structures\OverRange.cs" />
     <Compile Include="Structures\PoolManager.cs" />
-    <Compile Include="IEntity.cs" />
+    <Compile Include="IImportable.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />

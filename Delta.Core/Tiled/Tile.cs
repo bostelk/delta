@@ -21,6 +21,12 @@ namespace Delta.Tiled
         [ContentSerializer]
         internal Vector2 _position = Vector2.Zero;
 
+        float ILayerable.Layer
+        {
+            get { return 0; }
+            set { }
+        }
+
         internal Tile()
             : base()
         {

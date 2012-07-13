@@ -425,7 +425,7 @@ namespace Delta
         {
         }
 
-        public override void Remove()
+        public void Remove()
         {
             if (_collectionReference == null)
                 return;

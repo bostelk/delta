@@ -1,11 +1,11 @@
-﻿using System;
+﻿#if WINDOWS
+using System;
 
 namespace Delta
 {
-    public interface IEntity
+    public interface IImportable
     {
-#if WINDOWS
         bool ImportCustomValues(string name, string value);
-#endif
     }
 }
+#endif

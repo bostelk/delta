@@ -20,6 +20,8 @@ namespace Delta.Tiled
         [ContentSerializer(FlattenContent = true, CollectionItemName = "Tile")]
         internal List<Tile> _tiles = new List<Tile>();
 
+        public float Layer { get; set; }
+
         public TileLayer()
             : base()
         {

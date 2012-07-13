@@ -11,9 +11,7 @@ namespace Delta
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class EntityCollection
     {
-        [ContentSerializerIgnore]
         internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
-        [ContentSerializerIgnore]
         internal bool NeedsToSort { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -21,13 +19,16 @@ namespace Delta
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<IDrawable> _drawables = new List<IDrawable>();
 
-        [ContentSerializerIgnore]
-        public Rectangle ViewingArea { get; set; }
+        public IComparer<ILayerable> Comparer { get; set; }
+
+        //[ContentSerializerIgnore]
+        //public Rectangle ViewingArea { get; set; }
 
         public EntityCollection()
             : base()
         {
             NeedsToSort = true;
+            Comparer = new ILayerableComparer();
         }
 
         public void Add(IUpdateable updateable)
@@ -44,10 +45,9 @@ namespace Delta
 
         public void Add(Entity entity)
         {
-            if (entity is IUpdateable)
-                Add(entity as IUpdateable);
-            if (entity is IDrawable)
-                Add(entity as IDrawable);
+            _updateables.Add(entity);
+            _drawables.Add(entity);
+            NeedsToSort = true;
             entity._collectionReference = this;
             if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
                 entity.ID = Guid.NewGuid().ToString();
@@ -66,7 +66,6 @@ namespace Delta
             _idReferences.Add(entity.ID.ToLower(), entity);
         }
 
-
         public void Add(EntityCollection collection)
         {
             _updateables.AddRange(collection._updateables);
@@ -74,26 +73,25 @@ namespace Delta
            NeedsToSort = true;
         }
 
-        public void Remove(object obj)
+        public void Remove(IUpdateable updateable)
         {
-            IUpdateable updateable = obj as IUpdateable;
-            if (updateable != null)
-            {
-                _updateables.FastRemove<IUpdateable>(updateable);
-                NeedsToSort = true;
-            }
-            IDrawable drawable = obj as IDrawable;
-            if (drawable != null)
-            {
-                _drawables.FastRemove<IDrawable>(drawable);
-                NeedsToSort = true;
-            }
-            Entity entity = obj as Entity;
-            if (entity != null)
-            {
-                if (_idReferences.ContainsKey(entity.ID.ToLower()))
-                    _idReferences.Remove(entity.ID);
-            }
+            _updateables.FastRemove<IUpdateable>(updateable);
+            NeedsToSort = true;
+        }
+
+        public void Remove(IDrawable drawable)
+        {
+            _drawables.FastRemove<IDrawable>(drawable);
+            NeedsToSort = true;
+        }
+
+        public void Remove(Entity entity)
+        {
+            _updateables.FastRemove<IUpdateable>(entity);
+            _drawables.FastRemove<IDrawable>(entity);
+            NeedsToSort = true;
+            if (_idReferences.ContainsKey(entity.ID.ToLower()))
+                _idReferences.Remove(entity.ID);
         }
 
         public void Remove(EntityCollection collection)
@@ -126,23 +124,10 @@ namespace Delta
 
         protected virtual void Sort()
         {
-            //_updateables.Sort(_comparer);
+            _updateables.Sort(Comparer);
+            _drawables.Sort(Comparer);
             NeedsToSort = false;
         }
-
-        internal class DefaultEntityComparer : Comparer<EntityBase>
-        {
-            public override int Compare(EntityBase x, EntityBase y)
-            {
-                return x.Layer.CompareTo(y.Layer);
-                //if (x.MajorLayer > y.MajorLayer)
-                //    return int.MaxValue;
-                //else if (x.MajorLayer < y.MajorLayer)
-                //    return int.MinValue;
-                //return x.MinorLayer.CompareTo(y.MinorLayer);
-            }
-        }
-
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]

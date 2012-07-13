@@ -23,7 +23,7 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : EntityCollection, IEntity
+    public class Map : EntityCollection, IImportable
     {
         internal static Map Instance { get; set; }
 
@@ -105,7 +105,7 @@ namespace Delta.Tiled
             this.ImportTiledProperties(node.SelectSingleNode("properties"));
         }
 
-        bool IEntity.ImportCustomValues(string name, string value)
+        bool IImportable.ImportCustomValues(string name, string value)
         {
             switch (name)
             {
@@ -221,7 +221,7 @@ namespace Delta.Tiled
 
     internal static class MapHelper
     {
-        internal static void ImportTiledProperties(this IEntity entity, XmlNode node)
+        internal static void ImportTiledProperties(this IImportable entity, XmlNode node)
         {
             if (node == null)
                 return;

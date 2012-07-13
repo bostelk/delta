@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Delta
 {
-    public interface IUpdateable : ILayerable
+    public interface ILayerable
     {
-        void InternalUpdate(DeltaTime time);
-        void LoadContent();
+        float Layer { get; set; }
     }
 }

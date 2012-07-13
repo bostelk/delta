@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Delta
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityBase : IRecyclable, IEntity, IDrawable, IUpdateable
+    public class EntityBase : IRecyclable, IImportable, IDrawable, IUpdateable
     {
         internal EntityCollection _collectionReference = null;
         //internal Rectangle _renderArea = Rectangle.Empty;
@@ -51,7 +51,7 @@ namespace Delta
         }
 
 #if WINDOWS
-        bool IEntity.ImportCustomValues(string name, string value)
+        bool IImportable.ImportCustomValues(string name, string value)
         {
             return ImportCustomValues(name, value);
         }
@@ -160,13 +160,6 @@ namespace Delta
 
         protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-        }
-
-        public virtual void Remove()
-        {
-            if (_collectionReference == null)
-                return;
-            _collectionReference.Remove(this);
         }
 
         public virtual void Recycle()
