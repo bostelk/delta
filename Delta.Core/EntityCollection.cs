@@ -61,7 +61,7 @@ namespace Delta
                     }
                 }
             }
-            _idReferences.Add(entity.ID, entity);
+            _idReferences.Add(entity.ID.ToLower(), entity);
         }
 
         internal void InternalRemove(EntityBase entity)
