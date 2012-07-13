@@ -96,6 +96,7 @@
     <Compile Include="Audio\ISound.cs" />
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
+    <Compile Include="DeltaTime.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />

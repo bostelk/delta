@@ -48,8 +48,8 @@ namespace Delta.Examples
             //Transformer.ThisEntity(atom).BlinkFor(0.5f, 20);
             //Transformer.ThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
 
-            G.UI.Add(new GameHud());
-            G.UI.Camera.ZoomImmediate(4.0f);
+            UI.Add(new GameHud());
+            UI.Camera.ZoomImmediate(4.0f);
         }
 
         protected override void LoadContent()
