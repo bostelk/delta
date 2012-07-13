@@ -97,12 +97,12 @@
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
     <Compile Include="EntityBase.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="TEMP\CardinalDirection.cs" />
     <Compile Include="IRecyclable.cs" />
     <Compile Include="Physics\CollideableEntity.cs" />
-    <Compile Include="Copyable\ObjectExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
