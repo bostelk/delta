@@ -31,7 +31,7 @@ namespace Delta
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
-        public static HUD HUD { get; private set; }
+        public static UI UI { get; private set; }
 
         public new static GraphicsDevice GraphicsDevice { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
@@ -96,7 +96,7 @@ namespace Delta
                 LateInitialize();
             }
             G.World.Update(gameTime);
-            G.HUD.Update(gameTime);
+            G.UI.Update(gameTime);
             G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
@@ -104,7 +104,7 @@ namespace Delta
         {
             base.Draw(gameTime);
             G.World.Draw();
-            G.HUD.Draw();
+            G.UI.Draw();
         }
        
     }

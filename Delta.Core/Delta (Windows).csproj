@@ -154,7 +154,7 @@
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
-    <Compile Include="HUD.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="G.cs" />

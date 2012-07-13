@@ -13,9 +13,9 @@ namespace Delta
     {
         static DeltaTime _time = new DeltaTime();
 
-        public static Camera Camera { get; private set; }
-        public static float TimeScale { get; private set; }
-        public static DeltaTime Time { get { return _time; } }
+        public Camera Camera { get; private set; }
+        public float TimeScale { get; private set; }
+        public DeltaTime Time { get { return _time; } }
 
         public World()
         {
@@ -38,6 +38,19 @@ namespace Delta
             base.Draw(_time, G.SpriteBatch);
             Camera.Draw(_time, G.SpriteBatch);
             G.SpriteBatch.End();
+        }
+
+        public void Pause()
+        {
+        }
+
+        public void Resume()
+        {
+        }
+
+        public bool SecondsPast(float seconds)
+        {
+            return _time.TotalSeconds > seconds;
         }
 
         public List<T> GetEntitiesUnderMouse<T>() where T: Entity

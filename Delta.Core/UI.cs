@@ -12,8 +12,8 @@ namespace Delta
     {
         static DeltaTime _time = new DeltaTime();
 
-        public static Camera Camera { get; private set; }
-        public static DeltaTime Time { get { return _time; } }
+        public Camera Camera { get; private set; }
+        public DeltaTime Time { get { return _time; } }
 
         public UI()
         {
