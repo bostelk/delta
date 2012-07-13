@@ -22,26 +22,11 @@ namespace Delta
 
         public IComparer<ILayerable> Comparer { get; set; }
 
-        //[ContentSerializerIgnore]
-        //public Rectangle ViewingArea { get; set; }
-
         public EntityCollection()
             : base()
         {
             NeedsToSort = true;
             Comparer = new ILayerableComparer();
-        }
-
-        public void Add(IUpdateable updateable)
-        {
-            _updateables.Add(updateable);
-            NeedsToSort = true;
-        }
-
-        public void Add(IDrawable drawable)
-        {
-            _drawables.Add(drawable);
-            NeedsToSort = true;
         }
 
         public void Add(Entity entity)
@@ -67,40 +52,64 @@ namespace Delta
             _idReferences.Add(entity.ID.ToLower(), entity);
         }
 
-        public void Add(EntityCollection collection)
+        public void Add(object obj)
         {
-            _updateables.AddRange(collection._updateables);
-            _drawables.AddRange(collection._drawables);
-           NeedsToSort = true;
+            IUpdateable updateable = obj as IUpdateable;
+            IDrawable drawable = obj as IDrawable;
+            if (updateable == null && drawable == null)
+                throw new Exception("The parameter 'obj' is neither an IUpdateable nor IDrawable.");
+            if (updateable != null)
+            {
+                _updateables.Add(updateable);
+                NeedsToSort = true;
+            }
+            if (drawable != null)
+            {
+                _drawables.Add(drawable);
+                NeedsToSort = true;
+            }
+            Entity entity = obj as Entity;
+            if (entity != null)
+            {
+                entity._collectionReference = this;
+                if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
+                    entity.ID = Guid.NewGuid().ToString();
+                if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
+                {
+                    for (int x = 1; x < int.MaxValue; x++)
+                    {
+                        string newID = entity.ID + x;
+                        if (!_idReferences.ContainsKey(newID))
+                        {
+                            entity.ID = newID;
+                            break;
+                        }
+                    }
+                }
+                _idReferences.Add(entity.ID.ToLower(), entity);
+            }
         }
 
-        public void Remove(IUpdateable updateable)
+        public void Remove(object obj)
         {
-            _updateables.FastRemove<IUpdateable>(updateable);
-            NeedsToSort = true;
-        }
-
-        public void Remove(IDrawable drawable)
-        {
-            _drawables.FastRemove<IDrawable>(drawable);
-            NeedsToSort = true;
-        }
-
-        public void Remove(Entity entity)
-        {
-            _updateables.FastRemove<IUpdateable>(entity);
-            _drawables.FastRemove<IDrawable>(entity);
-            NeedsToSort = true;
-            if (_idReferences.ContainsKey(entity.ID.ToLower()))
-                _idReferences.Remove(entity.ID);
-        }
-
-        public void Remove(EntityCollection collection)
-        {
-            for (int x = 0; x < collection._updateables.Count; x++)
-                _updateables.FastRemove<IUpdateable>(collection._updateables[x]);
-            for (int x = 0; x < collection._drawables.Count; x++)
-                _drawables.FastRemove<IDrawable>(collection._drawables[x]);
+            IUpdateable updateable = obj as IUpdateable;
+            if (updateable != null)
+            {
+                _updateables.FastRemove<IUpdateable>(updateable);
+                NeedsToSort = true;
+            }
+            IDrawable drawable = obj as IDrawable;
+            if (drawable != null)
+            {
+                _drawables.FastRemove<IDrawable>(drawable);
+                NeedsToSort = true;
+            }
+            Entity entity = obj as Entity;
+            if (entity != null)
+            {
+                if (_idReferences.ContainsKey(entity.ID.ToLower()))
+                    _idReferences.Remove(entity.ID);
+            }
         }
 
         public virtual void LoadContent()
