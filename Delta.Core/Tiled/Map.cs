@@ -153,9 +153,9 @@ namespace Delta.Tiled
                 for (int y = 0; y < Map.Instance.Height; y++)
                 {
                     Tile tile = new Tile(new Vector2(x * Map.Instance.TileWidth, y * Map.Instance.TileHeight), tileLayerData[y * Map.Instance.Width + x]);
-                    tile.MajorLayer = layerOrder;
+                    //tile. = layerOrder;
                     if (tile._tilesetIndex >= 0)
-                        InternalAdd(tile);
+                        Add(tile);
                 }
             }
         }
@@ -249,9 +249,9 @@ namespace Delta.Tiled
             base.LoadContent();
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            foreach (EntityBase entity in this)
+            foreach (IDrawable drawable in _drawables)
             {
-                Tile tile = entity as Tile;
+                Tile tile = drawable as Tile;
                 Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
                 tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
             }

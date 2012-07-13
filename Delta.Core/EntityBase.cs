@@ -17,18 +17,12 @@ namespace Delta
         protected internal Rectangle RenderArea { get { return _renderArea; } }
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
-        [ContentSerializerIgnore]
-        protected bool IsUpdating { get; private set; }
-        [ContentSerializerIgnore]
-        protected bool IsDrawing { get; private set; }
         [ContentSerializer]
         public bool IsVisible { get; set; }
         [ContentSerializer]
         public bool IsEnabled { get; set; }
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
-        [ContentSerializerIgnore]
-        public bool RemoveOnNextUpdate { get; set; }
         [ContentSerializerIgnore]
         public bool HasLoadedContent { get; internal set; }
 
@@ -132,11 +126,6 @@ namespace Delta
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void InternalUpdate(DeltaTime time)
         {
-            if (RemoveOnNextUpdate)
-            {
-                RemoveOnNextUpdate = false;
-                Remove();
-            }
             if (!IsLateInitialized)
                 InternalInitialize();
             if (!HasLoadedContent)
@@ -157,7 +146,7 @@ namespace Delta
 
         protected virtual bool CanUpdate()
         {
-            if (!IsEnabled || !IsLateInitialized || IsUpdating) return false;
+            if (!IsEnabled) return false;
             return true;
         }
 
@@ -167,12 +156,10 @@ namespace Delta
 
         protected internal virtual void BeginUpdate(DeltaTime time)
         {
-            IsUpdating = true;
         }
 
         protected internal virtual void EndUpdate(DeltaTime time)
         {
-            IsUpdating = false;
         }
 
         protected internal virtual void BeginHeavyUpdate(DeltaTime time)
@@ -201,7 +188,8 @@ namespace Delta
 
         protected virtual bool CanDraw()
         {
-            if (!IsVisible || !IsLateInitialized || IsDrawing) return false;
+            if (!IsVisible) 
+                return false;
             if (RenderArea == Rectangle.Empty || _collectionReference == null || _collectionReference.ViewingArea == Rectangle.Empty)
                 return true;
             if (_collectionReference.ViewingArea.Contains(RenderArea) || _collectionReference.ViewingArea.Intersects(RenderArea))
@@ -211,7 +199,6 @@ namespace Delta
 
         protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            IsDrawing = true;
         }
 
         protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
@@ -220,10 +207,9 @@ namespace Delta
 
         protected internal virtual void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            IsDrawing = false;
         }
 
-        public void Remove()
+        public virtual void Remove()
         {
             if (_collectionReference == null)
                 return;
@@ -237,12 +223,9 @@ namespace Delta
             _majorLayer = 0.0f;
             _minorLayer = 0.0f;
             HasLoadedContent = false;
-            IsDrawing = false;
             IsEnabled = true;
             IsLateInitialized = false;
-            IsUpdating = false;
             IsVisible = true;
-            RemoveOnNextUpdate = false;
         }
 
     }

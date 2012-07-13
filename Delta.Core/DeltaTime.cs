@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Delta
 {
-    public struct DeltaTime
+    public class DeltaTime
     {
         public float TotalSeconds { get; internal set; }
         public float ElapsedSeconds { get; internal set; }

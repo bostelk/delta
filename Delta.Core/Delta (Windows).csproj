@@ -99,6 +99,8 @@
     <Compile Include="DeltaTime.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="IDrawable.cs" />
+    <Compile Include="IUpdateable.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="TEMP\CardinalDirection.cs" />

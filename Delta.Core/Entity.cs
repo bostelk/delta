@@ -425,6 +425,13 @@ namespace Delta
         {
         }
 
+        public override void Remove()
+        {
+            if (_collectionReference == null)
+                return;
+            _collectionReference.Remove(this);
+        }
+
         public override void Recycle()
         {
             base.Recycle();

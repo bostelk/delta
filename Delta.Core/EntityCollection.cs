@@ -9,27 +9,17 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Delta
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityCollection : List<EntityBase>
+    public class EntityCollection
     {
         [ContentSerializerIgnore]
         internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
         [ContentSerializerIgnore]
         internal bool NeedsToSort { get; set; }
 
-        IComparer<EntityBase> _comparer = new DefaultEntityComparer();
-        [ContentSerializerIgnore]
-        internal IComparer<EntityBase> Comparer
-        {
-            get { return _comparer; }
-            set
-            {
-                if (_comparer != value)
-                {
-                    _comparer = value;
-                    NeedsToSort = true;
-                }
-            }
-        }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public List<IUpdateable> _updateables = new List<IUpdateable>();
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public List<IDrawable> _drawables = new List<IDrawable>();
 
         [ContentSerializerIgnore]
         public Rectangle ViewingArea { get; set; }
@@ -40,81 +30,102 @@ namespace Delta
             NeedsToSort = true;
         }
 
-        internal void InternalAdd(EntityBase entity)
+        public void Add(object obj)
         {
-            base.Add(entity);
-            NeedsToSort = true;
-            entity._collectionReference = this;
-        }
-
-        public void Add(Entity entity)
-        {
-            this.InternalAdd(entity);
-            if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
-                entity.ID = Guid.NewGuid().ToString();
-            if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
+            IUpdateable updateable = obj as IUpdateable;
+            if (updateable != null)
             {
-                for (int x = 1; x < int.MaxValue; x++)
+                _updateables.Add(updateable);
+                NeedsToSort = true;
+            }
+            IDrawable drawable = obj as IDrawable;
+            if (drawable != null)
+            {
+                _drawables.Add(drawable);
+                NeedsToSort = true;
+            }
+            Entity entity = obj as Entity;
+            if (entity != null)
+            {
+                entity._collectionReference = this;
+                if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
+                    entity.ID = Guid.NewGuid().ToString();
+                if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
                 {
-                    string newID = entity.ID + x;
-                    if (!_idReferences.ContainsKey(newID))
+                    for (int x = 1; x < int.MaxValue; x++)
                     {
-                        entity.ID = newID;
-                        break;
+                        string newID = entity.ID + x;
+                        if (!_idReferences.ContainsKey(newID))
+                        {
+                            entity.ID = newID;
+                            break;
+                        }
                     }
                 }
+                _idReferences.Add(entity.ID.ToLower(), entity);
             }
-            _idReferences.Add(entity.ID.ToLower(), entity);
         }
 
         public void Add(EntityCollection collection)
         {
-            foreach (EntityBase entity in collection)
-                Add(entity);
+            _updateables.AddRange(collection._updateables);
+            _drawables.AddRange(collection._drawables);
+           NeedsToSort = true;
         }
 
-        internal void InternalRemove(EntityBase entity)
+        public void Remove(object obj)
         {
-            this.FastRemove<EntityBase>(entity);
-            NeedsToSort = true;
-        }
-
-        public void Remove(Entity entity)
-        {
-            InternalRemove(entity);
-            if (_idReferences.ContainsKey(entity.ID.ToLower()))
-                _idReferences.Remove(entity.ID);
+            IUpdateable updateable = obj as IUpdateable;
+            if (updateable != null)
+            {
+                _updateables.FastRemove<IUpdateable>(updateable);
+                NeedsToSort = true;
+            }
+            IDrawable drawable = obj as IDrawable;
+            if (drawable != null)
+            {
+                _drawables.FastRemove<IDrawable>(drawable);
+                NeedsToSort = true;
+            }
+            Entity entity = obj as Entity;
+            if (entity != null)
+            {
+                if (_idReferences.ContainsKey(entity.ID.ToLower()))
+                    _idReferences.Remove(entity.ID);
+            }
         }
 
         public void Remove(EntityCollection collection)
         {
-            foreach (EntityBase entity in collection)
-                Remove(entity);
+            for (int x = 0; x < collection._updateables.Count; x++)
+                _updateables.FastRemove<IUpdateable>(collection._updateables[x]);
+            for (int x = 0; x < collection._drawables.Count; x++)
+                _drawables.FastRemove<IDrawable>(collection._drawables[x]);
         }
 
         public virtual void LoadContent()
         {
-            for (int x = 0; x < base.Count; x++)
-                base[x].LoadContent();
+            for (int x = 0; x < _updateables.Count; x++)
+                _updateables[x].LoadContent();
         }
 
         internal void Update(DeltaTime time)
         {
             if (NeedsToSort)
                 Sort();
-            for (int x = 0; x < base.Count; x++)
-                base[x].InternalUpdate(time);
+            for (int x = 0; x < _updateables.Count; x++)
+                _updateables[x].InternalUpdate(time);
         }
 
         internal void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            for (int x = 0; x < base.Count; x++)
-                base[x].InternalDraw(time, spriteBatch);
+            for (int x = 0; x < _drawables.Count; x++)
+                _drawables[x].InternalDraw(time, spriteBatch);
         }
 
-        protected new virtual void Sort()
+        protected virtual void Sort()
         {
-            base.Sort(_comparer);
+            //_updateables.Sort(_comparer);
             NeedsToSort = false;
         }
 
@@ -140,9 +151,8 @@ namespace Delta
         {
             if (value == null)
                 value = new EntityCollection();
-            int count = input.ReadObject<int>();
-            for (int x = 0; x < count; x++)
-                value.Add(input.ReadObject<EntityBase>());
+            value._updateables = input.ReadObject<List<IUpdateable>>();
+            value._drawables = input.ReadObject<List<IDrawable>>();
             return value;
         }
     }

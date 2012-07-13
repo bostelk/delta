@@ -13,9 +13,8 @@ using Microsoft.Xna.Framework.Content.Pipeline;
         {
             protected override void Write(ContentWriter output, EntityCollection value)
             {
-                output.WriteObject<int>(value.Count);
-                for (int x = 0; x < value.Count; x++)
-                    output.WriteObject<EntityBase>(value[x]);
+                output.WriteObject<List<IUpdateable>>(value._updateables);
+                output.WriteObject<List<IDrawable>>(value._drawables);
             }
 
             public override string GetRuntimeType(TargetPlatform targetPlatform)

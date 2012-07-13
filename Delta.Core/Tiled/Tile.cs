@@ -11,7 +11,7 @@ using Delta;
 namespace Delta.Tiled
 {
     [EditorBrowsable( EditorBrowsableState.Never)]
-    public class Tile : EntityBase
+    public class Tile : IDrawable
     {
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
@@ -29,6 +29,7 @@ namespace Delta.Tiled
 
 #if WINDOWS
         public Tile(Vector2 position, uint tileID)
+            : this()
         {
             _position = position;
             int imageFrameIndex = (int)(tileID & ~(0x40000000 | 0x80000000));
@@ -43,7 +44,6 @@ namespace Delta.Tiled
                     break;
                 }
             }
-            UpdateRenderArea();
             // THERE ARE JUST HERE INCASE WE NEED IT, ROB DOESN'T USE MARGIN OR SPACING IN TILED
             //SpriteEffects = SpriteEffects.None;
             //if ((tileID & FlippedHorizontallyFlag) != 0)
@@ -61,14 +61,10 @@ namespace Delta.Tiled
         }
 #endif
 
-        protected internal override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
-        }
-
-        protected virtual void UpdateRenderArea()
-        {
-            _renderArea = new Rectangle((int)_position.X, (int)_position.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
         }
     }
 }
