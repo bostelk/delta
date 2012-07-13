@@ -106,6 +106,8 @@ namespace Delta
         [ContentSerializer]
         public string ID { get; internal set; }
         [ContentSerializerIgnore]
+        protected Vector2 RenderPosition { get; private set; }
+        [ContentSerializerIgnore]
         protected Vector2 RenderOrigin { get; private set; }
         [ContentSerializerIgnore]
         protected float RenderRotation { get; private set; }
@@ -331,7 +333,7 @@ namespace Delta
 
         protected virtual void UpdateRenderPosition()
         {
-            _renderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
+            RenderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
         }
 
         protected virtual void UpdateRenderOrigin()
@@ -427,6 +429,7 @@ namespace Delta
         {
             base.Recycle();
             ID = string.Empty;
+            RenderPosition = Vector2.Zero;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
             RenderSize = Vector2.Zero;

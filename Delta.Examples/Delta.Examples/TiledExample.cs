@@ -89,11 +89,11 @@ namespace Delta.Examples
             get
             {
 #if DEBUG
-                int totalTiles = 0; int totalDrawn = 0;
-                StringBuilder text = new StringBuilder();
-                text.Append(String.Format("Map: {0}x{1} tiles.\nTiles: {2}x{3} pixels.\n\n", _map.Width, _map.Height, _map.TileWidth, _map.TileHeight));
-                text.Append(String.Format("Selected Layer: {0}\n", _selectedLayer));
-                text.Append(String.Format("{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "Index", "Name", "Visible", "Tiles", "Drawn"));
+                //int totalTiles = 0; int totalDrawn = 0;
+                //StringBuilder text = new StringBuilder();
+                //text.Append(String.Format("Map: {0}x{1} tiles.\nTiles: {2}x{3} pixels.\n\n", _map.Width, _map.Height, _map.TileWidth, _map.TileHeight));
+                //text.Append(String.Format("Selected Layer: {0}\n", _selectedLayer));
+                //text.Append(String.Format("{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "Index", "Name", "Visible", "Tiles", "Drawn"));
                 //for (int i = 0; i < _map.Children.Count; i++)
                 //{
                 //    TileLayer layer = _map.Children[i]  as TileLayer;
@@ -103,8 +103,9 @@ namespace Delta.Examples
                 //    totalTiles += layer.TileCount;
                 //    totalDrawn += layer.TilesDrawn;
                 //}
-                text.Append(String.Format("Total:{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "", "", "", totalTiles, totalDrawn));
-                return text.ToString();
+                //text.Append(String.Format("Total:{0,-8}{1,-50}{2,20}{3,20}{4,20}\n", "", "", "", totalTiles, totalDrawn));
+                //return text.ToString();
+                return string.Empty;
 #else
                 return String.Empty;
 #endif

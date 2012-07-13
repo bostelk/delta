@@ -11,13 +11,10 @@ namespace Delta
     public class EntityBase : IRecyclable, IEntity
     {
         internal EntityCollection _collectionReference = null;
-        internal Vector2 _renderPosition = Vector2.Zero;
         internal Rectangle _renderArea = Rectangle.Empty;
 
         [ContentSerializerIgnore]
         protected internal Rectangle RenderArea { get { return _renderArea; } }
-        [ContentSerializerIgnore]
-        protected Vector2 RenderPosition { get { return _renderPosition; } }
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
         [ContentSerializerIgnore]
@@ -205,12 +202,11 @@ namespace Delta
         protected virtual bool CanDraw()
         {
             if (!IsVisible || !IsLateInitialized || IsDrawing) return false;
-            if (RenderArea != Rectangle.Empty && _collectionReference != null)
-            {
-                if (_collectionReference.ViewingArea != Rectangle.Empty || !_collectionReference.ViewingArea.Contains(RenderArea) || !_collectionReference.ViewingArea.Intersects(RenderArea))
-                    return false;
-            }
-            return true;
+            if (RenderArea == Rectangle.Empty || _collectionReference == null || _collectionReference.ViewingArea == Rectangle.Empty)
+                return true;
+            if (_collectionReference.ViewingArea.Contains(RenderArea) || _collectionReference.ViewingArea.Intersects(RenderArea))
+                return true;
+            return false;
         }
 
         protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
@@ -237,7 +233,6 @@ namespace Delta
         public virtual void Recycle()
         {
             _collectionReference = null;
-            _renderPosition = Vector2.Zero;
             _renderArea = Rectangle.Empty;
             _majorLayer = 0.0f;
             _minorLayer = 0.0f;

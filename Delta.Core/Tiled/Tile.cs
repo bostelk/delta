@@ -10,23 +10,27 @@ using Delta;
 
 namespace Delta.Tiled
 {
+    [EditorBrowsable( EditorBrowsableState.Never)]
     public class Tile : EntityBase
     {
-        [ContentSerializer]
-        internal int _imageFrameIndex = -1;
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
-        internal short _tilesetIndex = -1;
+        internal int _tilesetIndex = 1;
+        [ContentSerializer]
+        internal int _imageFrameIndex = -1;
+        [ContentSerializer]
+        internal Vector2 _position = Vector2.Zero;
 
-        public Tile()
+        internal Tile()
             : base()
         {
+            _imageFrameIndex = -1;
         }
 
 #if WINDOWS
         public Tile(Vector2 position, uint tileID)
         {
-            _renderPosition = position;
+            _position = position;
             int imageFrameIndex = (int)(tileID & ~(0x40000000 | 0x80000000));
 
             for (int i = 0; i < Map.Instance._tilesets.Count; i++)
@@ -35,7 +39,7 @@ namespace Delta.Tiled
                 if (imageFrameIndex >= tileset.FirstGID)
                 {
                     _imageFrameIndex = (ushort)(imageFrameIndex - tileset.FirstGID);
-                    _tilesetIndex = (byte)Map.Instance._tilesets.IndexOf(tileset);
+                    _tilesetIndex = Map.Instance._tilesets.IndexOf(tileset);
                     break;
                 }
             }
@@ -59,13 +63,12 @@ namespace Delta.Tiled
 
         protected internal override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Map.Instance._spriteSheet.Texture, RenderPosition, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+            spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
 
         protected virtual void UpdateRenderArea()
         {
-            _renderArea = new Rectangle((int)_renderPosition.X, (int)_renderPosition.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
+            _renderArea = new Rectangle((int)_position.X, (int)_position.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
         }
-
     }
 }

@@ -88,8 +88,9 @@ namespace Delta.Tiled
                 switch (layerNode.Name.ToLower())
                 {
                     case "layer":
-                        if (layerIsVisible)
-                            ImportTileLayer(layerNode, layerOrder);
+                        if (!layerIsVisible)
+                            continue;
+                        ImportTileLayer(layerNode, layerOrder);
                         break;
                     case "objectgroup":
                         ImportObjectGroup(layerNode, layerOrder, layerIsVisible);
