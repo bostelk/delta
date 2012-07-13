@@ -25,8 +25,8 @@ namespace Delta.Graphics
             se.IsLooped = false;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation);
-            se.Order = 100;
-            G.World.Add(se);
+            se.Layer = 100;
+            //G.World.Add(se);
         }
  
         /// <summary>
@@ -44,8 +44,8 @@ namespace Delta.Graphics
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
             se.Play(animation);
-            se.Order = 100;
-            G.World.Add(se);
+            se.Layer = 100;
+            //G.World.Add(se);
 
             Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.Recycle(); });
         }
@@ -70,8 +70,8 @@ namespace Delta.Graphics
                 see.IsLooped = false;
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation);
-                see.Order = 100;
-                G.World.Add(see);
+                see.Layer = 100;
+                //G.World.Add(see);
             }
 
             // rotate the cross randomly

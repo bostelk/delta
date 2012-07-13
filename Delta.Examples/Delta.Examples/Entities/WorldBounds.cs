@@ -14,7 +14,7 @@ using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class WorldBounds : Entity
+    public class WorldBounds
     {
         Polygon p1, p2, p3, p4;
         
@@ -36,11 +36,6 @@ namespace Delta.Examples.Entities
             G.Collision.AddCollider(new Collider(p2) { IsStatic = true });
             G.Collision.AddCollider(new Collider(p3) { IsStatic = true });
             G.Collision.AddCollider(new Collider(p4) { IsStatic = true });
-        }
-
-        protected override void LightUpdate(GameTime gameTime)
-        {
-            base.LightUpdate(gameTime);
         }
 
     }

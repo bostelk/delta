@@ -9,49 +9,35 @@ using Delta.Input;
 
 namespace Delta
 {
-    public class World : EntityParent<IEntity>
+    public class World : EntityCollection
     {
-        public static World Instance { get; set; }
+        static DeltaTime _time = new DeltaTime();
 
-        public float TimeScale { get; set; }
-        public WorldTime Time;
-        public Camera Camera { get; set; }
+        public static Camera Camera { get; private set; }
+        public static float TimeScale { get; private set; }
+        public static DeltaTime Time { get { return _time; } }
 
         public World()
         {
-            Instance = this;
             Camera = new Camera();
             TimeScale = 1.0f;
-            Comparer = new SortByHeight();
         }
 
-        protected internal override void BeginUpdate(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
-            Time.ElapsedWorldSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
-            Time.TotalWorldSeconds += Time.ElapsedWorldSeconds;
-            Camera.InternalUpdate(gameTime);
-            base.BeginUpdate(gameTime);
+            _time.IsRunningSlowly = gameTime.IsRunningSlowly;
+            _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
+            _time.TotalSeconds += _time.ElapsedSeconds;
+            Camera.Update(_time);
+            base.Update(_time);
         }
 
-        protected override void BeginDraw(GameTime gameTime, SpriteBatch spriteBatch)
+        internal virtual void Draw()
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
-            base.BeginDraw(gameTime, spriteBatch);
-        }
-
-        protected internal override void EndDraw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-#if DEBUG
-            spriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
-#endif
-            base.EndDraw(gameTime, spriteBatch);
-            Camera.Draw(gameTime, spriteBatch);
-            spriteBatch.End();
-#if DEBUG
-            spriteBatch.Begin();
-            spriteBatch.DrawString(G.Font, String.Format("Mouse: {0} . Viewing: {1}", Camera.ToWorldPosition(G.Input.Mouse.Position).ToString(), Camera.ViewingArea), new Vector2(0, G.ScreenArea.Bottom), Color.Red, TextAlignment.Bottom);
-            spriteBatch.End();
-#endif
+            G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
+            base.Draw(_time, G.SpriteBatch);
+            Camera.Draw(_time, G.SpriteBatch);
+            G.SpriteBatch.End();
         }
 
         public List<T> GetEntitiesUnderMouse<T>() where T: TransformableEntity

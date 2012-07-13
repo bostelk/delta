@@ -80,7 +80,7 @@ namespace Delta.Examples
             {
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);
             }
-            sprite.InternalUpdate(gameTime);
+            //sprite.InternalUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -88,7 +88,7 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             G.SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
-            sprite.InternalDraw(gameTime, G.SpriteBatch);
+            //sprite.InternalDraw(gameTime, G.SpriteBatch);
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             //SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
             G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);

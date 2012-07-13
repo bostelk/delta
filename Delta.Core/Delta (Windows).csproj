@@ -96,20 +96,13 @@
     <Compile Include="Audio\ISound.cs" />
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
-    <Compile Include="BuildNumber.cs" />
+    <Compile Include="EntityBase.cs" />
+    <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="CardinalDirection.cs" />
-    <Compile Include="CollideableEntity.cs" />
-    <Compile Include="Copyable\Copyable.cs" />
-    <Compile Include="Copyable\IInstanceProvider.cs" />
-    <Compile Include="Copyable\InstanceProvider.cs" />
+    <Compile Include="TEMP\CardinalDirection.cs" />
+    <Compile Include="IRecyclable.cs" />
+    <Compile Include="Physics\CollideableEntity.cs" />
     <Compile Include="Copyable\ObjectExtensions.cs" />
-    <Compile Include="Copyable\VisitedGraph.cs" />
-    <Compile Include="DeltaContentManager.cs" />
-    <Compile Include="DeltaGame.cs" />
-    <Compile Include="EntityHelper.cs" />
-    <Compile Include="EntityParentReader.cs" />
-    <Compile Include="EntitySpawner.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -126,7 +119,6 @@
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheetReader.cs" />
     <Compile Include="Movement\Interpolation.cs" />
-    <Compile Include="ITransformableEntity.cs" />
     <Compile Include="Movement\BlinkTransform.cs" />
     <Compile Include="Movement\BaseTransform.cs" />
     <Compile Include="Movement\FlickerTransform.cs" />
@@ -151,28 +143,22 @@
     <Compile Include="Collision\Geometry\Polygon.cs" />
     <Compile Include="Collision\BaseCollisionEngine.cs" />
     <Compile Include="Collision\SAT.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Physics\IWrappedBody.cs" />
+    <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Structures\HashSet.cs" />
     <Compile Include="Structures\OverRange.cs" />
     <Compile Include="Structures\PoolManager.cs" />
-    <Compile Include="Tiled\EntityLayer.cs" />
-    <Compile Include="Tiled\ILayer.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="Tiled\Map.cs" />
-    <Compile Include="Tiled\MapOrientation.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
-    <Compile Include="Tiled\TmxImporterExtensions.cs" />
-    <Compile Include="TransformableEntity.cs" />
-    <Compile Include="TransientEntity.cs" />
-    <Compile Include="UI.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="EntityParent.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="IEntityParent.cs" />
+    <Compile Include="EntityCollection.cs" />
     <Compile Include="Input\GamePadHelper.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputMap.cs" />
@@ -186,11 +172,9 @@
       <DependentUpon>EmbeddedContent.resx</DependentUpon>
     </Compile>
     <Compile Include="Structures\IPool.cs" />
-    <Compile Include="Structures\IRecyclable.cs" />
     <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="World.cs" />
-    <Compile Include="WorldTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedContent.resx">

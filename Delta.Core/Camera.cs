@@ -11,7 +11,7 @@ namespace Delta
     /// <summary>
     /// TODO: Add rotation support, add queue zoom support, fix transitions, add interpolation method support.
     /// </summary>
-    public class Camera : Entity
+    public class Camera
     {
         //float _rotationRate = 0;
         //float _goalRotation;
@@ -47,7 +47,6 @@ namespace Delta
                 if (_scale != value)
                 {
                     _scale = value;
-                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -61,7 +60,6 @@ namespace Delta
                 if (_rotation != value)
                 {
                     _rotation = value;
-                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -75,22 +73,6 @@ namespace Delta
                 if (_position != value)
                 {
                     _position = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
-        Vector2 _offset;
-        public Vector2 Offset
-        {
-            get
-            { return _offset; }
-            set
-            {
-                if (_offset != value)
-                {
-                    _offset = value;
-                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -141,7 +123,7 @@ namespace Delta
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
         public Matrix World { get; private set; }
-        public TransformableEntity Tracking { get; set; }
+        public Entity Tracking { get; set; }
 
         public bool IsTracking
         {
@@ -170,7 +152,7 @@ namespace Delta
             PixelFix = false; // broken.
         }
 
-        protected internal override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             if (Filter)
             {
@@ -190,14 +172,13 @@ namespace Delta
             }
         }
 
-        protected override void LightUpdate(GameTime gameTime)
+        internal virtual void Update(DeltaTime time)
         {
             // are we following the tracking entity, the player, or the goal position?
             if (IsTracking && Mode != CameraMode.FollowPlayer)
             {
                 _position.X = MathHelper.SmoothStep(_position.X, Tracking.Position.X, _translationRate);
                 _position.Y = MathHelper.SmoothStep(_position.Y, Tracking.Position.Y, _translationRate);
-                NeedsHeavyUpdate = true;
             }
             else if (!IsTracking && _moveDuration > 0.0f)
             {
@@ -209,33 +190,35 @@ namespace Delta
                 }
                 else
                 {
-                    _moveElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    _moveElapsed += time.ElapsedSeconds;
                     float amount = MathHelper.Clamp(_moveElapsed / _moveDuration, 0.0f, 1.0f);
                     _position.X = MathHelper.SmoothStep(_position.X, _desiredPosition.X, amount);
                     _position.Y = MathHelper.SmoothStep(_position.Y, _desiredPosition.Y, amount);
-                    NeedsHeavyUpdate = true;
                 }
             }
 
-            UpdateShake((float)gameTime.ElapsedGameTime.TotalSeconds);
-            UpdateScale((float)gameTime.ElapsedGameTime.TotalSeconds);
+            UpdateShake(time.ElapsedSeconds);
+            UpdateScale(time.ElapsedSeconds);
 
             if (StayInsideBounds)
             {
                 _position.X = MathHelper.Clamp(_position.X + _shakeOffset.X, BoundedArea.Left + ViewingArea.Width / 2, BoundedArea.Right - ViewingArea.Width / 2);
                 _position.Y = MathHelper.Clamp(_position.Y + _shakeOffset.Y, BoundedArea.Top + ViewingArea.Height / 2, BoundedArea.Bottom - ViewingArea.Height / 2);
-                NeedsHeavyUpdate = true;
             }
 
             if (_flashDuration > _flashElapsed)
             {
-                _flashElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;    
+                _flashElapsed += time.ElapsedSeconds;    
             }
             else
             {
                 _flashDuration = 0;
                 _flashElapsed = 0;
             }
+
+            UpdateView();
+            UpdateProjection();
+            UpdateWorld();
         }
 
         private void UpdateScale(float seconds)
@@ -246,7 +229,6 @@ namespace Delta
                 float amount = MathHelper.Clamp(_scaleElapsed / _scaleDuration, 0f, 1f);
                 //float amount = MathHelper.Clamp((float) Math.Pow(0.02, (double) seconds / _zoomElapsed), 0f, 1f);
                 Scale = MathHelper.SmoothStep(Scale, _desiredScale, amount);
-                NeedsHeavyUpdate = true;
             }
             else
             {
@@ -265,13 +247,11 @@ namespace Delta
                     {
                         Scale += traveledDistance;
                     }
-                    NeedsHeavyUpdate = true;
                 }
                 else
                 {
                     Scale = _desiredScale; // always finish on an integer.
                     IsZooming = false;
-                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -318,7 +298,6 @@ namespace Delta
                         */
                     }
                 }
-                NeedsHeavyUpdate = true;
             }
             else
             {
@@ -330,29 +309,21 @@ namespace Delta
             }
         }
 
-        protected internal override void HeavyUpdate(GameTime gameTime)
-        {
-            base.HeavyUpdate(gameTime);
-            UpdateView();
-            UpdateProjection();
-            UpdateWorld();
-        }
-
         protected virtual void UpdateView()
         {
             if (PixelFix)
             {
                 View = Matrix.CreateTranslation((-Position.X + _shakeOffset.X).SimpleRound(), (-Position.Y + _shakeOffset.Y).SimpleRound(), 0) *
                     Matrix.CreateRotationZ(Rotation.SimpleRound()) *
-                    Matrix.CreateScale(Scale) *
-                    Matrix.CreateTranslation(Offset.X.SimpleRound(), Offset.Y.SimpleRound(), 0);
+                    Matrix.CreateScale(Scale)
+                    ;
             }
             else
             {
                 View = Matrix.CreateTranslation(-Position.X + _shakeOffset.X, -Position.Y + _shakeOffset.Y, 0) *
                   Matrix.CreateRotationZ(Rotation) *
-                  Matrix.CreateScale(Scale) *
-                  Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
+                  Matrix.CreateScale(Scale)
+                  ;
             }
         }
 
@@ -366,7 +337,7 @@ namespace Delta
             World = Matrix.Identity;
         }
 
-        public void Follow(TransformableEntity target)
+        public void Follow(Entity target)
         {
             if (target == null)
                 return;
@@ -491,7 +462,7 @@ namespace Delta
             return ViewingArea.Intersects(rectangle) || ViewingArea.Contains(rectangle.Center.X, rectangle.Center.Y);
         }
 
-        public bool IsViewable(TransformableEntity e)
+        public bool IsViewable(Entity e)
         {
             return IsViewable(e.Position); // TODO: Add hitbox testing too.
         }

@@ -14,7 +14,7 @@ using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class PhysicsCar : TransformableEntity
+    public class PhysicsCar : Entity
     {
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;
@@ -74,28 +74,28 @@ namespace Delta.Examples.Entities
             Collider.Geom.Rotation = Rotation;
         }
 
-        protected override void LightUpdate(GameTime gameTime)
-        {
-            if (Input.X < 0)
-                Rotation = MathHelper.SmoothStep(Rotation, Rotation - ROTATION_SPEED, 0.01f);
-            if (Input.X > 0)
-                Rotation = MathHelper.SmoothStep(Rotation, Rotation + ROTATION_SPEED, 0.01f);
+        //protected override void LightUpdate(GameTime gameTime)
+        //{
+        //    if (Input.X < 0)
+        //        Rotation = MathHelper.SmoothStep(Rotation, Rotation - ROTATION_SPEED, 0.01f);
+        //    if (Input.X > 0)
+        //        Rotation = MathHelper.SmoothStep(Rotation, Rotation + ROTATION_SPEED, 0.01f);
 
-            if (Input != Vector2.Zero)
-            {
-                float speedX = (float)Math.Cos(Rotation + Math.PI / 2) * SPEED * Input.Y;
-                float speedY = (float)Math.Sin(Rotation + Math.PI / 2) * SPEED * Input.Y;
-                Velocity.X = MathHelper.SmoothStep(Velocity.X, speedX, 0.3f);
-                Velocity.Y = MathHelper.SmoothStep(Velocity.Y, speedY, 0.3f);
-            }
-            else
-            {
-                Velocity.X = MathHelper.SmoothStep(Velocity.X, 0, 0.1f);
-                Velocity.Y = MathHelper.SmoothStep(Velocity.Y, 0, 0.1f);
-            }
-            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            base.LightUpdate(gameTime);
-        }
+        //    if (Input != Vector2.Zero)
+        //    {
+        //        float speedX = (float)Math.Cos(Rotation + Math.PI / 2) * SPEED * Input.Y;
+        //        float speedY = (float)Math.Sin(Rotation + Math.PI / 2) * SPEED * Input.Y;
+        //        Velocity.X = MathHelper.SmoothStep(Velocity.X, speedX, 0.3f);
+        //        Velocity.Y = MathHelper.SmoothStep(Velocity.Y, speedY, 0.3f);
+        //    }
+        //    else
+        //    {
+        //        Velocity.X = MathHelper.SmoothStep(Velocity.X, 0, 0.1f);
+        //        Velocity.Y = MathHelper.SmoothStep(Velocity.Y, 0, 0.1f);
+        //    }
+        //    Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        //    base.LightUpdate(gameTime);
+        //}
 
     }
 }

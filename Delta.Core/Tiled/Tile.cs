@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -10,18 +10,13 @@ using Delta;
 
 namespace Delta.Tiled
 {
-    public class Tile
+    public class Tile : EntityBase
     {
         [ContentSerializer]
         internal int _imageFrameIndex = -1;
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
         internal short _tilesetIndex = -1;
-
-        /// <summary>
-        /// The top-left corner of the Tile.
-        /// </summary>
-        public Vector2 Position { get; set; }
 
         public Tile()
             : base()
@@ -31,9 +26,8 @@ namespace Delta.Tiled
 #if WINDOWS
         public Tile(Vector2 position, uint tileID)
         {
-            Position = position;
-            int imageFrameIndex = (int)(tileID & ~(0x40000000 | 0x80000000)); //strip out some flags
-            //find the tileset this tile uses
+            _renderPosition = position;
+            int imageFrameIndex = (int)(tileID & ~(0x40000000 | 0x80000000));
 
             for (int i = 0; i < Map.Instance._tilesets.Count; i++)
             {
@@ -63,9 +57,9 @@ namespace Delta.Tiled
         }
 #endif
 
-        internal void Draw(SpriteBatch spriteBatch)
+        public override void InternalDraw(DeltaTime deltaTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Map.Instance._spriteSheet.Texture, Position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+            spriteBatch.Draw(Map.Instance._spriteSheet.Texture, RenderPosition, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
 
     }

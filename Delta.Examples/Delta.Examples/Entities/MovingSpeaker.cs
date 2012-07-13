@@ -9,12 +9,12 @@ using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class MovingSpeaker : TransformableEntity
+    public class MovingSpeaker : Entity
     {
 
         float _rotation;
         Texture2D _texture;
-        TransformableEntity _orbiting;
+        Entity _orbiting;
 
         public bool IsOrbiting
         {
@@ -36,10 +36,10 @@ namespace Delta.Examples.Entities
 
         public MovingSpeaker()
         {
-            ID = "Speaker";
+            //ID = "Speaker";
         }
 
-        public void Orbit(TransformableEntity e)
+        public void Orbit(Entity e)
         {
             _orbiting = e;
             IsOrbiting = true;
@@ -69,28 +69,28 @@ namespace Delta.Examples.Entities
             base.LateInitialize();
         }
 
-        protected override void LightUpdate(GameTime gameTime)
-        {
-            if (!IsOrbiting)
-                return;
+        //protected override void LightUpdate(GameTime gameTime)
+        //{
+        //    if (!IsOrbiting)
+        //        return;
 
-            _rotation = MathHelper.WrapAngle(_rotation + 0.005f);
-            Vector2 newPosition = Vector2.Zero;
-            if (_orbiting == null)
-                newPosition += _center;
-            else
-                newPosition += _orbiting.Position;
-            newPosition.X = (float) Math.Cos(_rotation) * OrbitLength;
-            newPosition.Y = (float) Math.Sin(_rotation) * OrbitLength;
-            Position = newPosition;
-            base.LightUpdate(gameTime);
-        }
+        //    _rotation = MathHelper.WrapAngle(_rotation + 0.005f);
+        //    Vector2 newPosition = Vector2.Zero;
+        //    if (_orbiting == null)
+        //        newPosition += _center;
+        //    else
+        //        newPosition += _orbiting.Position;
+        //    newPosition.X = (float) Math.Cos(_rotation) * OrbitLength;
+        //    newPosition.Y = (float) Math.Sin(_rotation) * OrbitLength;
+        //    Position = newPosition;
+        //    base.LightUpdate(gameTime);
+        //}
 
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Position, Color.White);
-            base.Draw(gameTime, spriteBatch);
-        }
+        //protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    spriteBatch.Draw(_texture, Position, Color.White);
+        //    base.Draw(gameTime, spriteBatch);
+        //}
 
     }
 }

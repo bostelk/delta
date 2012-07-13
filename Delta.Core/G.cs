@@ -1,118 +1,110 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using Delta.Input;
 using Delta.Audio;
-using Microsoft.Xna.Framework.Content;
-using Delta.Graphics.Effects;
-
-using Delta.Content;
 using Delta.Graphics;
+using Delta.Graphics.Effects;
 using Delta.Collision;
 
 namespace Delta
 {
-    public sealed class G
+    public struct DeltaTime
     {
-        internal const bool LETTERBOX = false;
-        internal const float ASPECT_RATIO_SD = 800f / 600f;
-        internal const float ASPECT_RATIO_HD = 1920f / 1080f;
-        internal static Dictionary<string, object> _contentReferences = new Dictionary<string, object>();
+        public float TotalSeconds { get; internal set; }
+        public float ElapsedSeconds { get; internal set; }
+        public bool IsRunningSlowly { get; internal set; }
+    }
 
-        public static DeltaGame Instance { get; private set; }
-        public static GraphicsDevice GraphicsDevice { get; private set; }
-        public static DeltaContentManager Content { get; private set; }
-        public static SpriteBatch SpriteBatch { get; private set; }
-        public static PrimitiveBatch PrimitiveBatch { get; private set; }
+    public class G : Game
+    {
+        internal static ResourceContentManager _embedded = null;
+        internal static GraphicsDeviceManager _graphicsDeviceManager = null;
+        internal static bool _lateInitialized = false;
+
+        public new static ContentManager Content { get; private set; }
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
+        public static World World { get; private set; }
+        public static HUD HUD { get; private set; }
+
+        public new static GraphicsDevice GraphicsDevice { get; private set; }
+        public static SpriteBatch SpriteBatch { get; private set; }
+        public static PrimitiveBatch PrimitiveBatch { get; private set; }
         public static CollisionEngine Collision { get; private set; }
-        public static GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         public static Texture2D PixelTexture { get; private set; }
         public static SpriteFont Font { get; private set; }
         public static Random Random { get; private set; }
-        public static World World { get; private set; }
-        public static UI UI { get; private set; }
         public static Rectangle ScreenArea { get; private set; }
         public static Vector2 ScreenCenter { get; private set; }
+
         public static DeltaEffect DeltaEffect { get; private set; }
         public static SimpleEffect SimpleEffect { get; private set; }
 
-        public static T GetContent<T>(string assetName)
+        public G(int screenWidth, int screenHeight)
+            : base()
         {
-            if (_contentReferences.ContainsKey(assetName))
-                return (T)_contentReferences[assetName];
-            return default(T);
-        }
-
-        internal static void Setup(DeltaGame game, Rectangle screenArea)
-        {
-            Instance = game;
-            ScreenArea = screenArea; // need this information from the start
-            ScreenCenter = screenArea.Center.ToVector2(); // need this information from the start
-            GraphicsDeviceManager = new GraphicsDeviceManager(game);
-            GraphicsDeviceManager.PreparingDeviceSettings += OnPreparingDeviceSettings;
-            GraphicsDeviceManager.DeviceReset += OnDeviceReset;
-            GraphicsDeviceManager.PreferredBackBufferWidth = G.ScreenArea.Width;
-            GraphicsDeviceManager.PreferredBackBufferHeight = G.ScreenArea.Height;
+            Content = base.Content;
+            Content.RootDirectory = "Content";
+            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            _graphicsDeviceManager.PreferredBackBufferWidth = screenWidth;
+            _graphicsDeviceManager.PreferredBackBufferHeight = screenHeight;
+            GraphicsDevice = _graphicsDeviceManager.GraphicsDevice;
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
+            PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+            PixelTexture.SetData<Color>(new Color[] { Color.White });
+            ScreenArea = GraphicsDevice.Viewport.Bounds;
+            ScreenCenter = ScreenArea.Center.ToVector2();
+#if DEBUG
+            IsMouseVisible = true;
+#endif
+            _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
+            Font = _embedded.Load<SpriteFont>("TinyFont");
+            DeltaEffect = new DeltaEffect(_embedded.Load<Effect>("DeltaEffect"));
+            SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
             Random = new Random();
-            World = new World();
-            UI = new UI();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
             Collision = new CollisionEngine();
-            Content = new Delta.Content.DeltaContentManager(game.Content.ServiceProvider, game.Content.RootDirectory);
         }
 
-        internal static void LoadContent(DeltaGame game, ResourceContentManager resources)
+        protected override void LoadContent()
         {
-            GraphicsDevice = game.GraphicsDevice;
-            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
-            PixelTexture = new Texture2D(game.GraphicsDevice, 1, 1);
-            PixelTexture.SetData<Color>(new Color[] { Color.White });
-            Font = resources.Load<SpriteFont>("TinyFont");
-            DeltaEffect = new DeltaEffect(resources.Load<Effect>("DeltaEffect"));
-            SimpleEffect = new SimpleEffect(resources.Load<Effect>("SimpleEffect"));
-            ScreenArea = GraphicsDevice.Viewport.Bounds;
-            ScreenCenter = ScreenArea.Center.ToVector2();
+            base.LoadContent();
+            GC.Collect();
+            ResetElapsedTime();
         }
 
-        /// <summary>
-        /// Called when the presentation parameters have changed. Examples: fullscreen, window is resized, or manual reset.
-        /// </summary>
-        internal static void OnDeviceReset(object sender, EventArgs e)
+        protected virtual void LateInitialize()
         {
-            var pp = GraphicsDevice.PresentationParameters;
-            int width = pp.BackBufferWidth;
-            int height = pp.BackBufferHeight;
+        }
 
-            // scale height to maintain widescreen aspect ratio
-            if (width / height == (int)ASPECT_RATIO_SD && LETTERBOX)
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            G.Input.Update(gameTime);
+            G.Audio.Update(gameTime);
+            if (_lateInitialized)
             {
-                height = (int)((float)width * (1f / ASPECT_RATIO_HD));
-                GraphicsDevice.Viewport = new Viewport(0, (pp.BackBufferHeight - height) / 2, width, height);
+                _lateInitialized = true;
+                LateInitialize();
             }
-
-            // xna will try to maintain the backbuffer resolution, however the monitor may not support it.
-            // xna will then pick the next best resolution. eg. 1920x1080 fullscreened becomes 1600x900.
-            // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
-            ScreenArea = new Rectangle(0, 0, width, height);
-            ScreenCenter = ScreenArea.Center.ToVector2();
-            World.Camera.Offset = ScreenCenter;
+            G.World.Update(gameTime);
+            G.HUD.Update(gameTime);
+            G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
-        internal static void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        protected override void Draw(GameTime gameTime)
         {
-            var pp = e.GraphicsDeviceInformation.PresentationParameters;
-            if (pp.IsFullScreen)
-            {
-                pp.BackBufferWidth = 1024;
-                pp.BackBufferHeight = 768;
-            }
+            base.Draw(gameTime);
+            G.World.Draw();
+            G.HUD.Draw();
         }
        
     }

@@ -55,7 +55,7 @@ namespace Delta.Examples
             }
         }
 
-        static void RunExample<T>() where T: DeltaGame, new()
+        static void RunExample<T>() where T: G, new()
         {
             using (T game = new T())
                 game.Run();
