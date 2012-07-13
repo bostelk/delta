@@ -48,6 +48,12 @@ namespace Delta.Tiled
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
         [ContentSerializer]
+        public EntityCollection BelowGround { get; private set; }
+        [ContentSerializer]
+        public EntityCollection Ground { get; private set; }
+        [ContentSerializer]
+        public EntityCollection AboveGround { get; private set; }
+        [ContentSerializer]
         public EntityCollection PostEffects { get; private set; }
 
         public Map()
@@ -92,12 +98,27 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        Add(new TileLayer(fileName, layerNode, layerName));
+                        Add(new TileLayer(fileName, layerNode, layerName) { Layer = layerOrder});
                         break;
                     case "objectgroup":
-                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible); 
+                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Layer = layerOrder }; 
                         switch (layerName)
                         {
+                            case "delta.belowground":
+                            case "delta.bg":
+                            case "d.bg":
+                                Map.Instance.BelowGround = entityLayer;
+                                break;
+                            case "delta.ground":
+                            case "delta.g":
+                            case "d.g":
+                                Map.Instance.Ground = entityLayer;
+                                break;
+                            case "delta.aboveground":
+                            case "delta.ag":
+                            case "d.ag":
+                                Map.Instance.AboveGround = entityLayer;
+                                break;
                             default:
                                 Add(entityLayer);
                                 break;
