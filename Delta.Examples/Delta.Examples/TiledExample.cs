@@ -35,28 +35,23 @@ namespace Delta.Examples
         {
         }
 
-        protected override void Initialize()
-        {
-
-            base.Initialize();
-        }
-
         protected override void LoadContent()
         {
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
-            //G.World.Add(_map);
+            _map.LoadContent();
+            G.World.Add(_map);
             G.World.Camera.Offset = G.ScreenCenter;
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            ////G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
-            //if (G.Input.Keyboard.Held(Keys.OemPlus))
-            //    G.World.Camera.ZoomByAmount(0.2f);
-            //if (G.Input.Keyboard.Held(Keys.OemMinus))
-            //    G.World.Camera.ZoomByAmount(-0.2f);
+            G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WadsDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
+            if (G.Input.Keyboard.Held(Keys.OemPlus))
+                G.World.Camera.ZoomByAmount(0.2f);
+            if (G.Input.Keyboard.Held(Keys.OemMinus))
+                G.World.Camera.ZoomByAmount(-0.2f);
 
             //if (G.Input.Keyboard.JustPressed(Keys.Up))
             //    _selectedLayer = MathExtensions.Wrap(_selectedLayer - 1, 0, _map.Children.Count - 1);

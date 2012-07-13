@@ -67,6 +67,12 @@ namespace Delta
             _idReferences.Add(entity.ID.ToLower(), entity);
         }
 
+        public void Add(EntityCollection collection)
+        {
+            foreach (EntityBase entity in collection)
+                Add(entity);
+        }
+
         internal void InternalRemove(EntityBase entity)
         {
             this.FastRemove<EntityBase>(entity);
@@ -78,6 +84,12 @@ namespace Delta
             InternalRemove(entity);
             if (_idReferences.ContainsKey(entity.ID.ToLower()))
                 _idReferences.Remove(entity.ID);
+        }
+
+        public void Remove(EntityCollection collection)
+        {
+            foreach (EntityBase entity in collection)
+                Remove(entity);
         }
 
         public virtual void LoadContent()

@@ -72,9 +72,9 @@ namespace Delta.Examples
 
             if (G.Input.Keyboard.Held(Keys.F1))
             {
-                //Matrix view = G.World.Camera.View;
-                //Matrix projection = G.World.Camera.Projection;
-                //G.Collision.DrawDebug(ref view, ref projection);
+                Matrix view = G.World.Camera.View;
+                Matrix projection = G.World.Camera.Projection;
+                G.Collision.DrawDebug(ref view, ref projection);
             }
 
             G.SpriteBatch.Begin();
