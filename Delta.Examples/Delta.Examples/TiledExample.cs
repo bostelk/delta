@@ -46,7 +46,7 @@ namespace Delta.Examples
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
             //G.World.Add(_map);
-            //G.World.Camera.Offset = G.ScreenCenter;
+            G.World.Camera.Offset = G.ScreenCenter;
             base.LoadContent();
         }
 

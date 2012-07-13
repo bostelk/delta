@@ -44,22 +44,22 @@ namespace Delta.Examples.Entities
             base.LateInitialize();
         }
 
-        //protected override void LightUpdate(GameTime gameTime)
-        //{
-        //    if (_lucas == null)
-        //        _lucas = Entity.Get("Lucas") as Lucas;
-        //    for(int i = 0; i < NUM_PARTICLES; i++)
-        //    {
-        //        _particles[i].Velocity = -GRAVITY * (M1 * M2 / MathExtensions.Square(Vector2.Distance(_particles[i].Position, _lucas.Position))) * (_particles[i].Position-_lucas.Position );
-        //        _particles[i].Position += _particles[i].Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        //    }
-        //}
+        protected override void LightUpdate(DeltaTime time)
+        {
+            if (_lucas == null)
+                _lucas = Entity.Get("Lucas") as Lucas;
+            for (int i = 0; i < NUM_PARTICLES; i++)
+            {
+                _particles[i].Velocity = -GRAVITY * (M1 * M2 / MathExtensions.Square(Vector2.Distance(_particles[i].Position, _lucas.Position))) * (_particles[i].Position - _lucas.Position);
+                _particles[i].Position += _particles[i].Velocity * (float)time.ElapsedSeconds;
+            }
+        }
 
-        //protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        //{
-        //    foreach(Particle p in _particles)
-        //        spriteBatch.Draw(G.PixelTexture, p.Position, Color.White);
-        //}
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            foreach (Particle p in _particles)
+                spriteBatch.Draw(G.PixelTexture, p.Position, Color.White);
+        }
         
     }
 }

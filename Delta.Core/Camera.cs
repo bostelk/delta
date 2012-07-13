@@ -77,6 +77,20 @@ namespace Delta
             }
         }
 
+        Vector2 _offset;
+        public Vector2 Offset
+        {
+            get
+            { return _offset; }
+            set
+            {
+                if (_offset != value)
+                {
+                    _offset = value;
+                }
+            }
+        }
+
         public CameraMode Mode { get; set; }
 
         /// <summary>
@@ -315,15 +329,15 @@ namespace Delta
             {
                 View = Matrix.CreateTranslation((-Position.X + _shakeOffset.X).SimpleRound(), (-Position.Y + _shakeOffset.Y).SimpleRound(), 0) *
                     Matrix.CreateRotationZ(Rotation.SimpleRound()) *
-                    Matrix.CreateScale(Scale)
-                    ;
+                    Matrix.CreateScale(Scale) *
+                    Matrix.CreateTranslation(Offset.X.SimpleRound(), Offset.Y.SimpleRound(), 0);
             }
             else
             {
                 View = Matrix.CreateTranslation(-Position.X + _shakeOffset.X, -Position.Y + _shakeOffset.Y, 0) *
                   Matrix.CreateRotationZ(Rotation) *
-                  Matrix.CreateScale(Scale)
-                  ;
+                  Matrix.CreateScale(Scale) *
+                  Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
             }
         }
 

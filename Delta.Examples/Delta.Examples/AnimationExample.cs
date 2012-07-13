@@ -59,28 +59,28 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Down))
             {
             }
-            //if (G.Input.Keyboard.JustPressed(Keys.Left))
-            //{
-            //    _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
-            //    sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
-            //}
-            //if (G.Input.Keyboard.JustPressed(Keys.Right))
-            //{
-            //    _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
-            //    sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
-            //}
-            //if (G.Input.Keyboard.JustPressed(Keys.Space))
-            //{
-            //    if (!sprite.IsPaused)
-            //        sprite.Pause();
-            //    else
-            //        sprite.Resume();
-            //}
+            if (G.Input.Keyboard.JustPressed(Keys.Left))
+            {
+                _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
+                sprite.Play(_supportedAnimations[_animationIndex].Name);
+            }
+            if (G.Input.Keyboard.JustPressed(Keys.Right))
+            {
+                _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
+                sprite.Play(_supportedAnimations[_animationIndex].Name);
+            }
+            if (G.Input.Keyboard.JustPressed(Keys.Space))
+            {
+                if (!sprite.IsPaused)
+                    sprite.IsPaused = true;
+                else
+                    sprite.IsPaused = false;
+            }
             if (G.Input.Keyboard.JustPressed(Keys.F1))
             {
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);
             }
-            //sprite.InternalUpdate(gameTime);
+            sprite.InternalUpdate(G.World.Time);
             base.Update(gameTime);
         }
 
@@ -88,20 +88,21 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             G.SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
-            //sprite.InternalDraw(gameTime, G.SpriteBatch);
+            sprite.InternalDraw(G.World.Time, G.SpriteBatch);
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            //SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
+            SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
             G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
             G.SpriteBatch.End();
             base.Draw(gameTime);
         }
 
-        //public string InfoText
-        //{
-        //    get
-        //    {
-        //        return string.Format("Animation: {0}\nFrame: {1} of {2}\nFrame Duration: {3}", sprite.AnimationName, sprite.AnimationFrame, sprite.TotalFrames, sprite.SecondsLeft);
-        //    }
-        //}
+        public string InfoText
+        {
+            get
+            {
+                return String.Empty;
+                //return string.Format("Animation: {0}\nFrame: {1} of {2}\nFrame Duration: {3}", sprite.AnimationName, sprite.AnimationFrame, sprite.TotalFrames, sprite.SecondsLeft);
+            }
+        }
     }
 }

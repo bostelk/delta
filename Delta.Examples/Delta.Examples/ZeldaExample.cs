@@ -29,7 +29,7 @@ namespace Delta.Examples
         {
             ClearColor = Color.Black;
             G.Collision.DefineWorld(640, 640, 32);
-            //G.World.Camera. = G.ScreenCenter;
+            G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
             G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
             G.World.Camera.StayInsideBounds = true;
