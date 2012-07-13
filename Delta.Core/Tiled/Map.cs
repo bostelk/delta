@@ -80,7 +80,7 @@ namespace Delta.Tiled
 
             string layerName = string.Empty;
             int layerOrder = 0;
-            bool layerIsVisible = true;
+            bool layerIsVisible = false;
             foreach (XmlNode layerNode in node.SelectNodes("layer|objectgroup"))
             {
                 layerName = layerNode.Attributes["name"].Value;

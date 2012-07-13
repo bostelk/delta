@@ -126,16 +126,6 @@
    H4sIAAAAAAAAC+3TSQ0AIBADwP2iCxf4F4IDwq8cMwqatK0CAAC4V2/pBGvj8HyQ5L+k2B7s8ZW3/dDvBLHScWoAGQAA
   </data>
  </layer>
- <layer name="panels" width="40" height="40" visible="0" opacity="0.4">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ8HFAAAAAAAwJcBSxPzAQAZAAA=
-  </data>
- </layer>
- <layer name="ScreenS" width="40" height="40" visible="0" opacity="0">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3PMREAMAwDsZRGUYQ/upLwdbGG3/V7ZjbYDZe08fHx8fH1+Np++fj4+Pg6fG2/fHx8fHwdvrZfPj6+f74HubZP9gAZAAA=
-  </data>
- </layer>
  <layer name="Gypsys" width="40" height="40">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ8HFAAAAAAAwJcBSxPzAQAZAAA=
