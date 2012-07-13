@@ -87,6 +87,10 @@ namespace Delta
             SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
             ScreenArea = GraphicsDevice.Viewport.Bounds;
             ScreenCenter = ScreenArea.Center.ToVector2();
+
+            World.LoadContent();
+            UI.LoadContent();
+
             GC.Collect();
             ResetElapsedTime();
         }
