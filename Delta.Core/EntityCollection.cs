@@ -109,7 +109,7 @@ namespace Delta
                 _updateables[x].LoadContent();
         }
 
-        internal void Update(DeltaTime time)
+        public void Update(DeltaTime time)
         {
             if (NeedsToSort)
                 Sort();
@@ -117,7 +117,7 @@ namespace Delta
                 _updateables[x].InternalUpdate(time);
         }
 
-        internal void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (int x = 0; x < _drawables.Count; x++)
                 _drawables[x].InternalDraw(time, spriteBatch);

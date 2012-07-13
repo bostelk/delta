@@ -33,6 +33,7 @@ namespace Delta.Examples
 
         public TiledExample() : base("TiledExample")
         {
+            IsFixedTimeStep = false;
         }
 
         protected override void LoadContent()
@@ -40,7 +41,6 @@ namespace Delta.Examples
             Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
             _map.LoadContent();
-            G.World.Add(_map);
             G.World.Camera.Offset = G.ScreenCenter;
             base.LoadContent();
         }
@@ -78,9 +78,10 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-            G.SpriteBatch.Begin();
+            G.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, G.World.Camera.View);
             G.SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 40), Color.White);
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            _map.Draw(null, G.SpriteBatch);
             G.SpriteBatch.End();
         }
 
