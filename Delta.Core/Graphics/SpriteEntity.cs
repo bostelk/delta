@@ -260,7 +260,7 @@ namespace Delta.Graphics
         //    return (viewingArea.Contains(spriteArea) || viewingArea.Intersects(spriteArea));
         //}
 
-        protected internal override void Draw(DeltaTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaTime gameTime, SpriteBatch spriteBatch)
         {
             if (_state.HasFlag(SpriteState.OutlineTop) || _state.HasFlag(SpriteState.OutlineRight) || _state.HasFlag(SpriteState.OutlineBottom) || _state.HasFlag(SpriteState.OutlineLeft))
             {

@@ -33,7 +33,7 @@ namespace Delta.Examples.Entities
         {
             Vector2 offset = new Vector2(_texture.Width / 2, _texture.Height / 2);
             spriteBatch.Draw(_texture, Position - offset, Color.White);
-            base.InternalDraw(time, spriteBatch);
+            base.Draw(time, spriteBatch);
         }
 
     }

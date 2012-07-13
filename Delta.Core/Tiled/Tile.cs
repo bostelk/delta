@@ -21,11 +21,7 @@ namespace Delta.Tiled
         [ContentSerializer]
         internal Vector2 _position = Vector2.Zero;
 
-        float ILayerable.Layer
-        {
-            get { return 0; }
-            set { }
-        }
+        float ILayerable.Layer { get { return 0; } }
 
         internal Tile()
             : base()
@@ -68,7 +64,7 @@ namespace Delta.Tiled
 #endif
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }

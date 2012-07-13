@@ -8,11 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityCollection
+    public class EntityCollection : IDrawable, IUpdateable, ILayerable
     {
         internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
         internal bool NeedsToSort { get; set; }
+
+        public float Layer { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<IUpdateable> _updateables = new List<IUpdateable>();
@@ -108,18 +109,23 @@ namespace Delta
                 _updateables[x].LoadContent();
         }
 
+        void IUpdateable.Update(DeltaTime time)
+        {
+            Update(time);
+        }
+
         public void Update(DeltaTime time)
         {
             if (NeedsToSort)
                 Sort();
             for (int x = 0; x < _updateables.Count; x++)
-                _updateables[x].InternalUpdate(time);
+                _updateables[x].Update(time);
         }
 
         public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (int x = 0; x < _drawables.Count; x++)
-                _drawables[x].InternalDraw(time, spriteBatch);
+                _drawables[x].Draw(time, spriteBatch);
         }
 
         protected virtual void Sort()

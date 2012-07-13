@@ -11,11 +11,16 @@ using Microsoft.Xna.Framework.Content;
 namespace Delta.Examples
 {
 
-    public class PerformanceMetrics : Entity
+    public class PerformanceMetrics : IDrawable, IUpdateable
     {
         Stopwatch _stopwatch;
         StringBuilder _stringBuilder;
         int _frames;
+
+        float ILayerable.Layer
+        {
+            get { return 0; }
+        }
 
         public SpriteFont Font
         {
@@ -56,13 +61,13 @@ namespace Delta.Examples
             Color = Color.White;
         }
 
-        public virtual void LoadContent()
+        public void LoadContent()
         {
             Font = G.Font;
             _stopwatch.Start();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        public void Update(DeltaTime time)
         {
             if (_stopwatch.Elapsed > TimeSpan.FromSeconds(1))
             {
@@ -84,15 +89,13 @@ namespace Delta.Examples
                 //_stringBuilder.Append("??");
                 //_stringBuilder.Append(" mb");
             }
-            base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             Font = G.Font; // loadcontent isn't called yet; not attached to a world.
             spriteBatch.DrawString(Font, _stringBuilder, Vector2.Zero, Color);
             _frames++;
-            base.Draw(time, spriteBatch);
         }
     }
 }

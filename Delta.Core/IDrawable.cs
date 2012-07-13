@@ -5,6 +5,6 @@ namespace Delta
 {
     public interface IDrawable : ILayerable
     {
-        void InternalDraw(DeltaTime time, SpriteBatch spriteBatch);
+        void Draw(DeltaTime time, SpriteBatch spriteBatch);
     }
 }

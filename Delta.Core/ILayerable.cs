@@ -7,6 +7,6 @@ namespace Delta
 {
     public interface ILayerable
     {
-        float Layer { get; set; }
+        float Layer { get; }
     }
 }

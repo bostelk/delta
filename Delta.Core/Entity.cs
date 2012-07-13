@@ -346,11 +346,6 @@ namespace Delta
             RenderRotation = Rotation.ToRadians();
         }
 
-        //protected virtual void UpdateRenderArea()
-        //{
-        //    _renderArea = new Rectangle((int)(_position.X + _offset.X), (int)(_position.Y + _offset.Y), (int)RenderSize.X, (int)RenderSize.Y);
-        //}
-
         protected virtual void UpdateToWrappedBody()
         {
             if (WrappedBody != null)
@@ -376,7 +371,6 @@ namespace Delta
         {
             UpdateRenderPosition();
             UpdateToWrappedBody();
-            //UpdateRenderArea();
         }
 
         protected internal virtual void OnSizeChanged()
@@ -384,7 +378,6 @@ namespace Delta
             UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
-            //UpdateRenderArea();
         }
 
         protected internal virtual void OnScaleChanged()
@@ -392,7 +385,6 @@ namespace Delta
             UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
-            //UpdateRenderArea();
         }
 
         protected internal virtual void OnRotationChanged()

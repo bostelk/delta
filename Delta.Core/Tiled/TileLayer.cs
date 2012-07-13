@@ -74,10 +74,10 @@ namespace Delta.Tiled
         }
 #endif
 
-        public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < _tiles.Count; i++)
-                _tiles[i].InternalDraw(time, spriteBatch);
+                _tiles[i].Draw(time, spriteBatch);
         }
 
     }

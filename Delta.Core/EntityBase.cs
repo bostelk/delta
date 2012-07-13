@@ -7,14 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
+    /// <summary>
+    /// Lightweight as possible while still inhertiting all the basic interfaces.
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class EntityBase : IRecyclable, IImportable, IDrawable, IUpdateable
     {
         internal EntityCollection _collectionReference = null;
-        //internal Rectangle _renderArea = Rectangle.Empty;
 
-        //[ContentSerializerIgnore]
-        //protected internal Rectangle RenderArea { get { return _renderArea; } }
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
         [ContentSerializer]
@@ -47,7 +47,6 @@ namespace Delta
         {
             IsVisible = true;
             IsEnabled = true;
-            //_renderArea = Rectangle.Empty;
         }
 
 #if WINDOWS
@@ -79,41 +78,32 @@ namespace Delta
         }
 #endif
 
-        internal void InternalInitialize()
-        {
-            if (!IsLateInitialized)
-            {
-                if (G.GraphicsDevice == null)
-                    return;
-                IsLateInitialized = true;
-                LateInitialize();
-            }
-        }
-
         protected virtual void LateInitialize()
         {
-        }
-
-        internal void InternalLoadContent()
-        {
-            if (!HasLoadedContent)
-            {
-                HasLoadedContent = true;
-                LoadContent();
-            }
         }
 
         public virtual void LoadContent()
         {
         }
 
+        void IUpdateable.Update(DeltaTime time)
+        {
+            InternalUpdate(time);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual void InternalUpdate(DeltaTime time)
+        public void InternalUpdate(DeltaTime time)
         {
             if (!IsLateInitialized)
-                InternalInitialize();
+            {
+                IsLateInitialized = true;
+                LateInitialize();
+            }
             if (!HasLoadedContent)
-                InternalLoadContent();
+            {
+                HasLoadedContent = true;
+                LoadContent();
+            }
             if (CanUpdate())
             {
                 LightUpdate(time);
@@ -127,8 +117,7 @@ namespace Delta
 
         protected virtual bool CanUpdate()
         {
-            if (!IsEnabled) return false;
-            return true;
+            return IsEnabled;
         }
 
         protected virtual void LightUpdate(DeltaTime time)
@@ -140,8 +129,13 @@ namespace Delta
             NeedsHeavyUpdate = false;
         }
 
+        void IDrawable.Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            InternalDraw(time, spriteBatch);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
+        public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             if (CanDraw())
                 Draw(time, spriteBatch);
@@ -149,23 +143,16 @@ namespace Delta
 
         protected virtual bool CanDraw()
         {
-            if (!IsVisible) 
-                return false;
-            //if (RenderArea == Rectangle.Empty || _collectionReference == null || _collectionReference.ViewingArea == Rectangle.Empty)
-            //    return true;
-            //if (_collectionReference.ViewingArea.Contains(RenderArea) || _collectionReference.ViewingArea.Intersects(RenderArea))
-            //    return true;
-            return true;
+            return IsVisible; 
         }
 
-        protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
         }
 
         public virtual void Recycle()
         {
             _collectionReference = null;
-            //_renderArea = Rectangle.Empty;
             _layer = 0.0f;
             HasLoadedContent = false;
             IsEnabled = true;

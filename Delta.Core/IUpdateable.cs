@@ -7,7 +7,7 @@ namespace Delta
 {
     public interface IUpdateable : ILayerable
     {
-        void InternalUpdate(DeltaTime time);
+        void Update(DeltaTime time);
         void LoadContent();
     }
 }

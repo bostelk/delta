@@ -20,7 +20,7 @@ namespace Delta
             Camera = new Camera();
         }
 
-        internal virtual void Update(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
             _time.IsRunningSlowly = gameTime.IsRunningSlowly;
             _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
