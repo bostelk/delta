@@ -1,8 +1,9 @@
 using System;
 using Delta;
 using System.Diagnostics;
+using Delta.Examples;
 
-namespace Delta.Examples
+namespace Delta.Bootstrap
 {
 #if WINDOWS || XBOX
     static class Program

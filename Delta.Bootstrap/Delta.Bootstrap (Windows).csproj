@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Delta.Boostrap</RootNamespace>
-    <AssemblyName>Delta.Boostrap</AssemblyName>
+    <RootNamespace>Delta.Bootstrap</RootNamespace>
+    <AssemblyName>Delta.Bootstrap</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
