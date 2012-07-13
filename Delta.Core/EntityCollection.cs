@@ -29,29 +29,6 @@ namespace Delta
             Comparer = new ILayerableComparer();
         }
 
-        public void Add(Entity entity)
-        {
-            _updateables.Add(entity);
-            _drawables.Add(entity);
-            NeedsToSort = true;
-            entity._collectionReference = this;
-            if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
-                entity.ID = Guid.NewGuid().ToString();
-            if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment
-            {
-                for (int x = 1; x < int.MaxValue; x++)
-                {
-                    string newID = entity.ID + x;
-                    if (!_idReferences.ContainsKey(newID))
-                    {
-                        entity.ID = newID;
-                        break;
-                    }
-                }
-            }
-            _idReferences.Add(entity.ID.ToLower(), entity);
-        }
-
         public void Add(object obj)
         {
             IUpdateable updateable = obj as IUpdateable;
