@@ -67,6 +67,12 @@ namespace Delta
             }
         }
 
+        public void Add(params object[] objs)
+        {
+            foreach (object obj in objs)
+                Add(obj);
+        }
+
         public void Remove(object obj)
         {
             IUpdateable updateable = obj as IUpdateable;
@@ -89,6 +95,11 @@ namespace Delta
             }
         }
 
+        public void Remove(params object[] objs)
+        {
+            foreach (object obj in objs)
+                Remove(obj);
+        }
         public virtual void LoadContent()
         {
             for (int x = 0; x < _updateables.Count; x++)

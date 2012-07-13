@@ -11,7 +11,7 @@ namespace Delta.Movement
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
     /// Use additional Transformers to create parallel sequences.
     /// </summary>
-    public class Transformer : IRecyclable
+    public class Transformer : IRecyclable, IUpdateable
     {
         static Pool<Transformer> _pool;
         float _elapsed;
@@ -20,6 +20,8 @@ namespace Delta.Movement
         Action _onTransformFinished;
         Action _onSequenceFinished;
         Queue<ITransform> _transforms;
+
+        public float Layer { get; set; }
 
         public bool IsPaused { get; private set; }
 
@@ -48,7 +50,7 @@ namespace Delta.Movement
         public static Transformer ThisEntity(Entity entity)
         {
             Transformer transform = Create(entity);
-            //G.World.Add(transform);
+            G.World.Add(transform);
             return transform;
         }
 
@@ -263,55 +265,58 @@ namespace Delta.Movement
             _onSequenceFinished = callback;
         }
 
-        //protected override void LightUpdate(GameTime gameTime)
-        //{
-        //    if (_transforms.Count > 0 && !IsPaused)
-        //    {
-        //        ITransform currentTransform = _transforms.Peek();
+        public void LoadContent()
+        {
+        }
 
-        //        // the transform is either just starting, updating or ending.
-        //        if (_elapsed == 0)
-        //            currentTransform.Begin();
-        //        if (_elapsed > currentTransform.Duration)
-        //        {
-        //            ITransform oldTransform = _transforms.Dequeue();
-        //            oldTransform.End();
+        public void Update(DeltaTime time)
+        {
+            if (_transforms.Count > 0 && !IsPaused)
+            {
+                ITransform currentTransform = _transforms.Peek();
 
-        //            // either loop if -1 or repeat the desired about of times. or recycle it.
-        //            if (_repeat < 0)
-        //            {
-        //                _transforms.Enqueue(oldTransform);
-        //            }
-        //            else if (_repeat > 0)
-        //            {
-        //                _transforms.Enqueue(oldTransform);
-        //                _repeat--;
-        //            }
-        //            else if (oldTransform is IRecyclable)
-        //            {
-        //                (oldTransform as IRecyclable).Recycle();
-        //            }
+                // the transform is either just starting, updating or ending.
+                if (_elapsed == 0)
+                    currentTransform.Begin();
+                if (_elapsed > currentTransform.Duration)
+                {
+                    ITransform oldTransform = _transforms.Dequeue();
+                    oldTransform.End();
 
-        //            // the transform has finished.
-        //            if (_onTransformFinished != null)
-        //                _onTransformFinished();
-        //            // the transform sequence has finished; no remaining transforms.
-        //            if (_transforms.Count == 0 && _onSequenceFinished != null)
-        //            {
-        //                _onSequenceFinished();
-        //                Recycle();
-        //            }
+                    // either loop if -1 or repeat the desired about of times. or recycle it.
+                    if (_repeat < 0)
+                    {
+                        _transforms.Enqueue(oldTransform);
+                    }
+                    else if (_repeat > 0)
+                    {
+                        _transforms.Enqueue(oldTransform);
+                        _repeat--;
+                    }
+                    else if (oldTransform is IRecyclable)
+                    {
+                        (oldTransform as IRecyclable).Recycle();
+                    }
 
-        //            _elapsed = 0;
-        //        }
-        //        else
-        //        {
-        //            currentTransform.Update(_elapsed);
-        //            _elapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
-        //        }
-        //    }
-        //    base.LightUpdate(gameTime);
-        //}
+                    // the transform has finished.
+                    if (_onTransformFinished != null)
+                        _onTransformFinished();
+                    // the transform sequence has finished; no remaining transforms.
+                    if (_transforms.Count == 0 && _onSequenceFinished != null)
+                    {
+                        _onSequenceFinished();
+                        Recycle();
+                    }
+
+                    _elapsed = 0;
+                }
+                else
+                {
+                    currentTransform.Update(_elapsed);
+                    _elapsed += (float)time.ElapsedSeconds;
+                }
+            }
+        }
 
         public void Recycle()
         {
