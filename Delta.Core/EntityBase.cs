@@ -25,6 +25,8 @@ namespace Delta
         public bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
         public bool HasLoadedContent { get; internal set; }
+        [ContentSerializerIgnore]
+        public bool RemoveNextUpdate { get; set; }
 
         float _layer = 0.0f;
         [ContentSerializer]
@@ -77,6 +79,11 @@ namespace Delta
             return false;
         }
 #endif
+        public void Remove()
+        {
+            if (_collectionReference != null)
+                _collectionReference.Remove(this);
+        }
 
         protected virtual void LateInitialize()
         {
@@ -94,6 +101,10 @@ namespace Delta
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void InternalUpdate(DeltaTime time)
         {
+            if (RemoveNextUpdate)
+            {
+                Remove();
+            }
             if (!IsLateInitialized)
             {
                 IsLateInitialized = true;

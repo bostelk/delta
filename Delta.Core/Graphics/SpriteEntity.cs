@@ -350,7 +350,7 @@ namespace Delta.Graphics
             SpriteEffects = SpriteEffects.None;
             OutlineColor = Color.White;
 
-            //RemoveNextUpdate = true;
+            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }
