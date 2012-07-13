@@ -37,9 +37,8 @@ namespace Delta.Examples.Entities
 
         public Vector2 Velocity;
 
-        public Lucas()
+        public Lucas() : base("Lucas")
         {
-            //ID = "Lucas";
         }
 
         public override void LoadContent()

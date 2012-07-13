@@ -104,13 +104,16 @@ namespace Delta
             base.Update(gameTime);
             G.Input.Update(gameTime);
             G.Audio.Update(gameTime);
-            if (_lateInitialized)
+            if (!_lateInitialized)
             {
                 _lateInitialized = true;
                 LateInitialize();
             }
-            G.World.Update(gameTime);
-            G.UI.Update(gameTime);
+            if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
+            {
+                G.World.Update(gameTime);
+                G.UI.Update(gameTime);
+            }
             G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
