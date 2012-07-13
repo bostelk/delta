@@ -248,6 +248,12 @@ namespace Delta.Tiled
             base.LoadContent();
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
+            foreach (EntityBase entity in this)
+            {
+                Tile tile = entity as Tile;
+                Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
+                tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
+            }
         }
 
     }
