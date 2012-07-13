@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Delta.Examples
 {
 
-    public class PerformanceMetrics
+    public class PerformanceMetrics : Entity
     {
         Stopwatch _stopwatch;
         StringBuilder _stringBuilder;
@@ -62,7 +62,7 @@ namespace Delta.Examples
             _stopwatch.Start();
         }
 
-        public virtual void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        protected override void LightUpdate(DeltaTime time)
         {
             if (_stopwatch.Elapsed > TimeSpan.FromSeconds(1))
             {
@@ -84,14 +84,15 @@ namespace Delta.Examples
                 //_stringBuilder.Append("??");
                 //_stringBuilder.Append(" mb");
             }
+            base.LightUpdate(time);
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             Font = G.Font; // loadcontent isn't called yet; not attached to a world.
             spriteBatch.DrawString(Font, _stringBuilder, Vector2.Zero, Color);
             _frames++;
-            //base.Draw(gameTime, spriteBatch);
+            base.Draw(time, spriteBatch);
         }
     }
 }

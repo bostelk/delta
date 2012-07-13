@@ -39,7 +39,7 @@ namespace Delta.Examples
             //if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
                 //G.GraphicsDevice.gr
 
-            //_performanceMetrics.InternalUpdate(gameTime);
+            _performanceMetrics.InternalUpdate(G.World.Time);
             base.Update(gameTime);
         }
 
@@ -53,7 +53,7 @@ namespace Delta.Examples
         {
             base.Draw(gameTime);
             G.SpriteBatch.Begin();
-            //_performanceMetrics.InternalDraw(gameTime, G.SpriteBatch);
+            _performanceMetrics.InternalDraw(G.World.Time, G.SpriteBatch);
             G.SpriteBatch.End();
         }
     }
