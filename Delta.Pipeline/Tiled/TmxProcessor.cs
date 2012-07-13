@@ -1,29 +1,72 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Delta.Tiled;
+using Delta.Graphics;
 
-namespace Delta.Tiled
+namespace Delta
 {
-    [ContentProcessor(DisplayName = "TmxProcessor")]
-    public class TmxProcessor : ContentProcessor<FilenameContent, Map>
+
+    [ContentProcessor(DisplayName = "DependencyProcessor")]
+    public class TmxProcessor : ContentProcessor<Map, Map>
     {
-        public override Map Process(FilenameContent input, ContentProcessorContext context)
+        public override Map Process(Map input, ContentProcessorContext context)
         {
-            foreach (var file in Directory.GetFiles(Environment.CurrentDirectory))
+            CheckFilesForDependencies(context);
+            return input;
+        }
+
+        internal static List<string> _files = null;
+        internal static HashSet<string> _loadedFileNames = new HashSet<string>();
+        static void CheckFilesForDependencies(ContentProcessorContext context)
+        {
+            if (_files == null)
             {
-                if (file.ToLower().EndsWith(".stylesheet"))
-                {
-                    StyleSheet styleSheet = context.BuildAndLoadAsset<FilenameContent, StyleSheet>(new ExternalReference<FilenameContent>(file), "StyleSheetProcessor");
-                    foreach (var objectStyle in styleSheet.ObjectStyles)
-                    {
-                        if (!StyleSheet.GlobalObjectStyles.ContainsKey(objectStyle.Key))
-                            StyleSheet.GlobalObjectStyles.Add(objectStyle.Key, objectStyle.Value);
-                        else
-                            StyleSheet.GlobalObjectStyles[objectStyle.Key] = objectStyle.Value;
-                    }
-                }
+                _files = new List<string>();
+                DirectoryInfo d = new DirectoryInfo(Environment.CurrentDirectory);
+                foreach (var fi in d.GetFiles())
+                    _files.Add(fi.FullName);
+                foreach (var di in d.GetDirectories())
+                    foreach (var fi in di.GetFiles())
+                        _files.Add(fi.FullName);
             }
-            return new Map(input.FileName);
+            for (int x = 0; x < _files.Count; x++)
+            {
+                string fileName = _files[x];
+                string lowerFileName = fileName.ToLower(); ;
+                if (lowerFileName.EndsWith(".spritesheet"))
+                {
+                    context.AddDependency(fileName);
+                    if (!_loadedFileNames.Contains(fileName))
+                    {
+                        _loadedFileNames.Add(fileName);
+                        context.BuildAsset<SpriteSheetContent, SpriteSheetContent>(new ExternalReference<SpriteSheetContent>(fileName), "SpriteSheetProcessor");
+                    }
+                    continue;
+                }
+                if (lowerFileName.EndsWith(".stylesheet"))
+                {
+                    context.AddDependency(fileName);
+                    if (!_loadedFileNames.Contains(fileName))
+                    {
+                        _loadedFileNames.Add(fileName);
+                        StyleSheet styleSheet = new StyleSheet(fileName);
+                        foreach (var objectStyle in styleSheet.ObjectStyles)
+                        {
+                            if (!StyleSheet._globalObjectStyles.ContainsKey(objectStyle.Key))
+                                StyleSheet._globalObjectStyles.Add(objectStyle.Key, objectStyle.Value);
+                            else
+                                StyleSheet._globalObjectStyles[objectStyle.Key] = objectStyle.Value;
+                        }
+                    }
+                    continue;
+                }
+                _files.RemoveAt(x);
+            }
         }
     }
 }

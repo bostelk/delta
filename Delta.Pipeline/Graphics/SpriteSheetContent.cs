@@ -13,9 +13,12 @@ namespace Delta.Graphics
 {
     public class SpriteSheetContent
     {
+        public static Dictionary<string, SpriteSheetContent> _spriteSheetImages = new Dictionary<string, SpriteSheetContent>();
+
         internal Texture2DContent _texture = null;
         internal List<SpriteBlockContent> _blocks = new List<SpriteBlockContent>();
         internal Dictionary<string, Dictionary<int, Rectangle>> _imageFrameSourceRectangles = new Dictionary<string, Dictionary<int, Rectangle>>();
+        internal string _inputPath = string.Empty;
 
         [ContentSerializer(FlattenContent = true, CollectionItemName = "Image")]
         public List<ImageContent> Images { get; set; }

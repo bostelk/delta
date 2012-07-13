@@ -9,15 +9,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Delta.Graphics;
 
 namespace Delta.Tiled
 {
     [ContentImporter(".tmx", DisplayName="TmxImporter", DefaultProcessor="TmxProcessor")]
-    public class TmxImporter : ContentImporter<FilenameContent>
+    public class TmxImporter : ContentImporter<Map>
     {
-        public override FilenameContent Import(string fileName, ContentImporterContext context)
+        public override Map Import(string fileName, ContentImporterContext context)
         {
-            return new FilenameContent(fileName);
+            return new Map(fileName);
         }
+
     }
 }

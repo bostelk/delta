@@ -113,17 +113,15 @@
     <Compile Include="EntityCollectionWriter.cs" />
     <Compile Include="Graphics\AnimationSerializer.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
+    <Compile Include="Graphics\SpriteSheetContentSerializer.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\SpriteBlockContent.cs" />
     <Compile Include="Graphics\SpriteSheetContent.cs" />
     <Compile Include="Graphics\SpriteSheetContentWriter.cs" />
     <Compile Include="Graphics\SpriteSheetProcessor.cs" />
-    <Compile Include="FilenameContent.cs" />
-    <Compile Include="Tiled\StyleSheetProcessor.cs" />
-    <Compile Include="Tiled\StyleSheetImporter.cs" />
-    <Compile Include="Tiled\TmxImporter.cs" />
     <Compile Include="Tiled\TmxProcessor.cs" />
+    <Compile Include="Tiled\TmxImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Delta.Core\Delta %28Windows%29.csproj">

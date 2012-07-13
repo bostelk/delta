@@ -8,13 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Delta
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityBase : IRecyclable, IEntity
+    public class EntityBase : IRecyclable, IEntity, IDrawable, IUpdateable
     {
         internal EntityCollection _collectionReference = null;
-        internal Rectangle _renderArea = Rectangle.Empty;
+        //internal Rectangle _renderArea = Rectangle.Empty;
 
-        [ContentSerializerIgnore]
-        protected internal Rectangle RenderArea { get { return _renderArea; } }
+        //[ContentSerializerIgnore]
+        //protected internal Rectangle RenderArea { get { return _renderArea; } }
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
         [ContentSerializer]
@@ -26,32 +26,16 @@ namespace Delta
         [ContentSerializerIgnore]
         public bool HasLoadedContent { get; internal set; }
 
-        float _majorLayer = 0.0f;
+        float _layer = 0.0f;
         [ContentSerializer]
-        public float MajorLayer
+        public float Layer
         {
-            get { return _majorLayer; }
+            get { return _layer; }
             set
             {
-                if (_majorLayer != value)
+                if (_layer != value)
                 {
-                    _majorLayer = value;
-                    if (_collectionReference != null)
-                        _collectionReference.NeedsToSort = true;
-                }
-            }
-        }
-
-        float _minorLayer = 0.0f;
-        [ContentSerializer]
-        public float MinorLayer
-        {
-            get { return _minorLayer; }
-            set
-            {
-                if (_minorLayer != value)
-                {
-                    _minorLayer = value;
+                    _layer = value;
                     if (_collectionReference != null)
                         _collectionReference.NeedsToSort = true;
                 }
@@ -63,7 +47,7 @@ namespace Delta
         {
             IsVisible = true;
             IsEnabled = true;
-            _renderArea = Rectangle.Empty;
+            //_renderArea = Rectangle.Empty;
         }
 
 #if WINDOWS
@@ -88,7 +72,7 @@ namespace Delta
                 case "order":
                 case "draworder":
                 case "updateorder":
-                    MajorLayer = float.Parse(value, CultureInfo.InvariantCulture);
+                    Layer = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
              }
             return false;
@@ -132,15 +116,12 @@ namespace Delta
                 InternalLoadContent();
             if (CanUpdate())
             {
-                BeginUpdate(time);
                 LightUpdate(time);
                 if (NeedsHeavyUpdate)
                 {
-                    BeginHeavyUpdate(time);
+                    NeedsHeavyUpdate = false;
                     HeavyUpdate(time);
-                    EndHeavyUpdate(time);
                 }
-                EndUpdate(time);
             }
         }
 
@@ -154,58 +135,30 @@ namespace Delta
         {
         }
 
-        protected internal virtual void BeginUpdate(DeltaTime time)
-        {
-        }
-
-        protected internal virtual void EndUpdate(DeltaTime time)
-        {
-        }
-
-        protected internal virtual void BeginHeavyUpdate(DeltaTime time)
-        {
-            NeedsHeavyUpdate = false;
-        }
-
         protected internal virtual void HeavyUpdate(DeltaTime time)
         {
-        }
-
-        protected internal virtual void EndHeavyUpdate(DeltaTime time)
-        {
+            NeedsHeavyUpdate = false;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             if (CanDraw())
-            {
-                BeginDraw(time, spriteBatch);
                 Draw(time, spriteBatch);
-                EndDraw(time, spriteBatch);
-            }
         }
 
         protected virtual bool CanDraw()
         {
             if (!IsVisible) 
                 return false;
-            if (RenderArea == Rectangle.Empty || _collectionReference == null || _collectionReference.ViewingArea == Rectangle.Empty)
-                return true;
-            if (_collectionReference.ViewingArea.Contains(RenderArea) || _collectionReference.ViewingArea.Intersects(RenderArea))
-                return true;
-            return false;
-        }
-
-        protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
-        {
+            //if (RenderArea == Rectangle.Empty || _collectionReference == null || _collectionReference.ViewingArea == Rectangle.Empty)
+            //    return true;
+            //if (_collectionReference.ViewingArea.Contains(RenderArea) || _collectionReference.ViewingArea.Intersects(RenderArea))
+            //    return true;
+            return true;
         }
 
         protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
-        {
-        }
-
-        protected internal virtual void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
         }
 
@@ -219,9 +172,8 @@ namespace Delta
         public virtual void Recycle()
         {
             _collectionReference = null;
-            _renderArea = Rectangle.Empty;
-            _majorLayer = 0.0f;
-            _minorLayer = 0.0f;
+            //_renderArea = Rectangle.Empty;
+            _layer = 0.0f;
             HasLoadedContent = false;
             IsEnabled = true;
             IsLateInitialized = false;

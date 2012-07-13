@@ -27,10 +27,12 @@ namespace Delta.Tiled
     {
         internal static Map Instance { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [ContentSerializer(FlattenContent=true, ElementName="Tileset")]
-        internal List<Tileset> _tilesets = new List<Tileset>();
+        public List<Tileset> _tilesets = new List<Tileset>();
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [ContentSerializer(ElementName = "SpriteSheet")]
-        internal string _spriteSheetName = string.Empty;
+        public string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
 
         [ContentSerializer]
@@ -90,7 +92,7 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        ImportTileLayer(layerNode, layerOrder);
+                        Add(new TileLayer(fileName, layerNode, layerName));
                         break;
                     case "objectgroup":
                         ImportObjectGroup(layerNode, layerOrder, layerIsVisible);
@@ -115,51 +117,6 @@ namespace Delta.Tiled
             return false;
         }
 
-        void ImportTileLayer(XmlNode node, int layerOrder)
-        {
-            XmlNode dataNode = node["data"];
-            uint[] tileLayerData = new uint[Map.Instance.Width * Map.Instance.Height];
-            if (dataNode.Attributes["encoding"] == null)
-                throw new NotSupportedException(string.Format("{0} does not support un-encoded Tiled layer data.", Assembly.GetExecutingAssembly().GetName().Name));
-            switch (dataNode.Attributes["encoding"].Value.ToLower())
-            {
-                case "base64":
-                    Stream stream = new MemoryStream(Convert.FromBase64String(dataNode.InnerText), false);
-                    if (dataNode.Attributes["compression"] != null)
-                    {
-                        switch (dataNode.Attributes["compression"].Value.ToLower())
-                        {
-                            case "gzip":
-                                stream = new GZipStream(stream, CompressionMode.Decompress, false);
-                                break;
-                            default:
-                                throw new NotSupportedException(string.Format("{0} does not support the compression '{1}' for Tiled layer data.", Assembly.GetExecutingAssembly().GetName().Name, dataNode.Attributes["compression"].Value));
-                        }
-                        using (stream)
-                        {
-                            using (BinaryReader reader = new BinaryReader(stream))
-                            {
-                                for (int i = 0; i < tileLayerData.Length; i++)
-                                    tileLayerData[i] = reader.ReadUInt32();
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException(string.Format("{0} does not support the encoding '{1}' for Tiled layer data.", Assembly.GetExecutingAssembly().GetName().Name, dataNode.Attributes["encoding"].Value));
-            }
-            for (int x = 0; x < Map.Instance.Width; x++)
-            {
-                for (int y = 0; y < Map.Instance.Height; y++)
-                {
-                    Tile tile = new Tile(new Vector2(x * Map.Instance.TileWidth, y * Map.Instance.TileHeight), tileLayerData[y * Map.Instance.Width + x]);
-                    //tile. = layerOrder;
-                    if (tile._tilesetIndex >= 0)
-                        Add(tile);
-                }
-            }
-        }
-
         void ImportObjectGroup(XmlNode node, int layerOrder, bool layerIsVisible)
         {
             foreach (XmlNode objectNode in node.SelectNodes("object"))
@@ -169,7 +126,7 @@ namespace Delta.Tiled
                     continue;
 
                 entity.IsVisible = layerIsVisible;
-                entity.MajorLayer = layerOrder;
+                entity.Layer = layerOrder;
 
                 entity.ID = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
                 entity.Position = new Vector2(
@@ -251,9 +208,12 @@ namespace Delta.Tiled
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
             foreach (IDrawable drawable in _drawables)
             {
-                Tile tile = drawable as Tile;
-                Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
-                tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
+                TileLayer tileLayer = drawable as TileLayer;
+                foreach (Tile tile in tileLayer._tiles)
+                {
+                    Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
+                    tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
+                }
             }
         }
 

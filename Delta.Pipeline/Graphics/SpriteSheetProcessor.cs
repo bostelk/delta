@@ -23,8 +23,6 @@ namespace Delta.Graphics
 
             int maxTextureWidth = 0;
             int maxTextureHeight = 0;
-
-
             //maxTextureWidth = 1024;
             //maxTextureHeight = 1024;
 

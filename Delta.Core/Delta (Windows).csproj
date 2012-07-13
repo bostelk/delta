@@ -155,6 +155,7 @@
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
+    <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Entity.cs" />

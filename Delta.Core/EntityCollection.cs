@@ -133,7 +133,7 @@ namespace Delta
         {
             public override int Compare(EntityBase x, EntityBase y)
             {
-                return x.MajorLayer.CompareTo(y.MajorLayer);
+                return x.Layer.CompareTo(y.Layer);
                 //if (x.MajorLayer > y.MajorLayer)
                 //    return int.MaxValue;
                 //else if (x.MajorLayer < y.MajorLayer)

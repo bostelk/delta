@@ -10,8 +10,7 @@ namespace Delta.Tiled
 {
     public class StyleSheet
     {
-        static Dictionary<string, Entity> _globalObjectStyles = new Dictionary<string, Entity>();
-        public static Dictionary<string, Entity> GlobalObjectStyles {  get { return _globalObjectStyles; } }
+        public static Dictionary<string, Entity> _globalObjectStyles = new Dictionary<string, Entity>();
 
         XmlDocument _document = new XmlDocument();
         [ContentSerializer(FlattenContent = true, CollectionItemName = "ObjectStyle")]
