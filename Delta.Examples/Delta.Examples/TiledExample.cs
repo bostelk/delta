@@ -33,7 +33,6 @@ namespace Delta.Examples
 
         public TiledExample() : base("TiledExample")
         {
-            IsFixedTimeStep = false;
         }
 
         protected override void LoadContent()

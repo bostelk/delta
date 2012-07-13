@@ -15,7 +15,7 @@ namespace Delta.Tiled
     {
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
-        internal int _tilesetIndex = 1;
+        internal int _tilesetIndex = -1;
         [ContentSerializer]
         internal int _imageFrameIndex = -1;
         [ContentSerializer]
