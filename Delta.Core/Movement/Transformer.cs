@@ -296,9 +296,10 @@ namespace Delta.Movement
                     if (_onTransformFinished != null)
                         _onTransformFinished();
                     // the transform sequence has finished; no remaining transforms.
-                    if (_transforms.Count == 0 && _onSequenceFinished != null)
+                    if (_transforms.Count == 0)
                     {
-                        _onSequenceFinished();
+                        if (_onSequenceFinished != null)
+                            _onSequenceFinished();
                         Recycle();
                     }
 
