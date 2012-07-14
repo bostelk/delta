@@ -36,8 +36,8 @@ namespace Delta.Examples
             // Allows the game to exit
             if (G.Input.Keyboard.JustPressed(Keys.Escape))
                 Exit();
-            //if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
-                //G.GraphicsDevice.gr
+            if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
+                G.ToggleFullscreen();
 
             _performanceMetrics.Update(G.World.Time);
             base.Update(gameTime);

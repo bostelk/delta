@@ -11,7 +11,7 @@ namespace Delta.Movement
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
     /// Use additional Transformers to create parallel sequences.
     /// </summary>
-    public class Transformer : IRecyclable, IUpdateable
+    public class Transformer : EntityBase
     {
         static Pool<Transformer> _pool;
         float _elapsed;
@@ -20,8 +20,6 @@ namespace Delta.Movement
         Action _onTransformFinished;
         Action _onSequenceFinished;
         Queue<ITransform> _transforms;
-
-        public float Layer { get; set; }
 
         public bool IsPaused { get; private set; }
 
@@ -265,11 +263,7 @@ namespace Delta.Movement
             _onSequenceFinished = callback;
         }
 
-        public void LoadContent()
-        {
-        }
-
-        public void Update(DeltaTime time)
+        protected override void LightUpdate(DeltaTime time)
         {
             if (_transforms.Count > 0 && !IsPaused)
             {
@@ -316,10 +310,12 @@ namespace Delta.Movement
                     _elapsed += (float)time.ElapsedSeconds;
                 }
             }
+            base.LightUpdate(time);
         }
 
-        public void Recycle()
+        public override void Recycle()
         {
+            base.Recycle();
             _elapsed = 0;
             _repeat = 0;
             _entity = null;
@@ -327,7 +323,7 @@ namespace Delta.Movement
             _onSequenceFinished = null;
             _transforms.Clear();
 
-            //RemoveNextUpdate = true;
+            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }

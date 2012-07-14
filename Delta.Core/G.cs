@@ -94,8 +94,8 @@ namespace Delta
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            G.Input.Update(gameTime);
-            G.Audio.Update(gameTime);
+            Input.Update(gameTime);
+            Audio.Update(gameTime);
             if (!_lateInitialized)
             {
                 _lateInitialized = true;
@@ -103,19 +103,24 @@ namespace Delta
             }
             if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
             {
-                G.World.Update(gameTime);
-                G.UI.Update(gameTime);
+                World.Update(gameTime);
+                UI.Update(gameTime);
             }
-            G.Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
+            Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            G.World.Draw();
-            G.UI.Draw();
+            World.Draw();
+            UI.Draw();
         }
-       
+
+        public static void ToggleFullscreen()
+        {
+            _graphicsDeviceManager.ToggleFullScreen();
+        }
+
         internal void OnDeviceReset(object sender, EventArgs e) 
         {
             var pp = GraphicsDevice.PresentationParameters;
@@ -134,7 +139,7 @@ namespace Delta
             // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
             ScreenArea = new Rectangle(0, 0, width, height);
             ScreenCenter = ScreenArea.Center.ToVector2();
-            //World.Camera.Offset = ScreenCenter;
+            World.Camera.Offset = ScreenCenter;
         }
 
         internal void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
