@@ -33,10 +33,10 @@ namespace Delta
         {
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
             base.Draw(_time, G.SpriteBatch);
+            G.SpriteBatch.End();
+
+            G.SpriteBatch.Begin();
             Camera.Draw(_time, G.SpriteBatch);
-#if DEBUG
-            //G.SpriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
-#endif
             G.SpriteBatch.End();
         }
     }

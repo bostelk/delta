@@ -159,17 +159,12 @@ namespace Delta
         {
             if (TintEnabled)
             {
-                // depends on wheter the camera is drawn within the transformed batch
-                //spriteBatch.Draw(G.PixelTexture, G.ScreenArea, Tint);
-                spriteBatch.Draw(G.PixelTexture, ViewingArea, Tint);
+                spriteBatch.Draw(G.PixelTexture, G.ScreenArea, Tint);
             }
             if (_flashDuration > _flashElapsed)
             {
                 Color temp = _flashColor.SetAlpha(_flashElapsed / _flashDuration);
-
-                // depends on wheter the camera is drawn within the transformed batch
-                //spriteBatch.Draw(G.PixelTexture, G.ScreenArea, temp);
-                spriteBatch.Draw(G.PixelTexture, ViewingArea, temp);
+                spriteBatch.Draw(G.PixelTexture, G.ScreenArea, temp);
             }
         }
 
