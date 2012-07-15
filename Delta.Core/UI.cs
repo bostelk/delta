@@ -35,7 +35,7 @@ namespace Delta
             base.Draw(_time, G.SpriteBatch);
             Camera.Draw(_time, G.SpriteBatch);
 #if DEBUG
-            G.SpriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
+            //G.SpriteBatch.DrawRectangle(Camera.ViewingArea, Color.Gray, false);
 #endif
             G.SpriteBatch.End();
         }
