@@ -270,21 +270,21 @@ namespace Delta.Audio
         /// Fades the music channel to full volume over a period of time.
         /// </summary>
         /// <param name="duration"></param>
-        public void FadeChannelIn(float duration, AudioChannel channel)
+        public void FadeChannelIn(AudioChannel channel, float duration)
         {
-            FadeChannelByAmount(1f, duration, channel);
+            FadeChannelByAmount(channel, duration, 1f);
         }
 
         /// <summary>
         /// Fades the music channel to no volume over a period of time.
         /// </summary>
         /// <param name="duration"></param>
-        public void FadeChannelOut(float duration, AudioChannel channel)
+        public void FadeChannelOut(AudioChannel channel, float duration)
         {
-            FadeChannelByAmount(0f, duration, channel);
+            FadeChannelByAmount(channel, duration, 0f);
         }
 
-        public void FadeChannelByAmount(float amount, float duration, AudioChannel channel)
+        public void FadeChannelByAmount(AudioChannel channel, float duration, float amount)
         {
             _channelGoalVolume[(int)channel] = MathHelper.Clamp(amount, 0f, 1f);
             _channelFadeDuration[(int)channel] = duration;
@@ -325,7 +325,7 @@ namespace Delta.Audio
             _channelCategory[(int)channel].SetVolume(_channelVolume[(int)channel]);
         }
 
-        public void SetChannelVolume(float amount, AudioChannel channel)
+        public void SetChannelVolume(AudioChannel channel, float amount)
         {
             _channelVolume[(int)channel] = amount;
             _channelCategory[(int)channel].SetVolume(amount);
