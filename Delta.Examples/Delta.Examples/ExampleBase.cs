@@ -28,7 +28,7 @@ namespace Delta.Examples
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
-            _performanceMetrics = new PerformanceMetrics();
+            UI.Add(_performanceMetrics = new PerformanceMetrics());
         }
 
         protected override void Update(GameTime gameTime)
@@ -37,24 +37,20 @@ namespace Delta.Examples
             if (G.Input.Keyboard.JustPressed(Keys.Escape))
                 Exit();
             if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
-                G.ToggleFullscreen();
+                G.ToggleFullScreen();
+            if (G.Input.Keyboard.JustPressed(Keys.Pause))
+                G.World.TogglePause();
+            if (G.Input.Keyboard.JustPressed(Keys.PageUp))
+                G.World.TimeScale += 0.1f;
+            if (G.Input.Keyboard.JustPressed(Keys.PageDown))
+                G.World.TimeScale -= 0.1f;
 
-            _performanceMetrics.Update(G.World.Time);
             base.Update(gameTime);
-        }
-
-        protected override void LoadContent()
-        {
-            _performanceMetrics.LoadContent();
-            base.LoadContent();
         }
 
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            G.SpriteBatch.Begin();
-            _performanceMetrics.Draw(G.World.Time, G.SpriteBatch);
-            G.SpriteBatch.End();
         }
     }
 }
