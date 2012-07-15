@@ -116,7 +116,7 @@ namespace Delta
             UI.Draw();
         }
 
-        public static void ToggleFullscreen()
+        public static void ToggleFullScreen()
         {
             _graphicsDeviceManager.ToggleFullScreen();
         }
