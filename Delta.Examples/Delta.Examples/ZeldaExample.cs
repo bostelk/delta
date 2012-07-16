@@ -31,24 +31,24 @@ namespace Delta.Examples
             G.Collision.DefineWorld(640, 640, 32);
             G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
-            G.World.Camera.BoundsEnabled = true;
-            G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
-            G.World.Camera.TintEnabled = true;
-            G.World.Camera.Tint = new Color(0, 0, 0, 140);
+            //G.World.Camera.BoundsEnabled = true;
+            //G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
         }
 
         protected override void LoadContent()
         {
-            //Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
-            _map = Content.Load<Map>(@"Maps\Plains\2");
-            //G.World.Add(_map);
-            //G.World.Add(_player = new BoxLink());
+            _map = Content.Load<Map>(@"Maps\Plains\3");
+            _map.LoadContent();
+            _map.AddToWorld(G.World);
+            G.World.Ground.Add(_player = new BoxLink());
             G.World.Camera.Follow(_player);
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
+            G.World.Camera.Position += G.Input.WadsDirection;
+
             //if (G.Input.Keyboard.JustPressed(Keys.Tab))
             //    (_player as BoxLink).SwitchBody();
             //(_player as BoxLink).Input = G.Input.ArrowDirection * ((G.Input.Keyboard.Held(Keys.LeftShift)) ? 2.5f : 1);
@@ -74,7 +74,8 @@ namespace Delta.Examples
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();
-            
+
+            G.World.DebugDraw();
         }
     }
 }

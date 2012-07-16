@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -15,10 +15,14 @@ using System.Globalization;
 namespace Delta.Tiled
 {
 
-    public class TileLayer : DeltaGameComponent
+    public class TileLayer : IDrawable
     {
         [ContentSerializer(FlattenContent = true, CollectionItemName = "Tile")]
         internal List<Tile> _tiles = new List<Tile>();
+
+        public float Layer { get; set; }
+
+        public string Name;
 
         public TileLayer()
             : base()
@@ -72,11 +76,26 @@ namespace Delta.Tiled
         }
 #endif
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
+            Tile tile;
+            Rectangle tileArea = Rectangle.Empty;
+            Rectangle viewingArea = G.World.Camera.ViewingArea;
+            viewingArea.Inflate(Map.Instance.TileWidth, Map.Instance.TileHeight); // pad the viewing area with a border of off-screen tiles. for smooth scrolling, otherwise tiles seem to 'pop' in.
             for (int i = 0; i < _tiles.Count; i++)
-                _tiles[i].Draw(time, spriteBatch);
-            base.Draw(time, spriteBatch);
+            {
+                tile = _tiles[i];
+                tileArea = new Rectangle((int)tile._position.X, (int)tile._position.Y, Map.Instance.TileWidth, Map.Instance.TileHeight);
+                if (viewingArea.Contains(tileArea) || viewingArea.Intersects(tileArea))
+                {
+                    tile.Draw(time, spriteBatch);
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0} Layer:{1}", Name, Layer);
         }
     }
 }

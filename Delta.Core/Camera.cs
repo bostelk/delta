@@ -41,53 +41,55 @@ namespace Delta
         float _scale;
         public float Scale
         {
-            get { return _scale;}
+            get
+            {
+                return _scale;
+            }
             private set
             {
-                if (_scale != value)
-                {
-                    _scale = value;
-                }
+                _scale = value;
             }
         }
 
         float _rotation;
         public float Rotation
         {
-            get { return _rotation; }
+            get
+            {
+                return _rotation;
+            }
             set
             {
-                if (_rotation != value)
-                {
-                    _rotation = value;
-                }
+                _rotation = value;
             }
         }
 
         Vector2 _position;
         public Vector2 Position
         {
-            get { return _position; }
+            get
+            {
+                return _position;
+            }
             set
             {
-                if (_position != value)
-                {
-                    _position = value;
-                }
+                _position = value;
             }
         }
 
         Vector2 _offset;
+        /// <summary>
+        /// Defines the Camera's origin. Ex: An offset of the ScreenCenter defines (0,0) to be the center of the screen.
+        /// </summary>
         public Vector2 Offset
         {
             get
-            { return _offset; }
+            {
+                return _offset;
+            }
             set
             {
-                if (_offset != value)
-                {
-                    _offset = value;
-                }
+                _offset = value;
             }
         }
 
@@ -118,7 +120,7 @@ namespace Delta
         {
             get
             {
-                return new Rectangle((int) (Position.X - Size.X/2 + _shakeOffset.X), (int) (Position.Y - Size.Y/2 + _shakeOffset.Y), Size.X, Size.Y);
+                return new Rectangle((int) (Position.X - (Offset.X / Scale) + _shakeOffset.X), (int) (Position.Y - (Offset.Y / Scale) + _shakeOffset.Y), Size.X, Size.Y);
             }
         }
 

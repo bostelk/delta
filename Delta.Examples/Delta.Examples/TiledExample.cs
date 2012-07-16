@@ -37,10 +37,10 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-            //Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
+            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\1");
             _map.LoadContent();
-            G.World.Camera.Offset = G.ScreenCenter;
+            _map.AddToWorld(World);
             base.LoadContent();
         }
 
@@ -77,10 +77,9 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-            G.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, G.World.Camera.View);
+            G.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Matrix.Identity); //G.World.Camera.View);
             G.SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 40), Color.White);
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            _map.Draw(null, G.SpriteBatch);
             G.SpriteBatch.End();
         }
 

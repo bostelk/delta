@@ -16,6 +16,11 @@ namespace Delta.Tiled
 
     public class EntityLayer : DeltaGameComponentCollection
     {
+        public string Name;
+
+        private float _layer;
+        public float Layer { get { return _layer; } set { _layer = value; base.Layer = value; } }
+
         public EntityLayer()
             : base()
         {
@@ -98,7 +103,7 @@ namespace Delta.Tiled
                 {
                     if (sprite.IsOverlay)
                     {
-                        Map.Instance.PostEffects.Add(sprite);
+                        //Map.Instance.PostEffects.Add(sprite);
                         added = true;
                     }
                 }
@@ -108,5 +113,9 @@ namespace Delta.Tiled
             }
         }
 #endif
+        public override string ToString()
+        {
+            return String.Format("{0} Layer:{1}", Name, Layer);
+        }
     }
 }
