@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
  
-namespace Delta.Structures
+namespace Delta
 {
 	/// HashSet for Xbox360.
 	///
@@ -13,40 +13,39 @@ namespace Delta.Structures
 	/// implemented as a binary search tree.
 	public class HashSet<T> : IEnumerable where T : class
 	{
-		Dictionary<T, bool> data = new Dictionary<T, bool>();
+		Dictionary<T, bool> _data = new Dictionary<T, bool>();
  
 		public HashSet()
+            : base()
 		{
 		}
  
-		public void Add(T t)
+		public void Add(T item)
 		{
-			if (Contains(t) == false)
-			{
-				data.Add(t, true);
-			}
+			if (!Contains(item))
+				_data.Add(item, true);
 		}
  
 		public void Clear()
 		{
-			data.Clear();
+			_data.Clear();
 		}
  
-		public int Count { get { return data.Count; } }
+		public int Count { get { return _data.Count; } }
  
-		public bool Contains(T t)
+		public bool Contains(T item)
 		{
-			return data.ContainsKey(t);
+			return _data.ContainsKey(item);
 		}
  
 		public IEnumerator GetEnumerator()
 		{
-			return data.Keys.GetEnumerator();
+			return _data.Keys.GetEnumerator();
 		}
  
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return data.Keys.GetEnumerator(); 
+			return _data.Keys.GetEnumerator(); 
 		}
 	}
 }

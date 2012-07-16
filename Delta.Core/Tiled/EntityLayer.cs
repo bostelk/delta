@@ -14,7 +14,7 @@ using Delta.Graphics;
 namespace Delta.Tiled
 {
 
-    public class EntityLayer : EntityCollection
+    public class EntityLayer : DeltaGameComponentCollection
     {
         public EntityLayer()
             : base()

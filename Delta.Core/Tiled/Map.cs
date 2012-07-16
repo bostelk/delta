@@ -23,7 +23,7 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : EntityCollection, IImportable
+    public class Map : DeltaGameComponentCollection
     {
         internal static Map Instance { get; set; }
 
@@ -48,13 +48,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
         [ContentSerializer]
-        public EntityCollection BelowGround { get; private set; }
+        public DeltaGameComponentCollection BelowGround { get; private set; }
         [ContentSerializer]
-        public EntityCollection Ground { get; private set; }
+        public DeltaGameComponentCollection Ground { get; private set; }
         [ContentSerializer]
-        public EntityCollection AboveGround { get; private set; }
+        public DeltaGameComponentCollection AboveGround { get; private set; }
         [ContentSerializer]
-        public EntityCollection PostEffects { get; private set; }
+        public DeltaGameComponentCollection PostEffects { get; private set; }
 
         public Map()
             : base()
@@ -129,30 +129,17 @@ namespace Delta.Tiled
                 }
                 layerOrder++;
             }
-            //this.ImportTiledProperties(node.SelectSingleNode("properties"));
-        }
-
-        bool IImportable.ImportCustomValues(string name, string value)
-        {
-            switch (name)
-            {
-                case "spritesheet":
-                case "spritesheetname":
-                    _spriteSheetName = value;
-                    return true;
-            }
-            return false;
         }
 #endif
 
         public override void LoadContent()
         {
-            base.LoadContent();
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            foreach (IDrawable drawable in _drawables)
+            base.LoadContent();
+            foreach (var gameComponent in _components)
             {
-                TileLayer tileLayer = drawable as TileLayer;
+                TileLayer tileLayer = gameComponent as TileLayer;
                 foreach (Tile tile in tileLayer._tiles)
                 {
                     Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
@@ -163,22 +150,18 @@ namespace Delta.Tiled
 
         public void AddToWorld(World world)
         {
-            foreach (IDrawable layer in _drawables)
-                world.Add(layer);
+            world.Add(this);
             world.BelowGround = Map.Instance.BelowGround;
             world.Ground = Map.Instance.Ground;
             world.AboveGround = Map.Instance.AboveGround;
-            world.Add(BelowGround, Ground, AboveGround);
         }
 
         public void RemoveFromWorld(World world)
         {
-            foreach (IDrawable layer in _drawables)
-                world.Remove(layer);
+            world.Remove(this);
             world.BelowGround = null;
             world.Ground = null;
             world.AboveGround = null;
-            world.Remove(BelowGround, Ground, AboveGround);
         }
 
     }

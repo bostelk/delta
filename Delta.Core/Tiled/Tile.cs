@@ -11,8 +11,19 @@ using Delta;
 namespace Delta.Tiled
 {
     [EditorBrowsable( EditorBrowsableState.Never)]
-    public class Tile : IDrawable
+    public class Tile : IGameComponent
     {
+        IGameComponentCollection IGameComponent.Collection
+        {
+            get { return null; }
+            set { }
+        }
+
+        float IGameComponent.Layer
+        {
+            get { return 0; }
+        }
+
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
         internal int _tilesetIndex = -1;
@@ -20,8 +31,6 @@ namespace Delta.Tiled
         internal int _imageFrameIndex = -1;
         [ContentSerializer]
         internal Vector2 _position = Vector2.Zero;
-
-        float ILayerable.Layer { get { return 0; } }
 
         internal Tile()
             : base()
@@ -62,6 +71,13 @@ namespace Delta.Tiled
 
         }
 #endif
+        void IGameComponent.LoadContent()
+        {
+        }
+
+        void IGameComponent.Update(DeltaTime time)
+        {
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Draw(DeltaTime time, SpriteBatch spriteBatch)

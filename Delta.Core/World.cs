@@ -9,16 +9,16 @@ using Delta.Input;
 
 namespace Delta
 {
-    public class World : EntityCollection
+    public class World : DeltaGameComponentCollection<IGameComponent>
     {
         static DeltaTime _time = new DeltaTime();
 
         public Camera Camera { get; private set; }
         public float TimeScale { get; set; }
         public DeltaTime Time { get { return _time; } }
-        public EntityCollection BelowGround { get; set; }
-        public EntityCollection Ground { get; set; }
-        public EntityCollection AboveGround { get; set; }
+        public DeltaGameComponentCollection BelowGround { get; set; }
+        public DeltaGameComponentCollection Ground { get; set; }
+        public DeltaGameComponentCollection AboveGround { get; set; }
         public bool IsPaused { get; private set; }
 
         public World()

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    public class UI : EntityCollection
+    public class UI : DeltaGameComponentCollection<IGameComponent>
     {
         static DeltaTime _time = new DeltaTime();
 

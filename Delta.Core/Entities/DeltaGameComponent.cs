@@ -8,12 +8,22 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Delta
 {
     /// <summary>
-    /// Lightweight as possible while still inhertiting all the basic interfaces.
+    /// Base class for all Delta game components.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class EntityBase : IRecyclable, IImportable, IDrawable, IUpdateable
+    public class DeltaGameComponent : IRecyclable, IImportable, IGameComponent
     {
-        internal EntityCollection _collectionReference = null;
+        IGameComponentCollection _collection = null;
+
+        [ContentSerializerIgnore]
+        protected internal IGameComponentCollection Collection { get { return _collection; } }
+
+        [ContentSerializerIgnore]
+        IGameComponentCollection IGameComponent.Collection
+        {
+            get { return _collection; }
+            set { _collection = value; }
+        }
 
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
@@ -38,13 +48,13 @@ namespace Delta
                 if (_layer != value)
                 {
                     _layer = value;
-                    if (_collectionReference != null)
-                        _collectionReference.NeedsToSort = true;
+                    if (Collection != null)
+                        Collection.NeedsToSort = true;
                 }
             }
         }
 
-        public EntityBase()
+        public DeltaGameComponent()
             : base()
         {
             IsVisible = true;
@@ -81,8 +91,8 @@ namespace Delta
 #endif
         public void Remove()
         {
-            if (_collectionReference != null)
-                _collectionReference.Remove(this);
+            if (Collection != null)
+                Collection.Remove(this);
         }
 
         protected virtual void LateInitialize()
@@ -93,7 +103,7 @@ namespace Delta
         {
         }
 
-        void IUpdateable.Update(DeltaTime time)
+        void IGameComponent.Update(DeltaTime time)
         {
             InternalUpdate(time);
         }
@@ -141,7 +151,7 @@ namespace Delta
             NeedsHeavyUpdate = false;
         }
 
-        void IDrawable.Draw(DeltaTime time, SpriteBatch spriteBatch)
+        void IGameComponent.Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             InternalDraw(time, spriteBatch);
         }
@@ -164,7 +174,7 @@ namespace Delta
 
         public virtual void Recycle()
         {
-            _collectionReference = null;
+            _collection = null;
             _layer = 0.0f;
             HasLoadedContent = false;
             IsEnabled = true;
@@ -174,4 +184,5 @@ namespace Delta
         }
 
     }
+
 }

@@ -12,13 +12,13 @@ using Delta.Physics;
 
 namespace Delta
 {
-    public abstract class Entity : EntityBase
+    public abstract class Entity : DeltaGameComponent, IEntity
     {
-        public static Entity Get(string id)
+        public static IEntity Get(string id)
         {
             id = id.ToLower();
-            if (EntityCollection._idReferences.ContainsKey(id))
-                return EntityCollection._idReferences[id];
+            if (EntityHelper._idReferences.ContainsKey(id))
+                return EntityHelper._idReferences[id];
             return null;
         }
 
@@ -105,6 +105,13 @@ namespace Delta
 
         [ContentSerializer]
         public string ID { get; internal set; }
+
+        string IEntity.ID
+        {
+            get { return this.ID; }
+            set { this.ID = value; }
+        }
+
         [ContentSerializerIgnore]
         protected Vector2 RenderPosition { get; private set; }
         [ContentSerializerIgnore]
