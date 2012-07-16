@@ -48,13 +48,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
         [ContentSerializer]
-        public DeltaGameComponentCollection BelowGround { get; private set; }
+        public IGameComponentCollection BelowGround { get; private set; }
         [ContentSerializer]
-        public DeltaGameComponentCollection Ground { get; private set; }
+        public IGameComponentCollection Ground { get; private set; }
         [ContentSerializer]
-        public DeltaGameComponentCollection AboveGround { get; private set; }
+        public IGameComponentCollection AboveGround { get; private set; }
         [ContentSerializer]
-        public DeltaGameComponentCollection PostEffects { get; private set; }
+        public IGameComponentCollection PostEffects { get; private set; }
 
         public Map()
             : base()

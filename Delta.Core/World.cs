@@ -16,9 +16,9 @@ namespace Delta
         public Camera Camera { get; private set; }
         public float TimeScale { get; set; }
         public DeltaTime Time { get { return _time; } }
-        public DeltaGameComponentCollection<Entity> BelowGround { get; set; }
-        public DeltaGameComponentCollection<Entity> Ground { get; set; }
-        public DeltaGameComponentCollection<Entity> AboveGround { get; set; }
+        public IGameComponentCollection BelowGround { get; set; }
+        public IGameComponentCollection Ground { get; set; }
+        public IGameComponentCollection AboveGround { get; set; }
         public bool IsPaused { get; private set; }
 
         public World()
