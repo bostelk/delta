@@ -41,12 +41,11 @@ namespace Delta
         {
             _components.Add(item);
             NeedsToSort = true;
+            item.Collection = this;
             IEntity entity = item as IEntity;
             if (entity != null)
-            {
-                entity.Collection = this;
                 EntityHelper.AddIDReference(entity);
-            }
+            item.OnAdded();
         }
 
         public void Add(params T[] items)
@@ -64,12 +63,11 @@ namespace Delta
         {
             _components.FastRemove<T>(item);
             NeedsToSort = true;
+            item.Collection = null;
             IEntity entity = item as IEntity;
             if (entity != null)
-            {
-                entity.Collection = null;
                 EntityHelper.RemoveIDReference(entity);
-            }
+            item.OnRemoved();
         }
 
         public void Remove(params T[] items)

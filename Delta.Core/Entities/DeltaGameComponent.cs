@@ -92,10 +92,7 @@ namespace Delta
         public void Remove()
         {
             if (Collection != null)
-            {
                 Collection.Remove(this);
-                RemoveNextUpdate = false;
-            }
         }
 
         protected virtual void LateInitialize()
@@ -115,10 +112,7 @@ namespace Delta
         public void InternalUpdate(DeltaTime time)
         {
             if (RemoveNextUpdate)
-            {
                 Remove();
-                Recycle();
-            }
             if (!IsLateInitialized)
             {
                 IsLateInitialized = true;
@@ -184,6 +178,26 @@ namespace Delta
             IsLateInitialized = false;
             IsVisible = true;
             RemoveNextUpdate = false;
+        }
+
+        void IGameComponent.OnAdded()
+        {
+            OnAdded();
+        }
+
+        protected internal virtual void OnAdded()
+        {
+        }
+
+        void IGameComponent.OnRemoved()
+        {
+            OnRemoved();
+        }
+
+        protected internal virtual void OnRemoved()
+        {
+            RemoveNextUpdate = false;
+            _collection = null;
         }
 
     }

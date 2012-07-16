@@ -326,5 +326,11 @@ namespace Delta.Movement
 
             _pool.Release(this);
         }
+
+        protected internal override void OnRemoved()
+        {
+            base.OnRemoved();
+            Recycle();
+        }
     }
 }

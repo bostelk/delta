@@ -11,5 +11,7 @@ namespace Delta
         void LoadContent();
         void Update(DeltaTime time);
         void Draw(DeltaTime time, SpriteBatch spriteBatch);
+        void OnAdded();
+        void OnRemoved();
     }
 }

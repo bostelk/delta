@@ -84,5 +84,14 @@ namespace Delta.Tiled
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
+
+        void IGameComponent.OnAdded()
+        {
+        }
+
+        void IGameComponent.OnRemoved()
+        {
+        }
+
     }
 }
