@@ -288,7 +288,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Graphics\SpriteSheets\16x16.spritesheet">
+    <None Include="Graphics\SpriteSheets\16x16.spritesheet2">
       <Name>16x16</Name>
       <Importer>SpriteSheetImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>

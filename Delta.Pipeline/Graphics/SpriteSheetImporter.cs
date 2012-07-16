@@ -11,7 +11,10 @@ namespace Delta.Graphics
     {
         public override SpriteSheetContent Import(string fileName, ContentImporterContext context)
         {
-            return new SpriteSheetContent(fileName);
+            if (SpriteSheetContent._spriteSheetFiles.ContainsKey(fileName))
+                return SpriteSheetContent._spriteSheetFiles[fileName];
+            else
+                return new SpriteSheetContent(fileName);
         }
     }
 }

@@ -13,14 +13,14 @@ namespace Delta.Graphics
     {
         public override SpriteSheetContent Process(SpriteSheetContent input, ContentProcessorContext context)
         {
-            input._outputPath = context.OutputFilename;
+            input._fileName = context.OutputFilename;
             //load external images
+            if (input.Images.Count <= 0)
+                throw new Exception(input._fileName);
             for (int i = 0; i < input.Images.Count; i++)
             {
                 ImageContent externalImage = input.Images[i];
                 externalImage._bitmapContent = context.BuildAndLoadAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(externalImage.Path), "TextureProcessor").Faces[0][0];
-                if (!SpriteSheetContent._imageReferences.ContainsKey(externalImage.Path))
-                    SpriteSheetContent._imageReferences.Add(externalImage.Path, input);
             }
 
             int maxTextureWidth = 0;

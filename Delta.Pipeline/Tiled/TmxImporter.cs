@@ -22,12 +22,12 @@ namespace Delta.Tiled
             return new Map(fileName);
         }
 
-        static void FilesInDirectory(DirectoryInfo di, List<FileInfo> files)
+        static void FilesInDirectory(DirectoryInfo di, ref List<FileInfo> files)
         {
             foreach (var fi in di.GetFiles())
                 _files.Add(fi);
             foreach (var d in di.GetDirectories())
-                FilesInDirectory(d, files);
+                FilesInDirectory(d, ref files);
         }
 
         internal static List<FileInfo> _files = null;
@@ -36,15 +36,16 @@ namespace Delta.Tiled
             if (_files == null)
             {
                 _files = new List<FileInfo>();
-                FilesInDirectory(new DirectoryInfo(Environment.CurrentDirectory), _files);
+                FilesInDirectory(new DirectoryInfo(Environment.CurrentDirectory), ref _files);
             }
-            for (int x = 0; x < _files.Count; x++)
+            List<FileInfo> _filesToRemove = new List<FileInfo>();
+            foreach (var file in _files)
             {
-                FileInfo file = _files[x];
                 switch (file.Extension.ToLower())
                 {
                     case ".spritesheet":
                         context.AddDependency(file.FullName);
+                        SpriteSheetContent._spriteSheetFiles.Add(file.FullName, new SpriteSheetContent(file.FullName));
                         break;
                     case ".stylesheet":
                         context.AddDependency(file.FullName);
@@ -58,10 +59,12 @@ namespace Delta.Tiled
                         }
                         break;
                     default:
-                        _files.RemoveAt(x);
+                        _filesToRemove.Add(file);
                         break;
                 }
             }
+            foreach (var file in _filesToRemove)
+                _files.Remove(file);
         }
     }
 }
