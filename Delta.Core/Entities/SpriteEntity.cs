@@ -7,23 +7,6 @@ using Delta.Structures;
 
 namespace Delta.Graphics
 {
-
-    [Flags]
-    internal enum SpriteState
-    {
-        None = 0x0,
-        Paused = 0x1,
-        Looped = 0x2,
-        RandomFrameStart = 0x4,
-        Finished = 0x8,
-        //temporary?
-        Overlay = 0x10,
-        OutlineTop = 0x20,
-        OutlineRight = 0x40,
-        OutlineBottom = 0x80,
-        OutlineLeft = 0x100,
-    }
-
     public class SpriteEntity : Entity, IRecyclable
     {
         static Pool<SpriteEntity> _pool;
@@ -38,64 +21,22 @@ namespace Delta.Graphics
         internal float _frameDurationTimer = 0f;
         [ContentSerializer(ElementName = "Frame")]
         internal int _animationFrame = 0;
-        [ContentSerializer(ElementName = "State")]
-        internal SpriteState _state = SpriteState.Looped;
         [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
         public int AnimationFrameOffset { get; set; }
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
-
-        [ContentSerializerIgnore]
-        public bool IsPaused
-        {
-            get { return _state.HasFlag(SpriteState.Paused); }
-            set
-            {
-                if (value)
-                    _state |= SpriteState.Paused;
-                else
-                    _state &= ~SpriteState.Paused;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool IsLooped
-        {
-            get { return _state.HasFlag(SpriteState.Looped); }
-            set
-            {
-                if (value)
-                    _state |= SpriteState.Looped;
-                else
-                    _state &= ~SpriteState.Looped;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool IsFinished
-        {
-            get { return _state.HasFlag(SpriteState.Finished); }
-            private set
-            {
-                if (value)
-                    _state |= SpriteState.Finished;
-                else
-                    _state &= ~SpriteState.Finished;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public bool IsOverlay
-        {
-            get { return _state.HasFlag(SpriteState.Overlay); }
-            set
-            {
-                if (value)
-                    _state |= SpriteState.Overlay;
-                else
-                    _state &= ~SpriteState.Overlay;
-            }
-        }
+        [ContentSerializer]
+        public bool IsLooped { get; set; }
+        [ContentSerializer]
+        public bool IsPaused { get; set; }
+        [ContentSerializer]
+        public bool IsFinished { get; set; }
+        [ContentSerializer]
+        public bool IsOverlay { get; set; }
+        [ContentSerializer]
+        public bool StartOnRandomFrame { get; set; }
+        [ContentSerializer]
+        public bool Outline { get; set; }
 
         [ContentSerializerIgnore]
         public Color OutlineColor
@@ -120,6 +61,7 @@ namespace Delta.Graphics
             : base()
         {
             AnimationFrameOffset = 0;
+            IsLooped = true;
         }
 
         public SpriteEntity(string spriteSheet)
@@ -189,10 +131,7 @@ namespace Delta.Graphics
                     break;
                 case "startrandom":
                 case "random":
-                    if (bool.Parse(value))
-                        _state |= SpriteState.RandomFrameStart;
-                    else
-                        _state ^= SpriteState.RandomFrameStart;
+                    StartOnRandomFrame = bool.Parse(value);
                     return true;
                 case "ispaused":
                 case "paused":
@@ -233,7 +172,7 @@ namespace Delta.Graphics
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
                 if (!IsLooped && _animationFrame >= _animation.Frames.Count - 1)
                 {
-                    _state |= SpriteState.Finished;
+                    IsFinished = true;
                     _frameDurationTimer = 0;
                 }
                 Rectangle previousSourceRectangle = _sourceRectangle;
@@ -263,30 +202,26 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaTime gameTime, SpriteBatch spriteBatch)
         {
-            if (_state.HasFlag(SpriteState.OutlineTop) || _state.HasFlag(SpriteState.OutlineRight) || _state.HasFlag(SpriteState.OutlineBottom) || _state.HasFlag(SpriteState.OutlineLeft))
+            if (Outline)
             {
                 spriteBatch.End();
                 G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
                 G.SimpleEffect.Color = OutlineColor;
-                //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
-                //if (_state.HasFlag(SpriteState.OutlineTop))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineRight))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineBottom))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //if (_state.HasFlag(SpriteState.OutlineLeft))
-                //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                //spriteBatch.End();
-                //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
+                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             }
-
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
         public void Play(string animation)
         {
             _animationName = animation;
+            IsPaused = false;
             if (_spriteSheet == null)
             {
                 _animation = null;
@@ -295,26 +230,6 @@ namespace Delta.Graphics
             _animation = _spriteSheet.GetAnimation(_animationName);
             if (_animation != null)
                 OnAnimationChanged();
-        }
-
-        public void Outline(bool top, bool right, bool bottom, bool left)
-        {
-            if (top)
-                _state |= SpriteState.OutlineTop;
-            else
-                _state &= ~SpriteState.OutlineTop;
-            if (right)
-                _state |= SpriteState.OutlineRight;
-            else
-                _state &= ~SpriteState.OutlineRight;
-            if (bottom)
-                _state |= SpriteState.OutlineBottom;
-            else
-                _state &= ~SpriteState.OutlineBottom;
-            if (left)
-                _state |= SpriteState.OutlineLeft;
-            else
-                _state &= ~SpriteState.OutlineLeft;
         }
 
         protected internal override void OnPositionChanged()
@@ -327,10 +242,10 @@ namespace Delta.Graphics
         protected internal virtual void OnAnimationChanged()
         {
             _animationFrame = AnimationFrameOffset;
-            if (_state.HasFlag(SpriteState.RandomFrameStart))
+            if (StartOnRandomFrame)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
-            _state &= ~SpriteState.Finished;
+            IsFinished = false;
             // draw the first frame
             _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
             Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
@@ -339,7 +254,7 @@ namespace Delta.Graphics
         public override void Recycle()
         {
             base.Recycle();
-            _state = SpriteState.Looped;
+            IsLooped = true;
             _spriteSheet = null;
             _spriteSheetName = string.Empty;
             _animation = null;
