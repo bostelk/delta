@@ -85,7 +85,7 @@ namespace Delta
                 _components[_loopIndex].LoadContent();
         }
 
-        public void Update(DeltaTime time)
+        protected override void LightUpdate(DeltaTime time)
         {
             if (NeedsToSort)
                 Sort();
@@ -93,7 +93,7 @@ namespace Delta
                 _components[_loopIndex].Update(time);
         }
 
-        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (_loopIndex = 0; _loopIndex < _components.Count; _loopIndex++)
                 _components[_loopIndex].Draw(time, spriteBatch);

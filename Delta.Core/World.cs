@@ -35,7 +35,7 @@ namespace Delta
                 _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
                 _time.TotalSeconds += _time.ElapsedSeconds;
                 Camera.Update(_time);
-                base.Update(_time);
+                base.InternalUpdate(_time);
             }
         }
 
@@ -78,9 +78,9 @@ namespace Delta
         public void DebugDraw()
         {
             string info = String.Empty;
-            foreach (IDrawable drawable in _drawables)
+            foreach (IGameComponent gameComponent in _components)
             {
-                info += drawable.ToString() + "\n";
+                info += gameComponent.ToString() + "\n";
             }
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, info, new Vector2(0, 100), Color.White);

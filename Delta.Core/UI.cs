@@ -26,7 +26,7 @@ namespace Delta
             _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time.TotalSeconds += _time.ElapsedSeconds;
             Camera.Update(_time);
-            base.Update(_time);
+            base.InternalUpdate(_time);
         }
 
         internal virtual void Draw()

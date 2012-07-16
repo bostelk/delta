@@ -16,10 +16,7 @@ namespace Delta.Tiled
 
     public class EntityLayer : DeltaGameComponentCollection
     {
-        public string Name;
-
-        private float _layer;
-        public float Layer { get { return _layer; } set { _layer = value; base.Layer = value; } }
+        public string Name { get; set; }
 
         public EntityLayer()
             : base()

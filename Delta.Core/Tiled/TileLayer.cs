@@ -15,14 +15,12 @@ using System.Globalization;
 namespace Delta.Tiled
 {
 
-    public class TileLayer : IDrawable
+    public class TileLayer : DeltaGameComponent
     {
         [ContentSerializer(FlattenContent = true, CollectionItemName = "Tile")]
         internal List<Tile> _tiles = new List<Tile>();
 
-        public float Layer { get; set; }
-
-        public string Name;
+        public string Name { get; set; }
 
         public TileLayer()
             : base()
@@ -76,7 +74,7 @@ namespace Delta.Tiled
         }
 #endif
 
-        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             Tile tile;
             Rectangle tileArea = Rectangle.Empty;
