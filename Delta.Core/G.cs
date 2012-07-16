@@ -64,6 +64,8 @@ namespace Delta
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
             Collision = new CollisionEngine();
+            ScreenArea = new Rectangle(0, 0, screenWidth, screenHeight);
+            ScreenCenter = ScreenArea.Center.ToVector2();
         }
 
         protected override void LoadContent()
@@ -77,9 +79,7 @@ namespace Delta
             Font = _embedded.Load<SpriteFont>("TinyFont");
             DeltaEffect = new DeltaEffect(_embedded.Load<Effect>("DeltaEffect"));
             SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
-            ScreenArea = GraphicsDevice.Viewport.Bounds;
-            ScreenCenter = ScreenArea.Center.ToVector2();
-
+          
             World.LoadContent();
             UI.LoadContent();
 
