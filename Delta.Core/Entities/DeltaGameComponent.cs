@@ -92,7 +92,10 @@ namespace Delta
         public void Remove()
         {
             if (Collection != null)
+            {
                 Collection.Remove(this);
+                RemoveNextUpdate = false;
+            }
         }
 
         protected virtual void LateInitialize()
