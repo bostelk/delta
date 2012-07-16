@@ -22,6 +22,8 @@ namespace Delta.Tiled
 
         public float Layer { get; set; }
 
+        public string Name;
+
         public TileLayer()
             : base()
         {
@@ -91,5 +93,9 @@ namespace Delta.Tiled
             }
         }
 
+        public override string ToString()
+        {
+            return String.Format("{0} Layer:{1}", Name, Layer);
+        }
     }
 }

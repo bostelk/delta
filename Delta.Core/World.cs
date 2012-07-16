@@ -75,5 +75,17 @@ namespace Delta
             return result;
         }
 
+        public void DebugDraw()
+        {
+            string info = String.Empty;
+            foreach (IDrawable drawable in _drawables)
+            {
+                info += drawable.ToString() + "\n";
+            }
+            G.SpriteBatch.Begin();
+            G.SpriteBatch.DrawString(G.Font, info, new Vector2(0, 100), Color.White);
+            G.SpriteBatch.End();
+        }
+
     }
 }

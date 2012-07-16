@@ -98,26 +98,26 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        Add(new TileLayer(fileName, layerNode, layerName) { Layer = layerOrder});
+                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Layer = layerOrder });
                         break;
                     case "objectgroup":
-                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Layer = layerOrder }; 
+                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Layer = layerOrder }; 
                         switch (layerName.ToLower())
                         {
                             case "delta.belowground":
                             case "delta.bg":
                             case "d.bg":
-                                Map.Instance.BelowGround = entityLayer;
+                                BelowGround = entityLayer;
                                 break;
                             case "delta.ground":
                             case "delta.g":
                             case "d.g":
-                                Map.Instance.Ground = entityLayer;
+                                Ground = entityLayer;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
                             case "d.ag":
-                                Map.Instance.AboveGround = entityLayer;
+                                AboveGround = entityLayer;
                                 break;
                             default:
                                 Add(entityLayer);
@@ -153,6 +153,8 @@ namespace Delta.Tiled
             foreach (IDrawable drawable in _drawables)
             {
                 TileLayer tileLayer = drawable as TileLayer;
+                if (tileLayer == null)
+                    continue;
                 foreach (Tile tile in tileLayer._tiles)
                 {
                     Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];

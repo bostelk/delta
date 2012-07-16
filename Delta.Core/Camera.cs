@@ -120,7 +120,7 @@ namespace Delta
         {
             get
             {
-                return new Rectangle((int) (Position.X - Offset.X + _shakeOffset.X), (int) (Position.Y - Offset.Y + _shakeOffset.Y), Size.X, Size.Y);
+                return new Rectangle((int) (Position.X - (Offset.X / Scale) + _shakeOffset.X), (int) (Position.Y - (Offset.Y / Scale) + _shakeOffset.Y), Size.X, Size.Y);
             }
         }
 

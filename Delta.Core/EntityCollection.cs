@@ -13,6 +13,7 @@ namespace Delta
         internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
         internal bool NeedsToSort { get; set; }
 
+        [ContentSerializer]
         public float Layer { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -31,6 +32,9 @@ namespace Delta
 
         public void Add(object obj)
         {
+            if (obj == null)
+                return;
+
             IUpdateable updateable = obj as IUpdateable;
             IDrawable drawable = obj as IDrawable;
             if (updateable == null && drawable == null)
@@ -124,7 +128,6 @@ namespace Delta
 
         protected virtual void Sort()
         {
-            _updateables.Sort(Comparer);
             _drawables.Sort(Comparer);
             NeedsToSort = false;
         }
