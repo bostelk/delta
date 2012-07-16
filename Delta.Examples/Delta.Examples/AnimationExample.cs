@@ -45,7 +45,7 @@ namespace Delta.Examples
         {
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _supportedAnimations = mainSheet.Animations;
-            sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
+            sprite = new SpriteEntity("testSprite", @"Graphics\SpriteSheets\16x16");
             sprite.Play(_supportedAnimations[_animationIndex].Name);
             sprite.Position = G.ScreenCenter;
             base.LoadContent();
@@ -63,11 +63,13 @@ namespace Delta.Examples
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
+                sprite.Position = G.ScreenCenter + sprite.Size * 2;
             }
             if (G.Input.Keyboard.JustPressed(Keys.Right))
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
+                sprite.Position = G.ScreenCenter + sprite.Size * 2;
             }
             if (G.Input.Keyboard.JustPressed(Keys.Space))
             {
@@ -96,13 +98,6 @@ namespace Delta.Examples
             base.Draw(gameTime);
         }
 
-        public string InfoText
-        {
-            get
-            {
-                return String.Empty;
-                //return string.Format("Animation: {0}\nFrame: {1} of {2}\nFrame Duration: {3}", sprite.AnimationName, sprite.AnimationFrame, sprite.TotalFrames, sprite.SecondsLeft);
-            }
-        }
+        public string InfoText { get { return sprite.ToString(); } }
     }
 }

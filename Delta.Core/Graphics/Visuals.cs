@@ -19,7 +19,7 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void Create(string spriteSheet, string animation, Vector2 position)
         {
-            SpriteEntity se = SpriteEntity.Create(spriteSheet);
+            SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
             se.IsLooped = false;
@@ -37,7 +37,7 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void CreateTrail(string spriteSheet, string animation, Vector2 position) 
         {
-            SpriteEntity se = SpriteEntity.Create(spriteSheet);
+            SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
             se.IsLooped = false;
@@ -64,7 +64,7 @@ namespace Delta.Graphics
 
             for(int i = 0; i < 4; i++)
             {
-                SpriteEntity see = se[i] = SpriteEntity.Create(spriteSheet);
+                SpriteEntity see = se[i] = new SpriteEntity(null, spriteSheet);
                 see.LoadContent();
                 see.Position = position;
                 see.IsLooped = false;

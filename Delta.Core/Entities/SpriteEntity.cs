@@ -21,7 +21,7 @@ namespace Delta.Graphics
         internal float _frameDurationTimer = 0f;
         [ContentSerializer(ElementName = "Frame")]
         internal int _animationFrame = 0;
-        [ContentSerializer(ElementName = "FrameOffset")] //for Rob's convience
+        [ContentSerializer(ElementName = "FrameOffset")]
         public int AnimationFrameOffset { get; set; }
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
@@ -36,25 +36,13 @@ namespace Delta.Graphics
         [ContentSerializer]
         public bool StartOnRandomFrame { get; set; }
         [ContentSerializer]
-        public bool Outline { get; set; }
-
+        public bool IsOutlined { get; set; }
         [ContentSerializerIgnore]
-        public Color OutlineColor
-        {
-            get;
-            set;
-        }
+        public Color OutlineColor { get; set; }
 
         static SpriteEntity()
         {
             _pool = new Pool<SpriteEntity>(100);
-        }
-        
-        public static SpriteEntity Create(string spriteSheet) 
-        {
-            SpriteEntity spriteEntity = _pool.Fetch();
-            spriteEntity._spriteSheetName = spriteSheet;
-            return spriteEntity;
         }
 
         public SpriteEntity()
@@ -64,9 +52,11 @@ namespace Delta.Graphics
             IsLooped = true;
         }
 
-        public SpriteEntity(string spriteSheet)
-            : this()
+        public SpriteEntity(string id, string spriteSheet)
+            : base(id)
         {
+            AnimationFrameOffset = 0;
+            IsLooped = true;
             _spriteSheetName= spriteSheet;
         }
 
@@ -202,7 +192,7 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaTime gameTime, SpriteBatch spriteBatch)
         {
-            if (Outline)
+            if (IsOutlined)
             {
                 spriteBatch.End();
                 G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
@@ -254,7 +244,6 @@ namespace Delta.Graphics
         public override void Recycle()
         {
             base.Recycle();
-            IsLooped = true;
             _spriteSheet = null;
             _spriteSheetName = string.Empty;
             _animation = null;
@@ -264,10 +253,18 @@ namespace Delta.Graphics
             _frameDurationTimer = 0f;
             AnimationFrameOffset = 0;
             SpriteEffects = SpriteEffects.None;
+            IsLooped = true;
+            IsOverlay = false;
+            IsPaused = false;
+            IsOutlined = false;
+            StartOnRandomFrame = false;
             OutlineColor = Color.White;
-
-            RemoveNextUpdate = true;
             _pool.Release(this);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("ID:{0}, Position:({1},{2}), Animation:{3}, Frame:{4} of {5}", ID, Position.X, Position.Y, _animation == null ? string.Empty : _animation.Name, _animationFrame, _animation == null ? 0 : _animation.Frames.Count - 1);
         }
     }
 
