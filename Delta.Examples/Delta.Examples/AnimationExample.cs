@@ -43,10 +43,10 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-            mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\Tilesets");
+            mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _supportedAnimations = mainSheet.Animations;
-            //sprite.SpriteSheetName = "mainSpriteSheet";
-            //sprite.AnimationName = _supportedAnimations[_animationIndex].Name;
+            sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
+            sprite.Play(_supportedAnimations[_animationIndex].Name);
             sprite.Position = G.ScreenCenter;
             base.LoadContent();
         }

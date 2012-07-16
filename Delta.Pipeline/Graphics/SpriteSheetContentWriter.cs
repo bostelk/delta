@@ -17,14 +17,16 @@ namespace Delta.Graphics
         {
             List<Animation> animations = new List<Animation>();
             Dictionary<string, Dictionary<int, Rectangle>> imageFrameReferences = new Dictionary<string, Dictionary<int, Rectangle>>();
-            for (int x = 0; x < value.Images.Count; x++)
+            foreach (var image in value.Images)
             {
-                ImageContent image = value.Images[x];
                 animations.AddRange(image.Animations);
                 Dictionary<int, Rectangle> frameReferences = new Dictionary<int, Rectangle>();
                 foreach (var frameReference in image._frameReferences)
                     frameReferences.Add(frameReference.Key, frameReference.Value.DestinationRegion);
-                imageFrameReferences.Add(Path.GetFileNameWithoutExtension(image.Path), frameReferences);
+                string imageName = Path.GetFileNameWithoutExtension(image.Path);
+                imageFrameReferences.Add(imageName, frameReferences);
+                foreach (var animation in image.Animations)
+                    animation.ImageName = imageName;
             }
             output.WriteObject<List<Animation>>(animations);
             output.WriteObject<Dictionary<string, Dictionary<int, Rectangle>>>(imageFrameReferences);

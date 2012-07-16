@@ -15,10 +15,9 @@ namespace Delta.Graphics
         {
             input._fileName = context.OutputFilename;
             //load external images
-            for (int i = 0; i < input.Images.Count; i++)
+            foreach (var image in input.Images)
             {
-                ImageContent externalImage = input.Images[i];
-                externalImage._bitmapContent = context.BuildAndLoadAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(externalImage.Path), "TextureProcessor").Faces[0][0];
+                image._bitmapContent = context.BuildAndLoadAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(image.Path), "TextureProcessor").Faces[0][0];
             }
 
             int maxTextureWidth = 2;

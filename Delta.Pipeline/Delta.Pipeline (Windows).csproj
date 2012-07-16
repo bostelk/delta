@@ -111,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeltaGameComponentCollectionWriter.cs" />
-    <Compile Include="Graphics\AnimationSerializer.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

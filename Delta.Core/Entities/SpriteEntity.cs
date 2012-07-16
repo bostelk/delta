@@ -219,7 +219,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(DeltaTime time)
         {
-            if (_animation != null && !IsFinished)
+            if (_animation != null && !IsFinished && !IsPaused)
                 UpdateAnimationFrame(time);
             base.LightUpdate(time);
         }
