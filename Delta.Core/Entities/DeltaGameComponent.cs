@@ -34,9 +34,9 @@ namespace Delta
         [ContentSerializerIgnore]
         public bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
-        public bool HasLoadedContent { get; internal set; }
+        protected bool HasLoadedContent { get; set; }
         [ContentSerializerIgnore]
-        public bool RemoveNextUpdate { get; set; }
+        protected bool RemoveNextUpdate { get; set; }
 
         float _layer = 0.0f;
         [ContentSerializer]

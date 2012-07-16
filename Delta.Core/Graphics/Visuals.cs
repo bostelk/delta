@@ -22,7 +22,7 @@ namespace Delta.Graphics
             SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
-            se.IsLooped = false;
+            se.IsAnimationLooped = false;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation);
             se.Layer = 100;
@@ -40,7 +40,7 @@ namespace Delta.Graphics
             SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
-            se.IsLooped = false;
+            se.IsAnimationLooped = false;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
             se.Play(animation);
@@ -67,7 +67,7 @@ namespace Delta.Graphics
                 SpriteEntity see = se[i] = new SpriteEntity(null, spriteSheet);
                 see.LoadContent();
                 see.Position = position;
-                see.IsLooped = false;
+                see.IsAnimationLooped = false;
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation);
                 see.Layer = 100;

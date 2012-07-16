@@ -70,13 +70,14 @@ namespace Delta.Examples
                 _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
                 sprite.Position = G.ScreenCenter + sprite.Size * 2;
+                sprite.IsAnimationFinished = true;
             }
             if (G.Input.Keyboard.JustPressed(Keys.Space))
             {
-                if (!sprite.IsPaused)
-                    sprite.IsPaused = true;
+                if (!sprite.IsAnimationPaused)
+                    sprite.IsAnimationPaused = true;
                 else
-                    sprite.IsPaused = false;
+                    sprite.IsAnimationPaused = false;
             }
             if (G.Input.Keyboard.JustPressed(Keys.F1))
             {

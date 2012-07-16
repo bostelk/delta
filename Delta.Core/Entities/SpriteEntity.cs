@@ -11,30 +11,33 @@ namespace Delta.Graphics
     {
         static Pool<SpriteEntity> _pool;
 
+
         [ContentSerializer(ElementName = "SpriteSheet")]
         internal string _spriteSheetName = string.Empty;
         internal SpriteSheet _spriteSheet = null;
+        internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer(ElementName = "Animation")]
         internal string _animationName = string.Empty;
         internal Animation _animation = null;
-        internal Rectangle _sourceRectangle = Rectangle.Empty;
         internal float _frameDurationTimer = 0f;
         [ContentSerializer(ElementName = "Frame")]
         internal int _animationFrame = 0;
+        //for rob
         [ContentSerializer(ElementName = "FrameOffset")]
-        public int AnimationFrameOffset { get; set; }
+        int _animationFrameOffset = 0;
+        [ContentSerializer(ElementName = "RandomStart")]
+        bool _startOnRandomFrame = false;
+
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
         [ContentSerializer]
-        public bool IsLooped { get; set; }
+        public bool IsAnimationLooped { get; set; }
         [ContentSerializer]
-        public bool IsPaused { get; set; }
+        public bool IsAnimationPaused { get; set; }
         [ContentSerializer]
-        public bool IsFinished { get; set; }
+        public bool IsAnimationFinished { get; set; }
         [ContentSerializer]
         public bool IsOverlay { get; set; }
-        [ContentSerializer]
-        public bool StartOnRandomFrame { get; set; }
         [ContentSerializer]
         public bool IsOutlined { get; set; }
         [ContentSerializerIgnore]
@@ -48,15 +51,13 @@ namespace Delta.Graphics
         public SpriteEntity()
             : base()
         {
-            AnimationFrameOffset = 0;
-            IsLooped = true;
+            IsAnimationLooped = true;
         }
 
         public SpriteEntity(string id, string spriteSheet)
             : base(id)
         {
-            AnimationFrameOffset = 0;
-            IsLooped = true;
+            IsAnimationLooped = true;
             _spriteSheetName= spriteSheet;
         }
 
@@ -121,17 +122,17 @@ namespace Delta.Graphics
                     break;
                 case "startrandom":
                 case "random":
-                    StartOnRandomFrame = bool.Parse(value);
+                    _startOnRandomFrame  = bool.Parse(value);
                     return true;
                 case "ispaused":
                 case "paused":
                 case "isstopped":
                 case "stopped":
-                    IsPaused = bool.Parse(value);
+                    IsAnimationPaused = bool.Parse(value);
                     return true;
                 case "foffset":
                 case "frameoffset":
-                    AnimationFrameOffset = int.Parse(value, CultureInfo.InvariantCulture);
+                    _animationFrameOffset = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
             return base.ImportCustomValues(name, value);
@@ -148,7 +149,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(DeltaTime time)
         {
-            if (_animation != null && !IsFinished && !IsPaused)
+            if (_animation != null && !IsAnimationFinished && !IsAnimationPaused)
                 UpdateAnimationFrame(time);
             base.LightUpdate(time);
         }
@@ -160,13 +161,13 @@ namespace Delta.Graphics
             {
                 _frameDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                if (!IsLooped && _animationFrame >= _animation.Frames.Count - 1)
+                if (!IsAnimationLooped && _animationFrame >= _animation.Frames.Count - 1)
                 {
-                    IsFinished = true;
+                    IsAnimationFinished = true;
                     _frameDurationTimer = 0;
                 }
                 Rectangle previousSourceRectangle = _sourceRectangle;
-                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
+                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + _animationFrameOffset);
                 if (_sourceRectangle != Rectangle.Empty)
                 {
                     if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
@@ -211,7 +212,7 @@ namespace Delta.Graphics
         public void Play(string animation)
         {
             _animationName = animation;
-            IsPaused = false;
+            IsAnimationPaused = false;
             if (_spriteSheet == null)
             {
                 _animation = null;
@@ -231,13 +232,13 @@ namespace Delta.Graphics
 
         protected internal virtual void OnAnimationChanged()
         {
-            _animationFrame = AnimationFrameOffset;
-            if (StartOnRandomFrame)
+            _animationFrame = _animationFrameOffset;
+            if (_startOnRandomFrame)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
-            IsFinished = false;
+            IsAnimationFinished = false;
             // draw the first frame
-            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + AnimationFrameOffset);
+            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + _animationFrameOffset);
             Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
         }
 
@@ -251,13 +252,13 @@ namespace Delta.Graphics
             _animationFrame = 0;
             _sourceRectangle = Rectangle.Empty;
             _frameDurationTimer = 0f;
-            AnimationFrameOffset = 0;
+            _animationFrameOffset = 0;
+            _startOnRandomFrame = false;
             SpriteEffects = SpriteEffects.None;
-            IsLooped = true;
+            IsAnimationLooped = true;
             IsOverlay = false;
-            IsPaused = false;
+            IsAnimationPaused = false;
             IsOutlined = false;
-            StartOnRandomFrame = false;
             OutlineColor = Color.White;
             _pool.Release(this);
         }
