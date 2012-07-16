@@ -22,12 +22,13 @@ namespace Delta.Graphics
 
     public class SpriteSheetContent
     {
-        public static Dictionary<string, SpriteSheetContent> _imageReferences = new Dictionary<string, SpriteSheetContent>();
+        public static Dictionary<string, SpriteSheetContent> _spriteSheetFiles = new Dictionary<string, SpriteSheetContent>();
+        public static Dictionary<string, string> _imageReferences = new Dictionary<string, string>();
 
         internal Texture2DContent _texture = null;
         internal List<SpriteBlockContent> _blocks = new List<SpriteBlockContent>();
         internal Dictionary<string, Dictionary<int, Rectangle>> _imageFrameSourceRectangles = new Dictionary<string, Dictionary<int, Rectangle>>();
-        internal string _outputPath = string.Empty;
+        internal string _fileName = string.Empty;
 
         public List<ImageContent> Images { get; set; }
 
@@ -40,19 +41,22 @@ namespace Delta.Graphics
         public SpriteSheetContent(string fileName)
             : this()
         {
+            _fileName = fileName;
             XmlDocument document = new XmlDocument();
             document.Load(fileName);
             foreach (XmlNode node in document.DocumentElement.ChildNodes)
             {
                 if (node.Name.ToLower() != "image")
                     continue;
+                ImageContent image = new ImageContent();
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
-                    ImageContent image = new ImageContent();
                     switch (childNode.Name.ToLower())
                     {
                         case "path":
                             image.Path = childNode.InnerText;
+                            if (!_imageReferences.ContainsKey(image.Path))
+                                _imageReferences.Add(image.Path, fileName);
                             break;
                         case "framesize":
                             Vector2 size = Vector2Extensions.Parse(childNode.InnerText);
@@ -74,16 +78,16 @@ namespace Delta.Graphics
                                         frames = animationChildNode.InnerText;
                                         break;
                                     case "frameduration":
-                                        frameDuration = float.Parse(animationChildNode.Value, CultureInfo.InvariantCulture);
+                                        frameDuration = float.Parse(animationChildNode.InnerText, CultureInfo.InvariantCulture);
                                         break;
                                 }
                             }
                             image.Animations.Add(new Animation(animationName, frames, frameDuration));
                             break;
                     }
-                    if (!string.IsNullOrEmpty(image.Path) && image.FrameWidth != 0 && image.FrameHeight != 0)
-                        Images.Add(image);
                 }
+                if (!string.IsNullOrEmpty(image.Path) && image.FrameWidth != 0 && image.FrameHeight != 0)
+                    Images.Add(image);
             }
         }
     }
