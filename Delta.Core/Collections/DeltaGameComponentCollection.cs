@@ -18,7 +18,6 @@ namespace Delta
 
     public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection where T : IGameComponent
     {
-        static int _loopIndex = 0;
         internal List<T> _components = new List<T>();
 
         public ReadOnlyCollection<T> Components { get; private set; }
@@ -81,8 +80,8 @@ namespace Delta
 
         public override void LoadContent()
         {
-            for (_loopIndex = 0; _loopIndex < _components.Count; _loopIndex++)
-                _components[_loopIndex].LoadContent();
+            for (int i = 0; i < _components.Count; i++)
+                _components[i].LoadContent();
         }
 
         protected override void LightUpdate(DeltaTime time)
@@ -95,8 +94,8 @@ namespace Delta
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            for (_loopIndex = 0; _loopIndex < _components.Count; _loopIndex++)
-                _components[_loopIndex].Draw(time, spriteBatch);
+            for (int i = 0; i < _components.Count; i++)
+                _components[i].Draw(time, spriteBatch);
         }
 
         protected virtual void Sort()
