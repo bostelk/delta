@@ -37,7 +37,7 @@ namespace Delta.Graphics
         [ContentSerializer]
         public bool IsAnimationFinished { get; private set; }
         [ContentSerializer]
-        public bool IsOverlay { get; set; }
+        public bool IsOverlay { get; internal set; }
         [ContentSerializer]
         public bool IsOutlined { get; set; }
         [ContentSerializerIgnore]

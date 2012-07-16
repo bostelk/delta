@@ -32,7 +32,7 @@ namespace Delta
         [ContentSerializer]
         public bool IsEnabled { get; set; }
         [ContentSerializerIgnore]
-        public bool NeedsHeavyUpdate { get; set; }
+        protected bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
         protected bool HasLoadedContent { get; set; }
         [ContentSerializerIgnore]
