@@ -78,6 +78,9 @@ namespace Delta
         }
 
         Vector2 _offset;
+        /// <summary>
+        /// Defines the Camera's origin. Ex: An offset of the ScreenCenter defines (0,0) to be the center of the screen.
+        /// </summary>
         public Vector2 Offset
         {
             get
@@ -117,7 +120,7 @@ namespace Delta
         {
             get
             {
-                return new Rectangle((int) (Position.X - Size.X/2 + _shakeOffset.X), (int) (Position.Y - Size.Y/2 + _shakeOffset.Y), Size.X, Size.Y);
+                return new Rectangle((int) (Position.X - Offset.X + _shakeOffset.X), (int) (Position.Y - Offset.Y + _shakeOffset.Y), Size.X, Size.Y);
             }
         }
 

@@ -137,9 +137,12 @@ namespace Delta
             // xna will try to maintain the backbuffer resolution, however the monitor may not support it.
             // xna will then pick the next best resolution. eg. 1920x1080 fullscreened becomes 1600x900.
             // therefore the original resolution is not maintained and ScreenArea needs to update accordingly.
+            Vector2 increaseFactor = new Vector2((float)width / (float)ScreenArea.Width, (float)height / (float)ScreenArea.Height);
             ScreenArea = new Rectangle(0, 0, width, height);
             ScreenCenter = ScreenArea.Center.ToVector2();
-            World.Camera.Offset = ScreenCenter;
+
+            // re-align the camera's offset
+            World.Camera.Offset = World.Camera.Offset * increaseFactor;
         }
 
         internal void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
