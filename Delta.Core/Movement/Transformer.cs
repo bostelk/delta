@@ -300,7 +300,7 @@ namespace Delta.Movement
                     {
                         if (_onSequenceFinished != null)
                             _onSequenceFinished();
-                        Recycle();
+                        RemoveNextUpdate = true;
                     }
 
                     _elapsed = 0;
@@ -324,7 +324,6 @@ namespace Delta.Movement
             _onSequenceFinished = null;
             _transforms.Clear();
 
-            RemoveNextUpdate = true;
             _pool.Release(this);
         }
     }

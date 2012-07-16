@@ -104,6 +104,7 @@ namespace Delta
             if (RemoveNextUpdate)
             {
                 Remove();
+                Recycle();
             }
             if (!IsLateInitialized)
             {
@@ -169,6 +170,7 @@ namespace Delta
             IsEnabled = true;
             IsLateInitialized = false;
             IsVisible = true;
+            RemoveNextUpdate = false;
         }
 
     }
