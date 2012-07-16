@@ -31,26 +31,20 @@ namespace Delta.Examples
             G.Collision.DefineWorld(640, 640, 32);
             G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
+            G.World.Camera.BoundsEnabled = true;
             G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
-            G.World.Camera.StayInsideBounds = true;
-            G.World.Camera.Filter = true; // use tint
+            G.World.Camera.TintEnabled = true;
             G.World.Camera.Tint = new Color(0, 0, 0, 140);
         }
 
         protected override void LoadContent()
         {
-            Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
+            //Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _map = Content.Load<Map>(@"Maps\Plains\2");
             //G.World.Add(_map);
             //G.World.Add(_player = new BoxLink());
             G.World.Camera.Follow(_player);
             base.LoadContent();
-        }
-
-        protected override void LateInitialize()
-        {
-            G.Audio.PlaySound("BGM_Evil");
-            base.LateInitialize();
         }
 
         protected override void Update(GameTime gameTime)

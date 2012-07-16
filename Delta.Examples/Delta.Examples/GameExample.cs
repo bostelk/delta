@@ -33,11 +33,14 @@ namespace Delta.Examples
 
         public GameExample() : base("GameExample")
         {
+            G.World.Camera.Tint = (new Color(0, 0, 0, 50));
+            G.World.Camera.TintEnabled = true;
+
             G.World.Add(new Image(@"Graphics\Background") { Layer = (int)DrawLayers.BackgroundLow });
             G.World.Add(new Image(@"Graphics\ForeGround") { Layer = (int)DrawLayers.Background });
             G.World.Add(new GravitySink() { Layer = (int)DrawLayers.Ground });
-            G.World.Add(new Lucas() { Layer = (int)DrawLayers.Ground });
             G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0), Layer = (int)DrawLayers.Ground });
+            G.World.Add(new Lucas() { Layer = (int)DrawLayers.Flyers });
 
             FuelAtom atom = new FuelAtom() { Layer = (int)DrawLayers.Ground };
             G.World.Add(atom);
@@ -45,8 +48,6 @@ namespace Delta.Examples
             Transformer.ThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f).Loop();
             Transformer.ThisEntity(atom).RotateTo(180, 10f).RotateTo(0, 10f);
             Transformer.ThisEntity(atom).FlickerFor(0.5f, 1, 0.2f).Loop();
-            //Transformer.ThisEntity(atom).BlinkFor(0.5f, 20);
-            //Transformer.ThisEntity(atom).FadeTo(0.0f, 0.2f).FadeTo(1, 0.2f).Repeat(80 * 1000);
 
             UI.Add(new GameHud());
             UI.Camera.ZoomImmediate(4.0f);
