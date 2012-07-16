@@ -288,12 +288,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Graphics\SpriteSheets\16x16.spritesheet2">
+    <Compile Include="Graphics\SpriteSheets\16x16.spritesheet">
       <Name>16x16</Name>
       <Importer>SpriteSheetImporter</Importer>
       <Processor>SpriteSheetProcessor</Processor>
       <SubType>Designer</SubType>
-    </None>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\AnimatedMisc\spike.png">

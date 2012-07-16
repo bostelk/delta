@@ -15,16 +15,14 @@ namespace Delta.Graphics
         {
             input._fileName = context.OutputFilename;
             //load external images
-            if (input.Images.Count <= 0)
-                throw new Exception(input._fileName);
             for (int i = 0; i < input.Images.Count; i++)
             {
                 ImageContent externalImage = input.Images[i];
                 externalImage._bitmapContent = context.BuildAndLoadAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(externalImage.Path), "TextureProcessor").Faces[0][0];
             }
 
-            int maxTextureWidth = 0;
-            int maxTextureHeight = 0;
+            int maxTextureWidth = 2;
+            int maxTextureHeight = 2;
             //maxTextureWidth = 1024;
             //maxTextureHeight = 1024;
 
@@ -93,7 +91,7 @@ namespace Delta.Graphics
             input._blocks.Sort((a, b) => -((a.SourceRegion.Width * 2) + (a.SourceRegion.Height * 2)).CompareTo((b.SourceRegion.Width * 2) + (b.SourceRegion.Height * 2)));
 
             //pack the sprite blocks
-            int outputHeight = 0;
+            int outputHeight = 2;
             List<Rectangle> freeRegions = new List<Rectangle>(); //keep a list of unused regions
             freeRegions.Add(new Rectangle(0, 0, maxTextureWidth, maxTextureHeight)); //add the size of our workspace as the first free region
             for (int i = 0; i < input._blocks.Count; i++)

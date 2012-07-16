@@ -15,8 +15,6 @@ namespace Delta
     {
         public override Map Process(Map input, ContentProcessorContext context)
         {
-            foreach (var spriteSheetFile in SpriteSheetContent._spriteSheetFiles)
-                context.BuildAsset<SpriteSheetContent, SpriteSheetContent>(new ExternalReference<SpriteSheetContent>(spriteSheetFile.Key), "SpriteSheetProcessor");
             if (input._tilesets.Count > 0)
             {
                 foreach (var spriteSheetImage in SpriteSheetContent._imageReferences)

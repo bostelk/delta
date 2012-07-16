@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace Delta.Graphics
 {
-    [ContentImporter(".spritesheet", DisplayName = "SpriteSheetImporter", DefaultProcessor = "SpriteSheetProcessor")]
+    [ContentImporter(".spritesheet", DisplayName = "Sprite Sheet - Delta", DefaultProcessor = "SpriteSheetProcessor")]
     public class SpriteSheetImporter : ContentImporter<SpriteSheetContent>
     {
         public override SpriteSheetContent Import(string fileName, ContentImporterContext context)
@@ -14,7 +14,11 @@ namespace Delta.Graphics
             if (SpriteSheetContent._spriteSheetFiles.ContainsKey(fileName))
                 return SpriteSheetContent._spriteSheetFiles[fileName];
             else
-                return new SpriteSheetContent(fileName);
+            {
+                SpriteSheetContent spriteSheetContent = new SpriteSheetContent(fileName);
+                SpriteSheetContent._spriteSheetFiles.Add(fileName, spriteSheetContent);
+                return spriteSheetContent;
+            }
         }
     }
 }

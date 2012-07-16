@@ -246,11 +246,11 @@ namespace Delta.Graphics
             }
         }
 
-        //protected override bool CanDraw()
-        //{
-        //    if (_animation == null || _spriteSheet == null || _spriteSheet.Texture == null || !OnCamera()) return false;
-        //    return base.CanDraw();
-        //}
+        protected override bool CanDraw()
+        {
+            if (_animation == null || _spriteSheet == null || _spriteSheet.Texture == null || !OnCamera()) return false;
+            return base.CanDraw();
+        }
 
         //protected virtual bool OnCamera()
         //{

@@ -32,8 +32,8 @@ namespace Delta.Examples
             G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
             G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
-            G.World.Camera.StayInsideBounds = true;
-            G.World.Camera.Filter = true; // use tint
+            //G.World.Camera.StayInsideBounds = true;
+            //G.World.Camera.Filter = true; // use tint
             G.World.Camera.Tint = new Color(0, 0, 0, 140);
         }
 

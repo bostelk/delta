@@ -13,7 +13,7 @@ using Delta.Graphics;
 
 namespace Delta.Tiled
 {
-    [ContentImporter(".tmx", DisplayName="TmxImporter", DefaultProcessor="TmxProcessor")]
+    [ContentImporter(".tmx", DisplayName="Tiled Map - Delta", DefaultProcessor="TmxProcessor")]
     public class TmxImporter : ContentImporter<Map>
     {
         public override Map Import(string fileName, ContentImporterContext context)
@@ -44,8 +44,8 @@ namespace Delta.Tiled
                 switch (file.Extension.ToLower())
                 {
                     case ".spritesheet":
-                        context.AddDependency(file.FullName);
-                        SpriteSheetContent._spriteSheetFiles.Add(file.FullName, new SpriteSheetContent(file.FullName));
+                        if (!SpriteSheetContent._spriteSheetFiles.ContainsKey(file.FullName))
+                            SpriteSheetContent._spriteSheetFiles.Add(file.FullName, new SpriteSheetContent(file.FullName));
                         break;
                     case ".stylesheet":
                         context.AddDependency(file.FullName);
