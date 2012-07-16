@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -137,15 +137,6 @@ namespace Delta.Tiled
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
             base.LoadContent();
-            foreach (var gameComponent in _components)
-            {
-                TileLayer tileLayer = gameComponent as TileLayer;
-                foreach (Tile tile in tileLayer._tiles)
-                {
-                    Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
-                    tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
-                }
-            }
         }
 
         public void AddToWorld(World world)

@@ -74,6 +74,16 @@ namespace Delta.Tiled
         }
 #endif
 
+        public override void LoadContent()
+        {
+            base.LoadContent();
+            foreach (Tile tile in _tiles)
+            {
+                Tileset tileset = Map.Instance._tilesets[tile._tilesetIndex];
+                tile._sourceRectangle = Map.Instance._spriteSheet.GetFrameSourceRectangle(Path.GetFileNameWithoutExtension(tileset.ExternalImagePath), tile._imageFrameIndex);
+            }
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             Tile tile;

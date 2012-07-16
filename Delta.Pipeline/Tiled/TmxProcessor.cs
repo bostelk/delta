@@ -22,8 +22,10 @@ namespace Delta
                     foreach (var tileset in input._tilesets)
                     {
                         if (Path.GetFileName(spriteSheetImage.Key) == Path.GetFileName(tileset.ExternalImagePath))
+                        {
                             input._spriteSheetName = spriteSheetImage.Value;
-                        break;
+                            break;
+                        }
                     }
                     if (!string.IsNullOrEmpty(input._spriteSheetName))
                         break;
