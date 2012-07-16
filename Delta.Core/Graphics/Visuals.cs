@@ -22,9 +22,8 @@ namespace Delta.Graphics
             SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
-            se.IsAnimationLooped = false;
             se.Origin = new Vector2(0.5f, 0.5f);
-            se.Play(animation);
+            se.Play(animation, false);
             se.Layer = 100;
             //G.World.Add(se);
         }
@@ -40,10 +39,9 @@ namespace Delta.Graphics
             SpriteEntity se = new SpriteEntity(null, spriteSheet);
             se.LoadContent();
             se.Position = position;
-            se.IsAnimationLooped = false;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
-            se.Play(animation);
+            se.Play(animation, false);
             se.Layer = 100;
             //G.World.Add(se);
 
@@ -67,9 +65,8 @@ namespace Delta.Graphics
                 SpriteEntity see = se[i] = new SpriteEntity(null, spriteSheet);
                 see.LoadContent();
                 see.Position = position;
-                see.IsAnimationLooped = false;
                 see.Origin = new Vector2(0.5f, 0.5f);
-                see.Play(animation);
+                see.Play(animation, false);
                 see.Layer = 100;
                 //G.World.Add(see);
             }

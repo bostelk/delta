@@ -31,11 +31,11 @@ namespace Delta.Graphics
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
         [ContentSerializer]
-        public bool IsAnimationLooped { get; set; }
+        public bool IsAnimationLooped { get; private set; }
         [ContentSerializer]
         public bool IsAnimationPaused { get; set; }
         [ContentSerializer]
-        public bool IsAnimationFinished { get; set; }
+        public bool IsAnimationFinished { get; private set; }
         [ContentSerializer]
         public bool IsOverlay { get; set; }
         [ContentSerializer]
@@ -51,12 +51,14 @@ namespace Delta.Graphics
         public SpriteEntity()
             : base()
         {
+            IsAnimationFinished = false;
             IsAnimationLooped = true;
         }
 
         public SpriteEntity(string id, string spriteSheet)
             : base(id)
         {
+            IsAnimationFinished = false;
             IsAnimationLooped = true;
             _spriteSheetName= spriteSheet;
         }
@@ -166,13 +168,18 @@ namespace Delta.Graphics
                     IsAnimationFinished = true;
                     _frameDurationTimer = 0;
                 }
-                Rectangle previousSourceRectangle = _sourceRectangle;
-                _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + _animationFrameOffset);
-                if (_sourceRectangle != Rectangle.Empty)
-                {
-                    if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
-                        Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
-                }
+                UpdateSourceRectangle();
+            }
+        }
+
+        protected virtual void UpdateSourceRectangle()
+        {
+            Rectangle previousSourceRectangle = _sourceRectangle;
+            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + _animationFrameOffset);
+            if (_sourceRectangle != Rectangle.Empty)
+            {
+                if (previousSourceRectangle.Width != _sourceRectangle.Width || previousSourceRectangle.Height != _sourceRectangle.Height)
+                    Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
             }
         }
 
@@ -209,10 +216,13 @@ namespace Delta.Graphics
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
-        public void Play(string animation)
+        public void Play(string animation, bool isLooped, bool startRandom, int frameOffset)
         {
             _animationName = animation;
             IsAnimationPaused = false;
+            IsAnimationLooped = isLooped;
+            _startOnRandomFrame = startRandom;
+            _animationFrameOffset = frameOffset;
             if (_spriteSheet == null)
             {
                 _animation = null;
@@ -221,6 +231,21 @@ namespace Delta.Graphics
             _animation = _spriteSheet.GetAnimation(_animationName);
             if (_animation != null)
                 OnAnimationChanged();
+        }
+
+        public void Play(string animation, bool isLooped, bool startRandom)
+        {
+            Play(animation, isLooped, startRandom, 0);
+        }
+
+        public void Play(string animation, bool isLooped)
+        {
+            Play(animation, isLooped, false, 0);
+        }
+
+        public void Play(string animation)
+        {
+            Play(animation, true, false, 0);
         }
 
         protected internal override void OnPositionChanged()
@@ -237,9 +262,7 @@ namespace Delta.Graphics
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             IsAnimationFinished = false;
-            // draw the first frame
-            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_animation.ImageName, _animation.Frames[_animationFrame] + _animationFrameOffset);
-            Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
+            UpdateSourceRectangle();
         }
 
         public override void Recycle()
@@ -256,8 +279,9 @@ namespace Delta.Graphics
             _startOnRandomFrame = false;
             SpriteEffects = SpriteEffects.None;
             IsAnimationLooped = true;
-            IsOverlay = false;
             IsAnimationPaused = false;
+            IsAnimationFinished = false;
+            IsOverlay = false;
             IsOutlined = false;
             OutlineColor = Color.White;
             _pool.Release(this);
