@@ -102,6 +102,8 @@ namespace Delta
         {
             if (Comparer != null)
                 _components.Sort(Comparer);
+            else
+                _components.Sort((a, b) => (a.Layer.CompareTo(b.Layer)));
             NeedsToSort = false;
         }
     }
