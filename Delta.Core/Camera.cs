@@ -13,8 +13,8 @@ namespace Delta
     /// </summary>
     public class Camera
     {
-        //float _rotationRate = 0;
-        //float _goalRotation;
+        float _rotationRate;
+        float _goalRotation;
         float _desiredScale;
         Vector2 _desiredPosition;
         float _translationRate;
@@ -97,8 +97,7 @@ namespace Delta
         /// The area in the world the camera is locked inside.
         /// </summary>
         public Rectangle BoundedArea { get; set; }
-
-        public bool StayInsideBounds { get; set; }
+        public bool BoundsEnabled { get; set; }
 
         private Point Size
         {
@@ -119,20 +118,9 @@ namespace Delta
         {
             get
             {
-                return new Rectangle((int)Position.X - Size.X/2, (int)Position.Y - Size.Y/2, Size.X, Size.Y);
+                return new Rectangle((int) (Position.X - Size.X/2 + _shakeOffset.X), (int) (Position.Y - Size.Y/2 + _shakeOffset.Y), Size.X, Size.Y);
             }
         }
-
-        ///// <summary>
-        ///// May be needed for 3D applications; like Farseer.
-        ///// </summary>
-        //public Matrix FlippedVerticalView
-        //{
-        //    get
-        //    {
-        //        return View * Matrix.CreateScale(1, -1, 1);
-        //    }
-        //}
 
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
@@ -151,38 +139,32 @@ namespace Delta
         public bool IsMoving { get; private set; }
         public bool IsZooming { get; set; }
         public bool IsShaking { get; set; }
-        public bool Filter { get; set; }
         public Color Tint { get; set; }
+        public bool TintEnabled { get; set; }
         
         public Camera() : base()
         {
             _scaleRate = 0.5f;
-            //_rotationRate = 0.5f;
+            _rotationRate = 0.5f;
             _translationRate = 0.5f;
             Position = _desiredPosition = Vector2.Zero;
             Scale = _desiredScale = 1;
             Rotation = 0;
             Tint = Color.White;
+            BoundedArea = Rectangle.Empty;
             PixelFix = false; // broken.
         }
 
         protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            if (Filter)
+            if (TintEnabled)
             {
-                // depends on wheter the camera is drawn within the transformed batch
-                //spriteBatch.Draw(DeltaGame.Instance.PixelTexture, DeltaGame.Instance.ScreenArea, Tint);
-                spriteBatch.Draw(G.PixelTexture, ViewingArea, Tint);
+                spriteBatch.Draw(G.PixelTexture, G.ScreenArea, Tint);
             }
             if (_flashDuration > _flashElapsed)
             {
-                // TODO: Link with ColorExtensions.
                 Color temp = _flashColor.SetAlpha(_flashElapsed / _flashDuration);
-                //temp.A = (byte) ((_flashElapsed / _flashDuration) * 255.0f);
-
-                // depends on wheter the camera is drawn within the transformed batch
-                //spriteBatch.Draw(DeltaGame.Instance.PixelTexture, DeltaGame.Instance.ScreenArea, _flashColor);
-                spriteBatch.Draw(G.PixelTexture, ViewingArea, _flashColor);
+                spriteBatch.Draw(G.PixelTexture, G.ScreenArea, temp);
             }
         }
 
@@ -214,7 +196,7 @@ namespace Delta
             UpdateShake(time.ElapsedSeconds);
             UpdateScale(time.ElapsedSeconds);
 
-            if (StayInsideBounds)
+            if (BoundsEnabled)
             {
                 _position.X = MathHelper.Clamp(_position.X + _shakeOffset.X, BoundedArea.Left + ViewingArea.Width / 2, BoundedArea.Right - ViewingArea.Width / 2);
                 _position.Y = MathHelper.Clamp(_position.Y + _shakeOffset.Y, BoundedArea.Top + ViewingArea.Height / 2, BoundedArea.Bottom - ViewingArea.Height / 2);
@@ -424,19 +406,22 @@ namespace Delta
 
         public void Shake(float magnitude, float duration, ShakeMode mode, ShakeAxis options)
         {
-            IsShaking = true;
-            _shakeMagnitude = magnitude;
-            _shakeMode = mode;
-            _shakeOptions = options;
-            _shakeDuration = duration;
-            _shakeAnchorPosition = _position;
-            _shakeSpeed = 600f;
-            _shakeDistance = 30f;
-            _shakeAngle = 1.5707963267948966f;
-        }
-
-        public void Shake(float distance, float angle, float speed, float duration, ShakeMode mode, ShakeAxis options)
-        {
+            if (IsShaking)
+            {
+                _shakeDuration += duration;
+            }
+            else
+            {
+                IsShaking = true;
+                _shakeMagnitude = magnitude;
+                _shakeMode = mode;
+                _shakeOptions = options;
+                _shakeDuration = duration;
+                _shakeAnchorPosition = _position;
+                _shakeSpeed = 600f;
+                _shakeDistance = 30f;
+                _shakeAngle = 1.5707963267948966f;
+            }
         }
 
         public void StopShake()

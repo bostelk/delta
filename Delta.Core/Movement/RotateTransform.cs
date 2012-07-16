@@ -52,6 +52,7 @@ namespace Delta.Movement
             _goalRotation = 0;
             base.Recycle();
 
+            _pool.Release(this);
         }
 
     }

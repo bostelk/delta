@@ -45,10 +45,12 @@ namespace Delta
                 _drawables.Add(drawable);
                 NeedsToSort = true;
             }
+            EntityBase entityBase = obj as EntityBase;
+            if (entityBase != null)
+                entityBase._collectionReference = this;
             Entity entity = obj as Entity;
             if (entity != null)
             {
-                entity._collectionReference = this;
                 if (string.IsNullOrEmpty(entity.ID)) //if the ID is null, make it a unique.
                     entity.ID = Guid.NewGuid().ToString();
                 if (_idReferences.ContainsKey(entity.ID)) //if the ID already exists, append a numerical increment

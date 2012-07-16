@@ -217,16 +217,16 @@ namespace Delta.Graphics
             base.LoadContent();
         }
 
-        //protected override void LightUpdate(GameTime gameTime)
-        //{
-        //    if (_animation != null && !IsFinished)
-        //        UpdateAnimationFrame(gameTime);
-        //    base.LightUpdate(gameTime);
-        //}
-
-        protected internal virtual void UpdateAnimationFrame(GameTime gameTime)
+        protected override void LightUpdate(DeltaTime time)
         {
-            _frameDurationTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_animation != null && !IsFinished)
+                UpdateAnimationFrame(time);
+            base.LightUpdate(time);
+        }
+
+        protected internal virtual void UpdateAnimationFrame(DeltaTime time)
+        {
+            _frameDurationTimer -= (float)time.TotalSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;

@@ -12,7 +12,7 @@ using Delta.Physics;
 
 namespace Delta
 {
-    public class Entity : EntityBase
+    public abstract class Entity : EntityBase
     {
         public static Entity Get(string id)
         {
@@ -415,13 +415,6 @@ namespace Delta
 
         protected virtual void OnWrappedBodyChanged()
         {
-        }
-
-        public void Remove()
-        {
-            if (_collectionReference == null)
-                return;
-            _collectionReference.Remove(this);
         }
 
         public override void Recycle()

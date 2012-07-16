@@ -70,19 +70,19 @@ namespace Delta.Examples
             }
             if (G.Input.Keyboard.Held(Keys.Up))
             {
-                G.Audio.SetChannelVolume(MathHelper.SmoothStep(G.Audio.MusicVolume, 1.0f, 0.1f), AudioChannel.Music);
+                G.Audio.SetChannelVolume(AudioChannel.Music, MathHelper.SmoothStep(G.Audio.MusicVolume, 1.0f, 0.1f));
             }
             if (G.Input.Keyboard.Held(Keys.Down))
             {
-                G.Audio.SetChannelVolume(MathHelper.SmoothStep(G.Audio.MusicVolume, 0.0f, 0.1f), AudioChannel.Music);
+                G.Audio.SetChannelVolume(AudioChannel.Music, MathHelper.SmoothStep(G.Audio.MusicVolume, 0.0f, 0.1f));
             }
             if (G.Input.Keyboard.Held(Keys.NumPad8))
             {
-                G.Audio.SetChannelVolume(MathHelper.SmoothStep(G.Audio.SfxVolume, 1.0f, 0.1f), AudioChannel.Sfx); ;
+                G.Audio.SetChannelVolume(AudioChannel.Sfx, MathHelper.SmoothStep(G.Audio.MusicVolume, 1.0f, 0.1f));
             }
             if (G.Input.Keyboard.Held(Keys.NumPad2))
             {
-                G.Audio.SetChannelVolume(MathHelper.SmoothStep(G.Audio.SfxVolume, 0.0f, 0.1f), AudioChannel.Sfx);
+                G.Audio.SetChannelVolume(AudioChannel.Sfx, MathHelper.SmoothStep(G.Audio.MusicVolume, 0.0f, 0.1f));
             }
             if (G.Input.Keyboard.Held(Keys.NumPad7))
             {

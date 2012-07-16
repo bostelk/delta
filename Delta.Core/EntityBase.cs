@@ -11,7 +11,7 @@ namespace Delta
     /// Lightweight as possible while still inhertiting all the basic interfaces.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityBase : IRecyclable, IImportable, IDrawable, IUpdateable
+    public abstract class EntityBase : IRecyclable, IImportable, IDrawable, IUpdateable
     {
         internal EntityCollection _collectionReference = null;
 
@@ -104,6 +104,7 @@ namespace Delta
             if (RemoveNextUpdate)
             {
                 Remove();
+                Recycle();
             }
             if (!IsLateInitialized)
             {
@@ -169,6 +170,7 @@ namespace Delta
             IsEnabled = true;
             IsLateInitialized = false;
             IsVisible = true;
+            RemoveNextUpdate = false;
         }
 
     }
