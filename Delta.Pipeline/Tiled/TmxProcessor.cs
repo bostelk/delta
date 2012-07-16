@@ -23,7 +23,10 @@ namespace Delta
                     {
                         if (Path.GetFileName(spriteSheetImage.Key) == Path.GetFileName(tileset.ExternalImagePath))
                             input._spriteSheetName = spriteSheetImage.Value;
+                        break;
                     }
+                    if (!string.IsNullOrEmpty(input._spriteSheetName))
+                        break;
                 }
             }
             return input;

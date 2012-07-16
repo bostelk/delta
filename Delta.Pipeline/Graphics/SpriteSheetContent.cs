@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -56,7 +57,13 @@ namespace Delta.Graphics
                         case "path":
                             image.Path = childNode.InnerText;
                             if (!_imageReferences.ContainsKey(image.Path))
-                                _imageReferences.Add(image.Path, fileName);
+                            {
+                                string xnbFileName = Path.ChangeExtension(fileName, "");
+                                xnbFileName = xnbFileName.Remove(xnbFileName.Length - 1);
+                                xnbFileName = xnbFileName.Replace(Environment.CurrentDirectory, "");
+                                xnbFileName = xnbFileName.Remove(0, 1);
+                                _imageReferences.Add(image.Path, xnbFileName);
+                            }
                             break;
                         case "framesize":
                             Vector2 size = Vector2Extensions.Parse(childNode.InnerText);
