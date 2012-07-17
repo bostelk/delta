@@ -40,7 +40,7 @@ namespace Delta.Tiled
                     entity = CreateInstance(typeName);
                 if (entity == null)
                     continue;
-                entity.ID = node.Name;
+                entity.Name = node.Name;
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
                     if (!entity.ImportCustomValues(childNode.Name.ToLower(), childNode.InnerText))

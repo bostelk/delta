@@ -103,7 +103,7 @@ namespace Delta.Tiled
 
         public override string ToString()
         {
-            return String.Format("{0} {1} {2}", Name, Layer, _tiles.Count);
+            return String.Format("Name:{0}, Layer:{1}, Tiles:{2}", Name, Layer, _tiles.Count);
         }
     }
 }

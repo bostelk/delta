@@ -33,7 +33,7 @@ namespace Delta.Tiled
                 if (entity == null)
                     continue;
                 entity.IsVisible = layerIsVisible;
-                entity.ID = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
+                entity.Name = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
                 entity.Position = new Vector2(
                     objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture),
                     objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
@@ -100,7 +100,7 @@ namespace Delta.Tiled
                 {
                     if (sprite.IsOverlay)
                     {
-                        //Map.Instance.PostEffects.Add(sprite);
+                        Map.Instance.PostEffects.Add(sprite);
                         added = true;
                     }
                 }
@@ -112,7 +112,7 @@ namespace Delta.Tiled
 #endif
         public override string ToString()
         {
-            return String.Format("{0} {1} {2}", Name, Layer, Components.Count);
+            return String.Format("Name:{0}, Layer:{1}, Components:{2}", Name, Layer, Components.Count);
         }
     }
 }

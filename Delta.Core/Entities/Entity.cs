@@ -104,12 +104,12 @@ namespace Delta
         #endregion
 
         [ContentSerializer]
-        public string ID { get; internal set; }
+        public string Name { get; internal set; }
 
-        string IEntity.ID
+        string IEntity.Name
         {
-            get { return this.ID; }
-            set { this.ID = value; }
+            get { return Name; }
+            set { Name = value; }
         }
 
         [ContentSerializerIgnore]
@@ -276,16 +276,16 @@ namespace Delta
         public Entity()
             : base()
         {
-            ID = string.Empty;
+            Name = string.Empty;
             NeedsHeavyUpdate = true;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
         }
 
-        public Entity(string id)
+        public Entity(string name)
             : this()
         {
-            ID = id;
+            Name = name;
         }
 
 #if WINDOWS
@@ -427,7 +427,7 @@ namespace Delta
         public override void Recycle()
         {
             base.Recycle();
-            ID = string.Empty;
+            Name = string.Empty;
             RenderPosition = Vector2.Zero;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
