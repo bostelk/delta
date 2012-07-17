@@ -47,11 +47,11 @@ namespace Delta.Tiled
         public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializer(SharedResource = true)]
+        [ContentSerializer]
         public IGameComponentCollection BelowGround { get; private set; }
-        [ContentSerializer(SharedResource = true)]
+        [ContentSerializer]
         public IGameComponentCollection Ground { get; private set; }
-        [ContentSerializer(SharedResource = true)]
+        [ContentSerializer]
         public IGameComponentCollection AboveGround { get; private set; }
         [ContentSerializer] //leave this one to be serialized normally
         public IGameComponentCollection PostEffects { get; private set; }
@@ -107,17 +107,17 @@ namespace Delta.Tiled
                             case "delta.belowground":
                             case "delta.bg":
                             case "d.bg":
-                                Map.Instance.BelowGround = entityLayer;
+                                BelowGround = entityLayer;
                                 break;
                             case "delta.ground":
                             case "delta.g":
                             case "d.g":
-                                Map.Instance.Ground = entityLayer;
+                                Ground = entityLayer;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
                             case "d.ag":
-                                Map.Instance.AboveGround = entityLayer;
+                                AboveGround = entityLayer;
                                 break;
                         }
                         Add(entityLayer);
