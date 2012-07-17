@@ -23,6 +23,11 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
+        protected override void LightUpdate(DeltaTime time)
+        {
+            Layer = Position.Y;
+            base.LightUpdate(time);
+        }
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, null , Tint, Rotation, new Vector2(_texture.Width / 2, _texture.Height / 2), Scale, SpriteEffects.None, 0);
