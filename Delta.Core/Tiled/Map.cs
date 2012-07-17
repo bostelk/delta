@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -48,11 +48,11 @@ namespace Delta.Tiled
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
         [ContentSerializer]
-        public IGameComponentCollection BelowGround { get; private set; }
+        private int BelowGroundIndex;
         [ContentSerializer]
-        public IGameComponentCollection Ground { get; private set; }
+        private int GroundIndex;
         [ContentSerializer]
-        public IGameComponentCollection AboveGround { get; private set; }
+        private int AboveGroundIndex;
         [ContentSerializer] //leave this one to be serialized normally
         public IGameComponentCollection PostEffects { get; private set; }
 
@@ -107,17 +107,17 @@ namespace Delta.Tiled
                             case "delta.belowground":
                             case "delta.bg":
                             case "d.bg":
-                                BelowGround = entityLayer;
+                                BelowGroundIndex = layerOrder;
                                 break;
                             case "delta.ground":
                             case "delta.g":
                             case "d.g":
-                                Ground = entityLayer;
+                                GroundIndex = layerOrder;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
                             case "d.ag":
-                                AboveGround = entityLayer;
+                                AboveGroundIndex = layerOrder;
                                 break;
                         }
                         Add(entityLayer);
@@ -139,9 +139,9 @@ namespace Delta.Tiled
 
         protected internal override void OnAdded()
         {
-            G.World.BelowGround = Map.Instance.BelowGround;
-            G.World.Ground = Map.Instance.Ground;
-            G.World.AboveGround = Map.Instance.AboveGround;
+            G.World.BelowGround = Components[BelowGroundIndex] as IGameComponentCollection;
+            G.World.Ground = Components[GroundIndex] as IGameComponentCollection;
+            G.World.AboveGround = Components[AboveGroundIndex] as IGameComponentCollection;
             base.OnAdded();
         }
 
