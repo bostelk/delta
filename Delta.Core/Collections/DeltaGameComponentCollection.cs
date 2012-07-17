@@ -19,11 +19,31 @@ namespace Delta
 
     public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection, IEnumerable<T>, IEnumerable where T : IGameComponent
     {
+        static List<IGameComponent> _globalComponents = new List<IGameComponent>();
+        static ReadOnlyCollection<IGameComponent> _globalComponentsReadOnly = null; 
+        public static ReadOnlyCollection<IGameComponent> GlobalComponents
+        {
+            get
+            {
+                if (_globalComponentsReadOnly == null)
+                    _globalComponentsReadOnly = new ReadOnlyCollection<IGameComponent>(_globalComponents);
+                return _globalComponentsReadOnly;
+            }
+        }
+
         internal List<T> _components = new List<T>();
 
         public ReadOnlyCollection<T> Components { get; private set; }
         public bool NeedsToSort { get; set; }
         public IComparer<T> Comparer { get; set; }
+
+        public DeltaGameComponentCollection()
+            : base()
+        {
+            Components = new ReadOnlyCollection<T>(_components);
+            NeedsToSort = true;
+            Comparer = null;
+        }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -35,14 +55,6 @@ namespace Delta
             return Components.GetEnumerator();
         }
 
-        public DeltaGameComponentCollection()
-            : base()
-        {
-            Components = new ReadOnlyCollection<T>(_components);
-            NeedsToSort = true;
-            Comparer = null;
-        }
-
         void IGameComponentCollection.Add(IGameComponent item)
         {
             Add((T)item);
@@ -51,6 +63,7 @@ namespace Delta
         public void Add(T item)
         {
             _components.Add(item);
+            _globalComponents.Add(item);
             NeedsToSort = true;
             item.Collection = this;
             IEntity entity = item as IEntity;
@@ -73,6 +86,7 @@ namespace Delta
         public void Remove(T item)
         {
             _components.FastRemove<T>(item);
+            _globalComponents.FastRemove<IGameComponent>(item);
             NeedsToSort = true;
             item.Collection = null;
             IEntity entity = item as IEntity;

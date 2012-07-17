@@ -134,7 +134,6 @@
     <Compile Include="TiledExample.cs" />
     <Compile Include="EffectExample.cs" />
     <Compile Include="Entities\FuelAtom.cs" />
-    <Compile Include="FarseerExample.cs" />
     <Compile Include="Entities\MovingSpeaker.cs" />
     <Compile Include="Entities\GravitySink.cs" />
     <Compile Include="Entities\Image.cs" />
