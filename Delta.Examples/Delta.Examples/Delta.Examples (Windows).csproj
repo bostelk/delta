@@ -119,6 +119,8 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
+    <Compile Include="Entities\TextureEntity.cs" />
+    <Compile Include="InputExample.cs" />
     <Compile Include="Entities\Barrel.cs" />
     <Compile Include="ZeldaExample.cs" />
     <Compile Include="Entities\Obstacle.cs" />
@@ -141,7 +143,7 @@
     <Compile Include="Entities\Lucas.cs" />
     <Compile Include="ExampleBase.cs" />
     <Compile Include="GameExample.cs" />
-    <Compile Include="InputExample.cs" />
+    <Compile Include="TransformerExample.cs" />
     <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

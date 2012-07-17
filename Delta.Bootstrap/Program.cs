@@ -18,6 +18,7 @@ namespace Delta.Bootstrap
             Collision,
             Racing,
             Zelda,
+            Transformer
         }
 
 #if WINDOWS
@@ -25,7 +26,7 @@ namespace Delta.Bootstrap
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Animation;
+            Examples example = Examples.Transformer;
 
             switch (example)
             {
@@ -52,6 +53,9 @@ namespace Delta.Bootstrap
                     break;
                 case Examples.Zelda:
                     RunExample<ZeldaExample>();
+                    break;
+                case Examples.Transformer:
+                    RunExample<TransformerExample>();
                     break;
             }
         }
