@@ -161,7 +161,7 @@ namespace Delta.Graphics
 
         protected internal virtual void UpdateAnimationFrame(DeltaTime time)
         {
-            _frameDurationTimer -= (float)time.ElapsedSeconds;
+            _frameDurationTimer -= time.ElapsedSeconds;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
