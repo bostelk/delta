@@ -300,7 +300,7 @@ namespace Delta.Movement
                     {
                         if (_onSequenceFinished != null)
                             _onSequenceFinished();
-                        RemoveNextUpdate = true;
+                        RemoveNextFrame();
                     }
 
                     _elapsed = 0;

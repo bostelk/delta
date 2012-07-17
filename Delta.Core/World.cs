@@ -74,16 +74,20 @@ namespace Delta
             //}
             return result;
         }
+        
+        public override string ToString()
+        {
+            StringBuilder text = new StringBuilder();
+            text.Append(String.Format("{0,-8}{1,-50}\n", "Name", "Layer"));
+            foreach (IGameComponent gameComponent in _components)
+                text.Append(gameComponent.ToString());
+            return text.ToString();
+        }
 
         public void DebugDraw()
         {
-            string info = String.Empty;
-            foreach (IGameComponent gameComponent in _components)
-            {
-                info += gameComponent.ToString() + "\n";
-            }
             G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, info, new Vector2(0, 100), Color.White);
+            G.SpriteBatch.DrawString(G.Font, this.ToString(), new Vector2(0, 100), Color.White);
             G.SpriteBatch.End();
         }
 
