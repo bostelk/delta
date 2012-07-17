@@ -9,9 +9,9 @@ namespace Delta
 
         internal static void AddIDReference(IEntity entity)
         {
-            if (string.IsNullOrEmpty(entity.Name)) //if the ID is null, make it a unique.
+            if (string.IsNullOrEmpty(entity.Name.ToLower())) //if the ID is null, make it a unique.
                 entity.Name = Guid.NewGuid().ToString();
-            if (EntityHelper._idReferences.ContainsKey(entity.Name)) //if the ID already exists, append a numerical increment
+            if (EntityHelper._idReferences.ContainsKey(entity.Name.ToLower())) //if the ID already exists, append a numerical increment
             {
                 for (int x = 1; x < int.MaxValue; x++)
                 {
