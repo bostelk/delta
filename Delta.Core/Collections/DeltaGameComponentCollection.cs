@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,13 +17,23 @@ namespace Delta
         }
     }
 
-    public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection where T : IGameComponent
+    public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection, IEnumerable<T>, IEnumerable where T : IGameComponent
     {
         internal List<T> _components = new List<T>();
 
         public ReadOnlyCollection<T> Components { get; private set; }
         public bool NeedsToSort { get; set; }
         public IComparer<T> Comparer { get; set; }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return Components.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Components.GetEnumerator();
+        }
 
         public DeltaGameComponentCollection()
             : base()
