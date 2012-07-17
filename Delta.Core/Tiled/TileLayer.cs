@@ -103,7 +103,7 @@ namespace Delta.Tiled
 
         public override string ToString()
         {
-            return String.Format("{0} Layer:{1}", Name, Layer);
+            return String.Format("{0} {1}", Name, Layer);
         }
     }
 }

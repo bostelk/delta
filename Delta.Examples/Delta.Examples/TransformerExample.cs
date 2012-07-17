@@ -98,7 +98,7 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            G.GraphicsDevice.Clear(Color.Black);
+            G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
             PoolManager.DebugDraw();
         }

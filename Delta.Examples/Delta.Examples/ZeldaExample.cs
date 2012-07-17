@@ -38,10 +38,9 @@ namespace Delta.Examples
         protected override void LoadContent()
         {
             _map = Content.Load<Map>(@"Maps\Plains\3");
-            _map.LoadContent();
-            _map.AddToWorld(G.World);
+            G.World.Add(_map);
             G.World.Ground.Add(_player = new BoxLink());
-            G.World.Camera.Follow(_player);
+            //G.World.Camera.Follow(_player);
             base.LoadContent();
         }
 

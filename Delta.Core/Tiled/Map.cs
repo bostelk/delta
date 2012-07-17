@@ -98,10 +98,10 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        Add(new TileLayer(fileName, layerNode, layerName) { Layer = layerOrder});
+                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Layer = layerOrder});
                         break;
                     case "objectgroup":
-                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Layer = layerOrder }; 
+                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Layer = layerOrder }; 
                         switch (layerName.ToLower())
                         {
                             case "delta.belowground":
@@ -119,10 +119,8 @@ namespace Delta.Tiled
                             case "d.ag":
                                 Map.Instance.AboveGround = entityLayer;
                                 break;
-                            default:
-                                Add(entityLayer);
-                                break;
                         }
+                        Add(entityLayer);
                         break;
                     default:
                         throw new Exception(String.Format("Unknown layer type '{0}'.", layerNode.Name));
@@ -139,22 +137,29 @@ namespace Delta.Tiled
             base.LoadContent();
         }
 
-        public void AddToWorld(World world)
+        protected internal override void OnAdded()
         {
-            world.Add(this);
-            world.BelowGround = Map.Instance.BelowGround;
-            world.Ground = Map.Instance.Ground;
-            world.AboveGround = Map.Instance.AboveGround;
+            G.World.BelowGround = Map.Instance.BelowGround;
+            G.World.Ground = Map.Instance.Ground;
+            G.World.AboveGround = Map.Instance.AboveGround;
+            base.OnAdded();
         }
 
-        public void RemoveFromWorld(World world)
+        protected internal override void OnRemoved()
         {
-            world.Remove(this);
-            world.BelowGround = null;
-            world.Ground = null;
-            world.AboveGround = null;
+            G.World.BelowGround = null;
+            G.World.Ground = null;
+            G.World.AboveGround = null;
+            base.OnRemoved();
         }
 
+        public override string ToString()
+        {
+            string info = String.Empty;
+            foreach (IGameComponent gameComponent in _components)
+                info += gameComponent.ToString() + "\n";
+            return info;
+        }
     }
 
     internal static class MapHelper
