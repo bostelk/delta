@@ -112,7 +112,7 @@ namespace Delta.Tiled
 #endif
         public override string ToString()
         {
-            return String.Format("{0} {1} {2}", Name, Layer, Components.Count);
+            return String.Format("Name:{0}, Layer:{1}, Components:{2}", Name, Layer, Components.Count);
         }
     }
 }
