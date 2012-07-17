@@ -292,7 +292,7 @@ namespace Delta.Graphics
 
         public override string ToString()
         {
-            return string.Format("ID:{0}, Position:({1},{2}), Animation:{3}, Frame:{4} of {5}", ID, Position.X, Position.Y, _animation == null ? string.Empty : _animation.Name, _animationFrame, _animation == null ? 0 : _animation.Frames.Count - 1);
+            return string.Format("Name:{0}, Position:({1},{2}), Animation:{3}, Frame:{4} of {5}", Name, Position.X, Position.Y, _animation == null ? string.Empty : _animation.Name, _animationFrame, _animation == null ? 0 : _animation.Frames.Count - 1);
         }
     }
 

@@ -33,7 +33,7 @@ namespace Delta.Tiled
                 if (entity == null)
                     continue;
                 entity.IsVisible = layerIsVisible;
-                entity.ID = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
+                entity.Name = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
                 entity.Position = new Vector2(
                     objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture),
                     objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
