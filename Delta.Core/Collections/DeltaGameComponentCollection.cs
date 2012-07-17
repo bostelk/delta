@@ -19,6 +19,7 @@ namespace Delta
 
     public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection, IEnumerable<T>, IEnumerable where T : IGameComponent
     {
+        static Comparison<T> _defaultComparer = (a, b) => (a.Layer.CompareTo(b.Layer));
         static List<IGameComponent> _globalComponents = new List<IGameComponent>();
         static ReadOnlyCollection<IGameComponent> _globalComponentsReadOnly = null; 
         public static ReadOnlyCollection<IGameComponent> GlobalComponents
@@ -35,6 +36,7 @@ namespace Delta
 
         public ReadOnlyCollection<T> Components { get; private set; }
         public bool NeedsToSort { get; set; }
+        public bool AlwaysSort { get; set; }
         public IComparer<T> Comparer { get; set; }
 
         public DeltaGameComponentCollection()
@@ -109,10 +111,10 @@ namespace Delta
 
         protected override void LightUpdate(DeltaTime time)
         {
-            if (NeedsToSort)
+            if (AlwaysSort || NeedsToSort)
                 Sort();
-            for (int _loopIndex = 0; _loopIndex < _components.Count; _loopIndex++)
-                _components[_loopIndex].Update(time);
+            for (int i = 0; i < _components.Count; i++)
+                _components[i].Update(time);
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
@@ -126,7 +128,7 @@ namespace Delta
             if (Comparer != null)
                 _components.Sort(Comparer);
             else
-                _components.Sort((a, b) => (a.Layer.CompareTo(b.Layer)));
+                _components.Sort(_defaultComparer);
             NeedsToSort = false;
         }
     }

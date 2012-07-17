@@ -5,6 +5,7 @@ namespace Delta
     public interface IGameComponentCollection
     {
         bool NeedsToSort { get; set; }
+        bool AlwaysSort { get; set; }
 
         void Add(IGameComponent item);
         void Remove(IGameComponent item);
