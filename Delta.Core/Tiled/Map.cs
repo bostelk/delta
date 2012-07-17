@@ -47,12 +47,12 @@ namespace Delta.Tiled
         public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializer(SharedResource = true)]
-        public IGameComponentCollection BelowGround { get; private set; }
-        [ContentSerializer(SharedResource = true)]
-        public IGameComponentCollection Ground { get; private set; }
-        [ContentSerializer(SharedResource = true)]
-        public IGameComponentCollection AboveGround { get; private set; }
+        [ContentSerializer]
+        private int BelowGroundIndex;
+        [ContentSerializer]
+        private int GroundIndex;
+        [ContentSerializer]
+        private int AboveGroundIndex;
         [ContentSerializer] //leave this one to be serialized normally
         public IGameComponentCollection PostEffects { get; private set; }
 
@@ -107,17 +107,17 @@ namespace Delta.Tiled
                             case "delta.belowground":
                             case "delta.bg":
                             case "d.bg":
-                                Map.Instance.BelowGround = entityLayer;
+                                BelowGroundIndex = layerOrder;
                                 break;
                             case "delta.ground":
                             case "delta.g":
                             case "d.g":
-                                Map.Instance.Ground = entityLayer;
+                                GroundIndex = layerOrder;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
                             case "d.ag":
-                                Map.Instance.AboveGround = entityLayer;
+                                AboveGroundIndex = layerOrder;
                                 break;
                         }
                         Add(entityLayer);
@@ -139,9 +139,9 @@ namespace Delta.Tiled
 
         protected internal override void OnAdded()
         {
-            G.World.BelowGround = Map.Instance.BelowGround;
-            G.World.Ground = Map.Instance.Ground;
-            G.World.AboveGround = Map.Instance.AboveGround;
+            G.World.BelowGround = Components[BelowGroundIndex] as IGameComponentCollection;
+            G.World.Ground = Components[GroundIndex] as IGameComponentCollection;
+            G.World.AboveGround = Components[AboveGroundIndex] as IGameComponentCollection;
             base.OnAdded();
         }
 

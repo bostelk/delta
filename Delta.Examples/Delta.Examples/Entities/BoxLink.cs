@@ -26,7 +26,6 @@ namespace Delta.Examples.Entities
         float _trailInterval = 0.09f;
         float _trailTime = 0;
 
-        Texture2D _texture;
         public BoxLink()
         {
             _sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
@@ -53,12 +52,6 @@ namespace Delta.Examples.Entities
         //    }
         //}
 
-        public override void LoadContent()
-        {
-            _texture = G.Content.Load<Texture2D>(@"Graphics\AnimatedMisc\spike");
-            base.LoadContent();
-        }
-
         protected override void LightUpdate(DeltaTime time)
         {
             Vector2 direction = G.Input.Mouse.Held(Delta.Input.MouseButton.Left) ? G.World.Camera.ToWorldPosition(G.Input.Mouse.Position) - Position : Vector2.Zero;
@@ -81,7 +74,6 @@ namespace Delta.Examples.Entities
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, null, Tint, Rotation, new Vector2(_texture.Width / 2, _texture.Height / 2), Scale, SpriteEffects.None, 0);
             _sprite.InternalDraw(time, spriteBatch);
         }
     }
