@@ -47,7 +47,7 @@ namespace Delta.Input
 
         private InputManager _instance;
 
-        public Vector2 WadsDirection
+        public Vector2 WasdDirection
         {
             get
             {

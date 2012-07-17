@@ -21,7 +21,7 @@ namespace Delta.Examples
     /// </summary>
     public class ZeldaExample : ExampleBase
     {
-        const string CONTROLS = "[wads] movement.[rshift] boost.[tab] switch geometry.[~] enable/disable collider.";
+        const string CONTROLS = "[wads] camera movement.";
         Map _map;
         Entity _player;
 
@@ -46,15 +46,7 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            G.World.Camera.Position += G.Input.WadsDirection;
-
-            //if (G.Input.Keyboard.JustPressed(Keys.Tab))
-            //    (_player as BoxLink).SwitchBody();
-            //(_player as BoxLink).Input = G.Input.ArrowDirection * ((G.Input.Keyboard.Held(Keys.LeftShift)) ? 2.5f : 1);
-            //if (G.Input.Keyboard.JustPressed(Keys.OemTilde))
-            //{
-            //    (_player as BoxLink).ColliderEnabled = !(_player as BoxLink).ColliderEnabled;
-            //}
+            G.World.Camera.Position += G.Input.WasdDirection;
             base.Update(gameTime);
         }
 

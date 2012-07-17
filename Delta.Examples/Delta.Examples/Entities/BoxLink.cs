@@ -29,9 +29,9 @@ namespace Delta.Examples.Entities
         Texture2D _texture;
         public BoxLink()
         {
-            //_sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
-            //_sprite.Origin = new Vector2(0.5f, 0.5f);
-            //_sprite.Play("blackspike");
+            _sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
+            _sprite.Origin = new Vector2(0.5f, 0.5f);
+            _sprite.Play("blackspike");
 
             //Collider = new Collider()
             //{
@@ -74,14 +74,15 @@ namespace Delta.Examples.Entities
             //    _trailTime = (float)time.TotalSeconds;
             //}
 
-            //_sprite.Position = Position;
-            //_sprite.InternalUpdate(time);
+            _sprite.Position = Position;
+            _sprite.InternalUpdate(time);
             base.LightUpdate(time);
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, null, Tint, Rotation, new Vector2(_texture.Width / 2, _texture.Height / 2), Scale, SpriteEffects.None, 0);
+            _sprite.InternalDraw(time, spriteBatch);
         }
     }
 }

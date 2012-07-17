@@ -55,6 +55,9 @@ namespace Delta.Graphics
             IsAnimationLooped = true;
         }
 
+        public SpriteEntity(string spriteSheet)
+            : this(String.Empty, spriteSheet) { }
+
         public SpriteEntity(string id, string spriteSheet)
             : base(id)
         {

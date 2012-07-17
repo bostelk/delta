@@ -43,7 +43,7 @@ namespace Delta.Examples
             //if (G.Input.Keyboard.JustPressed(Keys.F1))
             //    G.World.Camera.Follow(player1);
                 
-            (player1 as PhysicsCar).Input = G.Input.WadsDirection;
+            (player1 as PhysicsCar).Input = G.Input.WasdDirection;
             (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
             base.Update(gameTime);
         }

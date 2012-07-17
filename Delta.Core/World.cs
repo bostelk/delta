@@ -75,10 +75,10 @@ namespace Delta
             return result;
         }
         
-        public override string ToString()
+        public string ToDebugString()
         {
             StringBuilder text = new StringBuilder();
-            text.Append(String.Format("{0,-8}{1,-50}\n", "Name", "Layer"));
+            text.Append(String.Format("{0,-60}{1,2}\n", "Name", "Layer"));
             foreach (IGameComponent gameComponent in _components)
                 text.Append(gameComponent.ToString());
             return text.ToString();
@@ -87,7 +87,7 @@ namespace Delta
         public void DebugDraw()
         {
             G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, this.ToString(), new Vector2(0, 100), Color.White);
+            G.SpriteBatch.DrawString(G.Font, this.ToDebugString(), new Vector2(0, 100), Color.White);
             G.SpriteBatch.End();
         }
 
