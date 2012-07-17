@@ -9,27 +9,30 @@ namespace Delta
 
         internal static void AddIDReference(IEntity entity)
         {
-            if (string.IsNullOrEmpty(entity.Name.ToLower())) //if the ID is null, make it a unique.
-                entity.Name = Guid.NewGuid().ToString();
-            if (EntityHelper._idReferences.ContainsKey(entity.Name.ToLower())) //if the ID already exists, append a numerical increment
+            string id = entity.Name.ToLower();
+            if (string.IsNullOrEmpty(id)) //if the ID is null, make it a unique.
+                id = Guid.NewGuid().ToString().ToLower();
+            if (_idReferences.ContainsKey(id)) //if the ID already exists, append a numerical increment
             {
                 for (int x = 1; x < int.MaxValue; x++)
                 {
-                    string newID = entity.Name + x;
-                    if (!EntityHelper._idReferences.ContainsKey(newID))
+                    string newID = id + x;
+                    if (!_idReferences.ContainsKey(newID))
                     {
-                        entity.Name = newID;
+                        id = newID;
                         break;
                     }
                 }
             }
-            EntityHelper._idReferences.Add(entity.Name.ToLower(), entity);
+            entity.Name = id;
+            _idReferences.Add(id, entity);
         }
 
         internal static void RemoveIDReference(IEntity entity)
         {
-            if (EntityHelper._idReferences.ContainsKey(entity.Name.ToLower()))
-                EntityHelper._idReferences.Remove(entity.Name);
+            string id = entity.Name.ToLower();
+            if (EntityHelper._idReferences.ContainsKey(id))
+                EntityHelper._idReferences.Remove(id);
         }
 
     }
