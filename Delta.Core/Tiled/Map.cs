@@ -54,12 +54,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         private int AboveGroundIndex;
         [ContentSerializer]
-        public IGameComponentCollection PostEffects { get; private set; }
+        public DeltaGameComponentCollection PostEffects { get; private set; }
 
         public Map()
             : base()
         {
             Instance = this;
+            PostEffects = new DeltaGameComponentCollection();
         }
 
 #if WINDOWS
