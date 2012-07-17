@@ -28,7 +28,7 @@ namespace Delta.Examples.Entities
 
         public BoxLink()
         {
-            _sprite = new SpriteEntity(@"Graphics\SpriteSheets\16x16");
+            _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("blackspike");
 
@@ -61,14 +61,15 @@ namespace Delta.Examples.Entities
             Position += Velocity * (float)time.ElapsedSeconds;
 
             // if boosting leave a motion trail
-            //if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.LeftShift))
-            //{
-            //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + Velocity * (float)time.ElapsedSeconds);
-            //    _trailTime = (float)time.TotalSeconds;
-            //}
+            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.LeftShift))
+            {
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position);
+                _trailTime = (float)time.TotalSeconds;
+            }
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(time);
+            Layer = Position.Y;
             base.LightUpdate(time);
         }
 

@@ -48,6 +48,13 @@ namespace Delta.Graphics
             _pool = new Pool<SpriteEntity>(100);
         }
 
+        public static SpriteEntity Create(string spriteSheet)
+        {
+            SpriteEntity se = _pool.Fetch();
+            se._spriteSheetName = spriteSheet;
+            return se;
+        }
+
         public SpriteEntity()
             : base()
         {

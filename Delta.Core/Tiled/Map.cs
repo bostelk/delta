@@ -113,6 +113,7 @@ namespace Delta.Tiled
                             case "delta.g":
                             case "d.g":
                                 GroundIndex = layerOrder;
+                                entityLayer.AlwaysSort = true;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
@@ -139,9 +140,15 @@ namespace Delta.Tiled
 
         protected internal override void OnAdded()
         {
-            G.World.BelowGround = Components[BelowGroundIndex] as IGameComponentCollection;
-            G.World.Ground = Components[GroundIndex] as IGameComponentCollection;
-            G.World.AboveGround = Components[AboveGroundIndex] as IGameComponentCollection;
+            if (BelowGroundIndex > 0)
+                G.World.BelowGround = Components[BelowGroundIndex] as IGameComponentCollection;
+            if (GroundIndex > 0)
+            {
+                G.World.Ground = Components[GroundIndex] as IGameComponentCollection;
+                G.World.Ground.AlwaysSort = true;
+            }
+            if (AboveGroundIndex > 0)
+                G.World.AboveGround = Components[AboveGroundIndex] as IGameComponentCollection;
             base.OnAdded();
         }
 

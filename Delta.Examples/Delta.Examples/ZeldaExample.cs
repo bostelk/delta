@@ -13,6 +13,7 @@ using Delta.Collision;
 using Delta.Collision.Geometry;
 using Delta.Graphics;
 using Delta.Tiled;
+using Delta.Structures;
 
 namespace Delta.Examples
 {
@@ -28,19 +29,20 @@ namespace Delta.Examples
         public ZeldaExample() : base("ZeldaExample")
         {
             ClearColor = Color.Black;
-            G.Collision.DefineWorld(640, 640, 32);
             G.World.Camera.Offset = G.ScreenCenter;
             G.World.Camera.ZoomImmediate(4);
-            //G.World.Camera.BoundsEnabled = true;
-            //G.World.Camera.BoundedArea = new Rectangle(0, 0, 640, 640);
         }
 
         protected override void LoadContent()
         {
             _map = Content.Load<Map>(@"Maps\Plains\3");
+            G.World.Camera.BoundsEnabled = true;
+            G.World.Camera.BoundedArea = new Rectangle(0, 0, _map.Width * _map.TileWidth, _map.Height * _map.TileHeight);
+            G.Collision.DefineWorld(_map.Width * _map.TileWidth, _map.Height * _map.TileHeight, 32);
+
             G.World.Add(_map);
             G.World.Ground.Add(_player = new BoxLink());
-            //G.World.Camera.Follow(_player);
+            G.World.Camera.Follow(_player);
             base.LoadContent();
         }
 
@@ -66,7 +68,8 @@ namespace Delta.Examples
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();
 
-            G.World.DebugDraw();
+            //PoolManager.DebugDraw();
+            //G.World.DebugDraw();
         }
     }
 }

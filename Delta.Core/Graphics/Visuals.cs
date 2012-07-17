@@ -19,13 +19,13 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void Create(string spriteSheet, string animation, Vector2 position)
         {
-            SpriteEntity se = new SpriteEntity(null, spriteSheet);
+            SpriteEntity se = SpriteEntity.Create(spriteSheet);
             se.LoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation, false);
-            se.Layer = 100;
-            //G.World.Add(se);
+            se.Layer = position.Y;
+            G.World.Ground.Add(se);
         }
  
         /// <summary>
@@ -36,16 +36,16 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void CreateTrail(string spriteSheet, string animation, Vector2 position) 
         {
-            SpriteEntity se = new SpriteEntity(null, spriteSheet);
+            SpriteEntity se = SpriteEntity.Create(spriteSheet);
             se.LoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
             se.Play(animation, false);
-            se.Layer = 100;
-            //G.World.Add(se);
+            se.Layer = position.Y;
+            G.World.Ground.Add(se);
 
-            Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.Recycle(); });
+            Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.RemoveImmediate(); se.Recycle(); });
         }
 
         /// <summary>
@@ -62,13 +62,13 @@ namespace Delta.Graphics
 
             for(int i = 0; i < 4; i++)
             {
-                SpriteEntity see = se[i] = new SpriteEntity(null, spriteSheet);
+                SpriteEntity see = se[i] = SpriteEntity.Create(spriteSheet);
                 see.LoadContent();
                 see.Position = position;
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation, false);
-                see.Layer = 100;
-                //G.World.Add(see);
+                see.Layer = position.Y;
+                G.World.Ground.Add(see);
             }
 
             // rotate the cross randomly
