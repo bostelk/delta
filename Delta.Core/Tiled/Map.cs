@@ -47,13 +47,13 @@ namespace Delta.Tiled
         public int Height { get; private set; }
         [ContentSerializer]
         public MapOrientation Orientation { get; private set; }
-        [ContentSerializer]
+        [ContentSerializer(SharedResource = true)]
         public IGameComponentCollection BelowGround { get; private set; }
-        [ContentSerializer]
+        [ContentSerializer(SharedResource = true)]
         public IGameComponentCollection Ground { get; private set; }
-        [ContentSerializer]
+        [ContentSerializer(SharedResource = true)]
         public IGameComponentCollection AboveGround { get; private set; }
-        [ContentSerializer]
+        [ContentSerializer] //leave this one to be serialized normally
         public IGameComponentCollection PostEffects { get; private set; }
 
         public Map()

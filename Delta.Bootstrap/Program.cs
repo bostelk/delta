@@ -26,7 +26,7 @@ namespace Delta.Bootstrap
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Transformer;
+            Examples example = Examples.Zelda;
 
             switch (example)
             {
