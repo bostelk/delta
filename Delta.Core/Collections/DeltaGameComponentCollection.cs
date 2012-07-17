@@ -107,12 +107,22 @@ namespace Delta
                 _components[i].LoadContent();
         }
 
+        void IGameComponentCollection.Update(DeltaTime time)
+        {
+            InternalUpdate(time);
+        }
+
         protected override void LightUpdate(DeltaTime time)
         {
             if (NeedsToSort)
                 Sort();
             for (int _loopIndex = 0; _loopIndex < _components.Count; _loopIndex++)
                 _components[_loopIndex].Update(time);
+        }
+
+        void IGameComponentCollection.Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            InternalDraw(time, spriteBatch);
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
@@ -8,5 +9,8 @@ namespace Delta
 
         void Add(IGameComponent item);
         void Remove(IGameComponent item);
+
+        void Update(DeltaTime time);
+        void Draw(DeltaTime time, SpriteBatch spriteBatch);
     }
 }

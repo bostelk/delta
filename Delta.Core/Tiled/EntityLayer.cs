@@ -100,7 +100,7 @@ namespace Delta.Tiled
                 {
                     if (sprite.IsOverlay)
                     {
-                        //Map.Instance.PostEffects.Add(sprite);
+                        Map.Instance.PostEffects.Add(sprite);
                         added = true;
                     }
                 }
