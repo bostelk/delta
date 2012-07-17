@@ -34,7 +34,7 @@ namespace Delta
         [ContentSerializerIgnore]
         protected bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
-        protected bool HasLoadedContent { get; set; }
+        public bool IsLoaded { get; protected set; }
         [ContentSerializerIgnore]
         protected bool RemoveNextUpdate { get; set; }
 
@@ -89,7 +89,13 @@ namespace Delta
             return false;
         }
 #endif
-        public void Remove()
+
+        public void RemoveNextFrame()
+        {
+            RemoveNextUpdate = true;
+        }
+
+        public void RemoveImmediate()
         {
             if (Collection != null)
                 Collection.Remove(this);
@@ -112,15 +118,15 @@ namespace Delta
         public void InternalUpdate(DeltaTime time)
         {
             if (RemoveNextUpdate)
-                Remove();
+                RemoveImmediate();
             if (!IsLateInitialized)
             {
                 IsLateInitialized = true;
                 LateInitialize();
             }
-            if (!HasLoadedContent)
+            if (!IsLoaded)
             {
-                HasLoadedContent = true;
+                IsLoaded = true;
                 LoadContent();
             }
             if (CanUpdate())
@@ -173,7 +179,7 @@ namespace Delta
         {
             _collection = null;
             _layer = 0.0f;
-            HasLoadedContent = false;
+            IsLoaded = false;
             IsEnabled = true;
             IsLateInitialized = false;
             IsVisible = true;
