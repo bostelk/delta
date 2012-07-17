@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +17,20 @@ namespace Delta
         }
     }
 
-    public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection where T : IGameComponent
+    public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection, IEnumerable<T>, IEnumerable where T : IGameComponent
     {
+        static List<IGameComponent> _globalComponents = new List<IGameComponent>();
+        static ReadOnlyCollection<IGameComponent> _globalComponentsReadOnly = null; 
+        public static ReadOnlyCollection<IGameComponent> GlobalComponents
+        {
+            get
+            {
+                if (_globalComponentsReadOnly == null)
+                    _globalComponentsReadOnly = new ReadOnlyCollection<IGameComponent>(_globalComponents);
+                return _globalComponentsReadOnly;
+            }
+        }
+
         internal List<T> _components = new List<T>();
 
         public ReadOnlyCollection<T> Components { get; private set; }
@@ -32,6 +45,16 @@ namespace Delta
             Comparer = null;
         }
 
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return Components.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Components.GetEnumerator();
+        }
+
         void IGameComponentCollection.Add(IGameComponent item)
         {
             Add((T)item);
@@ -40,6 +63,7 @@ namespace Delta
         public void Add(T item)
         {
             _components.Add(item);
+            _globalComponents.Add(item);
             NeedsToSort = true;
             item.Collection = this;
             IEntity entity = item as IEntity;
@@ -62,6 +86,7 @@ namespace Delta
         public void Remove(T item)
         {
             _components.FastRemove<T>(item);
+            _globalComponents.FastRemove<IGameComponent>(item);
             NeedsToSort = true;
             item.Collection = null;
             IEntity entity = item as IEntity;
