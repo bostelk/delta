@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Delta.Movement;
+using System.Globalization;
 
 namespace Delta.Graphics
 {
@@ -111,35 +112,31 @@ namespace Delta.Graphics
                     _animationName = value;
                     return true;
                 case "frequency":
-                    Frequency = float.Parse(value);
+                    Frequency = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
-                case "minspeed":
-                    MinSpeed = float.Parse(value);
+                case "speed":
+                    OverRange speedRange = OverRange.Parse(value);
+                    MinSpeed = speedRange.Lower;
+                    MaxSpeed = speedRange.Upper;
                     return true;
-                case "maxspeed":
-                    MaxSpeed = float.Parse(value);
+                case "lifespan":
+                    OverRange lifespanRange = OverRange.Parse(value);
+                    MinLifespan = lifespanRange.Lower;
+                    MaxLifespan = lifespanRange.Upper;
                     return true;
-                case "minlifespan":
-                    MinLifespan = float.Parse(value);
+                case "rotation":
+                    OverRange rotationRange = OverRange.Parse(value);
+                    MinRotation = rotationRange.Lower.ToRadians();
+                    MaxRotation = rotationRange.Upper.ToRadians();
                     return true;
-                case "maxlifespan":
-                    MaxLifespan = float.Parse(value);
-                    return true;
-                case "minrotation":
-                    MinRotation = float.Parse(value).ToRadians();
-                    return true;
-                case "maxrotation":
-                    MaxRotation = float.Parse(value).ToRadians();
-                    return true;
-                case "minangle":
-                    MinAngle = float.Parse(value).ToRadians();
-                    return true;
-                case "maxangle":
-                    MaxAngle = float.Parse(value).ToRadians();
+                case "angle":
+                    OverRange angleRange = OverRange.Parse(value);
+                    MinAngle = angleRange.Lower.ToRadians();
+                    MaxAngle = angleRange.Upper.ToRadians();
                     return true;
                 case "explode":
                     Explode = true;
-                    ExplodeQuantity = int.Parse(value);
+                    ExplodeQuantity = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
             return base.ImportCustomValues(name, value);
