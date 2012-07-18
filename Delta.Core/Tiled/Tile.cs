@@ -11,17 +11,23 @@ using Delta;
 namespace Delta.Tiled
 {
     [EditorBrowsable( EditorBrowsableState.Never)]
-    public class Tile : IGameComponent
+    public class Tile : IEntity
     {
-        IGameComponentCollection IGameComponent.Collection
+        string IEntity.Name
         {
-            get { return null; }
+            get { return string.Empty; }
             set { }
         }
 
-        float IGameComponent.Layer
+        float IEntity.Layer
         {
             get { return 0; }
+        }
+
+        IEntityCollection IEntity.Collection
+        {
+            get { return null; }
+            set { }
         }
 
         internal Rectangle _sourceRectangle = Rectangle.Empty;
@@ -71,11 +77,11 @@ namespace Delta.Tiled
 
         }
 #endif
-        void IGameComponent.LoadContent()
+        void IEntity.LoadContent()
         {
         }
 
-        void IGameComponent.Update(DeltaTime time)
+        void IEntity.Update(DeltaTime time)
         {
         }
 
@@ -85,11 +91,11 @@ namespace Delta.Tiled
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
 
-        void IGameComponent.OnAdded()
+        void IEntity.OnAdded()
         {
         }
 
-        void IGameComponent.OnRemoved()
+        void IEntity.OnRemoved()
         {
         }
 

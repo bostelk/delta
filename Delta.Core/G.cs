@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Delta.UI;
 using Delta.Input;
 using Delta.Audio;
 using Delta.Graphics;
@@ -28,7 +29,7 @@ namespace Delta
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
-        public static UI UI { get; private set; }
+        public static UIManager UI { get; private set; }
 
         public new static GraphicsDevice GraphicsDevice { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
@@ -59,7 +60,7 @@ namespace Delta
             Window.AllowUserResizing = true;
 #endif
             World = new World();
-            UI = new UI();
+            UI = new UIManager();
             Random = new Random();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");

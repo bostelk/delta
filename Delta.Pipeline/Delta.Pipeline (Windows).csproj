@@ -110,7 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeltaGameComponentCollectionWriter.cs" />
+    <Compile Include="EntityCollectionWriter.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

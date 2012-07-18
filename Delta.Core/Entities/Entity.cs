@@ -12,16 +12,8 @@ using Delta.Physics;
 
 namespace Delta
 {
-    public abstract class Entity : DeltaGameComponent, IEntity
+    public abstract class Entity : EntityBase, IEntity
     {
-        public static IEntity Get(string id)
-        {
-            id = id.ToLower();
-            if (EntityHelper._idReferences.ContainsKey(id))
-                return EntityHelper._idReferences[id];
-            return null;
-        }
-
         #region TEMP: Transformer
         Transformer _transformer;
 
@@ -102,15 +94,6 @@ namespace Delta
             }
         }
         #endregion
-
-        [ContentSerializer]
-        public string Name { get; internal set; }
-
-        string IEntity.Name
-        {
-            get { return Name; }
-            set { Name = value; }
-        }
 
         [ContentSerializerIgnore]
         protected Vector2 RenderPosition { get; private set; }

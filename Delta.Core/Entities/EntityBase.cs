@@ -11,20 +11,37 @@ namespace Delta
     /// Base class for all Delta game components.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class DeltaGameComponent : IRecyclable, IImportable, IGameComponent, IDisposable
+    public class EntityBase : IRecyclable, IImportable, IEntity, IDisposable
     {
         public static int Count { get; set; }
 
-        IGameComponentCollection _collection = null;
+        public static IEntity Get(string id)
+        {
+            id = id.ToLower();
+            if (EntityHelper._idReferences.ContainsKey(id))
+                return EntityHelper._idReferences[id];
+            return null;
+        }
+
+        IEntityCollection _collection = null;
 
         [ContentSerializerIgnore]
-        protected internal IGameComponentCollection Collection { get { return _collection; } }
+        protected internal IEntityCollection Collection { get { return _collection; } }
 
         [ContentSerializerIgnore]
-        IGameComponentCollection IGameComponent.Collection
+        IEntityCollection IEntity.Collection
         {
             get { return _collection; }
             set { _collection = value; }
+        }
+
+        [ContentSerializer]
+        public string Name { get; internal set; }
+
+        string IEntity.Name
+        {
+            get { return Name; }
+            set { Name = value; }
         }
 
         [ContentSerializerIgnore]
@@ -56,7 +73,7 @@ namespace Delta
             }
         }
 
-        public DeltaGameComponent()
+        public EntityBase()
             : base()
         {
             Count++;
@@ -64,7 +81,7 @@ namespace Delta
             IsEnabled = true;
         }
 
-        ~DeltaGameComponent()
+        ~EntityBase()
         {      
             Dispose(false);
         }
@@ -129,7 +146,7 @@ namespace Delta
         {
         }
 
-        void IGameComponent.Update(DeltaTime time)
+        void IEntity.Update(DeltaTime time)
         {
             InternalUpdate(time);
         }
@@ -174,7 +191,7 @@ namespace Delta
             NeedsHeavyUpdate = false;
         }
 
-        void IGameComponent.Draw(DeltaTime time, SpriteBatch spriteBatch)
+        void IEntity.Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             InternalDraw(time, spriteBatch);
         }
@@ -206,7 +223,7 @@ namespace Delta
             RemoveNextUpdate = false;
         }
 
-        void IGameComponent.OnAdded()
+        void IEntity.OnAdded()
         {
             OnAdded();
         }
@@ -215,7 +232,7 @@ namespace Delta
         {
         }
 
-        void IGameComponent.OnRemoved()
+        void IEntity.OnRemoved()
         {
             OnRemoved();
         }

@@ -43,15 +43,15 @@ namespace Delta.Entities
             base.LoadContent();
         }
 
-        protected override void LightUpdate(DeltaTime time)
-        {
-            Layer = Position.Y;
-            base.LightUpdate(time);
-        }
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, null , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);
-            base.Draw(time, spriteBatch);
+        }
+
+        protected internal override void OnPositionChanged()
+        {
+            base.OnPositionChanged();
+            Layer = Position.Y;
         }
     }
 }

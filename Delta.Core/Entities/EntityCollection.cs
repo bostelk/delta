@@ -9,25 +9,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    public class DeltaGameComponentCollection : DeltaGameComponentCollection<IGameComponent>
+    public class EntityCollection : EntityCollection<IEntity>
     {
-        public DeltaGameComponentCollection()
+        public EntityCollection()
             : base()
         {
         }
     }
 
-    public class DeltaGameComponentCollection<T> : DeltaGameComponent, IGameComponentCollection, IEnumerable<T>, IEnumerable where T : IGameComponent
+    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable<T>, IEnumerable where T : IEntity
     {
         static Comparison<T> _defaultComparer = (a, b) => (a.Layer.CompareTo(b.Layer));
-        static List<IGameComponent> _globalComponents = new List<IGameComponent>();
-        static ReadOnlyCollection<IGameComponent> _globalComponentsReadOnly = null; 
-        public static ReadOnlyCollection<IGameComponent> GlobalComponents
+        static List<IEntity> _globalComponents = new List<IEntity>();
+        static ReadOnlyCollection<IEntity> _globalComponentsReadOnly = null; 
+        public static ReadOnlyCollection<IEntity> GlobalComponents
         {
             get
             {
                 if (_globalComponentsReadOnly == null)
-                    _globalComponentsReadOnly = new ReadOnlyCollection<IGameComponent>(_globalComponents);
+                    _globalComponentsReadOnly = new ReadOnlyCollection<IEntity>(_globalComponents);
                 return _globalComponentsReadOnly;
             }
         }
@@ -39,7 +39,7 @@ namespace Delta
         public bool AlwaysSort { get; set; }
         public IComparer<T> Comparer { get; set; }
 
-        public DeltaGameComponentCollection()
+        public EntityCollection()
             : base()
         {
             Components = new ReadOnlyCollection<T>(_components);
@@ -57,7 +57,7 @@ namespace Delta
             return Components.GetEnumerator();
         }
 
-        void IGameComponentCollection.Add(IGameComponent item)
+        void IEntityCollection.Add(IEntity item)
         {
             Add((T)item);
         }
@@ -70,9 +70,8 @@ namespace Delta
             _globalComponents.Add(item);
             NeedsToSort = true;
             item.Collection = this;
-            IEntity entity = item as IEntity;
-            if (entity != null)
-                EntityHelper.AddIDReference(entity);
+            if (!string.IsNullOrEmpty(item.Name))
+                EntityHelper.AddIDReference(item);
             item.OnAdded();
         }
 
@@ -82,7 +81,7 @@ namespace Delta
                 Add(item);
         }
 
-        void IGameComponentCollection.Remove(IGameComponent item)
+        void IEntityCollection.Remove(IEntity item)
         {
             Remove((T)item);
         }
@@ -92,12 +91,11 @@ namespace Delta
             if (!_components.Contains(item)) 
                 return;
             _components.FastRemove<T>(item);
-            _globalComponents.FastRemove<IGameComponent>(item);
+            _globalComponents.FastRemove<IEntity>(item);
             NeedsToSort = true;
             item.Collection = null;
-            IEntity entity = item as IEntity;
-            if (entity != null)
-                EntityHelper.RemoveIDReference(entity);
+            if (!string.IsNullOrEmpty(item.Name))
+                EntityHelper.RemoveIDReference(item);
             item.OnRemoved();
         }
 
@@ -113,7 +111,7 @@ namespace Delta
                 _components[i].LoadContent();
         }
 
-        void IGameComponentCollection.Update(DeltaTime time)
+        void IEntityCollection.Update(DeltaTime time)
         {
             InternalUpdate(time);
         }
@@ -126,7 +124,7 @@ namespace Delta
                 _components[i].Update(time);
         }
 
-        void IGameComponentCollection.Draw(DeltaTime time, SpriteBatch spriteBatch)
+        void IEntityCollection.Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             InternalDraw(time, spriteBatch);
         }
@@ -148,13 +146,13 @@ namespace Delta
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class DeltaGameComponentCollectionReader<T> : ContentTypeReader<DeltaGameComponentCollection<T>> where T : IGameComponent
+    public class EntityCollectionReader<T> : ContentTypeReader<EntityCollection<T>> where T : IEntity
     {
-        protected override DeltaGameComponentCollection<T> Read(ContentReader input, DeltaGameComponentCollection<T> value)
+        protected override EntityCollection<T> Read(ContentReader input, EntityCollection<T> value)
         {
             if (value == null)
-                value = new DeltaGameComponentCollection<T>();
-            input.ReadRawObject<DeltaGameComponent>(value as DeltaGameComponent);
+                value = new EntityCollection<T>();
+            input.ReadRawObject<EntityBase>(value as EntityBase);
             List<T> gameComponents = input.ReadObject<List<T>>();
             foreach (var item in gameComponents)
                 value.Add(item);
