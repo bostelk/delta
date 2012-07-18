@@ -119,7 +119,6 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
-    <Compile Include="Entities\TextureEntity.cs" />
     <Compile Include="InputExample.cs" />
     <Compile Include="Entities\Barrel.cs" />
     <Compile Include="BlossomExample.cs" />

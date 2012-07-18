@@ -12,10 +12,10 @@ using Delta.Entities;
 
 namespace Delta.Graphics
 {
-    public class SpriteEmitter : Emitter
+    public class PixelEmitter : Emitter
     {
 
-        internal class SpriteParticle : Particle<SpriteEntity>
+        internal class PixelParticle : Particle<TextureEntity>
         {
             public override void Recycle()
             {
@@ -27,23 +27,20 @@ namespace Delta.Graphics
             public override void OnEmitted()
             {
                 Entity.Alpha = 0;
-                Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
+                Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic);
                 base.OnEmitted();
             }
         }
 
-        static Pool<SpriteEmitter> _pool;
-        static Pool<SpriteParticle> _particlePool;
+        static Pool<PixelEmitter> _pool;
+        static Pool<PixelParticle> _particlePool;
         
-        List<SpriteParticle> _particles;
+        List<PixelParticle> _particles;
         
-        [ContentSerializer]
-        string _spriteSheet;
-        [ContentSerializer]
-        string _animationName;
         float _lastEmitTime;
 
         public float Frequency;
+        public Color Color;
         public float MaxLifespan;
         public float MinLifespan;
         public float MinSpeed;
@@ -61,30 +58,28 @@ namespace Delta.Graphics
         public bool Explode;
         public int ExplodeQuantity;
 
-        static SpriteEmitter()
+        static PixelEmitter()
         {
-            _pool = new Pool<SpriteEmitter>(200);
-            _particlePool = new Pool<SpriteParticle>(2000);
+            _pool = new Pool<PixelEmitter>(200);
+            _particlePool = new Pool<PixelParticle>(2000);
         }
 
-        public static SpriteEmitter Create(string spriteSheet, string animationName)
+        public static PixelEmitter Create()
         {
-            SpriteEmitter emitter = _pool.Fetch();
-            emitter._spriteSheet = spriteSheet;
-            emitter._animationName = animationName;
+            PixelEmitter emitter = _pool.Fetch();
             G.World.AboveGround.Add(emitter);
             return emitter;
         }
 
-        static SpriteParticle CreateParticle()
+        static PixelParticle CreateParticle()
         {
-            SpriteParticle particle = _particlePool.Fetch();
+            PixelParticle particle = _particlePool.Fetch();
             return particle;
         }
 
-        public SpriteEmitter()
+        public PixelEmitter()
         {
-            _particles = new List<SpriteParticle>(100);
+            _particles = new List<PixelParticle>(100);
             MinAngle = 0;
             MaxAngle = 360;
             MinScale = 1;
@@ -95,13 +90,8 @@ namespace Delta.Graphics
         {
             switch (name)
             {
-                case "spritesheet":
-                case "spritesheetname":
-                    _spriteSheet = value;
-                    return true;
-                case "animation":
-                case "animationname":
-                    _animationName = value;
+                case "color":
+                    Color = value.ToColor();
                     return true;
                 case "frequency":
                     Frequency = float.Parse(value, CultureInfo.InvariantCulture);
@@ -151,17 +141,16 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            SpriteParticle newParticle = _particlePool.Fetch();
-            newParticle.Entity = SpriteEntity.Create(_spriteSheet);
+            PixelParticle newParticle = _particlePool.Fetch();
+            newParticle.Entity = TextureEntity.Create();
             newParticle.Lifespan = G.Random.Between(MinLifespan, MaxLifespan);
             newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
             newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
+            newParticle.Entity.Tint = Color;
             newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
-            newParticle.Entity.Play(_animationName, PlayOption.Random);
-            newParticle.Entity.Pause();
             newParticle.OnEmitted();
             _particles.Add(newParticle);
         }
@@ -180,7 +169,7 @@ namespace Delta.Graphics
 
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                PixelParticle particle = _particles[i];
                 particle.Entity.InternalUpdate(time);
                 particle.Lifespan -= time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
@@ -193,7 +182,7 @@ namespace Delta.Graphics
                 if (particle.IsDead)
                 {
                     particle.Recycle();
-                    _particles.FastRemove<SpriteParticle>(i);
+                    _particles.FastRemove<PixelParticle>(i);
                     i--;
                 }
             }
@@ -204,7 +193,7 @@ namespace Delta.Graphics
         {
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                PixelParticle particle = _particles[i];
                 particle.Entity.InternalDraw(time, spriteBatch);
             }
             base.Draw(time, spriteBatch);
@@ -219,8 +208,6 @@ namespace Delta.Graphics
         public override void Recycle()
         {
             base.Recycle();
-            _spriteSheet = String.Empty;
-            _animationName = String.Empty;
             _lastEmitTime = 0;
             Frequency = 0;
             MaxLifespan = 0;
@@ -237,7 +224,7 @@ namespace Delta.Graphics
             ExplodeQuantity = 0;
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                PixelParticle particle = _particles[i];
                 particle.Recycle();
             }
 
