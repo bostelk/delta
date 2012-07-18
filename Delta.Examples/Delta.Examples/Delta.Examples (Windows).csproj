@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
+    <Compile Include="UIExample.cs" />
     <Compile Include="InputExample.cs" />
     <Compile Include="Entities\Barrel.cs" />
     <Compile Include="BlossomExample.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Entities\RaceTrack.cs" />
     <Compile Include="Entities\PhysicsCar.cs" />
     <Compile Include="CollisionExample.cs" />
-    <Compile Include="SciptingExample.cs" />
     <Compile Include="TiledExample.cs" />
     <Compile Include="EffectExample.cs" />
     <Compile Include="Entities\FuelAtom.cs" />
@@ -142,7 +142,6 @@
     <Compile Include="ExampleBase.cs" />
     <Compile Include="GameExample.cs" />
     <Compile Include="TransformerExample.cs" />
-    <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

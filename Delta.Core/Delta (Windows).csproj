@@ -162,6 +162,7 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />

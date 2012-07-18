@@ -14,7 +14,7 @@ namespace Delta.UI
 
             protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
             {
- 	            //spriteBatch.Draw(G.PixelTexture, base.Re)
+                spriteBatch.DrawRectangle(RenderArea, Color.White, true);
             }
 
         }

@@ -11,14 +11,12 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Delta.Examples
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class ScriptingExample : ExampleBase
+
+    public class UIExample : ExampleBase
     {
-        public ScriptingExample() : base("ScriptingExample")
+        public UIExample() : base("UIExample")
         {
-            //ScriptManager.ScriptHost = new DeltaHost();
+
         }
 
         protected override void Initialize()
@@ -41,7 +39,10 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-
+            GraphicsDevice.Clear(ClearColor);
+            G.SpriteBatch.Begin();
+            G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
+            G.SpriteBatch.End();
             base.Draw(gameTime);
         }
     }
