@@ -41,7 +41,8 @@ namespace Delta.Graphics
 
             public override void OnEmitted()
             {
-                Transformer.ThisEntity(Entity).FadeTo(0, Lifespan, Interpolation.EaseInCubic);
+                Entity.Alpha = 0;
+                Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
                 base.OnEmitted();
             }
         }
@@ -68,6 +69,8 @@ namespace Delta.Graphics
         public float MaxRotation;
         public float MinAngle;
         public float MaxAngle;
+        public float MinScale;
+        public float MaxScale;
         public bool Explode;
         public int ExplodeQuantity;
 
@@ -97,6 +100,8 @@ namespace Delta.Graphics
             _particles = new List<SpriteParticle>(100);
             MinAngle = 0;
             MaxAngle = 360;
+            MinScale = 1;
+            MaxScale = 1;
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -134,6 +139,11 @@ namespace Delta.Graphics
                     MinAngle = angleRange.Lower.ToRadians();
                     MaxAngle = angleRange.Upper.ToRadians();
                     return true;
+                case "scale":
+                    OverRange scaleRange = OverRange.Parse(value);
+                    MinScale = scaleRange.Lower;
+                    MaxScale = scaleRange.Upper;
+                    return true;
                 case "explode":
                     Explode = true;
                     ExplodeQuantity = int.Parse(value, CultureInfo.InvariantCulture);
@@ -149,8 +159,10 @@ namespace Delta.Graphics
             newParticle.Lifespan = G.Random.Between(MinLifespan, MaxLifespan);
             newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
             newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
-            newParticle.Entity.Position = G.Random.Between(Position - Size / 2, Position + Size / 2);
+            newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
+            newParticle.Entity.Position = G.Random.Between(Position - Size / 2, Position + Size / 2);
+            newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.Entity.Play(_animationName, PlayOption.Random);
             newParticle.Entity.Pause();
             newParticle.OnEmitted();
@@ -221,6 +233,8 @@ namespace Delta.Graphics
             MaxRotation = 0;
             MinAngle = 0;
             MaxAngle = 360;
+            MinScale = 1;
+            MaxScale = 1;
             Explode = false;
             ExplodeQuantity = 0;
             for (int i = 0; i < _particles.Count; i++)
