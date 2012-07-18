@@ -77,6 +77,8 @@ namespace Delta.Entities
             base.Recycle();
             _path = String.Empty;
             _texture = null;
+
+            _pool.Release(this);
         }
     }
 }
