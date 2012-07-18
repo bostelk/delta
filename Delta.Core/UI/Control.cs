@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.UI
 {
@@ -12,9 +12,9 @@ namespace Delta.UI
             public string Text { get; set; }
             public object Tag { get; set;}
 
-            protected override void  Draw(DeltaTime time, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+            protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
             {
- 	            base.Draw(time, spriteBatch);
+ 	            //spriteBatch.Draw(G.PixelTexture, base.Re)
             }
 
         }

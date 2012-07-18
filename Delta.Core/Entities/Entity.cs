@@ -106,7 +106,7 @@ namespace Delta
         [ContentSerializerIgnore]
         protected Vector2 RenderSize { get; private set; }
         [ContentSerializerIgnore]
-        protected Rectangle RenderArea { get { return _renderArea} }
+        protected Rectangle RenderArea { get { return _renderArea; } }
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
