@@ -95,6 +95,8 @@ namespace Delta
         }
         #endregion
 
+        Rectangle _renderArea = Rectangle.Empty;
+
         [ContentSerializerIgnore]
         protected Vector2 RenderPosition { get; private set; }
         [ContentSerializerIgnore]
@@ -103,6 +105,8 @@ namespace Delta
         protected float RenderRotation { get; private set; }
         [ContentSerializerIgnore]
         protected Vector2 RenderSize { get; private set; }
+        [ContentSerializerIgnore]
+        protected Rectangle RenderArea { get { return _renderArea} }
 
         Vector2 _position = Vector2.Zero;
         [ContentSerializer]
@@ -336,6 +340,14 @@ namespace Delta
             RenderRotation = Rotation.ToRadians();
         }
 
+        protected virtual void UpdateRenderArea()
+        {
+            _renderArea.X = (int)(Position.X + Offset.X);
+            _renderArea.Y = (int)(Position.Y + Offset.Y);
+            _renderArea.Width = (int)RenderSize.X;
+            _renderArea.Height = (int)RenderSize.Y;
+        }
+
         protected virtual void UpdateToWrappedBody()
         {
             if (WrappedBody != null)
@@ -361,6 +373,7 @@ namespace Delta
         {
             UpdateRenderPosition();
             UpdateToWrappedBody();
+            UpdateRenderArea();
         }
 
         protected internal virtual void OnSizeChanged()
@@ -368,6 +381,7 @@ namespace Delta
             UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
+            UpdateRenderArea();
         }
 
         protected internal virtual void OnScaleChanged()
@@ -375,6 +389,7 @@ namespace Delta
             UpdateRenderSize();
             UpdateRenderOrigin();
             UpdateRenderPosition();
+            UpdateRenderArea();
         }
 
         protected internal virtual void OnRotationChanged()
@@ -411,6 +426,7 @@ namespace Delta
         {
             base.Recycle();
             Name = string.Empty;
+            _renderArea = Rectangle.Empty;
             RenderPosition = Vector2.Zero;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
