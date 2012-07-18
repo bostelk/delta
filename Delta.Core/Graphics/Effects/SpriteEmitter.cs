@@ -71,6 +71,8 @@ namespace Delta.Graphics
         public float MaxAngle;
         public float MinScale;
         public float MaxScale;
+        public float MinFrameInterval;
+        public float MaxFrameInterval;
         public bool Explode;
         public int ExplodeQuantity;
 
@@ -144,6 +146,16 @@ namespace Delta.Graphics
                     MinScale = scaleRange.Lower;
                     MaxScale = scaleRange.Upper;
                     return true;
+                case "acceleration":
+                    OverRange accelerationRange = OverRange.Parse(value);
+                    MinAcceleration = accelerationRange.Lower;
+                    MaxAcceleration = accelerationRange.Upper;
+                    return true;
+                case "frameinterval":
+                    OverRange frameIntervalRange = OverRange.Parse(value);
+                    MinFrameInterval = frameIntervalRange.Lower;
+                    MaxFrameInterval = frameIntervalRange.Upper;
+                    return true;
                 case "explode":
                     Explode = true;
                     ExplodeQuantity = int.Parse(value, CultureInfo.InvariantCulture);
@@ -161,7 +173,7 @@ namespace Delta.Graphics
             newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
             newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
-            newParticle.Entity.Position = G.Random.Between(Position - Size / 2, Position + Size / 2);
+            newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.Entity.Play(_animationName, PlayOption.Random);
             newParticle.Entity.Pause();
@@ -186,6 +198,7 @@ namespace Delta.Graphics
                 SpriteParticle particle = _particles[i];
                 particle.Entity.InternalUpdate(time);
                 particle.Lifespan -= time.ElapsedSeconds;
+                particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
                 particle.Entity.Position += particle.Velocity * time.ElapsedSeconds;
                 particle.Entity.Rotation += particle.AngularVelocity * time.ElapsedSeconds;
 

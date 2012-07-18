@@ -17,7 +17,6 @@ namespace Delta.Examples.Entities
         public Barrel()
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
-            _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("barrel");
             Polygon = new OBB(16, 16);
         }

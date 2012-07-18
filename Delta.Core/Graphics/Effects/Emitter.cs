@@ -12,6 +12,7 @@ namespace Delta.Graphics
         {
             public T Entity;
             public float Lifespan;
+            public Vector2 Acceleration;
             public Vector2 Velocity;
             public float AngularVelocity;
             public bool IsDead { get { return Lifespan <= 0; } }
