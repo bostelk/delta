@@ -11,8 +11,10 @@ namespace Delta
     /// Base class for all Delta game components.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class DeltaGameComponent : IRecyclable, IImportable, IGameComponent
+    public class DeltaGameComponent : IRecyclable, IImportable, IGameComponent, IDisposable
     {
+        public static int Count { get; set; }
+
         IGameComponentCollection _collection = null;
 
         [ContentSerializerIgnore]
@@ -57,8 +59,26 @@ namespace Delta
         public DeltaGameComponent()
             : base()
         {
+            Count++;
             IsVisible = true;
             IsEnabled = true;
+        }
+
+        ~DeltaGameComponent()
+        {      
+            Dispose(false);
+        }
+ 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+  
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Count--;
         }
 
 #if WINDOWS
