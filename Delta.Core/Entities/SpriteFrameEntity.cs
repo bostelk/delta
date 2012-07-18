@@ -6,17 +6,41 @@ using Delta;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Delta.Graphics;
+using Delta.Structures;
 
 namespace Delta.Entities
 {
     public class SpriteFrameEntity : Entity
     {
+        static Pool<SpriteFrameEntity> _pool;
+
         string _spriteSheetName;
         string _animationName;
         int _frame;
 
         Texture2D _texture;
         Rectangle _sourceRectangle;
+
+        static SpriteFrameEntity()
+        {
+            _pool = new Pool<SpriteFrameEntity>(100);
+        }
+
+        public static SpriteFrameEntity Create(SpriteEntity sprite)
+        {
+            return Create(sprite._spriteSheetName, sprite._animationName, sprite._animationFrame);
+        }
+
+        public static SpriteFrameEntity Create(string spriteSheet, string animation, int frame)
+        {
+            SpriteFrameEntity spriteFrame = _pool.Fetch();
+            spriteFrame._spriteSheetName = spriteSheet;
+            spriteFrame._animationName = animation;
+            spriteFrame._frame = frame;
+            return spriteFrame;
+        }
+
+        public SpriteFrameEntity() { }
 
         public SpriteFrameEntity(SpriteEntity sprite)
         {
@@ -50,8 +74,20 @@ namespace Delta.Entities
         }
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, null , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture, Position, _sourceRectangle , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);
             base.Draw(time, spriteBatch);
+        }
+
+        public override void Recycle()
+        {
+            base.Recycle();
+            _spriteSheetName = String.Empty;
+            _animationName = String.Empty;
+            _frame = 0;
+            _texture = null;
+            _sourceRectangle = Rectangle.Empty;
+
+            _pool.Release(this);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Delta.Structures;
 using Microsoft.Xna.Framework;
 using Delta.Movement;
+using Delta.Entities;
 
 namespace Delta.Graphics
 {
@@ -47,6 +48,26 @@ namespace Delta.Graphics
 
             Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.RemoveImmediate(); se.Recycle(); });
         }
+
+        /// <summary>
+        /// For creating motion trails.
+        /// </summary>
+        /// <param name="spriteSheet"></param>
+        /// <param name="animation"></param>
+        /// <param name="position"></param>
+        public static void CreateTrail(SpriteEntity sprite, Vector2 position)
+        {
+            SpriteFrameEntity sfe = SpriteFrameEntity.Create(sprite);
+            sfe.LoadContent();
+            sfe.Position = position;
+            sfe.Origin = new Vector2(0.5f, 0.5f);
+            sfe.Alpha = 0.5f;
+            sfe.Layer = position.Y;
+            G.World.BelowGround.Add(sfe);
+
+            Transformer.ThisEntity(sfe).FadeTo(0, 0.3f).OnSequenceFinished(() => { sfe.RemoveImmediate(); sfe.Recycle(); });
+        }
+
 
         /// <summary>
         /// Visually looks like a randomly rotated X pattern.
