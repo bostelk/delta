@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,7 +71,8 @@ namespace Delta.Entities
         {
             Layer = Position.Y;
             base.LightUpdate(time);
-        }
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, _sourceRectangle , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);

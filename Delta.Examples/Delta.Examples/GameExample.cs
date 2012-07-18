@@ -49,7 +49,7 @@ namespace Delta.Examples
             Transformer.ThisEntity(atom).RotateTo(180, 10f).RotateTo(0, 10f);
             Transformer.ThisEntity(atom).FlickerFor(0.5f, 1, 0.2f).Loop();
 
-            UI.Add(new GameHud());
+            //UI.Add(new GameHud());
             UI.Camera.ZoomImmediate(4.0f);
         }
 

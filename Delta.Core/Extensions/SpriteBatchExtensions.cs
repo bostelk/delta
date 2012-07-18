@@ -58,23 +58,22 @@ namespace Delta
             spriteBatch.DrawString(font, text, position, color);
         }
 
-        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 from, Vector2 to, Color color, float thickness)
+        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness)
         {
-            Vector2 direction = to - from;
+            Vector2 direction = end - start;
             float angle = (float)Math.Atan2(direction.Y, direction.X);
-            spriteBatch.Draw(G.PixelTexture, from, null, color, angle, Vector2.Zero, new Vector2(direction.Length(), thickness), SpriteEffects.None, 0);
+            spriteBatch.Draw(G.PixelTexture, start, null, color, angle, Vector2.Zero, new Vector2(direction.Length(), thickness), SpriteEffects.None, 0);
         }
 
-        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 from, float angle, float length, Color color, float thickness)
+        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, float thickness)
         {
-            spriteBatch.Draw(G.PixelTexture, from, null, color, angle, Vector2.Zero, new Vector2(length, thickness), SpriteEffects.None, 0);
+            spriteBatch.Draw(G.PixelTexture, start, null, color, angle, Vector2.Zero, new Vector2(length, thickness), SpriteEffects.None, 0);
         }
+
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color, bool fill)
         {
             if (fill)
-            {
                 spriteBatch.Draw(G.PixelTexture, rectangle, color);
-            }
             else
             {
                 spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Right, rectangle.Top), color, 1);

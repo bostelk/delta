@@ -11,7 +11,7 @@ namespace Delta.Movement
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
     /// Use additional Transformers to create parallel sequences.
     /// </summary>
-    public class Transformer : DeltaGameComponent
+    public class Transformer : EntityBase
     {
         static Pool<Transformer> _pool;
         float _elapsed;

@@ -23,7 +23,7 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : DeltaGameComponentCollection
+    public class Map : EntityCollection
     {
         internal static Map Instance { get; set; }
 
@@ -54,13 +54,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         private int AboveGroundIndex;
         [ContentSerializer]
-        public DeltaGameComponentCollection PostEffects { get; private set; }
+        public EntityCollection PostEffects { get; private set; }
 
         public Map()
             : base()
         {
             Instance = this;
-            PostEffects = new DeltaGameComponentCollection();
+            PostEffects = new EntityCollection();
         }
 
 #if WINDOWS
@@ -142,14 +142,14 @@ namespace Delta.Tiled
         protected internal override void OnAdded()
         {
             if (BelowGroundIndex > 0)
-                G.World.BelowGround = Components[BelowGroundIndex] as IGameComponentCollection;
+                G.World.BelowGround = Components[BelowGroundIndex] as IEntityCollection;
             if (GroundIndex > 0)
             {
-                G.World.Ground = Components[GroundIndex] as IGameComponentCollection;
+                G.World.Ground = Components[GroundIndex] as IEntityCollection;
                 G.World.Ground.AlwaysSort = true;
             }
             if (AboveGroundIndex > 0)
-                G.World.AboveGround = Components[AboveGroundIndex] as IGameComponentCollection;
+                G.World.AboveGround = Components[AboveGroundIndex] as IEntityCollection;
             base.OnAdded();
         }
 
@@ -164,7 +164,7 @@ namespace Delta.Tiled
         public override string ToString()
         {
             string info = String.Empty;
-            foreach (IGameComponent gameComponent in _components)
+            foreach (IEntity gameComponent in _components)
                 info += gameComponent.ToString() + "\n";
             return info;
         }

@@ -97,18 +97,19 @@
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
     <Compile Include="DeltaTime.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\SpriteFrameEntity.cs" />
     <Compile Include="Entities\EntitySpawner.cs" />
-    <Compile Include="Entities\DeltaGameComponent.cs" />
+    <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityHelper.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Graphics\Effects\PixelEmitter.cs" />
     <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
     <Compile Include="Graphics\Effects\Emitter.cs" />
     <Compile Include="Entities\TextureEntity.cs" />
+    <Compile Include="Interfaces\IEntityCollection.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="Interfaces\IGameComponentCollection.cs" />
-    <Compile Include="Interfaces\IGameComponent.cs" />
+    <Compile Include="Interfaces\IEntityManager.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="TEMP\CardinalDirection.cs" />
@@ -161,15 +162,16 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="UI\PerformanceMetrics.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
-    <Compile Include="UI.cs" />
+    <Compile Include="UI\UIManager.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="Collections\DeltaGameComponentCollection.cs" />
+    <Compile Include="Entities\EntityCollection.cs" />
     <Compile Include="Input\GamePadHelper.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputMap.cs" />
@@ -185,7 +187,8 @@
     <Compile Include="Structures\IPool.cs" />
     <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="UI\Control.cs" />
+    <Compile Include="Entities\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedContent.resx">
@@ -198,9 +201,7 @@
     <None Include="Resources\SimpleEffect.xnb" />
     <None Include="Resources\TinyFont.xnb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UIElements\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

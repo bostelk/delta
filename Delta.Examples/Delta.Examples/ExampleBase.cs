@@ -21,14 +21,12 @@ namespace Delta.Examples
     {
         public Color ClearColor { get; set; }
 
-        PerformanceMetrics _performanceMetrics;
-
         public ExampleBase(string exampleName) 
             : base(1280, 720)
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
-            UI.Add(_performanceMetrics = new PerformanceMetrics());
+            UI.Add(new UI.PerformanceMetrics());
         }
 
         protected override void Update(GameTime gameTime)

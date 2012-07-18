@@ -9,25 +9,25 @@ namespace Delta
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     [ContentTypeWriter]
-    public class DeltaGameComponentCollectionWriter<T> : ContentTypeWriter<DeltaGameComponentCollection<T>> where T : IGameComponent
+    public class EntityCollectionWriter<T> : ContentTypeWriter<EntityCollection<T>> where T : IEntity
     {
-        protected override void Write(ContentWriter output, DeltaGameComponentCollection<T> value)
+        protected override void Write(ContentWriter output, EntityCollection<T> value)
         {
-            output.WriteRawObject<DeltaGameComponent>(value as DeltaGameComponent);
-            List<IGameComponent> gameComponents = new List<IGameComponent>();
+            output.WriteRawObject<EntityBase>(value as EntityBase);
+            List<IEntity> gameComponents = new List<IEntity>();
             foreach (var gameComponent in value.Components)
                 gameComponents.Add(gameComponent);
-            output.WriteObject<List<IGameComponent>>(gameComponents);
+            output.WriteObject<List<IEntity>>(gameComponents);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(DeltaGameComponentCollection<T>).AssemblyQualifiedName;
+            return typeof(EntityCollection<T>).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(DeltaGameComponentCollectionReader<T>).AssemblyQualifiedName;
+            return typeof(EntityCollectionReader<T>).AssemblyQualifiedName;
         }
     }
 }
