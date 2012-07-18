@@ -17,6 +17,9 @@ namespace Delta.Graphics
 
         internal class SpriteParticle : Particle<SpriteEntity>
         {
+            float _trailInterval = 0.1f;
+            float _lastTrailTime = 0;
+
             public override void Recycle()
             {
                 base.Recycle();
@@ -29,6 +32,22 @@ namespace Delta.Graphics
                 Entity.Alpha = 0;
                 Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
                 base.OnEmitted();
+            }
+
+            public void Update(DeltaTime time)
+            {
+                if (G.World.SecondsPast(_lastTrailTime + _trailInterval))
+                {
+                    Visuals.CreateTrail(Entity, Entity.Position);
+                    _lastTrailTime = time.TotalSeconds;
+                }
+
+                Entity.InternalUpdate(time);
+            }
+
+            public void Draw(DeltaTime time, SpriteBatch spriteBatch)
+            {
+                Entity.InternalDraw(time, spriteBatch);
             }
         }
 
@@ -181,7 +200,7 @@ namespace Delta.Graphics
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];
-                particle.Entity.InternalUpdate(time);
+                particle.Update(time);
                 particle.Lifespan -= time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
                 particle.Entity.Position += particle.Velocity * time.ElapsedSeconds;
@@ -205,7 +224,7 @@ namespace Delta.Graphics
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];
-                particle.Entity.InternalDraw(time, spriteBatch);
+                particle.Draw(time, spriteBatch);
             }
             base.Draw(time, spriteBatch);
         }
