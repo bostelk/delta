@@ -40,9 +40,6 @@ namespace Delta.Examples
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
-            G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
-            G.SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

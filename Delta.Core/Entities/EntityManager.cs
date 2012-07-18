@@ -27,6 +27,7 @@ namespace Delta
                 _time.IsRunningSlowly = gameTime.IsRunningSlowly;
                 _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
                 _time.TotalSeconds += _time.ElapsedSeconds;
+                Camera.Update(_time);
                 base.InternalUpdate(_time);
             }
         }
@@ -34,7 +35,7 @@ namespace Delta
         internal virtual void Draw()
         {
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
-            base.Draw(_time, G.SpriteBatch);
+            base.InternalDraw(_time, G.SpriteBatch);
             G.SpriteBatch.End();
 
             G.SpriteBatch.Begin();
