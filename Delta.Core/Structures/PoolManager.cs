@@ -22,7 +22,9 @@ namespace Delta.Structures
                 + String.Format("FlickerPool: {0}\n", Pool<FlickerTransform>.PerformanceInfo)
                 + String.Format("BlinkPool: {0}\n", Pool<BlinkTransform>.PerformanceInfo)
                 + String.Format("Sound1DPool: {0}\n", Pool<Sound1D>.PerformanceInfo)
-                + String.Format("Sound3DPool: {0}\n", Pool<Sound3D>.PerformanceInfo);
+                + String.Format("Sound3DPool: {0}\n", Pool<Sound3D>.PerformanceInfo)
+                + String.Format("SpriteEmitterPool: {0}\n", Pool<SpriteEmitter>.PerformanceInfo)
+                + String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo);
             G.SpriteBatch.Begin();
             G.SpriteBatch.DrawString(G.Font, info, new Vector2(0, 100), Color.White);
             G.SpriteBatch.End();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Delta.Collision.Geometry;
 using Delta.Collision;
+using Delta.Physics;
 
 namespace Delta.Collision
 {

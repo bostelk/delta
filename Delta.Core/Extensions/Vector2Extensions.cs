@@ -65,7 +65,10 @@ namespace Delta
 
         public static Vector2 DirectionBetween(float startAngle, float finishAngle)
         {
-            Vector2 result = Vector2.Zero;
+            float theta = G.Random.Between(startAngle, finishAngle);
+            Vector2 result = default(Vector2);
+            result.X = (float)Math.Cos(theta);
+            result.Y = (float)Math.Sin(theta);
             return result;
         }
 

@@ -46,7 +46,6 @@
    H4sIAAAAAAAAC62YwY6kMAxE58DnNnDr5Qb8+S4SpXlTU05Ca0tqCUISV8qJ7fQ+fX0d/37n/btw4n3Hd8cc2i6sRftm86+ws9mY1/3esv+++RFL6HfZeYd22XTb4kiu3t7D1U/6UI+kzRbWIX1GbPp3redl7W57uW2s0EHPrmPSqIUj+Jpcd6z5CDpVGOVxBu0qHb39NH/wu3P0d98v/wMHdDqn3/u+xU/YoPsxwK86cz1oDM9vjxvHreEskE/6pu89XJwW8HvZfNz/jrWjR+vbKDc+e/yrbG7QrbX3pF2l3yg/108cHTz/4pjWsWDedapzyijHefrm5vGPe3oHP8anFkb6kIu/v+6zq2fqMd/cF+PiMVp9Cb57TPXnHt+90I7cGINXtKW9p77z9DsHc12t87PdYxX35EfPUZpvNn7iRv9rLb0YR92rOoG5nuc18fM5nfcycAZSvvc9QyTtZtiZTZNUJ7Cf5ktjkp5+vrwu2qefus3G7x3Gcm3qS16pr2ySC33HMb4u5iXZXMDf9zbnJK8q/rbyjvgI7l/tGWm4G7/VbJPvMv3OC8yz9EWqZxM8pl+QvcPmrubzPqnWV3urtiefxFM+5h48G3Nyf++2tqom+zTv/rEx4iYN39PP2F7l/4pXxa+KWw7eG/W8glPr7ubcehzJYyQPe91EHqz9nN/Te67mcl8Roz4Rlyr/+jvP92htcg5q6LlhBseX6ep8iCc1E3PI1vFJ4ip/Oj+vB9xmlQP0/GlNyjjLejNxF1LsTP2qtk8xclYdPX6p3uMz90tVsyduI/vB/fYu/NjSkD6o+LGuGoV0cX34/uk9rYLfdSvsBYcqh3qeJlpxKd13q7tHgnLx0zWleQj//8L5eb8e2C/VFBVa+7K6Wx7QbxnQ0WPMUzwZT37knP73JNKdOCH5uDWmtf/YVoH3zOpstOxu0/fvgq871eOMg+SW9krrvtDifBifSkPPZ36HG71X6+76NJcdGJ8wm37kSPwF2PwuywAZAAA=
   </data>
  </layer>
- <objectgroup name="Delta.BelowGround" width="40" height="40"/>
  <layer name="path / fences/flowerpots /wood" width="40" height="40">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+2YPQ7CMAxGPXRoVn7EAh2BATgArHA6RgbugcSNOAfgqjKJQtpImMap5Cd9S4fmyYlTuQA85pgFpmK+py/Uj8dQ/A6YMWYiq/MF+VFyq+MSs8IcIU8/YijnUP1+Q/14qB8P9eOhfjzUj0fOfjPT7XdJ7OMT80vBq2zisjM20n4xcvF7lOGoH4+h+IXm4Gdp+8vvsa1pksovNAdPI+ufi960PtAcTLOw63f1/NxzK0Fdywrs+m09Je1HxPY3Nb7fxtg+aIukX0q6zpJ7V4f8btin9yL+rG9i9RuB7L/C2o/u6VD2IPutqf1OYO/DtqwF/f5Vmzeik9MSABkAAA==
@@ -87,7 +86,22 @@
    H4sIAAAAAAAAC+3UIQ7AIBREQQT9pr15Dw00AdkKDCWZEauf2pQAAACA4c5tYnXFu6fv+nEfzCjH6oJvZ/RvAGArFX/HEwEAGQAA
   </data>
  </layer>
- <objectgroup name="Delta.Ground" width="40" height="40"/>
+ <objectgroup name="Delta.BelowGround" width="40" height="40"/>
+ <objectgroup name="Delta.Ground" width="40" height="40">
+  <object name="Lily" type="Delta.Examples.Entities.Lily" x="240" y="112" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="192" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="192" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="192" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="176" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="176" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="176" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="160" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="160" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="160" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="144" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="144" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="144" width="16" height="16"/>
+ </objectgroup>
  <layer name="torches" width="40" height="40">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+3TSQ0AIBADwP2iCxf4F4IDwq8cMwqatK0CAAC4V2/pBGvj8HyQ5L+k2B7s8ZW3/dDvBLHScWoAGQAA
@@ -98,5 +112,21 @@
    H4sIAAAAAAAAC+3UsQ2AIBCF4QuxURfQxjHc0sYhrRUdwLP2CkxAjPxf8pqrHjlABEAqfXefDcYsl/FDXRDfZOx3ZucAAES3VLkb2FbttWm8ZtccgT1rJ9JoWpe2HxDqb28MuJRyr0s5J4B3PflbTuH+xNgAGQAA
   </data>
  </layer>
- <objectgroup name="Delta.AboveGround" width="40" height="40"/>
+ <objectgroup name="Delta.AboveGround" width="40" height="40">
+ <object type="Delta.Graphics.SpriteEmitter" x="304" y="160" width="16" height="16">
+   <properties>
+    <property name="MaxSpeed" value="10"/>
+    <property name="MinSpeed" value="25"/>
+    <property name="MinRotation" value="1"/>
+    <property name="MaxRotation" value="1.5"/>
+    <property name="MinLifespan" value="1"/>
+    <property name="MaxLifespan" value="5.5"/>
+    <property name="MinAngle" value="90"/>
+    <property name="MaxAngle" value="90"/>
+    <property name="Frequency" value=".150"/>
+    <property name="SpriteSheet" value="Graphics\SpriteSheets\16x16"/>
+    <property name="AnimationName" value="flowermagic"/>
+   </properties>
+ </object>
+ </objectgroup>
 </map>

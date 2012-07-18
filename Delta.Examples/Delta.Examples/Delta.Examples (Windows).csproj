@@ -122,9 +122,9 @@
     <Compile Include="Entities\TextureEntity.cs" />
     <Compile Include="InputExample.cs" />
     <Compile Include="Entities\Barrel.cs" />
-    <Compile Include="ZeldaExample.cs" />
-    <Compile Include="Entities\Obstacle.cs" />
-    <Compile Include="Entities\BoxLink.cs" />
+    <Compile Include="BlossomExample.cs" />
+    <Compile Include="Entities\BouncingBody.cs" />
+    <Compile Include="Entities\Lily.cs" />
     <Compile Include="Entities\WorldBounds.cs" />
     <Compile Include="RacingExample.cs" />
     <Compile Include="Entities\RaceTrack.cs" />

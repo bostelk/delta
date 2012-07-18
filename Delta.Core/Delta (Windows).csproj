@@ -101,6 +101,8 @@
     <Compile Include="Entities\DeltaGameComponent.cs" />
     <Compile Include="Entities\EntityHelper.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
+    <Compile Include="Graphics\Effects\Emitter.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IGameComponentCollection.cs" />
     <Compile Include="Interfaces\IGameComponent.cs" />
@@ -148,7 +150,7 @@
     <Compile Include="Collision\Geometry\Polygon.cs" />
     <Compile Include="Collision\BaseCollisionEngine.cs" />
     <Compile Include="Collision\SAT.cs" />
-    <Compile Include="Physics\IWrappedBody.cs" />
+    <Compile Include="Interfaces\IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Collections\HashSet.cs" />
     <Compile Include="Structures\OverRange.cs" />

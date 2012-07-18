@@ -85,4 +85,13 @@
       <FrameDuration>1</FrameDuration>
     </Animation>
   </Image>
+  <Image>
+    <Path>Graphics\AnimatedMisc\particle-FlowerMagic-22x22-15.png</Path>
+    <FrameSize>22</FrameSize>
+    <Animation>
+      <Name>flowermagic</Name>
+      <Frames>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14</Frames>
+      <FrameDuration>0.2</FrameDuration>
+    </Animation>
+  </Image>
 </SpriteSheet>

@@ -20,13 +20,13 @@ namespace Delta.Examples
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class ZeldaExample : ExampleBase
+    public class BlossomExample : ExampleBase
     {
         const string CONTROLS = "[wads] camera movement.";
         Map _map;
         Entity _player;
 
-        public ZeldaExample() : base("ZeldaExample")
+        public BlossomExample() : base("BlossomExample")
         {
             ClearColor = Color.Black;
             G.World.Camera.Offset = G.ScreenCenter;
@@ -41,8 +41,7 @@ namespace Delta.Examples
             G.Collision.DefineWorld(_map.Width * _map.TileWidth, _map.Height * _map.TileHeight, 32);
 
             G.World.Add(_map);
-            G.World.Ground.Add(_player = new BoxLink());
-            G.World.Camera.Follow(_player);
+            G.World.Camera.Follow(_player = Entity.Get("Lily") as Entity);
             base.LoadContent();
         }
 
@@ -68,7 +67,7 @@ namespace Delta.Examples
             G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
             G.SpriteBatch.End();
 
-            //PoolManager.DebugDraw();
+            PoolManager.DebugDraw();
             //G.World.DebugDraw();
         }
     }

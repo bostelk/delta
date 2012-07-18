@@ -29,9 +29,10 @@ namespace Delta.Tiled
         {
             foreach (XmlNode objectNode in node.SelectNodes("object"))
             {
+                string type = objectNode.Attributes["type"] == null ? String.Empty : objectNode.Attributes["type"].Value;
+                if (String.IsNullOrEmpty(type)) continue;
                 Entity entity = StyleSheet.Load(objectNode.Attributes["type"].Value);
-                if (entity == null)
-                    continue;
+                if (entity == null) continue;
                 entity.IsVisible = layerIsVisible;
                 entity.Name = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
                 entity.Position = new Vector2(

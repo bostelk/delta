@@ -64,6 +64,8 @@ namespace Delta
 
         public void Add(T item)
         {
+            if (_components.Contains(item)) 
+                return;
             _components.Add(item);
             _globalComponents.Add(item);
             NeedsToSort = true;
@@ -87,6 +89,8 @@ namespace Delta
 
         public void Remove(T item)
         {
+            if (!_components.Contains(item)) 
+                return;
             _components.FastRemove<T>(item);
             _globalComponents.FastRemove<IGameComponent>(item);
             NeedsToSort = true;

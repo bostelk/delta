@@ -31,6 +31,7 @@ namespace Delta.Movement
         public Transformer() 
         { 
             _transforms = new Queue<ITransform>();
+            IsVisible = false;
         }
 
         static Transformer Create(Entity entity)

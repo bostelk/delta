@@ -7,10 +7,35 @@ using Delta.Structures;
 
 namespace Delta.Graphics
 {
+    [Flags]
+    public enum PlayOption
+    {
+        None = 1 << 0,
+
+        /// <summary>
+        /// Play the animation again after it has finished.
+        /// </summary>
+        Looped = 1 << 1,
+
+        /// <summary>
+        /// Pick a random frame to start on.
+        /// </summary>
+        Random = 1 << 2,
+
+        /// <summary>
+        /// Restarts the animation if it is already playing.
+        /// </summary>
+        Force = 1 << 3,
+
+        /// <summary>
+        /// Remove the animation once it has finished animating.
+        /// </summary>
+        AutoRemove = 1 << 3,
+    }
+
     public class SpriteEntity : Entity, IRecyclable
     {
         static Pool<SpriteEntity> _pool;
-
 
         [ContentSerializer(ElementName = "SpriteSheet")]
         internal string _spriteSheetName = string.Empty;
@@ -27,6 +52,8 @@ namespace Delta.Graphics
         int _animationFrameOffset = 0;
         [ContentSerializer(ElementName = "RandomStart")]
         bool _startOnRandomFrame = false;
+        //for kyle
+        bool _autoRemoveOnFinish = false;
 
         [ContentSerializer]
         public SpriteEffects SpriteEffects { get; set; }
@@ -34,6 +61,8 @@ namespace Delta.Graphics
         public bool IsAnimationLooped { get; private set; }
         [ContentSerializer]
         public bool IsAnimationPaused { get; set; }
+        [ContentSerializer]
+        public bool IsAnimationPlaying { get; private set; }
         [ContentSerializer]
         public bool IsAnimationFinished { get; private set; }
         [ContentSerializer]
@@ -58,18 +87,16 @@ namespace Delta.Graphics
         public SpriteEntity()
             : base()
         {
-            IsAnimationFinished = false;
-            IsAnimationLooped = true;
         }
 
         public SpriteEntity(string spriteSheet)
-            : this(String.Empty, spriteSheet) { }
+            : this(String.Empty, spriteSheet) 
+        { 
+        }
 
         public SpriteEntity(string id, string spriteSheet)
             : base(id)
         {
-            IsAnimationFinished = false;
-            IsAnimationLooped = true;
             _spriteSheetName= spriteSheet;
         }
 
@@ -155,7 +182,8 @@ namespace Delta.Graphics
         {
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            Play(_animationName);
+            if(!IsAnimationPlaying)
+                Play(_animationName, PlayOption.Looped);
             base.LoadContent();
         }
 
@@ -176,7 +204,10 @@ namespace Delta.Graphics
                 if (!IsAnimationLooped && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     IsAnimationFinished = true;
+                    IsAnimationPlaying = false;
                     _frameDurationTimer = 0;
+                    if (_autoRemoveOnFinish)
+                        RemoveNextFrame();
                 }
                 UpdateSourceRectangle();
             }
@@ -226,12 +257,23 @@ namespace Delta.Graphics
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
-        public void Play(string animation, bool isLooped, bool startRandom, int frameOffset)
+        public void Play(string animation)
+        {
+            Play(animation, PlayOption.None, 0);
+        }
+ 
+        public void Play(string animation, PlayOption options)
+        {
+            Play(animation, options, 0);
+        }
+
+        public void Play(string animation, PlayOption options, int frameOffset)
         {
             _animationName = animation;
             IsAnimationPaused = false;
-            IsAnimationLooped = isLooped;
-            _startOnRandomFrame = startRandom;
+            IsAnimationLooped = options.HasFlag(PlayOption.Looped);
+            _startOnRandomFrame = options.HasFlag(PlayOption.Random);
+            _autoRemoveOnFinish = options.HasFlag(PlayOption.AutoRemove);
             _animationFrameOffset = frameOffset;
             if (_spriteSheet == null)
             {
@@ -243,21 +285,11 @@ namespace Delta.Graphics
                 OnAnimationChanged();
         }
 
-        public void Play(string animation, bool isLooped, bool startRandom)
+        public void Pause()
         {
-            Play(animation, isLooped, startRandom, 0);
+            IsAnimationPaused = true;
         }
-
-        public void Play(string animation, bool isLooped)
-        {
-            Play(animation, isLooped, false, 0);
-        }
-
-        public void Play(string animation)
-        {
-            Play(animation, true, false, 0);
-        }
-
+        
         protected internal override void OnPositionChanged()
         {
             base.OnPositionChanged();
@@ -272,7 +304,15 @@ namespace Delta.Graphics
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             IsAnimationFinished = false;
+            IsAnimationPlaying = true;
             UpdateSourceRectangle();
+        }
+
+        protected internal override void OnRemoved()
+        {
+            if (_autoRemoveOnFinish)
+                Recycle();
+            base.OnRemoved();
         }
 
         public override void Recycle()
@@ -287,9 +327,11 @@ namespace Delta.Graphics
             _frameDurationTimer = 0f;
             _animationFrameOffset = 0;
             _startOnRandomFrame = false;
+            _autoRemoveOnFinish = false;
             SpriteEffects = SpriteEffects.None;
-            IsAnimationLooped = true;
+            IsAnimationLooped = false;
             IsAnimationPaused = false;
+            IsAnimationPlaying = false;
             IsAnimationFinished = false;
             IsOverlay = false;
             IsOutlined = false;

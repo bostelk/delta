@@ -17,7 +17,7 @@ namespace Delta.Bootstrap
             Tiled,
             Collision,
             Racing,
-            Zelda,
+            Blossom,
             Transformer
         }
 
@@ -26,7 +26,7 @@ namespace Delta.Bootstrap
 #endif
         static void Main(string[] args)
         {
-            Examples example = Examples.Zelda;
+            Examples example = Examples.Blossom;
 
             switch (example)
             {
@@ -51,8 +51,8 @@ namespace Delta.Bootstrap
                 case Examples.Racing:
                     RunExample<RacingExample>();
                     break;
-                case Examples.Zelda:
-                    RunExample<ZeldaExample>();
+                case Examples.Blossom:
+                    RunExample<BlossomExample>();
                     break;
                 case Examples.Transformer:
                     RunExample<TransformerExample>();

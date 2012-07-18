@@ -14,7 +14,7 @@ using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class BoxLink : Entity  //CollideableEntity
+    public class Lily : CollideableEntity
     {
         const float SPEED = 50;
 
@@ -26,18 +26,13 @@ namespace Delta.Examples.Entities
         float _trailInterval = 0.09f;
         float _trailTime = 0;
 
-        public BoxLink()
+        public Lily() : base("Lily")
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("blackspike");
 
-            //Collider = new Collider()
-            //{
-            //    Tag = this,
-            //    Mass = 1f,
-            //    Geom = new Circle(8)
-            //};
+            Polygon = new Circle(8);
         }
 
         //public void SwitchBody()
@@ -63,13 +58,15 @@ namespace Delta.Examples.Entities
             // if boosting leave a motion trail
             if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.LeftShift))
             {
-                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position);
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + (direction * -2 * time.ElapsedSeconds));
                 _trailTime = (float)time.TotalSeconds;
             }
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(time);
             Layer = Position.Y;
+
+            Collider.Geom.Position = Position;
             base.LightUpdate(time);
         }
 
