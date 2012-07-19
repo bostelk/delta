@@ -107,6 +107,7 @@ namespace Delta.Graphics
             newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
+            newParticle.Entity.Tint = Tint;
             newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
@@ -150,10 +151,23 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
+            bool clearBatch = G.GraphicsDevice.BlendState == Blend;
+            if (clearBatch)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
+            }
+
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];
                 particle.Draw(time, spriteBatch);
+            }
+
+            if (clearBatch)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             }
             base.Draw(time, spriteBatch);
         }

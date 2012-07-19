@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Delta.Structures;
+using Delta.Extensions;
 using System.Globalization;
 using Delta.Movement;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.Graphics
 {
@@ -16,6 +18,9 @@ namespace Delta.Graphics
         string _fadeOutMethodString;
         Interpolation.InterpolationMethod _fadeInInterpolator;
         Interpolation.InterpolationMethod _fadeOutInterpolator;
+
+        string _blendString;
+        BlendState _blend;
 
         public float Frequency;
         public bool Explode;
@@ -29,6 +34,18 @@ namespace Delta.Graphics
         public Range FrameIntervalRange;
         public Range FadeInRange;
         public Range FadeOutRange;
+
+        // fuck you for not serializing blendstates; warning will hardcrash visual studio
+        [ContentSerializerIgnore]
+        public BlendState Blend
+        {
+            get
+            {
+                if (_blend == null)
+                    _blend = BlendStateExtensions.Parse(_blendString);
+                return _blend;
+            }
+        }
 
         // fuck you for not serializing delegates
         [ContentSerializerIgnore]
@@ -61,6 +78,7 @@ namespace Delta.Graphics
             Quantity = 1;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
+            _blendString = "Additive";
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -88,12 +106,14 @@ namespace Delta.Graphics
                     AngleRange.Upper = AngleRange.Upper.ToRadians();
                     return true;
                 case "scale":
+                case "size":
                     ScaleRange = Range.Parse(value);
                     return true;
                 case "acceleration":
                     AccelerationRange = Range.Parse(value);
                     return true;
                 case "frameinterval":
+                case "frameduration":
                     FrameIntervalRange = Range.Parse(value);
                     return true;
                 case "explode":
@@ -115,6 +135,9 @@ namespace Delta.Graphics
                 case "fadeoutmethod":
                     _fadeOutMethodString = value;
                     return true;
+                case "blend":
+                    _blendString = value;
+                    return true;
             }
             return base.ImportCustomValues(name, value);
         }
@@ -134,6 +157,7 @@ namespace Delta.Graphics
             FadeOutRange = Range.Empty;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
+            _blendString = "Additive";
         }
 
         internal class Particle<T> : IRecyclable where T: Entity
