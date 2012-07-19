@@ -22,7 +22,7 @@ namespace Delta.Examples
         public Color ClearColor { get; set; }
 
         public ExampleBase(string exampleName) 
-            : base(1280, 720)
+            : base(1280, 720, false, true)
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
@@ -41,7 +41,6 @@ namespace Delta.Examples
                 G.World.TimeScale += 0.1f;
             if (G.Input.Keyboard.IsPressed(Keys.PageDown))
                 G.World.TimeScale -= 0.1f;
-
             base.Update(gameTime);
         }
 
