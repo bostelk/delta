@@ -8,16 +8,44 @@ namespace Delta.UI
     public class Control : EntityBase
     {
         public Vector2 Position { get; set; }
+
+        Vector2 _size = Vector2.Zero;
+        public Vector2 Size
+        {
+            get { return _size; }
+            set
+            {
+                if (_size != value)
+                {
+                    _size = value;
+                    OnSizeChanged();
+                }
+            }
+        }
+
+        public Color BackColor { get; set; }
         public EntityCollection<Control> Children { get; set; }
+
+        protected Vector2 RenderSize { get; set; }
 
         public Control()
         {
         }
 
+        protected virtual void UpdateRenderSize()
+        {
+            RenderSize = _size;
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
-            //spriteBatch.DrawRectangle(RenderArea, Color.White, true);
+            spriteBatch.Draw(G.PixelTexture, Position, null, BackColor, 0, Vector2.Zero, RenderSize, SpriteEffects.None, 0);
+        }
+
+        protected virtual void OnSizeChanged()
+        {
+            UpdateRenderSize();
         }
 
     }
