@@ -92,15 +92,14 @@ namespace Delta
             DeltaEffect = new DeltaEffect(_embedded.Load<Effect>("DeltaEffect"));
             SimpleEffect = new SimpleEffect(_embedded.Load<Effect>("SimpleEffect"));
           
-            World.LoadContent();
-            UI.LoadContent();
-
-            GC.Collect();
-            ResetElapsedTime();
+            World.InternalLoadContent();
+            UI.InternalLoadContent();
         }
 
         protected virtual void LateInitialize()
         {
+            GC.Collect();
+            ResetElapsedTime();
         }
 
         protected override void Update(GameTime gameTime)

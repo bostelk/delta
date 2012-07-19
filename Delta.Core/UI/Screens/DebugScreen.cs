@@ -7,7 +7,7 @@ namespace Delta.UI
         public DebugScreen()
             : base()
         {
-            Add(new PerformanceMetrics());
+            Add(new PerformanceMetrics() { VerticalTextAlignment = Controls.VerticalTextAlignment.Center, HorizontalTextAlignment = Controls.HorizontalTextAlignment.Center});
         }
     }
 }

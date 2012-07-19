@@ -56,7 +56,7 @@ namespace Delta.Examples.Entities
             LeftBarColor = new Color(208, 48, 208).SetAlpha(0.95f);
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _healthBar = G.Content.Load<Texture2D>(@"Graphics\HealthBar");
             _ammoBar = G.Content.Load<Texture2D>(@"Graphics\AmmoBar");

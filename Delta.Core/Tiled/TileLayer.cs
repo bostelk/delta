@@ -74,7 +74,7 @@ namespace Delta.Tiled
         }
 #endif
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             base.LoadContent();
             foreach (Tile tile in _tiles)

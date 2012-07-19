@@ -56,7 +56,7 @@ namespace Delta.Entities
             _frame = frame;
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             SpriteSheet _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
             _texture = _spriteSheet.Texture;

@@ -44,7 +44,7 @@ namespace Delta.Entities
             _path = texturePath;
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             if (String.IsNullOrEmpty(_path))
             {

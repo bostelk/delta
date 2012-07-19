@@ -41,7 +41,7 @@ namespace Delta.Examples.Entities
         {
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _sheet = G.Content.Load<Texture2D>(@"Graphics\Player");
             base.LoadContent();

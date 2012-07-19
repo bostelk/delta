@@ -37,17 +37,17 @@ namespace Delta
         {
             Vector2 textSize = font.MeasureString(text);
             Vector2 offset = Vector2.Zero;
-            if (alignment.HasFlag(TextAlignment.Left))
+            if ((alignment & TextAlignment.Left) != 0)
                 offset.X = 0;
-            else if (alignment.HasFlag(TextAlignment.Center))
+            else if ((alignment & TextAlignment.Center) != 0)
                 offset.X = -textSize.X / 2;
-            else if (alignment.HasFlag(TextAlignment.Right))
+            else if ((alignment & TextAlignment.Right) != 0)
                 offset.X = -textSize.X;
-            if (alignment.HasFlag(TextAlignment.Top))
+            if ((alignment & TextAlignment.Top) != 0)
                 offset.Y = 0;
-            else if (alignment.HasFlag(TextAlignment.Middle))
+            else if ((alignment & TextAlignment.Middle) != 0)
                 offset.Y = textSize.X;
-            else if (alignment.HasFlag(TextAlignment.Bottom))
+            else if ((alignment & TextAlignment.Bottom) != 0)
                 offset.Y = -textSize.Y;
             spriteBatch.DrawString(font, text, position + offset, color);
         }

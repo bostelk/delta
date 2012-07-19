@@ -3,11 +3,12 @@ using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Delta.UI.Controls;
 
 namespace Delta.UI
 {
 
-    public class PerformanceMetrics : Control
+    public class PerformanceMetrics : Label
     {
         Stopwatch _stopwatch;
         int _frames;
@@ -20,7 +21,7 @@ namespace Delta.UI
             _stopwatch = new Stopwatch();
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             base.LoadContent();
             _stopwatch.Start();

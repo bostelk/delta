@@ -105,7 +105,7 @@ namespace Delta
                 Remove(item);
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             for (int i = 0; i < _components.Count; i++)
                 _components[i].LoadContent();

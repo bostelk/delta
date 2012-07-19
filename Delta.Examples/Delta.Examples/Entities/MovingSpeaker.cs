@@ -56,7 +56,7 @@ namespace Delta.Examples.Entities
             IsOrbiting = false;
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _texture = G.Content.Load<Texture2D>(@"Graphics\Player");
             base.LoadContent();
