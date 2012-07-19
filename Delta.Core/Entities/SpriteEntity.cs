@@ -255,7 +255,7 @@ namespace Delta.Graphics
 
         public void Play(string animation)
         {
-            Play(animation, AnimationPlayOptions.None, 0);
+            Play(animation, AnimationPlayOptions.Looped, 0);
         }
  
         public void Play(string animation, AnimationPlayOptions options)
