@@ -11,9 +11,9 @@ namespace Delta.UI
             : base()
         {
             _performanceMetrics.AutoSize = true;
-            _performanceMetrics.Position = new Vector2(200, 200);
-            _performanceMetrics.ForeColor = Color.Yellow;
-            _performanceMetrics.BackColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            _performanceMetrics.Position = new Vector2(0, 0);
+            _performanceMetrics.ForeColor = Color.White;
+            _performanceMetrics.BackColor = Color.Gray;
             Add(_performanceMetrics);
         }
     }
