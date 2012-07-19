@@ -68,7 +68,7 @@ namespace Delta
             float theta = G.Random.Between(startAngle, finishAngle);
             Vector2 result = default(Vector2);
             result.X = (float)Math.Cos(theta);
-            result.Y = (float)Math.Sin(theta);
+            result.Y = -(float)Math.Sin(theta); // adjust for xna
             return result;
         }
 

@@ -17,9 +17,6 @@ namespace Delta.Graphics
 
         internal class SpriteParticle : Particle<SpriteEntity>
         {
-            float _trailInterval = 0.1f;
-            float _lastTrailTime = 0;
-
             public override void Recycle()
             {
                 base.Recycle();
@@ -35,9 +32,9 @@ namespace Delta.Graphics
             public void Update(DeltaTime time)
             {
                 if (FadeInPercent > 0)
-                    Entity.Alpha = Interpolation.EaseInCubic(0, 1, Life / (FadeInPercent * Lifespan)); 
+                    Entity.Alpha = Emitter.FadeInInterpolator(0, 1, Life / (FadeInPercent * Lifespan)); 
                 if (FadeOutPercent > 0)
-                    Entity.Alpha = Entity.Alpha - Interpolation.EaseOutCubic(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
+                    Entity.Alpha = Entity.Alpha - Emitter.FadeOutInterpolator(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
                 Entity.InternalUpdate(time);
             }
 
@@ -79,12 +76,9 @@ namespace Delta.Graphics
             return particle;
         }
 
-        public SpriteEmitter()
+        public SpriteEmitter() : base()
         {
-            _particles = new List<SpriteParticle>(100);
-            AngleRange = new Range(0, 360);
-            ScaleRange = new Range(1, 1);
-            Quantity = 1;
+            _particles = new List<SpriteParticle>(100); 
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -106,11 +100,11 @@ namespace Delta.Graphics
         public void Emit()
         {
             SpriteParticle newParticle = _particlePool.Fetch();
+            newParticle.Emitter = this;
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();
             newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
-            newParticle.Velocity.Y *= -1;
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
@@ -176,16 +170,6 @@ namespace Delta.Graphics
             _spriteSheet = String.Empty;
             _animationName = String.Empty;
             _lastEmitTime = 0;
-            Frequency = 0;
-            Explode = false;
-            Quantity = 1;
-            LifespanRange = Range.Empty;
-            SpeedRange = Range.Empty;
-            RotationRange = Range.Empty;
-            AngleRange = Range.Empty;
-            ScaleRange = new Range(1, 1);
-            FadeInRange = Range.Empty;
-            FadeOutRange = Range.Empty;
 
             for (int i = 0; i < _particles.Count; i++)
             {

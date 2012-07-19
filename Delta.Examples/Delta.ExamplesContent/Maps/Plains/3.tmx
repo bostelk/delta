@@ -122,6 +122,8 @@
     <property name="SpriteSheet" value="Graphics\SpriteSheets\16x16"/>
     <property name="FadeIn" value="range(0.3, 0.5)"/>
     <property name="FadeOut" value="range(0.3, 0.5)"/>
+    <property name="FadeInMethod" value="cubic.in"/>
+    <property name="FadeOutMethod" value="cubic.out"/>
    </properties>
   </object>
   <object type="Delta.Examples.Entities.Barrel" x="352" y="256" width="16" height="16"/>
