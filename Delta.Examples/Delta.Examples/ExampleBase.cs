@@ -31,15 +31,15 @@ namespace Delta.Examples
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (G.Input.Keyboard.JustPressed(Keys.Escape))
+            if (G.Input.Keyboard.IsPressed(Keys.Escape))
                 Exit();
-            if ((G.Input.Keyboard.Held(Keys.LeftAlt) || G.Input.Keyboard.Held(Keys.RightAlt)) && G.Input.Keyboard.JustPressed(Keys.Enter))
+            if ((G.Input.Keyboard.IsDown(Keys.LeftAlt) || G.Input.Keyboard.IsDown(Keys.RightAlt)) && G.Input.Keyboard.IsPressed(Keys.Enter))
                 G.ToggleFullScreen();
-            if (G.Input.Keyboard.JustPressed(Keys.Pause))
+            if (G.Input.Keyboard.IsPressed(Keys.Pause))
                 G.World.TogglePause();
-            if (G.Input.Keyboard.JustPressed(Keys.PageUp))
+            if (G.Input.Keyboard.IsPressed(Keys.PageUp))
                 G.World.TimeScale += 0.1f;
-            if (G.Input.Keyboard.JustPressed(Keys.PageDown))
+            if (G.Input.Keyboard.IsPressed(Keys.PageDown))
                 G.World.TimeScale -= 0.1f;
 
             base.Update(gameTime);

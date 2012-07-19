@@ -52,7 +52,7 @@ namespace Delta.Examples
         protected override void Update(GameTime gameTime)
         {
 
-            if (G.Input.Keyboard.JustPressed(Keys.Left))
+            if (G.Input.Keyboard.IsPressed(Keys.Left))
             {
                 G.Audio.StopAllSounds();
                 _soundIndex = MathExtensions.Wrap(_soundIndex - 1, 0, _sounds.Count - 1);
@@ -60,7 +60,7 @@ namespace Delta.Examples
                 _pitch = 0.5f;
                 _volume = 1f;
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Right))
+            if (G.Input.Keyboard.IsPressed(Keys.Right))
             {
                 G.Audio.StopAllSounds();
                 _soundIndex = MathExtensions.Wrap(_soundIndex + 1, 0, _sounds.Count - 1);
@@ -68,63 +68,63 @@ namespace Delta.Examples
                 _pitch = 0.5f;
                 _volume = 1f;
             }
-            if (G.Input.Keyboard.Held(Keys.Up))
+            if (G.Input.Keyboard.IsDown(Keys.Up))
             {
                 G.Audio.SetChannelVolume(AudioChannel.Music, MathHelper.SmoothStep(G.Audio.MusicVolume, 1.0f, 0.1f));
             }
-            if (G.Input.Keyboard.Held(Keys.Down))
+            if (G.Input.Keyboard.IsDown(Keys.Down))
             {
                 G.Audio.SetChannelVolume(AudioChannel.Music, MathHelper.SmoothStep(G.Audio.MusicVolume, 0.0f, 0.1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad8))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad8))
             {
                 G.Audio.SetChannelVolume(AudioChannel.Sfx, MathHelper.SmoothStep(G.Audio.MusicVolume, 1.0f, 0.1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad2))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad2))
             {
                 G.Audio.SetChannelVolume(AudioChannel.Sfx, MathHelper.SmoothStep(G.Audio.MusicVolume, 0.0f, 0.1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad7))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad7))
             {
                 G.Audio.SetSoundPitch(_sounds[_soundIndex], _pitch = MathHelper.Clamp(_pitch+0.01f, 0,1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad1))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad1))
             {
                 G.Audio.SetSoundPitch(_sounds[_soundIndex], _pitch = MathHelper.Clamp(_pitch-0.01f, 0,1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad9))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad9))
             {
                 G.Audio.SetSoundVolume(_sounds[_soundIndex], _volume = MathHelper.Clamp(_volume+0.01f, 0,1f));
             }
-            if (G.Input.Keyboard.Held(Keys.NumPad3))
+            if (G.Input.Keyboard.IsDown(Keys.NumPad3))
             {
                 G.Audio.SetSoundVolume(_sounds[_soundIndex], _volume = MathHelper.Clamp(_volume-0.01f, 0,1f));
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Space))
+            if (G.Input.Keyboard.IsPressed(Keys.Space))
             {
                 if (G.Audio.IsPlaying(_sounds[_soundIndex]))
                     G.Audio.PauseSound(_sounds[_soundIndex]);
                 else
                     G.Audio.ResumeSound(_sounds[_soundIndex]);
             }
-            if (G.Input.Keyboard.JustPressed(Keys.NumPad0))
+            if (G.Input.Keyboard.IsPressed(Keys.NumPad0))
             {
                 G.Audio.PlaySound(_sounds[_soundIndex], true);
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Enter))
+            if (G.Input.Keyboard.IsPressed(Keys.Enter))
             {
                 G.Audio.StopSound(_sounds[_soundIndex]);
                 G.Audio.PlaySound(_sounds[_soundIndex]);
                 G.Audio.SetSoundPitch(_sounds[_soundIndex], _pitch);
                 G.Audio.SetSoundVolume(_sounds[_soundIndex], _volume);
             }
-            if (G.Input.Keyboard.JustPressed(Keys.RightShift))
+            if (G.Input.Keyboard.IsPressed(Keys.RightShift))
             {
                 G.Audio.PlaySound(_sounds[_soundIndex], true);
                 G.Audio.SetSoundPitch(_sounds[_soundIndex], _pitch);
                 G.Audio.SetSoundVolume(_sounds[_soundIndex], _volume);
             }
-            if (G.Input.Keyboard.JustPressed(Keys.F1))
+            if (G.Input.Keyboard.IsPressed(Keys.F1))
             {
                 if (G.Audio.IsMuted)
                     G.Audio.Mute();

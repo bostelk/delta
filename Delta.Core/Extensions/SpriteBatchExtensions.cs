@@ -70,17 +70,30 @@ namespace Delta
             spriteBatch.Draw(G.PixelTexture, start, null, color, angle, Vector2.Zero, new Vector2(length, thickness), SpriteEffects.None, 0);
         }
 
-        public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color, bool fill)
+        public static void DrawRectangleOutline(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
-            if (fill)
-                spriteBatch.Draw(G.PixelTexture, rectangle, color);
-            else
-            {
-                spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Right, rectangle.Top), color, 1);
-                spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Left, rectangle.Bottom), color, 1);
-                spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Bottom), new Vector2(rectangle.Right, rectangle.Bottom), color, 1);
-                spriteBatch.DrawLine(new Vector2(rectangle.Right, rectangle.Top), new Vector2(rectangle.Right, rectangle.Bottom), color, 1);
-            }
+            spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Right, rectangle.Top), color, 1);
+            spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Left, rectangle.Bottom), color, 1);
+            spriteBatch.DrawLine(new Vector2(rectangle.Left, rectangle.Bottom), new Vector2(rectangle.Right, rectangle.Bottom), color, 1);
+            spriteBatch.DrawLine(new Vector2(rectangle.Right, rectangle.Top), new Vector2(rectangle.Right, rectangle.Bottom), color, 1);
+        }
+
+        public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
+        {
+            spriteBatch.Draw(G.PixelTexture, rectangle, color);
+        }
+
+        public static void DrawRectangleOutline(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Color color)
+        {
+            spriteBatch.DrawLine(position, new Vector2(position.X + size.X, position.Y), color, 1);
+            spriteBatch.DrawLine(position, new Vector2(position.X, position.Y + size.Y), color, 1);
+            spriteBatch.DrawLine(new Vector2(position.X, position.Y + size.Y), new Vector2(position.X + size.X, position.Y + size.Y), color, 1);
+            spriteBatch.DrawLine(new Vector2(position.X + size.X, position.Y), new Vector2(position.X + size.X, position.Y + size.Y), color, 1);
+        }
+
+        public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Color color)
+        {
+            spriteBatch.Draw(G.PixelTexture, position, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0); 
         }
 
         public static void DrawPixel(this SpriteBatch spriteBatch, Vector2 position, Color color)

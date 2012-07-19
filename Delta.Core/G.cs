@@ -28,6 +28,8 @@ namespace Delta
         internal static ResourceContentManager _embedded = null;
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
         internal static bool _lateInitialized = false;
+        internal static Game _instance = null;
+        internal static DeltaTime _time = new DeltaTime();
 
         public new static ContentManager Content { get; private set; }
         public static InputManager Input { get; private set; }
@@ -35,7 +37,9 @@ namespace Delta
         public static World World { get; private set; }
         public static ScreenManager UI { get; private set; }
 
-        public new static GraphicsDevice GraphicsDevice { get; private set; }
+        public new static GraphicsDevice GraphicsDevice { get { return _instance.GraphicsDevice; } }
+        public new static bool IsMouseVisible { get { return _instance.IsMouseVisible; } set { _instance.IsMouseVisible = value; } }
+        public static bool IsVSyncEnabled { get { return _graphicsDeviceManager.SynchronizeWithVerticalRetrace; } }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static PrimitiveBatch PrimitiveBatch { get; private set; }
         public static CollisionEngine Collision { get; private set; }
@@ -53,18 +57,26 @@ namespace Delta
 #endif
 
         public G(int screenWidth, int screenHeight)
+            : this(screenWidth, screenHeight, false, false)
+        {
+        }
+
+        public G(int screenWidth, int screenHeight, bool vSync, bool isFixedTimeStep)
             : base()
         {
+            _instance = this;
             Content = base.Content;
             Content.RootDirectory = "Content";
+            IsFixedTimeStep = isFixedTimeStep;
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.PreferredBackBufferWidth = screenWidth;
             _graphicsDeviceManager.PreferredBackBufferHeight = screenHeight;
             _graphicsDeviceManager.DeviceReset += OnDeviceReset;
             _graphicsDeviceManager.PreparingDeviceSettings += OnPreparingDeviceSettings;
+            _graphicsDeviceManager.SynchronizeWithVerticalRetrace = vSync;
             _embedded = new ResourceContentManager(Services, EmbeddedContent.ResourceManager);
 #if DEBUG
-            IsMouseVisible = true;
+            base.IsMouseVisible = true;
             Window.AllowUserResizing = true;
 #endif
             World = new World();
@@ -83,7 +95,6 @@ namespace Delta
         protected override void LoadContent()
         {
             base.LoadContent();
-            GraphicsDevice = _graphicsDeviceManager.GraphicsDevice;
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             PrimitiveBatch = new PrimitiveBatch(GraphicsDevice);
             PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -105,8 +116,11 @@ namespace Delta
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Input.Update(gameTime);
-            Audio.Update(gameTime);
+            _time.IsRunningSlowly = gameTime.IsRunningSlowly;
+            _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _time.TotalSeconds += _time.ElapsedSeconds;
+            Input.Update(_time);
+            Audio.Update(_time);
             if (!_lateInitialized)
             {
                 _lateInitialized = true;
@@ -114,10 +128,10 @@ namespace Delta
             }
             if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
             {
-                World.Update(gameTime);
-                UI.Update(gameTime);
+                World.Update();
+                UI.Update();
             }
-            Collision.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
+            Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
 
         protected override void Draw(GameTime gameTime)

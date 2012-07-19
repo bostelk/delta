@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Delta
 {
-    public class DeltaTime
+    public sealed class DeltaTime
     {
         public float TotalSeconds { get; internal set; }
         public float ElapsedSeconds { get; internal set; }

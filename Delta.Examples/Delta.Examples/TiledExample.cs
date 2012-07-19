@@ -44,10 +44,10 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WasdDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
-            if (G.Input.Keyboard.Held(Keys.OemPlus))
+            //G.World.Camera.MoveToImmediate(G.World.Camera.Position + G.Input.WasdDirection * (G.Input.Keyboard.Held(Keys.RightShift) ? 8: 3));
+            if (G.Input.Keyboard.IsDown(Keys.OemPlus))
                 G.World.Camera.ZoomByAmount(0.2f);
-            if (G.Input.Keyboard.Held(Keys.OemMinus))
+            if (G.Input.Keyboard.IsDown(Keys.OemMinus))
                 G.World.Camera.ZoomByAmount(-0.2f);
 
             //if (G.Input.Keyboard.JustPressed(Keys.Up))

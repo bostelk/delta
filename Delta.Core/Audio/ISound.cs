@@ -30,6 +30,6 @@ namespace Delta.Audio
         void SetVolume(float amount);
         void SetPitch(float amount);
 
-        bool Update(GameTime gameTime);
+        bool Update(DeltaTime time);
     }
 }

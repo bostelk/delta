@@ -62,7 +62,7 @@ namespace Delta
             Add((T)item);
         }
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             if (_components.Contains(item)) 
                 return;
@@ -86,7 +86,7 @@ namespace Delta
             Remove((T)item);
         }
 
-        public void Remove(T item)
+        public virtual void Remove(T item)
         {
             if (!_components.Contains(item)) 
                 return;

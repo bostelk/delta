@@ -34,17 +34,17 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            if (G.Input.Keyboard.JustPressed(Keys.Tab))
+            if (G.Input.Keyboard.IsPressed(Keys.Tab))
                 (player1 as PhysicsCar).SwitchBody();
-            if (G.Input.Keyboard.JustPressed(Keys.RightControl))
+            if (G.Input.Keyboard.IsPressed(Keys.RightControl))
                 (player2 as PhysicsCar).SwitchBody();
             //if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
             //    player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
             //if (G.Input.Keyboard.JustPressed(Keys.F1))
             //    G.World.Camera.Follow(player1);
                 
-            (player1 as PhysicsCar).Input = G.Input.WasdDirection;
-            (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
+            //(player1 as PhysicsCar).Input = G.Input.WasdDirection;
+           // (player2 as PhysicsCar).Input = G.Input.ArrowDirection;
             base.Update(gameTime);
         }
 

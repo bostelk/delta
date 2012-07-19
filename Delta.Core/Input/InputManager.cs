@@ -1,133 +1,67 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-
-using Delta;
+using Delta.Input.States;
 
 namespace Delta.Input
 {
-    public class InputManager
+    public sealed class InputManager
     {
-        public const int MAX_GAMEPADS = 4;
+        PlayerInput[] _playerInputs = new PlayerInput[4];
+        GamePadState[] _gamePads = new GamePadState[4];
+        KeyboardState[] _chatPads = new KeyboardState[4];
+#if WINDOWS
+        MouseState _mouseState = new MouseState();
+        public KeyboardInputState Keyboard { get; private set; }
+        public MouseInputState Mouse { get; private set; } 
+#endif
+        public PlayerInputCollection PlayerInput { get; private set; }
 
-        MouseHelper _mouse;
-        GamePadHelper[] _gamepad;
-        KeyboardHelper _keyboard;
+		internal InputManager()
+		{
+            for (int i = 0; i < 4; i++)
+                _playerInputs[i] = new PlayerInput(i, PlayerInput);
 
-        public MouseHelper Mouse
+            _playerInputs[0].ControlInput = ControlInput.GamePad1;
+            _playerInputs[1].ControlInput = ControlInput.GamePad2;
+            _playerInputs[2].ControlInput = ControlInput.GamePad3;
+            _playerInputs[3].ControlInput = ControlInput.GamePad4;
+
+            PlayerInput = new PlayerInputCollection(_playerInputs);
+
+#if WINDOWS
+            Keyboard = new KeyboardInputState();
+            Mouse = new MouseInputState();
+            if (!GamePad.GetCapabilities(PlayerIndex.One).IsConnected)
+                _playerInputs[0].ControlInput = ControlInput.KeyboardMouse;
+#endif
+		}
+
+        internal void Update(DeltaTime time)
         {
-            get
-            {
-                return _mouse;
-            }
+            for (int i = 0; i < 4; i++)
+			{
+				_gamePads[i] = Microsoft.Xna.Framework.Input.GamePad.GetState((PlayerIndex)i);
+				_chatPads[i] = Microsoft.Xna.Framework.Input.Keyboard.GetState((PlayerIndex)i);
+			}
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    //_playerInputs[i]._gamePadMapper.SetKMS(this, input[i].ControlInput);
+            //    //input[i].mapper.UpdateState(ref input[i].istate, updateState, input[i].KeyboardMouseControlMapping, input[i].ControlInput, windowFocused);
+            //}
+#if WINDOWS
+            _mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            Keyboard.Update(time, ref _chatPads[0]);
+            Mouse.Update(time, ref _mouseState);
+#endif
         }
 
-        public KeyboardHelper Keyboard
-        {
-            get
-            {
-                return _keyboard;
-            }
-        }
-
-        public GamePadHelper[] Gamepad
-        {
-            get
-            {
-                return _gamepad;
-            }
-        }
-
-        private InputManager _instance;
-
-        public Vector2 WasdDirection
-        {
-            get
-            {
-                Vector2 direction = Vector2.Zero;
-                if (Keyboard.Held(Keys.W))
-                    direction.Y = -1;
-                if (Keyboard.Held(Keys.A))
-                    direction.X = -1;
-                if (Keyboard.Held(Keys.S))
-                    direction.Y = 1;
-                if (Keyboard.Held(Keys.D))
-                    direction.X= 1;
-                Vector2Extensions.SafeNormalize(ref direction);
-                return direction;
-            }
-        }
-
-        public Vector2 ArrowDirection
-        {
-            get
-            {
-                Vector2 direction = Vector2.Zero;
-                if (Keyboard.Held(Keys.Up))
-                    direction.Y = -1;
-                if (Keyboard.Held(Keys.Left))
-                    direction.X = -1;
-                if (Keyboard.Held(Keys.Down))
-                    direction.Y = 1;
-                if (Keyboard.Held(Keys.Right))
-                    direction.X = 1;
-                Vector2Extensions.SafeNormalize(ref direction);
-                return direction;
-            }
-        }
-
-        public Vector2 DpadDirection
-        {
-            get
-            {
-                Vector2 direction = Vector2.Zero;
-                if (Gamepad[1].Held(Buttons.DPadUp))
-                    direction.Y = -1;
-                if (Gamepad[1].Held(Buttons.DPadRight))
-                    direction.X = -1;
-                if (Gamepad[1].Held(Buttons.DPadDown))
-                    direction.Y = 1;
-                if (Gamepad[1].Held(Buttons.DPadRight))
-                    direction.X = 1;
-                Vector2Extensions.SafeNormalize(ref direction);
-                return direction;
-            }
-        }
-
-        public InputManager()
-        {
-            if (_instance != null)
-            {
-                throw new InvalidOperationException("InputManager already exists!");
-            }
-
-            _mouse = new MouseHelper();
-            _keyboard = new KeyboardHelper();
-
-            _gamepad = new GamePadHelper[MAX_GAMEPADS];
-            for(int i = 0; i < MAX_GAMEPADS; i++) 
-            {
-                _gamepad[i] = new GamePadHelper((PlayerIndex) i);
-            }
-
-            _instance = this;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            Keyboard.Update(gameTime);
-            Mouse.Update(gameTime);
-            for(int i = 0; i < 4; i++) 
-            {
-                Gamepad[i].Update(gameTime);
-            }
-        }
-    }
-}
+        //void UpdateXboxInput(float totalSeconds, KeyboardState[] keyboards)
+        //{
+        //    for (int i = 0; i < 4; i++)
+        //    {
+        //        if (PlayerInput[i].ControlInput != ControlInput.KeyboardMouse)
+        //            PlayerInput[i].UpdatePadState(totalSeconds, ref keyboards[(int)this.PlayerInput[i].ControlInput]);
+        //    }
+        //}
+	}
+ }

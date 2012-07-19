@@ -37,6 +37,22 @@ namespace Delta.UI
 #if DEBUG
             DebugScreen.InternalDraw(time, spriteBatch);
 #endif
+            if (FocusedScreen != null)
+                FocusedScreen.InternalFocusDraw(time, spriteBatch);
+        }
+
+        public override void Add(Screen item)
+        {
+            base.Add(item);
+            if (FocusedScreen == null)
+                FocusedScreen = item;
+        }
+
+        public override void Remove(Screen item)
+        {
+            if (FocusedScreen == item)
+                FocusedScreen = null;
+            base.Remove(item);
         }
 
 

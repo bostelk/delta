@@ -25,8 +25,10 @@ namespace Delta.UI
 
         public Color BackColor { get; set; }
         public EntityCollection<Control> Children { get; set; }
+        public bool IsFocused { get; internal set; }
 
         protected Vector2 RenderSize { get; set; }
+        protected internal Screen Screen { get; internal set; }
 
         public Control()
         {
@@ -35,6 +37,29 @@ namespace Delta.UI
         protected virtual void UpdateRenderSize()
         {
             RenderSize = _size;
+        }
+
+        public void Focus()
+        {
+            if (Screen == null)
+            {
+                IsFocused = false;
+                return;
+            }
+            IsFocused = true;
+            Screen.FocusedControl = this;
+        }
+
+        internal void InternalFocusDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            Draw(time, spriteBatch);
+        }
+
+        protected override bool CanDraw()
+        {
+            if (IsFocused)
+                return false;
+            return base.CanDraw();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)

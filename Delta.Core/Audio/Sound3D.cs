@@ -122,7 +122,7 @@ namespace Delta.Audio
         }
 
 
-        public bool Update(GameTime gameTime)
+        public bool Update(DeltaTime time)
         {
             if (_cue.IsStopped || _cue.IsDisposed)
             {

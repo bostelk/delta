@@ -92,7 +92,7 @@ namespace Delta.Audio
             return !_cue.IsStopped && !_cue.IsDisposed && !_cue.IsPaused;
         }
 
-        public bool Update(GameTime gameTime)
+        public bool Update(DeltaTime time)
         {
             if (_cue.IsStopped || _cue.IsDisposed)
             {

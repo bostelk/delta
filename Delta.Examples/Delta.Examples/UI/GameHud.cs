@@ -67,8 +67,8 @@ namespace Delta.Examples.Entities
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int)(60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(Alpha), true);
-            spriteBatch.DrawRectangle(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int)(60.0f * _rightFillPercent)), RightBarColor.SetAlpha(Alpha), true);
+            //spriteBatch.DrawRectangleOutline(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int)(60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(Alpha), true);
+            //spriteBatch.DrawRectangleOutline(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int)(60.0f * _rightFillPercent)), RightBarColor.SetAlpha(Alpha), true);
             spriteBatch.Draw(_healthBar, _leftPosition, Color.White.SetAlpha(Alpha));
             spriteBatch.Draw(_ammoBar, _rightPosition, Color.White.SetAlpha(Alpha));
             spriteBatch.DrawString(G.Font, (int)(_leftFillPercent * 100.0f) + "%", new Vector2(_leftPosition.X + 10, _leftPosition.Y + 2 + 30), Color.White.SetAlpha(Alpha), TextAlignment.Center);

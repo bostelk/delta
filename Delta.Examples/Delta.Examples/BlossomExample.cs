@@ -36,6 +36,7 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
+
             _map = Content.Load<Map>(@"Maps\Plains\3");
             G.World.Camera.BoundsEnabled = true;
             G.World.Camera.BoundedArea = new Rectangle(0, 0, _map.Width * _map.TileWidth, _map.Height * _map.TileHeight);
@@ -49,24 +50,24 @@ namespace Delta.Examples
             lblControls.Text.Append(CONTROLS);
             lblControls.Position = new Vector2(G.ScreenCenter.X, 0);
             lblControls.BackColor = Color.Gray;
-            lblControls.ForeColor = Color.DarkOrange;
+            lblControls.ForeColor = Color.White;
             G.UI.DebugScreen.Add(lblControls);
 
             base.LoadContent();
         }
 
-        protected override void Update(GameTime gameTime)
-        {
-            G.World.Camera.Position += G.Input.WasdDirection;
-            base.Update(gameTime);
-        }
+        //protected override void Update(GameTime gameTime)
+        //{
+        //    G.World.Camera.Position += G.Input.WasdDirection;
+        //    base.Update(gameTime);
+        //}
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
 
-            if (G.Input.Keyboard.Held(Keys.F1))
+            if (G.Input.Keyboard.IsDown(Keys.F1))
             {
                 Matrix view = G.World.Camera.View;
                 Matrix projection = G.World.Camera.Projection;

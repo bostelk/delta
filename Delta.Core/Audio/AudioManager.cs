@@ -359,7 +359,7 @@ namespace Delta.Audio
         {
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(DeltaTime time)
         {
             // don't complain if the audio engine isn't ready yet
             if (_audioEngine == null)
@@ -369,7 +369,7 @@ namespace Delta.Audio
 
             foreach (ISound sound in _sounds)
             {
-                if (!sound.Update(gameTime))
+                if (!sound.Update(time))
                 {
                     _soundsToRemove.Add(sound);
                 }
@@ -390,7 +390,7 @@ namespace Delta.Audio
                     {
                         _channelVolume[i] = MathHelper.SmoothStep(_channelVolume[i], _channelGoalVolume[i], _channelFadeElapsed[i] / _channelFadeDuration[i]);
                         _channelCategory[i].SetVolume(_channelVolume[i]);
-                        _channelFadeElapsed[i] = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        _channelFadeElapsed[i] = time.ElapsedSeconds;
                     }
                     else
                     {

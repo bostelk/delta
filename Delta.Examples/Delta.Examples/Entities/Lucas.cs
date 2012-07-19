@@ -64,31 +64,31 @@ namespace Delta.Examples.Entities
         {
             Velocity.X = MathHelper.SmoothStep(Velocity.X, 0, _decel);
             Velocity.Y = MathHelper.SmoothStep(Velocity.Y, 0, _decel);
-            if (G.Input.Keyboard.Held(Keys.Up))
+            if (G.Input.Keyboard.IsDown(Keys.Up))
             {
                 float speedx = (float)Math.Cos(_rotation) * _speed;
                 float speedy = (float)Math.Sin(_rotation) * _speed;
                 Velocity.Y = MathHelper.SmoothStep(Velocity.Y, speedy, _accel);
                 Velocity.X = MathHelper.SmoothStep(Velocity.X, speedx, _accel);
             }
-            if (G.Input.Keyboard.Held(Keys.Down))
+            if (G.Input.Keyboard.IsDown(Keys.Down))
             {
                 float speedx = (float)Math.Cos(_rotation) * -_speed;
                 float speedy = (float)Math.Sin(_rotation) * -_speed;
                 Velocity.Y = MathHelper.SmoothStep(Velocity.Y, speedy, _accel);
                 Velocity.X = MathHelper.SmoothStep(Velocity.X, speedx, _accel);
             }
-            if (G.Input.Keyboard.Held(Keys.Left))
+            if (G.Input.Keyboard.IsDown(Keys.Left))
             {
                 _rotation = MathHelper.WrapAngle(_rotation - 0.08f);
             }
-            if (G.Input.Keyboard.Held(Keys.Right))
+            if (G.Input.Keyboard.IsDown(Keys.Right))
             {
                 _rotation = MathHelper.WrapAngle(_rotation + 0.08f);
             }
             Position += Velocity * G.World.Time.ElapsedSeconds;
 
-            if (G.Input.Keyboard.JustPressed(Keys.Space) && !_isBoosting && G.World.Camera.Scale == NORMAL_ZOOM)
+            if (G.Input.Keyboard.IsPressed(Keys.Space) && !_isBoosting && G.World.Camera.Scale == NORMAL_ZOOM)
             {
                 G.World.Camera.Flash(Color.White);
                 G.World.Camera.Shake(10f, 0.5f, ShakeAxis.X | ShakeAxis.Y);
@@ -104,7 +104,7 @@ namespace Delta.Examples.Entities
                 HUD.Alpha = MathHelper.SmoothStep(1f, 0f, (NORMAL_ZOOM - G.World.Camera.Scale) / Math.Abs(BOOST_ZOOM - NORMAL_ZOOM));
                 _boostElapsed += G.World.Time.ElapsedSeconds;
                 _speed = BOOST_SPEED;
-                if (_boostElapsed > _boostDuration && !G.Input.Keyboard.Held(Keys.Space))
+                if (_boostElapsed > _boostDuration && !G.Input.Keyboard.IsDown(Keys.Space))
                 {
                     _speed = NORMAL_SPEED;
                     _boostElapsed = 0;
@@ -120,40 +120,40 @@ namespace Delta.Examples.Entities
             }
             else
             {
-                if (G.Input.Keyboard.Held(Keys.LeftControl) && !_isLeftCooldown) // charging
+                if (G.Input.Keyboard.IsDown(Keys.LeftControl) && !_isLeftCooldown) // charging
                 {
                     G.Audio.PlaySound("SFX_Charge", false);
                     G.Audio.SetSoundPitch("SFX_Charge", HUD.LeftFillPercent);
                     HUD.LeftFillPercent = MathHelper.Lerp(HUD.LeftFillPercent, 1, 0.01f);
                 }
-                else if (G.Input.Keyboard.JustReleased(Keys.LeftControl)) // fired
+                else if (G.Input.Keyboard.IsPressed(Keys.LeftControl)) // fired
                 {
                     G.Audio.StopSound("SFX_Charge");
                     G.Audio.PlaySound("SFX_Laser", true);
                     G.Audio.SetSoundVolume("SFX_Laser", HUD.LeftFillPercent);
                     _isLeftCooldown = true;
                 }
-                else if (!G.Input.Keyboard.Held(Keys.LeftControl)) // cooldown
+                else if (!G.Input.Keyboard.IsDown(Keys.LeftControl)) // cooldown
                 {
                     HUD.LeftFillPercent = MathHelper.SmoothStep(HUD.LeftFillPercent, 0, 0.1f);
                     if (HUD.LeftFillPercent < 0.3)
                         _isLeftCooldown = false;
                 }
 
-                if (G.Input.Keyboard.Held(Keys.RightControl) && !_isRightCooldown) // charging
+                if (G.Input.Keyboard.IsDown(Keys.RightControl) && !_isRightCooldown) // charging
                 {
                     G.Audio.PlaySound("SFX_Charge", false);
                     G.Audio.SetSoundPitch("SFX_Charge", HUD.RightFillPercent);
                     HUD.RightFillPercent = MathHelper.Lerp(HUD.RightFillPercent, 1, 0.01f);
                 }
-                else if (G.Input.Keyboard.JustReleased(Keys.RightControl)) // fired
+                else if (G.Input.Keyboard.IsReleased(Keys.RightControl)) // fired
                 {
                     G.Audio.StopSound("SFX_Charge");
                     G.Audio.PlaySound("SFX_Laser", true);
                     G.Audio.SetSoundVolume("SFX_Laser", HUD.RightFillPercent);
                     _isRightCooldown = true;
                 }
-                else if (!G.Input.Keyboard.Held(Keys.RightControl)) // cooldown
+                else if (!G.Input.Keyboard.IsDown(Keys.RightControl)) // cooldown
                 {
                     HUD.RightFillPercent = MathHelper.SmoothStep(HUD.RightFillPercent, 0, 0.1f);
                     if (HUD.RightFillPercent < 0.3)

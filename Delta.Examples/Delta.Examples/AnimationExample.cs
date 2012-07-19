@@ -53,32 +53,26 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            if (G.Input.Keyboard.JustPressed(Keys.Up))
-            {
-            }
-            if (G.Input.Keyboard.JustPressed(Keys.Down))
-            {
-            }
-            if (G.Input.Keyboard.JustPressed(Keys.Left))
+            if (G.Input.Keyboard.IsPressed(Keys.Left))
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
                 sprite.Position = G.ScreenCenter + sprite.Size * 2;
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Right))
+            if (G.Input.Keyboard.IsPressed(Keys.Right))
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
                 sprite.Position = G.ScreenCenter + sprite.Size * 2;
             }
-            if (G.Input.Keyboard.JustPressed(Keys.Space))
+            if (G.Input.Keyboard.IsPressed(Keys.Space))
             {
                 if (!sprite.IsAnimationPaused)
                     sprite.IsAnimationPaused = true;
                 else
                     sprite.IsAnimationPaused = false;
             }
-            if (G.Input.Keyboard.JustPressed(Keys.F1))
+            if (G.Input.Keyboard.IsPressed(Keys.F1))
             {
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);
             }

@@ -20,12 +20,12 @@ namespace Delta
             TimeScale = 1.0f;
         }
 
-        internal void Update(GameTime gameTime)
+        internal void Update()
         {
             if (!IsPaused)
             {
-                _time.IsRunningSlowly = gameTime.IsRunningSlowly;
-                _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
+                _time.IsRunningSlowly = G._time.IsRunningSlowly;
+                _time.ElapsedSeconds = G._time.ElapsedSeconds * TimeScale;
                 _time.TotalSeconds += _time.ElapsedSeconds;
                 Camera.Update(_time);
                 base.InternalUpdate(_time);

@@ -49,18 +49,18 @@ namespace Delta.Examples.Entities
 
         protected override void LightUpdate(DeltaTime time)
         {
-            Vector2 direction = G.Input.Mouse.Held(Delta.Input.MouseButton.Left) ? G.World.Camera.ToWorldPosition(G.Input.Mouse.Position) - Position : Vector2.Zero;
-            direction = G.Input.ArrowDirection;
-            Vector2Extensions.SafeNormalize(ref direction);
-            Velocity = ((G.Input.Keyboard.Held(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
+            //Vector2 direction = G.Input.Mouse.Held(Delta.Input.MouseButton.Left) ? G.World.Camera.ToWorldPosition(G.Input.Mouse.Position) - Position : Vector2.Zero;
+            //direction = G.Input.ArrowDirection;
+            //Vector2Extensions.SafeNormalize(ref direction);
+            //Velocity = ((G.Input.Keyboard.Held(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
             Position += Velocity * (float)time.ElapsedSeconds;
 
             // if boosting leave a motion trail
-            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.LeftShift))
-            {
-                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + (direction * -2 * time.ElapsedSeconds));
-                _trailTime = (float)time.TotalSeconds;
-            }
+            //if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
+            //{
+            //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + (direction * -2 * time.ElapsedSeconds));
+            //    _trailTime = (float)time.TotalSeconds;
+            //}
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(time);

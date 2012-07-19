@@ -69,7 +69,7 @@ namespace Delta.Examples
                 G.World.Add(trail);
                 _trailTime1 = G.World.Time.TotalSeconds;
             }
-            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.D1))
+            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.D1))
             {
                 TextureEntity trail = new TextureEntity(@"Graphics\Flower");
                 trail.Position = _flower.Position;
@@ -81,7 +81,7 @@ namespace Delta.Examples
                 G.World.Add(trail);
                 _trailTime = G.World.Time.TotalSeconds;
             }
-            else if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.Held(Keys.D2))
+            else if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.D2))
             {
                 TextureEntity trail = new TextureEntity(@"Graphics\Flower");
                 trail.Position = _flower.Position;
