@@ -15,7 +15,7 @@ namespace Delta.Extensions
 
         public static BlendState Parse(this BlendState blendState, string value)
         {
-            switch (value) {
+            switch (value.ToLower()) {
                 case "alpha":
                 case "alphablend":
                     return BlendState.AlphaBlend;

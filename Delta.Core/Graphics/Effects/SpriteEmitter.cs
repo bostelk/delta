@@ -151,24 +151,15 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            bool clearBatch = G.GraphicsDevice.BlendState == Blend;
-            if (clearBatch)
-            {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
-            }
-
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];
                 particle.Draw(time, spriteBatch);
             }
-
-            if (clearBatch)
-            {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
-            }
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             base.Draw(time, spriteBatch);
         }
 
