@@ -7,30 +7,47 @@ using Delta.Movement;
 using Microsoft.Xna.Framework;
 using Delta.Audio;
 using Delta.Entities;
+using Delta.UI.Controls;
 
 namespace Delta.Structures
 {
     public static class PoolManager
     {
+        static Label _infoLbl = new Label();
+
+        static PoolManager()
+        {
+            _infoLbl.AutoSize = true;
+            _infoLbl.Position = new Vector2(0, 50);
+            _infoLbl.BackColor = Color.Gray;
+            _infoLbl.ForeColor = Color.White;
+            _infoLbl.InternalLoadContent();
+        }
+
         public static void DebugDraw()
         {
-            string info = String.Format("SpritePool: {0}\n", Pool<SpriteEntity>.PerformanceInfo)
-                + String.Format("TransformerPool: {0}\n", Pool<Transformer>.PerformanceInfo)
-                + String.Format("TranslatePool: {0}\n", Pool<TranslateTransform>.PerformanceInfo)
-                + String.Format("RotatePool: {0}\n", Pool<RotateTransform>.PerformanceInfo)
-                + String.Format("ScalePool: {0}\n", Pool<ScaleTransform>.PerformanceInfo)
-                + String.Format("FadePool: {0}\n", Pool<FadeTransform>.PerformanceInfo)
-                + String.Format("FlickerPool: {0}\n", Pool<FlickerTransform>.PerformanceInfo)
-                + String.Format("BlinkPool: {0}\n", Pool<BlinkTransform>.PerformanceInfo)
-                + String.Format("Sound1DPool: {0}\n", Pool<Sound1D>.PerformanceInfo)
-                + String.Format("Sound3DPool: {0}\n", Pool<Sound3D>.PerformanceInfo)
-                + String.Format("TexturePool: {0}\n", Pool<TextureEntity>.PerformanceInfo)
-                + String.Format("SpriteEmitterPool: {0}\n", Pool<SpriteEmitter>.PerformanceInfo)
-                + String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo)
-                + String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo)
-                + String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo);
+            _infoLbl.Text.Clear();
+            _infoLbl.Text.Append(String.Format("SpritePool: {0}\n", Pool<SpriteEntity>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("TransformerPool: {0}\n", Pool<Transformer>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("TranslatePool: {0}\n", Pool<TranslateTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("RotatePool: {0}\n", Pool<RotateTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("ScalePool: {0}\n", Pool<ScaleTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("FadePool: {0}\n", Pool<FadeTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("FlickerPool: {0}\n", Pool<FlickerTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("BlinkPool: {0}\n", Pool<BlinkTransform>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("Sound1DPool: {0}\n", Pool<Sound1D>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("Sound3DPool: {0}\n", Pool<Sound3D>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("TexturePool: {0}\n", Pool<TextureEntity>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("SpriteEmitterPool: {0}\n", Pool<SpriteEmitter>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
+
+            // hack: otherwise text control isn't auto-sized.
+            _infoLbl.InternalLoadContent();
+
             G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, info, new Vector2(0, 100), Color.White);
+            _infoLbl.InternalDraw(G.UI.Time, G.SpriteBatch);
             G.SpriteBatch.End();
         }
     }
