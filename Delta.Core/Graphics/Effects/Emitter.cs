@@ -14,11 +14,14 @@ namespace Delta.Graphics
 {
     public abstract class Emitter : Entity
     {
+        [ContentSerializer]
         string _fadeInMethodString;
+        [ContentSerializer]
         string _fadeOutMethodString;
         Interpolation.InterpolationMethod _fadeInInterpolator;
         Interpolation.InterpolationMethod _fadeOutInterpolator;
 
+        [ContentSerializer]
         string _blendString;
         BlendState _blend;
 
@@ -78,7 +81,7 @@ namespace Delta.Graphics
             Quantity = 1;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
-            _blendString = "Additive";
+            _blendString = "AlphaBlend";
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -157,7 +160,7 @@ namespace Delta.Graphics
             FadeOutRange = Range.Empty;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
-            _blendString = "Additive";
+            _blendString = "AlphaBlend";
         }
 
         internal class Particle<T> : IRecyclable where T: Entity
