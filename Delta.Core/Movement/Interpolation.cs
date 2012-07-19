@@ -29,7 +29,7 @@ namespace Delta.Movement
 
         public static readonly InterpolationMethod EaseOutQuart = EaseOutQuartInterpolation;
 
-        public static readonly InterpolationMethod EaseInOutQuar = EaseInOutQuartInterpolation;
+        public static readonly InterpolationMethod EaseInOutQuart = EaseInOutQuartInterpolation;
 
         public static readonly InterpolationMethod EaseInQuint = EaseInQuintInterpolation;
 
@@ -60,6 +60,118 @@ namespace Delta.Movement
         public static readonly InterpolationMethod EaseOutBounce = EaseOutBounceInterpolation;
 
         public static readonly InterpolationMethod EaseInOutBounce = EaseInOutBounceInterpolation;
+
+        /// <summary>
+        /// Parse the value in the form of method follower by ease: method.ease. Ex: quad.in, quad.out, quad.inout.
+        /// </summary>
+        /// <param name="value">Interpolation method expressed as a string.</param>
+        /// <returns>Interpolation Method</returns>
+        public static InterpolationMethod Parse(string value)
+        {
+            string[] split = value.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+            if (split.Length <= 1) return Linear;
+            switch (split[0])
+            {
+                case "quad":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInQuad;
+                        case "out":
+                            return EaseOutQuad;
+                        case "inout":
+                            return EaseInOutQuad;
+                        default:
+                            return Linear;
+                    }
+                case "cubic":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInCubic;
+                        case "out":
+                            return EaseOutCubic;
+                        case "inout":
+                            return EaseInOutCubic;
+                        default:
+                            return Linear;
+                    }
+                case "quart":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInQuart;
+                        case "out":
+                            return EaseOutQuart;
+                        case "inout":
+                            return EaseInOutQuart;
+                        default:
+                            return Linear;
+                    }
+                case "quint":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInQuart;
+                        case "out":
+                            return EaseOutQuart;
+                        case "inout":
+                            return EaseInOutQuart;
+                        default:
+                            return Linear;
+                    }
+                case "sine":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInSine;
+                        case "out":
+                            return EaseOutSine;
+                        case "inout":
+                            return EaseInOutSine;
+                        default:
+                            return Linear;
+                    }
+                case "expo":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInExpo;
+                        case "out":
+                            return EaseOutExpo;
+                        case "inout":
+                            return EaseInOutExpo;
+                        default:
+                            return Linear;
+                    }
+                case "circle":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInCircle;
+                        case "out":
+                            return EaseOutCircle;
+                        case "inout":
+                            return EaseInOutCircle;
+                        default:
+                            return Linear;
+                    }
+                case "bounce":
+                    switch (split[1])
+                    {
+                        case "in":
+                            return EaseInBounce;
+                        case "out":
+                            return EaseOutBounce;
+                        case "inout":
+                            return EaseInOutBounce;
+                        default:
+                            return Linear;
+                    }
+                default:
+                    return Linear;
+            }
+        }
 
         /**
          * Linear interpolation (same as Mathf.Lerp)
@@ -277,8 +389,8 @@ namespace Delta.Movement
             return (end - start) / 2 * ((float)Math.Sqrt(1 - amount * amount) + 1) + start;
         }
 
-        const float coef1 = 1 / 2.75f;     const float coef2 = 2 / 2.75f;
-        const float coef3 = 2.5f / 2.75f;  const float coef4 = 1.5f / 2.75f;
+        const float coef1 = 1 / 2.75f; const float coef2 = 2 / 2.75f;
+        const float coef3 = 2.5f / 2.75f; const float coef4 = 1.5f / 2.75f;
         const float coef5 = 2.25f / 2.75f; const float coef6 = 2.625f / 2.75f;
 
         static float EaseOutBounceInterpolation(float start, float end, float amount)

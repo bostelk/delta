@@ -9,7 +9,7 @@
     <Frequency>0.600</Frequency>
     <Lifespan>range(5.5, 5.5)</Lifespan>
     <Quantity>2</Quantity>
-    <Angle>range(65,45)</Angle>
+    <Angle>range(45,65)</Angle>
     <Speed>range(10, 15)</Speed>
   </SmokeEmitter>
 </ObjectStyles>

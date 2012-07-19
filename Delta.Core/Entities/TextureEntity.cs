@@ -69,7 +69,7 @@ namespace Delta.Entities
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, null , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture, Position, null , Tint, Rotation, Origin * Size, Scale, SpriteEffects.None, 0);
             base.Draw(time, spriteBatch);
         }
 

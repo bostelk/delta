@@ -19,9 +19,9 @@ namespace Delta
 
         [ContentSerializer]
         public bool _fadeRandom { get; set; } // won't serialize fields? wtf. totally temp.
-        OverRange _fadeRange;
+        TimedRange _fadeRange;
         [ContentSerializer]
-        public OverRange FadeRange
+        public TimedRange FadeRange
         {
             get { return _fadeRange; }
             set
@@ -58,9 +58,9 @@ namespace Delta
             }
         }
 
-        OverRange _flickerRange;
+        TimedRange _flickerRange;
         [ContentSerializer]
-        public OverRange FlickerRange
+        public TimedRange FlickerRange
         {
             get { return _flickerRange; }
             set
@@ -76,9 +76,9 @@ namespace Delta
             }
         }
 
-        OverRange _blinkRange;
+        TimedRange _blinkRange;
         [ContentSerializer]
-        public OverRange BlinkRange
+        public TimedRange BlinkRange
         {
             get { return _blinkRange; }
             set
@@ -303,17 +303,17 @@ namespace Delta
                     Alpha = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "fade":
-                    _fadeRange = OverRange.Parse(value);
+                    _fadeRange = TimedRange.Parse(value);
                     return true;
                 case "faderandom":
-                    _fadeRange = OverRange.Parse(value);
+                    _fadeRange = TimedRange.Parse(value);
                     _fadeRandom = true;
                     return true;
                 case "flicker":
-                    _flickerRange = OverRange.Parse(value);
+                    _flickerRange = TimedRange.Parse(value);
                     return true;
                 case "blink":
-                    _blinkRange = OverRange.Parse(value);
+                    _blinkRange = TimedRange.Parse(value);
                     return true;
             }
             return base.ImportCustomValues(name, value);
