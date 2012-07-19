@@ -29,18 +29,18 @@ namespace Delta.Graphics
 
             public override void OnEmitted()
             {
-                Entity.Alpha = 0;
-                Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
+                //Entity.Alpha = 0;
+                //Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
                 base.OnEmitted();
             }
 
             public void Update(DeltaTime time)
             {
-                if (G.World.SecondsPast(_lastTrailTime + _trailInterval))
-                {
-                    Visuals.CreateTrail(Entity, Entity.Position);
-                    _lastTrailTime = time.TotalSeconds;
-                }
+                //if (G.World.SecondsPast(_lastTrailTime + _trailInterval))
+                //{
+                //    Visuals.CreateTrail(Entity, Entity.Position);
+                //    _lastTrailTime = time.TotalSeconds;
+                //}
 
                 Entity.InternalUpdate(time);
             }
@@ -78,7 +78,7 @@ namespace Delta.Graphics
         public float MinFrameInterval;
         public float MaxFrameInterval;
         public bool Explode;
-        public int ExplodeQuantity;
+        public int Quantity;
 
         static SpriteEmitter()
         {
@@ -108,6 +108,7 @@ namespace Delta.Graphics
             MaxAngle = 360;
             MinScale = 1;
             MaxScale = 1;
+            Quantity = 1;
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -162,7 +163,10 @@ namespace Delta.Graphics
                     return true;
                 case "explode":
                     Explode = true;
-                    ExplodeQuantity = int.Parse(value, CultureInfo.InvariantCulture);
+                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
+                    return true;
+                case "quantity":
+                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
             return base.ImportCustomValues(name, value);
@@ -174,13 +178,14 @@ namespace Delta.Graphics
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = G.Random.Between(MinLifespan, MaxLifespan);
             newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
-            newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
+            newParticle.Velocity.Y *= -1;
             newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
-            newParticle.Entity.Play(_animationName, PlayOption.Random);
-            newParticle.Entity.Pause();
+            newParticle.Entity.Play(_animationName);
+            //`newParticle.Entity.Pause();
             newParticle.OnEmitted();
             _particles.Add(newParticle);
         }
@@ -189,10 +194,7 @@ namespace Delta.Graphics
         {
             if (G.World.SecondsPast(_lastEmitTime + Frequency))
             {
-                if (Explode)
-                    for (int i = 0; i < ExplodeQuantity; i++)
-                        Emit();
-                else
+                for (int i = 0; i < Quantity; i++)
                     Emit();
                 _lastEmitTime = time.TotalSeconds;
             }
@@ -253,7 +255,7 @@ namespace Delta.Graphics
             MinScale = 1;
             MaxScale = 1;
             Explode = false;
-            ExplodeQuantity = 0;
+            Quantity = 1;
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];

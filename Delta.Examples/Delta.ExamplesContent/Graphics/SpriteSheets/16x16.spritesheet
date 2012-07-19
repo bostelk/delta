@@ -94,4 +94,14 @@
       <FrameDuration>0.2</FrameDuration>
     </Animation>
   </Image>
+  <Image>
+    <Path>Graphics\AnimatedMisc\particle-SmokePuffs-31x20-7.png</Path>
+    <FrameSize>31,20</FrameSize>
+    <Animation>
+      <Name>smokepuffs</Name>
+      <Frames>0,1,2,3,4,5,6,7</Frames>
+      <FrameDuration>0.5</FrameDuration>
+    </Animation>
+  </Image>
+
 </SpriteSheet>

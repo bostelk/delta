@@ -3,4 +3,13 @@
   <Torch Type="Delta.Graphics.SpriteEntity">
     <Tint>FFFFFF</Tint>
   </Torch>
+  <SmokeEmitter Type="Delta.Graphics.SpriteEmitter">
+    <SpriteSheet>Graphics\SpriteSheets\16x16</SpriteSheet>
+    <Animation>smokepuffs</Animation>
+    <Frequency>0.600</Frequency>
+    <Lifespan>range(5.5, 5.5)</Lifespan>
+    <Quantity>2</Quantity>
+    <Angle>range(65,45)</Angle>
+    <Speed>range(10, 15)</Speed>
+  </SmokeEmitter>
 </ObjectStyles>

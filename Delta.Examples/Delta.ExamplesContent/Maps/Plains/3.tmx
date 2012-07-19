@@ -134,5 +134,9 @@
     <property name="Speed" value="range(10, 25)"/>
    </properties>
   </object>
+  <object type="SmokeEmitter" x="227" y="350" width="5" height="1"/>
+  <object type="SmokeEmitter" x="211" y="511" width="5" height="1"/>
+  <object type="SmokeEmitter" x="498" y="527" width="5" height="1"/>
+  <object type="SmokeEmitter" x="499" y="431" width="5" height="1"/>
  </objectgroup>
 </map>
