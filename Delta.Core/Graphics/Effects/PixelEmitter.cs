@@ -27,7 +27,7 @@ namespace Delta.Graphics
             public override void OnEmitted()
             {
                 Entity.Alpha = 0;
-                Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic);
+                Transformer.ThisEntity(Entity).FadeTo(1, Life / 2, Interpolation.EaseInCubic);
                 base.OnEmitted();
             }
         }
@@ -97,37 +97,37 @@ namespace Delta.Graphics
                     Frequency = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "speed":
-                    OverRange speedRange = OverRange.Parse(value);
+                    Range speedRange = Range.Parse(value);
                     MinSpeed = speedRange.Lower;
                     MaxSpeed = speedRange.Upper;
                     return true;
                 case "lifespan":
-                    OverRange lifespanRange = OverRange.Parse(value);
+                    Range lifespanRange = Range.Parse(value);
                     MinLifespan = lifespanRange.Lower;
                     MaxLifespan = lifespanRange.Upper;
                     return true;
                 case "rotation":
-                    OverRange rotationRange = OverRange.Parse(value);
+                    Range rotationRange = Range.Parse(value);
                     MinRotation = rotationRange.Lower.ToRadians();
                     MaxRotation = rotationRange.Upper.ToRadians();
                     return true;
                 case "angle":
-                    OverRange angleRange = OverRange.Parse(value);
+                    Range angleRange = Range.Parse(value);
                     MinAngle = angleRange.Lower.ToRadians();
                     MaxAngle = angleRange.Upper.ToRadians();
                     return true;
                 case "scale":
-                    OverRange scaleRange = OverRange.Parse(value);
+                    Range scaleRange = Range.Parse(value);
                     MinScale = scaleRange.Lower;
                     MaxScale = scaleRange.Upper;
                     return true;
                 case "acceleration":
-                    OverRange accelerationRange = OverRange.Parse(value);
+                    Range accelerationRange = Range.Parse(value);
                     MinAcceleration = accelerationRange.Lower;
                     MaxAcceleration = accelerationRange.Upper;
                     return true;
                 case "frameinterval":
-                    OverRange frameIntervalRange = OverRange.Parse(value);
+                    Range frameIntervalRange = Range.Parse(value);
                     MinFrameInterval = frameIntervalRange.Lower;
                     MaxFrameInterval = frameIntervalRange.Upper;
                     return true;
@@ -143,7 +143,7 @@ namespace Delta.Graphics
         {
             PixelParticle newParticle = _particlePool.Fetch();
             newParticle.Entity = TextureEntity.Create();
-            newParticle.Lifespan = G.Random.Between(MinLifespan, MaxLifespan);
+            newParticle.Life = G.Random.Between(MinLifespan, MaxLifespan);
             newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
             newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
             newParticle.Entity.Tint = Color;
@@ -171,7 +171,7 @@ namespace Delta.Graphics
             {
                 PixelParticle particle = _particles[i];
                 particle.Entity.InternalUpdate(time);
-                particle.Lifespan -= time.ElapsedSeconds;
+                particle.Life -= time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
                 particle.Entity.Position += particle.Velocity * time.ElapsedSeconds;
                 particle.Entity.Rotation += particle.AngularVelocity * time.ElapsedSeconds;

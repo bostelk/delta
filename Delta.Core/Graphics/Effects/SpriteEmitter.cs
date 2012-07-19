@@ -29,19 +29,15 @@ namespace Delta.Graphics
 
             public override void OnEmitted()
             {
-                //Entity.Alpha = 0;
-                //Transformer.ThisEntity(Entity).FadeTo(1, Lifespan / 2, Interpolation.EaseInCubic).FadeTo(0, Lifespan / 2, Interpolation.EaseOutCubic);
                 base.OnEmitted();
             }
 
             public void Update(DeltaTime time)
             {
-                //if (G.World.SecondsPast(_lastTrailTime + _trailInterval))
-                //{
-                //    Visuals.CreateTrail(Entity, Entity.Position);
-                //    _lastTrailTime = time.TotalSeconds;
-                //}
-
+                if (FadeInPercent > 0)
+                    Entity.Alpha = Interpolation.EaseInCubic(0, 1, Life / (FadeInPercent * Lifespan)); 
+                if (FadeOutPercent > 0)
+                    Entity.Alpha = Entity.Alpha - Interpolation.EaseOutCubic(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
                 Entity.InternalUpdate(time);
             }
 
@@ -61,24 +57,6 @@ namespace Delta.Graphics
         [ContentSerializer]
         string _animationName;
         float _lastEmitTime;
-
-        public float Frequency;
-        public float MaxLifespan;
-        public float MinLifespan;
-        public float MinSpeed;
-        public float MaxSpeed;
-        public float MinAcceleration;
-        public float MaxAcceleration;
-        public float MinRotation;
-        public float MaxRotation;
-        public float MinAngle;
-        public float MaxAngle;
-        public float MinScale;
-        public float MaxScale;
-        public float MinFrameInterval;
-        public float MaxFrameInterval;
-        public bool Explode;
-        public int Quantity;
 
         static SpriteEmitter()
         {
@@ -104,10 +82,8 @@ namespace Delta.Graphics
         public SpriteEmitter()
         {
             _particles = new List<SpriteParticle>(100);
-            MinAngle = 0;
-            MaxAngle = 360;
-            MinScale = 1;
-            MaxScale = 1;
+            AngleRange = new Range(0, 360);
+            ScaleRange = new Range(1, 1);
             Quantity = 1;
         }
 
@@ -123,51 +99,6 @@ namespace Delta.Graphics
                 case "animationname":
                     _animationName = value;
                     return true;
-                case "frequency":
-                    Frequency = float.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
-                case "speed":
-                    OverRange speedRange = OverRange.Parse(value);
-                    MinSpeed = speedRange.Lower;
-                    MaxSpeed = speedRange.Upper;
-                    return true;
-                case "lifespan":
-                    OverRange lifespanRange = OverRange.Parse(value);
-                    MinLifespan = lifespanRange.Lower;
-                    MaxLifespan = lifespanRange.Upper;
-                    return true;
-                case "rotation":
-                    OverRange rotationRange = OverRange.Parse(value);
-                    MinRotation = rotationRange.Lower.ToRadians();
-                    MaxRotation = rotationRange.Upper.ToRadians();
-                    return true;
-                case "angle":
-                    OverRange angleRange = OverRange.Parse(value);
-                    MinAngle = angleRange.Lower.ToRadians();
-                    MaxAngle = angleRange.Upper.ToRadians();
-                    return true;
-                case "scale":
-                    OverRange scaleRange = OverRange.Parse(value);
-                    MinScale = scaleRange.Lower;
-                    MaxScale = scaleRange.Upper;
-                    return true;
-                case "acceleration":
-                    OverRange accelerationRange = OverRange.Parse(value);
-                    MinAcceleration = accelerationRange.Lower;
-                    MaxAcceleration = accelerationRange.Upper;
-                    return true;
-                case "frameinterval":
-                    OverRange frameIntervalRange = OverRange.Parse(value);
-                    MinFrameInterval = frameIntervalRange.Lower;
-                    MaxFrameInterval = frameIntervalRange.Upper;
-                    return true;
-                case "explode":
-                    Explode = true;
-                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
-                case "quantity":
-                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
             }
             return base.ImportCustomValues(name, value);
         }
@@ -176,11 +107,13 @@ namespace Delta.Graphics
         {
             SpriteParticle newParticle = _particlePool.Fetch();
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
-            newParticle.Lifespan = G.Random.Between(MinLifespan, MaxLifespan);
-            newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
+            newParticle.Lifespan = LifespanRange.RandomWithin();
+            newParticle.AngularVelocity = RotationRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
             newParticle.Velocity.Y *= -1;
-            newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
+            newParticle.FadeInPercent = FadeInRange.RandomWithin();
+            newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
+            newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
@@ -203,7 +136,7 @@ namespace Delta.Graphics
             {
                 SpriteParticle particle = _particles[i];
                 particle.Update(time);
-                particle.Lifespan -= time.ElapsedSeconds;
+                particle.Life += time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
                 particle.Entity.Position += particle.Velocity * time.ElapsedSeconds;
                 particle.Entity.Rotation += particle.AngularVelocity * time.ElapsedSeconds;
@@ -244,18 +177,16 @@ namespace Delta.Graphics
             _animationName = String.Empty;
             _lastEmitTime = 0;
             Frequency = 0;
-            MaxLifespan = 0;
-            MinLifespan = 0;
-            MinSpeed = 0;
-            MaxSpeed = 0;
-            MinRotation = 0;
-            MaxRotation = 0;
-            MinAngle = 0;
-            MaxAngle = 360;
-            MinScale = 1;
-            MaxScale = 1;
             Explode = false;
             Quantity = 1;
+            LifespanRange = Range.Empty;
+            SpeedRange = Range.Empty;
+            RotationRange = Range.Empty;
+            AngleRange = Range.Empty;
+            ScaleRange = new Range(1, 1);
+            FadeInRange = Range.Empty;
+            FadeOutRange = Range.Empty;
+
             for (int i = 0; i < _particles.Count; i++)
             {
                 SpriteParticle particle = _particles[i];
