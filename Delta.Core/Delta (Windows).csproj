@@ -110,6 +110,7 @@
     <Compile Include="Interfaces\IEntityCollection.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IEntityManager.cs" />
+    <Compile Include="Structures\TimedRange.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="TEMP\CardinalDirection.cs" />
@@ -157,7 +158,7 @@
     <Compile Include="Interfaces\IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Collections\HashSet.cs" />
-    <Compile Include="Structures\OverRange.cs" />
+    <Compile Include="Structures\Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
