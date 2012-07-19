@@ -102,6 +102,7 @@
     <Compile Include="Entities\EntitySpawner.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityHelper.cs" />
+    <Compile Include="Extensions\BlendStateExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Graphics\Effects\PixelEmitter.cs" />
