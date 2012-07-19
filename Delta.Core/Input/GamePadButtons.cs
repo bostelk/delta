@@ -19,7 +19,7 @@ namespace Delta.Input
         public Button DpadRight { get; internal set; }
         public Button DpadUp { get; internal set; }
         public Button DpadDown { get; internal set; }
-        public Button LeftShoulder { get; internal set; }
-        public Button RightShoulder { get; internal set; }
+        public Button LeftBumper { get; internal set; }
+        public Button RightBumper { get; internal set; }
     }
 }

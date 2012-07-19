@@ -12,56 +12,35 @@ namespace Delta.Input.States
         Button _middle; 
         Button _x1; 
         Button _x2;
-		int x;
-        int y;
-        int scroll;
-        int scrollDelta;
+		int _x;
+        int _y;
+        int _xDelta;
+        int _yDelta;
+        int _scroll;
+        int _scrollDelta;
 
-		/// <summary>
-		/// Horizontal position of the mouse cursor.
-		/// </summary>
-		public int X { get { return x; } }
-		/// <summary>
-		/// Vertical position of the mouse cursor.
-		/// </summary>
-		public int Y { get { return y; } }
-		/// <summary>
-		/// <see cref="Button"/> state of the left mouse button.
-		/// </summary>
+		public int X { get { return _x; } }
+		public int Y { get { return _y; } }
+        public int XDelta { get { return _xDelta; } }
+        public int YDelta { get { return _yDelta; } }
 		public Button LeftButton { get { return _left; } }
-		/// <summary>
-		/// <see cref="Button"/> state of the right mouse button.
-		/// </summary>
 		public Button RightButton { get { return _right; } }
-		/// <summary>
-		/// <see cref="Button"/> state of the middle mouse button.
-		/// </summary>
 		public Button MiddleButton { get { return _middle; } }
-		/// <summary>
-		/// <see cref="Button"/> state of the first X mouse button.
-		/// </summary>
 		public Button XButton1 { get { return _x2; } }
-		/// <summary>
-		/// <see cref="Button"/> state of the second X mouse button.
-		/// </summary>
 		public Button XButton2 { get { return _x1; } }
-		/// <summary>
-		/// Gets the total mouse scroll movement.
-		/// </summary>
-		public int ScrollWheelValue { get { return scroll; } }
-		/// <summary>
-		/// Gets the delta mouse scroll movement.
-		/// </summary>
-		public int ScrollWheelDelta { get { return scrollDelta; } }
+		public int ScrollWheelValue { get { return _scroll; } }
+		public int ScrollWheelDelta { get { return _scrollDelta; } }
 		
 		internal void Update(DeltaTime time, ref MouseState mouseState)
 		{
 			state = mouseState;
 
-			x = state.X;
-			y = state.Y;
-			scrollDelta = state.ScrollWheelValue - this.scroll;
-			scroll = state.ScrollWheelValue;
+            _xDelta = state.X - _x;
+            _yDelta = state.Y - _y;
+			_x = state.X;
+			_y = state.Y;
+			_scrollDelta = state.ScrollWheelValue - _scroll;
+			_scroll = state.ScrollWheelValue;
 
 			_left.SetState(state.LeftButton == ButtonState.Pressed, time);
 			_right.SetState(state.RightButton == ButtonState.Pressed, time);

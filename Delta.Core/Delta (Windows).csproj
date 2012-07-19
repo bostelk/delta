@@ -110,10 +110,6 @@
     <Compile Include="Graphics\Effects\Emitter.cs" />
     <Compile Include="Entities\TextureEntity.cs" />
     <Compile Include="Input\Button.cs" />
-    <Compile Include="Input\ControlInput.cs" />
-    <Compile Include="Input\Mapping\KeyboardMouseControlMap.cs" />
-    <Compile Include="Input\Mapping\KeyboardMouseControlMapping.cs" />
-    <Compile Include="Input\Mapping\GamePadMapper.cs" />
     <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Input\PlayerInputCollection.cs" />
     <Compile Include="Input\States\GamePadInputState.cs" />
@@ -194,7 +190,6 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
-    <Compile Include="Input\GamePadHelper.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputMap.cs" />
     <Compile Include="Input\MouseHelper.cs" />
