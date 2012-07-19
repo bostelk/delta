@@ -57,17 +57,17 @@ namespace Delta
 #endif
 
         public G(int screenWidth, int screenHeight)
-            : this(screenWidth, screenHeight, false, false)
+            : this(screenWidth, screenHeight, true)
         {
         }
 
-        public G(int screenWidth, int screenHeight, bool vSync, bool isFixedTimeStep)
+        public G(int screenWidth, int screenHeight, bool vSync)
             : base()
         {
             _instance = this;
             Content = base.Content;
             Content.RootDirectory = "Content";
-            IsFixedTimeStep = isFixedTimeStep;
+            IsFixedTimeStep = true;
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.PreferredBackBufferWidth = screenWidth;
             _graphicsDeviceManager.PreferredBackBufferHeight = screenHeight;
