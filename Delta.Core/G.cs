@@ -13,6 +13,10 @@ using Delta.Graphics;
 using Delta.Graphics.Effects;
 using Delta.Collision;
 
+#if WINDOWS
+using System.Diagnostics;
+#endif
+
 namespace Delta
 {
     public class G : Game
@@ -29,7 +33,7 @@ namespace Delta
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
-        public static UIManager UI { get; private set; }
+        public static ScreenManager UI { get; private set; }
 
         public new static GraphicsDevice GraphicsDevice { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
@@ -43,6 +47,10 @@ namespace Delta
 
         public static DeltaEffect DeltaEffect { get; private set; }
         public static SimpleEffect SimpleEffect { get; private set; }
+
+#if WINDOWS
+        public static Process Process { get; set; }
+#endif
 
         public G(int screenWidth, int screenHeight)
             : base()
@@ -60,13 +68,16 @@ namespace Delta
             Window.AllowUserResizing = true;
 #endif
             World = new World();
-            UI = new UIManager();
+            UI = new ScreenManager();
             Random = new Random();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
             Collision = new CollisionEngine();
             ScreenArea = new Rectangle(0, 0, screenWidth, screenHeight);
             ScreenCenter = ScreenArea.Center.ToVector2();
+#if WINDOWS
+            Process = Process.GetCurrentProcess();
+#endif
         }
 
         protected override void LoadContent()

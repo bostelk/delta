@@ -26,7 +26,6 @@ namespace Delta.Examples
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;
-            UI.Add(new UI.PerformanceMetrics());
         }
 
         protected override void Update(GameTime gameTime)
