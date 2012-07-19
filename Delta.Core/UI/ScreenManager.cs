@@ -10,14 +10,35 @@ namespace Delta.UI
 {
     public class ScreenManager : EntityManager<Screen>
     {
+#if DEBUG
+        public DebugScreen DebugScreen { get; internal set; }
+#endif
         public Screen FocusedScreen { get; internal set; }
 
         public ScreenManager()
             : base()
         {
 #if DEBUG
-            Add(new DebugScreen());
+            DebugScreen = new DebugScreen();
 #endif
         }
+
+        protected override void LightUpdate(DeltaTime time)
+        {
+            base.LightUpdate(time);
+#if DEBUG
+            DebugScreen.InternalUpdate(time);
+#endif
+        }
+
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            base.Draw(time, spriteBatch);
+#if DEBUG
+            DebugScreen.InternalDraw(time, spriteBatch);
+#endif
+        }
+
+
     }
 }

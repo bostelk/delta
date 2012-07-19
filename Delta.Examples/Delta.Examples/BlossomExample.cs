@@ -14,6 +14,7 @@ using Delta.Collision.Geometry;
 using Delta.Graphics;
 using Delta.Tiled;
 using Delta.Structures;
+using Delta.UI.Controls;
 
 namespace Delta.Examples
 {
@@ -42,6 +43,15 @@ namespace Delta.Examples
 
             G.World.Add(_map);
             G.World.Camera.Follow(_player = Entity.Get("Lily") as Entity);
+
+            Label lblControls = new Label();
+            lblControls.AutoSize = true;
+            lblControls.Text.Append(CONTROLS);
+            lblControls.Position = new Vector2(G.ScreenCenter.X, 0);
+            lblControls.BackColor = Color.Gray;
+            lblControls.ForeColor = Color.DarkOrange;
+            G.UI.DebugScreen.Add(lblControls);
+
             base.LoadContent();
         }
 
@@ -62,11 +72,6 @@ namespace Delta.Examples
                 Matrix projection = G.World.Camera.Projection;
                 G.Collision.DrawDebug(ref view, ref projection);
             }
-
-            G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
-            G.SpriteBatch.End();
-
             PoolManager.DebugDraw();
             //G.World.DebugDraw();
         }

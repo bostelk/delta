@@ -20,7 +20,7 @@ namespace Delta
             TimeScale = 1.0f;
         }
 
-        internal virtual void Update(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
             if (!IsPaused)
             {
@@ -32,7 +32,7 @@ namespace Delta
             }
         }
 
-        internal virtual void Draw()
+        internal void Draw()
         {
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
             base.InternalDraw(_time, G.SpriteBatch);

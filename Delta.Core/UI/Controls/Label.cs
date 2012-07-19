@@ -25,8 +25,9 @@ namespace Delta.UI.Controls
     {
         Vector2 _textPosition = Vector2.Zero;
         Vector2 _textSize = Vector2.Zero;
+        StringBuilder _text = new StringBuilder();
 
-        public StringBuilder Text { get; set; }
+        public StringBuilder Text { get { return _text; } }
         public SpriteFont Font { get; set; }
         public Color ForeColor { get; set; }
         public bool AutoSize { get; set; }
@@ -37,7 +38,6 @@ namespace Delta.UI.Controls
             : base()
         {
             AutoSize = true;
-            Text = new StringBuilder();
             ForeColor = Color.White;
         }
 
@@ -45,6 +45,9 @@ namespace Delta.UI.Controls
         {
             base.LoadContent();
             Font = G.Font;
+            UpdateTextSize();
+            UpdateRenderSize();
+            UpdateTextPosition();
         }
 
         protected override void UpdateRenderSize()
@@ -91,7 +94,7 @@ namespace Delta.UI.Controls
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
-            spriteBatch.DrawString(Font, Text, _textPosition, ForeColor, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
     }
 }
