@@ -29,12 +29,14 @@ namespace Delta.UI.Controls
         public StringBuilder Text { get; set; }
         public SpriteFont Font { get; set; }
         public Color ForeColor { get; set; }
+        public bool AutoSize { get; set; }
         public HorizontalTextAlignment HorizontalTextAlignment { get; set; }
         public VerticalTextAlignment VerticalTextAlignment { get; set; }
 
         public Label()
             : base()
         {
+            AutoSize = true;
             Text = new StringBuilder();
             ForeColor = Color.White;
         }
@@ -45,32 +47,51 @@ namespace Delta.UI.Controls
             Font = G.Font;
         }
 
+        protected override void UpdateRenderSize()
+        {
+            if (AutoSize)
+                RenderSize = _textSize;
+            else
+                base.UpdateRenderSize();
+        }
+
         protected virtual void UpdateTextSize()
         {
             _textSize = Font.MeasureString(Text);
+            if (AutoSize)
+                Size = _textSize;
         }
 
-        public void UpdateTextPosition()
+        protected virtual void UpdateTextPosition()
         {
-            //horizontal alignment
-            if ((HorizontalTextAlignment & HorizontalTextAlignment.Left) != 0)
-                _textPosition.X = Position.X;
-            else if ((HorizontalTextAlignment & HorizontalTextAlignment.Center) != 0)
-                _textPosition.X = Position.X + -_textSize.X * 0.5f;
-            else if ((HorizontalTextAlignment & HorizontalTextAlignment.Right) != 0)
-                _textPosition.X = Position.X + -_textSize.X;
-            //vertical alignment
-            if ((VerticalTextAlignment & VerticalTextAlignment.Top) != 0)
-                _textPosition.Y = Position.Y;
-            else if ((VerticalTextAlignment & VerticalTextAlignment.Center) != 0)
-                _textPosition.X = Position.Y + -_textSize.Y * 0.5f;
-            else if ((VerticalTextAlignment & VerticalTextAlignment.Bottom) != 0)
-                _textPosition.X = Position.Y + -_textSize.Y;
+            _textPosition = Position;
+            if (!AutoSize)
+            {
+                //horizontal alignment
+                _textPosition.X = 0;
+                if (Size.X >= _textSize.X)
+                {
+                    if ((HorizontalTextAlignment & HorizontalTextAlignment.Center) != 0)
+                        _textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
+                    else if ((HorizontalTextAlignment & HorizontalTextAlignment.Right) != 0)
+                        _textPosition.X += Size.X - _textSize.X;
+                }
+                //vertical alignment
+                _textPosition.Y = 0;
+                if (Size.Y >= _textSize.Y)
+                {
+                    if ((VerticalTextAlignment & VerticalTextAlignment.Center) != 0)
+                        _textPosition.Y += (Size.Y * 0.5f) - (_textSize.Y * 0.5f);
+                    else if ((VerticalTextAlignment & VerticalTextAlignment.Bottom) != 0)
+                        _textPosition.Y += Size.Y - _textSize.Y;
+                }
+            }
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(Font, Text, _textPosition, ForeColor);
+            base.Draw(time, spriteBatch);
+            spriteBatch.DrawString(Font, Text, _textPosition, ForeColor, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
     }
 }

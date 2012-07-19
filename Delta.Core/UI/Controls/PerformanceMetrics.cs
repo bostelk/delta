@@ -56,6 +56,9 @@ namespace Delta.UI
                 Text.Concat((float)(_managedMemory / 1024f / 1024f), 2);
                 Text.Append(" mB");
             }
+            UpdateTextSize();
+            UpdateRenderSize();
+            UpdateTextPosition();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
