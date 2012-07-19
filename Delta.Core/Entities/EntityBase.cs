@@ -142,6 +142,20 @@ namespace Delta
         {
         }
 
+        void IEntity.LoadContent()
+        {
+            InternalLoadContent();
+        }
+
+        void InternalLoadContent()
+        {
+            if (!IsLoaded)
+            {
+                IsLoaded = true;
+                LoadContent();
+            }
+        }
+
         public virtual void LoadContent()
         {
         }
@@ -161,11 +175,7 @@ namespace Delta
                 IsLateInitialized = true;
                 LateInitialize();
             }
-            if (!IsLoaded)
-            {
-                IsLoaded = true;
-                LoadContent();
-            }
+            InternalLoadContent();
             if (CanUpdate())
             {
                 LightUpdate(time);

@@ -1,23 +1,41 @@
 ﻿using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.UI
 {
- 
-        public class Control : Entity
+    public class Control : Entity
+    {
+
+        public EntityCollection<Control> Children { get; set; }
+        public StringBuilder Text { get; set; }
+        public object Tag { get; set; }
+
+        public SpriteFont Font { get; set; }
+        public Color ForeColor { get; set; }
+
+        public Control()
         {
-
-            public EntityCollection<Control> Children { get; set; }
-            public string Text { get; set; }
-            public object Tag { get; set;}
-
-            protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
-            {
-                spriteBatch.DrawRectangle(RenderArea, Color.White, true);
-            }
-
+            Text = new StringBuilder();
+            ForeColor = Color.White;
         }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+            Font = G.Font;
+        }
+
+        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            base.Draw(time, spriteBatch);
+            //spriteBatch.DrawRectangle(RenderArea, Color.White, true);
+            if (Font != null)
+                spriteBatch.DrawString(Font, Text, Position, ForeColor);
+        }
+
+    }
 }
             //Color _color = UndefinedColor;
             //private Color textColor = UndefinedColor;

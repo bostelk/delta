@@ -103,6 +103,7 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityHelper.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Graphics\Effects\PixelEmitter.cs" />
     <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
     <Compile Include="Graphics\Effects\Emitter.cs" />
@@ -162,12 +163,14 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
-    <Compile Include="UI\PerformanceMetrics.cs" />
+    <Compile Include="UI\Screens\DebugScreen.cs" />
+    <Compile Include="UI\Controls\PerformanceMetrics.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
-    <Compile Include="UI\UIManager.cs" />
+    <Compile Include="UI\Screen.cs" />
+    <Compile Include="UI\ScreenManager.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="G.cs" />

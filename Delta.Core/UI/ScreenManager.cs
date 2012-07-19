@@ -8,13 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.UI
 {
-    public class UIManager : EntityManager<Control>
+    public class ScreenManager : EntityManager<Screen>
     {
-        public Control FocusedControl { get; set; }
+        public Screen FocusedScreen { get; internal set; }
 
-        public UIManager()
+        public ScreenManager()
             : base()
         {
+#if DEBUG
+            Add(new DebugScreen());
+#endif
         }
     }
 }
