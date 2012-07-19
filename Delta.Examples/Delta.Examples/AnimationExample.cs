@@ -98,6 +98,6 @@ namespace Delta.Examples
             base.Draw(gameTime);
         }
 
-        public string InfoText { get { return sprite.ToString(); } }
+        public string InfoText { get { return string.Empty; } }
     }
 }

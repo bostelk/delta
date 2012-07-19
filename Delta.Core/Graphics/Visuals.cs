@@ -21,7 +21,7 @@ namespace Delta.Graphics
         public static void Create(string spriteSheet, string animation, Vector2 position)
         {
             SpriteEntity se = SpriteEntity.Create(spriteSheet);
-            se.LoadContent();
+            se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation, PlayOption.AutoRemove);
@@ -38,7 +38,7 @@ namespace Delta.Graphics
         public static void CreateTrail(string spriteSheet, string animation, Vector2 position) 
         {
             SpriteEntity se = SpriteEntity.Create(spriteSheet);
-            se.LoadContent();
+            se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
@@ -58,7 +58,7 @@ namespace Delta.Graphics
         public static void CreateTrail(SpriteEntity sprite, Vector2 position)
         {
             SpriteFrameEntity sfe = SpriteFrameEntity.Create(sprite);
-            sfe.LoadContent();
+            sfe.InternalLoadContent();
             sfe.Position = position;
             sfe.Origin = new Vector2(0.5f, 0.5f);
             sfe.Alpha = 0.5f;
@@ -84,7 +84,7 @@ namespace Delta.Graphics
             for(int i = 0; i < 4; i++)
             {
                 SpriteEntity see = se[i] = SpriteEntity.Create(spriteSheet);
-                see.LoadContent();
+                see.InternalLoadContent();
                 see.Position = position;
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation, PlayOption.Random);

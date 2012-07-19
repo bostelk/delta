@@ -22,7 +22,7 @@ namespace Delta.Examples.Entities
             _filepath = filepath;
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _texture = G.Content.Load<Texture2D>(_filepath);
 

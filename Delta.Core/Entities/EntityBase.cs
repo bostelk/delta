@@ -147,7 +147,7 @@ namespace Delta
             InternalLoadContent();
         }
 
-        void InternalLoadContent()
+        internal void InternalLoadContent()
         {
             if (!IsLoaded)
             {
@@ -156,7 +156,7 @@ namespace Delta
             }
         }
 
-        public virtual void LoadContent()
+        protected virtual void LoadContent()
         {
         }
 

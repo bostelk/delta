@@ -178,7 +178,7 @@ namespace Delta.Graphics
         }
 #endif
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);

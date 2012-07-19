@@ -19,7 +19,7 @@ namespace Delta.Examples.Entities
         {
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _texture = G.Content.Load<Texture2D>(@"Graphics\Atom");
             base.LoadContent();

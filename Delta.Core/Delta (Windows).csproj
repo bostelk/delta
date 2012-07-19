@@ -163,6 +163,7 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="UI\Controls\Label.cs" />
     <Compile Include="UI\Screens\DebugScreen.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
@@ -172,7 +173,6 @@
     <Compile Include="UI\Screen.cs" />
     <Compile Include="UI\ScreenManager.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
     <Compile Include="Input\GamePadHelper.cs" />

@@ -183,7 +183,7 @@ namespace Delta.Graphics
             newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
-            newParticle.Entity.LoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
+            newParticle.Entity.InternalLoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.Entity.Play(_animationName);
             //`newParticle.Entity.Pause();
             newParticle.OnEmitted();
