@@ -27,7 +27,7 @@ namespace Delta.Graphics
 
         public float Frequency;
         public bool Explode;
-        public int Quantity;
+        public Range QuantityRange;
         public Range LifespanRange;
         public Range VelocityMagnitudeRange;
         public Range AccelerationMagnitudeRange;
@@ -79,7 +79,7 @@ namespace Delta.Graphics
         {
             VelocityAngleRange = new Range(0, 360);
             ScaleRange = new Range(1);
-            Quantity = 1;
+            QuantityRange = new Range(1, 1);
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
             _blendString = "AlphaBlend";
@@ -135,10 +135,10 @@ namespace Delta.Graphics
                     return true;
                 case "explode":
                     Explode = true;
-                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
+                    QuantityRange = Range.TryParse(value);
                     return true;
                 case "quantity":
-                    Quantity = int.Parse(value, CultureInfo.InvariantCulture);
+                    QuantityRange = Range.TryParse(value);
                     return true;
                 case "fadein":
                     FadeInRange = Range.TryParse(value);
@@ -164,7 +164,7 @@ namespace Delta.Graphics
             base.Recycle();
             Frequency = 0;
             Explode = false;
-            Quantity = 1;
+            QuantityRange = new Range(1, 1);
             LifespanRange = Range.Empty;
             RotationRange = Range.Empty;
             VelocityMagnitudeRange = Range.Empty;

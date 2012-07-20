@@ -111,25 +111,22 @@
   </data>
  </layer>
  <objectgroup name="Delta.AboveGround" width="40" height="40">
-  <object type="Delta.Graphics.SpriteEmitter" x="272" y="192" width="80" height="16">
+  <object type="Delta.Graphics.SpriteEmitter" x="85" y="377" width="7" height="6">
    <properties>
-    <property name="VelocityAngle" value="range(90, 90)"/>
     <property name="Animation" value="flowermagic"/>
-    <property name="Frequency" value=".150"/>
-    <property name="Lifespan" value="range(1, 5.5)"/>
-    <property name="Rotation" value="range(5, 8.5)"/>
-    <property name="Velocity" value="range(10, 25)"/>
-    <property name="SpriteSheet" value="Graphics\SpriteSheets\16x16"/>
-    <property name="FadeIn" value="range(0.3, 0.5)"/>
-    <property name="FadeOut" value="range(0.3, 0.5)"/>
-    <property name="FadeInMethod" value="cubic.in"/>
-    <property name="FadeOutMethod" value="cubic.out"/>
-    <property name="Tint" value="#ffffff"/>
     <property name="Blend" value="Additive"/>
+    <property name="FadeIn" value="range(0.2, 0.3)"/>
+    <property name="FadeOut" value="range(0.3, 0.5)"/>
+    <property name="FadeOutMethod" value="cubic.out"/>
+    <property name="Frequency" value=".800"/>
+    <property name="Lifespan" value="range(1, 5.5)"/>
+    <property name="Quantity" value="range(0, 2)"/>
+    <property name="Rotation" value="range(5, 8.5)"/>
+    <property name="SpriteSheet" value="Graphics\SpriteSheets\16x16"/>
     <property name="TimeScale" value="range(0.6, 1)"/>
-    <property name="Random" value="true"/>
-    <property name="AccelAngle" value="120"/>
-    <property name="Accel" value="22"/>
+    <property name="Tint" value="#ffffff"/>
+    <property name="Velocity" value="range(10, 15)"/>
+    <property name="VelocityAngle" value="range(90, 90)"/>
    </properties>
   </object>
   <object type="Delta.Examples.Entities.Barrel" x="352" y="256" width="16" height="16"/>

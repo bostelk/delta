@@ -123,7 +123,8 @@ namespace Delta.Graphics
         {
             if (G.World.SecondsPast(_lastEmitTime + Frequency))
             {
-                for (int i = 0; i < Quantity; i++)
+                int quantity = (int) (QuantityRange.RandomWithin() + .5);
+                for (int i = 0; i < quantity; i++)
                     Emit();
                 _lastEmitTime = time.TotalSeconds;
             }
