@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Delta
 {
@@ -142,6 +144,66 @@ namespace Delta
         {
             stringBuilder.Concat(value, decimalPlaces, pad, ms_default_pad_char);
             return stringBuilder;
+        }
+
+        static StringBuilder _singleCharacterStringBuilder = new StringBuilder(" ");
+        static char[] _newLineChars = { '\n' };
+        static Vector2 MeasureCharacter(this SpriteFont font, char character)
+        {
+            _singleCharacterStringBuilder[0] = character;
+            return font.MeasureString(_singleCharacterStringBuilder);
+        }
+
+        public static void WordWrap(this StringBuilder stringBuilder, ref StringBuilder target, SpriteFont font, Vector2 maximumSize, Vector2 scale)
+        {
+            int lastWhiteSpaceIndex = 0;
+            float currentLineWidth = 0;
+            float lengthSinceLastWhiteSpace = 0;
+            Vector2 characterSize = Vector2.Zero;
+            int lines = 0;
+            for (int i = 0; i < stringBuilder.Length; i++)
+            {
+                characterSize = font.MeasureCharacter(stringBuilder[i]) * scale;
+                currentLineWidth += characterSize.X;
+                lengthSinceLastWhiteSpace += characterSize.X;
+                if ((stringBuilder[i] != '\r') && (stringBuilder[i] != '\n'))
+                {
+                    if (currentLineWidth > maximumSize.X)
+                    {
+                        if ((lines + 1) * font.LineSpacing > maximumSize.Y)
+                            return;
+                        lines++;
+                        if (char.IsWhiteSpace(stringBuilder[i]))
+                        {
+                            target.Insert(i, _newLineChars);
+                            currentLineWidth = 0;
+                            lengthSinceLastWhiteSpace = 0;
+                            continue;
+                        }
+                        else
+                        {
+                            target.Insert(lastWhiteSpaceIndex, _newLineChars);
+                            target.Remove(lastWhiteSpaceIndex + _newLineChars.Length, 1);
+                            currentLineWidth = lengthSinceLastWhiteSpace;
+                            lengthSinceLastWhiteSpace = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (char.IsWhiteSpace(stringBuilder[i]))
+                        {
+                            lastWhiteSpaceIndex = target.Length;
+                            lengthSinceLastWhiteSpace = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    lengthSinceLastWhiteSpace = 0;
+                    currentLineWidth = 0;
+                }
+                target.Append(stringBuilder[i]);
+            }
         }
     }
 }

@@ -17,7 +17,6 @@ namespace Delta.Structures
 
         static PoolManager()
         {
-            _infoLbl.AutoSize = true;
             _infoLbl.Position = new Vector2(0, 50);
             _infoLbl.BackColor = Color.Gray;
             _infoLbl.ForeColor = Color.White;
@@ -42,7 +41,7 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
-
+            _infoLbl.Invalidate();
             G.SpriteBatch.Begin();
             _infoLbl.InternalDraw(G.UI.Time, G.SpriteBatch);
             G.SpriteBatch.End();

@@ -34,11 +34,6 @@ namespace Delta.UI
         {
         }
 
-        protected virtual void UpdateRenderSize()
-        {
-            RenderSize = _size;
-        }
-
         public void Focus()
         {
             if (Screen == null)
@@ -48,6 +43,23 @@ namespace Delta.UI
             }
             IsFocused = true;
             Screen.FocusedControl = this;
+            Invalidate();
+        }
+
+        public void Invalidate()
+        {
+            NeedsHeavyUpdate = true;
+        }
+
+        protected internal override void HeavyUpdate(DeltaTime time)
+        {
+            base.HeavyUpdate(time);
+            OnInvalidate();
+        }
+
+        protected virtual void UpdateRenderSize()
+        {
+            RenderSize = _size;
         }
 
         internal void InternalFocusDraw(DeltaTime time, SpriteBatch spriteBatch)
@@ -68,11 +80,15 @@ namespace Delta.UI
             spriteBatch.Draw(G.PixelTexture, Position, null, BackColor, 0, Vector2.Zero, RenderSize, SpriteEffects.None, 0);
         }
 
-        protected virtual void OnSizeChanged()
+        protected virtual void OnInvalidate()
         {
             UpdateRenderSize();
         }
 
+        protected virtual void OnSizeChanged()
+        {
+            Invalidate();
+        }
     }
 }
             //Color _color = UndefinedColor;
