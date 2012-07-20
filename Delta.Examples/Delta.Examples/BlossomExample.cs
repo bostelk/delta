@@ -56,11 +56,11 @@ namespace Delta.Examples
             base.LoadContent();
         }
 
-        //protected override void Update(GameTime gameTime)
-        //{
-        //    G.World.Camera.Position += G.Input.WasdDirection;
-        //    base.Update(gameTime);
-        //}
+        protected override void Update(GameTime gameTime)
+        {
+            G.World.Camera.Position += G.Input.WasdDirection;
+            base.Update(gameTime);
+        }
 
         protected override void Draw(GameTime gameTime)
         {

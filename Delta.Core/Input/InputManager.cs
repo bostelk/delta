@@ -16,6 +16,60 @@ namespace Delta.Input
 #endif
         public PlayerInputCollection PlayerInput { get; private set; }
 
+        public Vector2 WasdDirection
+        {
+            get
+            {
+                Vector2 direction = Vector2.Zero;
+                if (Keyboard.IsDown(Keys.W))
+                    direction.Y = -1;
+                if (Keyboard.IsDown(Keys.A))
+                    direction.X = -1;
+                if (Keyboard.IsDown(Keys.S))
+                    direction.Y = 1;
+                if (Keyboard.IsDown(Keys.D))
+                    direction.X = 1;
+                Vector2Extensions.SafeNormalize(ref direction);
+                return direction;
+            }
+        }
+
+        public Vector2 ArrowDirection
+        {
+            get
+            {
+                Vector2 direction = Vector2.Zero;
+                if (Keyboard.IsDown(Keys.Up))
+                    direction.Y = -1;
+                if (Keyboard.IsDown(Keys.Left))
+                    direction.X = -1;
+                if (Keyboard.IsDown(Keys.Down))
+                    direction.Y = 1;
+                if (Keyboard.IsDown(Keys.Right))
+                    direction.X = 1;
+                Vector2Extensions.SafeNormalize(ref direction);
+                return direction;
+            }
+        }
+
+        public Vector2 DpadDirection
+        {
+            get
+            {
+                Vector2 direction = Vector2.Zero;
+                if (PlayerInput[0].GamePad.Buttons.DpadUp.IsDown)
+                    direction.Y = -1;
+                if (PlayerInput[0].GamePad.Buttons.DpadRight.IsDown)
+                    direction.X = -1;
+                if (PlayerInput[0].GamePad.Buttons.DpadDown.IsDown)
+                    direction.Y = 1;
+                if (PlayerInput[0].GamePad.Buttons.DpadRight.IsDown)
+                    direction.X = 1;
+                Vector2Extensions.SafeNormalize(ref direction);
+                return direction;
+            }
+        }
+
 		internal InputManager()
 		{
             for (int i = 0; i < 4; i++)
