@@ -29,10 +29,11 @@ namespace Delta.Graphics
         public bool Explode;
         public int Quantity;
         public Range LifespanRange;
-        public Range SpeedRange;
-        public Range AccelerationRange;
+        public Range VelocityMagnitudeRange;
+        public Range AccelerationMagnitudeRange;
         public Range RotationRange;
-        public Range AngleRange;
+        public Range VelocityAngleRange;
+        public Range AccelerationAngleRange;
         public Range ScaleRange;
         public Range FrameIntervalRange;
         public Range FadeInRange;
@@ -76,7 +77,7 @@ namespace Delta.Graphics
 
         public Emitter()
         {
-            AngleRange = new Range(0, 360);
+            VelocityAngleRange = new Range(0, 360);
             ScaleRange = new Range(1);
             Quantity = 1;
             _fadeInMethodString = "Linear";
@@ -91,33 +92,46 @@ namespace Delta.Graphics
                 case "frequency":
                     Frequency = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
-                case "speed":
-                    SpeedRange = Range.Parse(value);
-                    return true;
                 case "lifespan":
-                    LifespanRange = Range.Parse(value);
+                    LifespanRange = Range.TryParse(value);
                     return true;
                 case "rotation":
                 case "rotationspeed":
-                    RotationRange = Range.Parse(value);
+                    RotationRange = Range.TryParse(value);
                     RotationRange.Lower = RotationRange.Lower.ToRadians();
                     RotationRange.Upper = RotationRange.Upper.ToRadians();
                     return true;
-                case "angle":
-                    AngleRange = Range.Parse(value);
-                    AngleRange.Lower = AngleRange.Lower.ToRadians();
-                    AngleRange.Upper = AngleRange.Upper.ToRadians();
+                case "v":
+                case "vel":
+                case "velocity":
+                    VelocityMagnitudeRange = Range.TryParse(value);
+                    return true;
+                case "vangle":
+                case "velangle":
+                case "velocityangle":
+                    VelocityAngleRange = Range.TryParse(value);
+                    VelocityAngleRange.Lower = VelocityAngleRange.Lower.ToRadians();
+                    VelocityAngleRange.Upper = VelocityAngleRange.Upper.ToRadians();
+                    return true;
+                case "a":
+                case "accel":
+                case "acceleration":
+                    AccelerationMagnitudeRange = Range.TryParse(value);
+                    return true;
+                case "aangle":
+                case "accelangle":
+                case "accelerationangle":
+                    AccelerationAngleRange = Range.TryParse(value);
+                    AccelerationAngleRange.Lower = AccelerationAngleRange.Lower.ToRadians();
+                    AccelerationAngleRange.Upper = AccelerationAngleRange.Upper.ToRadians();
                     return true;
                 case "scale":
                 case "size":
-                    ScaleRange = Range.Parse(value);
-                    return true;
-                case "acceleration":
-                    AccelerationRange = Range.Parse(value);
+                    ScaleRange = Range.TryParse(value);
                     return true;
                 case "frameinterval":
                 case "frameduration":
-                    FrameIntervalRange = Range.Parse(value);
+                    FrameIntervalRange = Range.TryParse(value);
                     return true;
                 case "explode":
                     Explode = true;
@@ -127,10 +141,10 @@ namespace Delta.Graphics
                     Quantity = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "fadein":
-                    FadeInRange = Range.Parse(value);
+                    FadeInRange = Range.TryParse(value);
                     return true;
                 case "fadeout":
-                    FadeOutRange = Range.Parse(value);
+                    FadeOutRange = Range.TryParse(value);
                     return true;
                 case "fadeinmethod":
                     _fadeInMethodString = value;
@@ -152,9 +166,11 @@ namespace Delta.Graphics
             Explode = false;
             Quantity = 1;
             LifespanRange = Range.Empty;
-            SpeedRange = Range.Empty;
             RotationRange = Range.Empty;
-            AngleRange = Range.Empty;
+            VelocityMagnitudeRange = Range.Empty;
+            VelocityAngleRange = Range.Empty;
+            AccelerationMagnitudeRange = Range.Empty;
+            AccelerationAngleRange = Range.Empty;
             ScaleRange = new Range(1, 1);
             FadeInRange = Range.Empty;
             FadeOutRange = Range.Empty;
@@ -201,6 +217,15 @@ namespace Delta.Graphics
                 FadeInPercent = 0;
             }
 
+            public virtual void Update(DeltaTime time)
+            {
+                if (FadeInPercent > 0)
+                    Entity.Alpha = Emitter.FadeInInterpolator(0, 1, Life / (FadeInPercent * Lifespan)); 
+                if (FadeOutPercent > 0)
+                    Entity.Alpha = Entity.Alpha - Emitter.FadeOutInterpolator(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
+            }
+
+            public virtual void Draw(DeltaTime time, SpriteBatch spriteBatch) { }
             public virtual void OnEmitted() { }
 
         }

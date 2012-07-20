@@ -17,31 +17,25 @@ namespace Delta.Graphics
 
         internal class SpriteParticle : Particle<SpriteEntity>
         {
+
+            public override void Update(DeltaTime time)
+            {
+                Entity.InternalUpdate(time);
+                base.Update(time);
+            }
+
+            public override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+            {
+                Entity.InternalDraw(time, spriteBatch);
+                base.Draw(time, spriteBatch);
+            }
+
             public override void Recycle()
             {
                 base.Recycle();
-
                 _particlePool.Release(this);
             }
 
-            public override void OnEmitted()
-            {
-                base.OnEmitted();
-            }
-
-            public void Update(DeltaTime time)
-            {
-                if (FadeInPercent > 0)
-                    Entity.Alpha = Emitter.FadeInInterpolator(0, 1, Life / (FadeInPercent * Lifespan)); 
-                if (FadeOutPercent > 0)
-                    Entity.Alpha = Entity.Alpha - Emitter.FadeOutInterpolator(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
-                Entity.InternalUpdate(time);
-            }
-
-            public void Draw(DeltaTime time, SpriteBatch spriteBatch)
-            {
-                Entity.InternalDraw(time, spriteBatch);
-            }
         }
 
         static Pool<SpriteEmitter> _pool;
@@ -98,7 +92,7 @@ namespace Delta.Graphics
                     _animationName = value;
                     return true;
                 case "timescale":
-                    TimeScaleRange = Range.Parse(value);
+                    TimeScaleRange = Range.TryParse(value);
                     return true;
                 case "looped":
                     SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.Looped : SpriteOptions;
@@ -117,8 +111,9 @@ namespace Delta.Graphics
             newParticle.Emitter = this;
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
+            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower, VelocityAngleRange.Upper) * VelocityMagnitudeRange.RandomWithin();
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Tint = Tint;
@@ -177,12 +172,6 @@ namespace Delta.Graphics
             base.Draw(time, spriteBatch);
         }
 
-        protected internal override void OnRemoved()
-        {
-            Recycle();
-            base.OnRemoved();
-        }
-
         public override void Recycle()
         {
             base.Recycle();
@@ -198,6 +187,12 @@ namespace Delta.Graphics
             }
 
             _pool.Release(this);
+        }
+
+        protected internal override void OnRemoved()
+        {
+            Recycle();
+            base.OnRemoved();
         }
 
     }
