@@ -27,6 +27,8 @@ namespace Delta.UI.Controls
         Vector2 _textSize = Vector2.Zero;
         StringBuilder _text = new StringBuilder();
 
+        int _previousTextHash;
+
         public StringBuilder Text { get { return _text; } }
         public SpriteFont Font { get; set; }
         public Color ForeColor { get; set; }
@@ -91,8 +93,18 @@ namespace Delta.UI.Controls
             }
         }
 
+        protected virtual void OnTextChanged() {
+            UpdateTextSize();
+            UpdateRenderSize();
+            UpdateTextPosition();
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
+            if (Text.ToString().GetHashCode() != _previousTextHash)
+                OnTextChanged();
+            _previousTextHash = Text.GetHashCode();
+
             base.Draw(time, spriteBatch);
             spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }
