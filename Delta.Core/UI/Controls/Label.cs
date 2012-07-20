@@ -79,7 +79,10 @@ namespace Delta.UI.Controls
         {
             _renderText.Clear();
             if (AutoSize || !_isWordWrapped)
-                _renderText.Append(Text);
+            {
+                for (int i = 0; i < Text.Length; i++)
+                    _renderText.Append(Text[i]);
+            }
             Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
         }
 

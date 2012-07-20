@@ -198,7 +198,6 @@ namespace Delta
 
         protected internal virtual void HeavyUpdate(DeltaTime time)
         {
-            NeedsHeavyUpdate = false;
         }
 
         void IEntity.Draw(DeltaTime time, SpriteBatch spriteBatch)
