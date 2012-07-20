@@ -43,9 +43,6 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
 
-            // hack: otherwise text control isn't auto-sized.
-            _infoLbl.InternalLoadContent();
-
             G.SpriteBatch.Begin();
             _infoLbl.InternalDraw(G.UI.Time, G.SpriteBatch);
             G.SpriteBatch.End();
