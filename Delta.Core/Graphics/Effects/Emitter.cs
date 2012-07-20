@@ -201,6 +201,15 @@ namespace Delta.Graphics
                 FadeInPercent = 0;
             }
 
+            public virtual void Update(DeltaTime time)
+            {
+                if (FadeInPercent > 0)
+                    Entity.Alpha = Emitter.FadeInInterpolator(0, 1, Life / (FadeInPercent * Lifespan)); 
+                if (FadeOutPercent > 0)
+                    Entity.Alpha = Entity.Alpha - Emitter.FadeOutInterpolator(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
+            }
+
+            public virtual void Draw(DeltaTime time, SpriteBatch spriteBatch) { }
             public virtual void OnEmitted() { }
 
         }

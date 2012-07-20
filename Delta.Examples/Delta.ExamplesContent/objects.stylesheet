@@ -12,4 +12,14 @@
     <Angle>range(45,65)</Angle>
     <Speed>range(10, 15)</Speed>
   </SmokeEmitter>
+  <SmokeDustEmitter Type="Delta.Graphics.PixelEmitter">
+    <Color>#5E5958, #2E2C2B</Color>
+    <Frequency>0.600</Frequency>
+    <Lifespan>range(0.8, 3)</Lifespan>
+    <Quantity>1</Quantity>
+    <Angle>range(45,55)</Angle>
+    <Speed>range(8, 12)</Speed>
+    <FadeOut>range(0.1, 0.2)</FadeOut>
+    <Scale>range(0.5, 1)</Scale>
+  </SmokeDustEmitter>
 </ObjectStyles>

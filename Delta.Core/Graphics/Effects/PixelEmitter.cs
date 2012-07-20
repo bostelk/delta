@@ -15,20 +15,39 @@ namespace Delta.Graphics
     public class PixelEmitter : Emitter
     {
 
-        internal class PixelParticle : Particle<TextureEntity>
+        internal class PixelEntity : Entity 
+        {
+            static Pool<PixelEntity> _pool;
+
+            static PixelEntity()
+            {
+                _pool = new Pool<PixelEntity>(100);
+            }
+
+            public static PixelEntity Create()
+            {
+                return _pool.Fetch();
+            }
+
+            public override void Recycle()
+            {
+                base.Recycle();
+                _pool.Release(this);
+            }
+        }
+
+        internal class PixelParticle : Particle<PixelEntity>
         {
             public override void Recycle()
             {
                 base.Recycle();
-
                 _particlePool.Release(this);
             }
 
-            public override void OnEmitted()
+            public override void Draw(DeltaTime time, SpriteBatch spriteBatch)
             {
-                Entity.Alpha = 0;
-                Transformer.ThisEntity(Entity).FadeTo(1, Life / 2, Interpolation.EaseInCubic);
-                base.OnEmitted();
+                spriteBatch.Draw(G.PixelTexture, Entity.Position, null , Entity.Tint, Entity.Rotation, Entity.Origin * Entity.Size, Entity.Scale, SpriteEffects.None, 0);
+                base.Draw(time, spriteBatch);
             }
         }
 
@@ -39,24 +58,7 @@ namespace Delta.Graphics
         
         float _lastEmitTime;
 
-        public float Frequency;
-        public Color Color;
-        public float MaxLifespan;
-        public float MinLifespan;
-        public float MinSpeed;
-        public float MaxSpeed;
-        public float MinAcceleration;
-        public float MaxAcceleration;
-        public float MinRotation;
-        public float MaxRotation;
-        public float MinAngle;
-        public float MaxAngle;
-        public float MinScale;
-        public float MaxScale;
-        public float MinFrameInterval;
-        public float MaxFrameInterval;
-        public bool Explode;
-        public int ExplodeQuantity;
+        public List<Color> Colors;
 
         static PixelEmitter()
         {
@@ -80,10 +82,7 @@ namespace Delta.Graphics
         public PixelEmitter()
         {
             _particles = new List<PixelParticle>(100);
-            MinAngle = 0;
-            MaxAngle = 360;
-            MinScale = 1;
-            MaxScale = 1;
+            Colors = new List<Color>();
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -91,49 +90,11 @@ namespace Delta.Graphics
             switch (name)
             {
                 case "color":
-                    Color = value.ToColor();
-                    return true;
-                case "frequency":
-                    Frequency = float.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
-                case "speed":
-                    Range speedRange = Range.Parse(value);
-                    MinSpeed = speedRange.Lower;
-                    MaxSpeed = speedRange.Upper;
-                    return true;
-                case "lifespan":
-                    Range lifespanRange = Range.Parse(value);
-                    MinLifespan = lifespanRange.Lower;
-                    MaxLifespan = lifespanRange.Upper;
-                    return true;
-                case "rotation":
-                    Range rotationRange = Range.Parse(value);
-                    MinRotation = rotationRange.Lower.ToRadians();
-                    MaxRotation = rotationRange.Upper.ToRadians();
-                    return true;
-                case "angle":
-                    Range angleRange = Range.Parse(value);
-                    MinAngle = angleRange.Lower.ToRadians();
-                    MaxAngle = angleRange.Upper.ToRadians();
-                    return true;
-                case "scale":
-                    Range scaleRange = Range.Parse(value);
-                    MinScale = scaleRange.Lower;
-                    MaxScale = scaleRange.Upper;
-                    return true;
-                case "acceleration":
-                    Range accelerationRange = Range.Parse(value);
-                    MinAcceleration = accelerationRange.Lower;
-                    MaxAcceleration = accelerationRange.Upper;
-                    return true;
-                case "frameinterval":
-                    Range frameIntervalRange = Range.Parse(value);
-                    MinFrameInterval = frameIntervalRange.Lower;
-                    MaxFrameInterval = frameIntervalRange.Upper;
-                    return true;
-                case "explode":
-                    Explode = true;
-                    ExplodeQuantity = int.Parse(value, CultureInfo.InvariantCulture);
+                case "colors":
+                    string[] split = value.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach(string item in split) {
+                        Colors.Add(item.ToColor());
+                    }
                     return true;
             }
             return base.ImportCustomValues(name, value);
@@ -142,15 +103,17 @@ namespace Delta.Graphics
         public void Emit()
         {
             PixelParticle newParticle = _particlePool.Fetch();
-            newParticle.Entity = TextureEntity.Create();
-            newParticle.Life = G.Random.Between(MinLifespan, MaxLifespan);
-            newParticle.AngularVelocity = G.Random.Between(MinRotation, MaxRotation);
-            newParticle.Velocity = -Vector2Extensions.DirectionBetween(MinAngle, MaxAngle) * G.Random.Between(MinSpeed, MaxSpeed);
-            newParticle.Entity.Tint = Color;
-            newParticle.Entity.Scale = G.Random.Between(new Vector2(MinScale), new Vector2(MaxScale));
+            newParticle.Emitter = this;
+            newParticle.Lifespan = LifespanRange.RandomWithin();
+            newParticle.AngularVelocity = RotationRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
+            newParticle.FadeInPercent = FadeInRange.RandomWithin();
+            newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
+            newParticle.Entity = PixelEntity.Create();
+            newParticle.Entity.Tint = Colors[G.Random.Next(Colors.Count)];
+            newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
-            newParticle.Entity.InternalLoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.OnEmitted();
             _particles.Add(newParticle);
         }
@@ -159,10 +122,7 @@ namespace Delta.Graphics
         {
             if (G.World.SecondsPast(_lastEmitTime + Frequency))
             {
-                if (Explode)
-                    for (int i = 0; i < ExplodeQuantity; i++)
-                        Emit();
-                else
+                for (int i = 0; i < Quantity; i++)
                     Emit();
                 _lastEmitTime = time.TotalSeconds;
             }
@@ -170,8 +130,8 @@ namespace Delta.Graphics
             for (int i = 0; i < _particles.Count; i++)
             {
                 PixelParticle particle = _particles[i];
-                particle.Entity.InternalUpdate(time);
-                particle.Life -= time.ElapsedSeconds;
+                particle.Update(time);
+                particle.Life += time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
                 particle.Entity.Position += particle.Velocity * time.ElapsedSeconds;
                 particle.Entity.Rotation += particle.AngularVelocity * time.ElapsedSeconds;
@@ -191,37 +151,23 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             for (int i = 0; i < _particles.Count; i++)
             {
                 PixelParticle particle = _particles[i];
-                particle.Entity.InternalDraw(time, spriteBatch);
+                particle.Draw(time, spriteBatch);
             }
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             base.Draw(time, spriteBatch);
-        }
-
-        protected internal override void OnRemoved()
-        {
-            Recycle();
-            base.OnRemoved();
         }
 
         public override void Recycle()
         {
             base.Recycle();
             _lastEmitTime = 0;
-            Frequency = 0;
-            MaxLifespan = 0;
-            MinLifespan = 0;
-            MinSpeed = 0;
-            MaxSpeed = 0;
-            MinRotation = 0;
-            MaxRotation = 0;
-            MinAngle = 0;
-            MaxAngle = 360;
-            MinScale = 1;
-            MaxScale = 1;
-            Explode = false;
-            ExplodeQuantity = 0;
+
             for (int i = 0; i < _particles.Count; i++)
             {
                 PixelParticle particle = _particles[i];
@@ -229,6 +175,12 @@ namespace Delta.Graphics
             }
 
             _pool.Release(this);
+        }
+
+        protected internal override void OnRemoved()
+        {
+            Recycle();
+            base.OnRemoved();
         }
 
     }
