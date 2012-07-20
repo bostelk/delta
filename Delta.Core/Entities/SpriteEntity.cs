@@ -23,9 +23,9 @@ namespace Delta.Graphics
         /// Restarts the animation if it is already playing.
         /// </summary>
         Restart = 1 << 3,
-        ///// <summary>
-        ///// Remove the animation once it has finished animating.
-        ///// </summary>
+        /// <summary>
+        /// Remove the animation once it has finished animating.
+        /// </summary>
         RemoveWhenFinished = 1 << 3,
     }
 

@@ -5,7 +5,7 @@ namespace Delta.Input.States
 {
     public sealed class KeyState
     {
-        readonly Button[] _buttons;
+        Button[] _buttons;
 
         internal KeyState(Button[] buttons)
         {

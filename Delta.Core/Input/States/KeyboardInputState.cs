@@ -169,9 +169,19 @@ namespace Delta.Input.States
             return _buttons[(int)key];
         }
 
+        public bool IsDown(Keys key, float duration)
+        {
+            return _buttons[(int)key] && _buttons[(int)key].DownDuration >= duration;
+        }
+
         public bool IsUp(Keys key)
         {
             return !_buttons[(int)key];
+        }
+
+        public bool IsUp(Keys key, float duration)
+        {
+            return !_buttons[(int)key] && _buttons[(int)key].UpDuration >= duration;
         }
 
         public bool IsPressed(Keys key)
@@ -183,11 +193,6 @@ namespace Delta.Input.States
         {
             return _buttons[(int)key].IsReleased;
         }
-
-        //public Button GetKey(Keys key)
-        //{
-        //    return _buttons[(int)key];
-        //}
 
         internal void Update(DeltaTime time, ref KeyboardState keyboardState)
         {
