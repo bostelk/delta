@@ -67,6 +67,8 @@ namespace Delta.Graphics
         public bool IsOutlined { get; set; }
         [ContentSerializerIgnore]
         public Color OutlineColor { get; set; }
+        [ContentSerializerIgnore]
+        public float TimeScale = 1f;
 
         static SpriteEntity()
         {
@@ -192,7 +194,7 @@ namespace Delta.Graphics
 
         protected internal virtual void UpdateAnimationFrame(DeltaTime time)
         {
-            _frameDurationTimer -= time.ElapsedSeconds;
+            _frameDurationTimer -= time.ElapsedSeconds * TimeScale;
             if (_frameDurationTimer <= 0f)
             {
                 _frameDurationTimer = _animation.FrameDuration;
@@ -332,6 +334,7 @@ namespace Delta.Graphics
             IsOverlay = false;
             IsOutlined = false;
             OutlineColor = Color.White;
+            TimeScale = 1f;
             _pool.Release(this);
         }
 

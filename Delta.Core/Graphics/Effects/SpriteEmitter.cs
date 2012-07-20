@@ -55,6 +55,9 @@ namespace Delta.Graphics
         string _animationName;
         float _lastEmitTime;
 
+        public Range TimeScaleRange;
+        public AnimationPlayOptions SpriteOptions;
+
         static SpriteEmitter()
         {
             _pool = new Pool<SpriteEmitter>(200);
@@ -78,7 +81,8 @@ namespace Delta.Graphics
 
         public SpriteEmitter() : base()
         {
-            _particles = new List<SpriteParticle>(100); 
+            _particles = new List<SpriteParticle>(100);
+            TimeScaleRange = new Range(1);
         }
 
         protected internal override bool ImportCustomValues(string name, string value)
@@ -92,6 +96,16 @@ namespace Delta.Graphics
                 case "animation":
                 case "animationname":
                     _animationName = value;
+                    return true;
+                case "timescale":
+                    TimeScaleRange = Range.Parse(value);
+                    return true;
+                case "looped":
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.Looped : SpriteOptions;
+                    return true;
+                case "startrandom":
+                case "random":
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.StartRandom : SpriteOptions;
                     return true;
             }
             return base.ImportCustomValues(name, value);
@@ -108,12 +122,12 @@ namespace Delta.Graphics
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Tint = Tint;
+            newParticle.Entity.TimeScale = TimeScaleRange.RandomWithin();
             newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.InternalLoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
-            newParticle.Entity.Play(_animationName);
-            //`newParticle.Entity.Pause();
+            newParticle.Entity.Play(_animationName, SpriteOptions);
             newParticle.OnEmitted();
             _particles.Add(newParticle);
         }
@@ -175,6 +189,7 @@ namespace Delta.Graphics
             _spriteSheet = String.Empty;
             _animationName = String.Empty;
             _lastEmitTime = 0;
+            TimeScaleRange = new Range(1);
 
             for (int i = 0; i < _particles.Count; i++)
             {
