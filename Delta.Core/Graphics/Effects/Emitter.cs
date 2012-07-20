@@ -77,7 +77,7 @@ namespace Delta.Graphics
         public Emitter()
         {
             AngleRange = new Range(0, 360);
-            ScaleRange = new Range(1, 1);
+            ScaleRange = new Range(1);
             Quantity = 1;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
