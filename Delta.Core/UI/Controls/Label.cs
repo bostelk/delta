@@ -26,21 +26,46 @@ namespace Delta.UI.Controls
         Vector2 _textPosition = Vector2.Zero;
         Vector2 _textSize = Vector2.Zero;
         Vector2 _textOrigin = Vector2.Zero;
-        StringBuilder _text = new StringBuilder();
+        StringBuilder _renderText = new StringBuilder();
 
-        int _previousTextHash;
+        bool _isWordWrapped = false;
+        public bool IsWordWrapped
+        {
+            get { return _isWordWrapped; }
+            set 
+            {
+                if (_isWordWrapped != value)
+                {
+                    _isWordWrapped = value;
+                    Invalidate();
+                }
+            }
+        }
 
-        public StringBuilder Text { get { return _text; } }
+        bool _autoSize = true;
+        public bool AutoSize
+        {
+            get { return _autoSize; }
+            set
+            {
+                if (_autoSize != value)
+                {
+                    _autoSize = value;
+                    Invalidate();
+                }
+            }
+        }
+
+        public StringBuilder Text { get; private set; }
         public SpriteFont Font { get; set; }
         public Color ForeColor { get; set; }
-        public bool AutoSize { get; set; }
         public HorizontalTextAlignment HorizontalTextAlignment { get; set; }
         public VerticalTextAlignment VerticalTextAlignment { get; set; }
 
         public Label()
             : base()
         {
-            AutoSize = true;
+            Text = new StringBuilder();
             ForeColor = Color.White;
         }
 
@@ -48,24 +73,19 @@ namespace Delta.UI.Controls
         {
             base.LoadContent();
             Font = G.Font;
-            UpdateTextSize();
-            UpdateRenderSize();
-            UpdateTextPosition();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected virtual void UpdateRenderText()
         {
-            base.LightUpdate(time);
-            if (Text.ToString().GetHashCode() != _previousTextHash)
-                OnTextChanged();
-            _previousTextHash = Text.GetHashCode();
+            _renderText.Clear();
+            if (AutoSize || !_isWordWrapped)
+                _renderText.Append(Text);
+            Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
         }
 
         protected virtual void UpdateTextSize()
         {
-            _textSize = Font.MeasureString(Text);
-            if (AutoSize)
-                Size = _textSize;
+            _textSize = Font.MeasureString(_renderText);
         }
 
         protected override void UpdateRenderSize()
@@ -86,10 +106,7 @@ namespace Delta.UI.Controls
                 if (Size.X >= _textSize.X)
                 {
                     if ((HorizontalTextAlignment & HorizontalTextAlignment.Center) != 0)
-                    {
-                        //_textOrigin.X = Size.X;
                         _textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
-                    }
                     else if ((HorizontalTextAlignment & HorizontalTextAlignment.Right) != 0)
                         _textPosition.X += Size.X - _textSize.X;
                 }
@@ -104,17 +121,18 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected virtual void OnTextChanged() 
+        protected override void OnInvalidate()
         {
+            UpdateRenderText();
             UpdateTextSize();
-            UpdateRenderSize();
+            base.OnInvalidate();
             UpdateTextPosition();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
-            spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Font, _renderText, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);
         }
     }
 }

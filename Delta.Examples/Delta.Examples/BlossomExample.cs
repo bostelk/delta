@@ -46,7 +46,6 @@ namespace Delta.Examples
             G.World.Camera.Follow(_player = Entity.Get("Lily") as Entity);
 
             Label lblControls = new Label();
-            lblControls.AutoSize = true;
             lblControls.Text.Append(CONTROLS);
             lblControls.Position = new Vector2(G.ScreenCenter.X, 0);
             lblControls.BackColor = Color.Gray;
