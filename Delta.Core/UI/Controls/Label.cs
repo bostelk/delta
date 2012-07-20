@@ -53,12 +53,12 @@ namespace Delta.UI.Controls
             UpdateTextPosition();
         }
 
-        protected override void UpdateRenderSize()
+        protected override void LightUpdate(DeltaTime time)
         {
-            if (AutoSize)
-                RenderSize = _textSize;
-            else
-                base.UpdateRenderSize();
+            base.LightUpdate(time);
+            if (Text.ToString().GetHashCode() != _previousTextHash)
+                OnTextChanged();
+            _previousTextHash = Text.GetHashCode();
         }
 
         protected virtual void UpdateTextSize()
@@ -66,6 +66,14 @@ namespace Delta.UI.Controls
             _textSize = Font.MeasureString(Text);
             if (AutoSize)
                 Size = _textSize;
+        }
+
+        protected override void UpdateRenderSize()
+        {
+            if (AutoSize)
+                RenderSize = _textSize;
+            else
+                base.UpdateRenderSize();
         }
 
         protected virtual void UpdateTextPosition()
@@ -79,8 +87,8 @@ namespace Delta.UI.Controls
                 {
                     if ((HorizontalTextAlignment & HorizontalTextAlignment.Center) != 0)
                     {
-                        _textOrigin.X = Size.X;
-                        //_textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
+                        //_textOrigin.X = Size.X;
+                        _textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
                     }
                     else if ((HorizontalTextAlignment & HorizontalTextAlignment.Right) != 0)
                         _textPosition.X += Size.X - _textSize.X;
@@ -96,7 +104,8 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected virtual void OnTextChanged() {
+        protected virtual void OnTextChanged() 
+        {
             UpdateTextSize();
             UpdateRenderSize();
             UpdateTextPosition();
@@ -104,10 +113,6 @@ namespace Delta.UI.Controls
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            if (Text.ToString().GetHashCode() != _previousTextHash)
-                OnTextChanged();
-            _previousTextHash = Text.GetHashCode();
-
             base.Draw(time, spriteBatch);
             spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);
         }

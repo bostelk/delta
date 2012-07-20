@@ -21,22 +21,22 @@ namespace Delta.Input
         {
             if (value && !IsDown)
                 _pressedStarted = time.TotalSeconds;
-            else
-                _pressedStarted = 0;
-            if (value)
-                DownDuration = time.TotalSeconds - _pressedStarted;
-            else
-                DownDuration = 0;
             _previousFrameIsDown = IsDown;
             IsDown = value;
             if (!value && _previousFrameIsDown)
                 _releasedStarted = time.TotalSeconds;
-            else
-                _releasedStarted = 0;
-            if (_releasedStarted != 0)
-                UpDuration = time.TotalSeconds - _releasedStarted;
-            else
+            if (value)
+            {
+                DownDuration = time.TotalSeconds - _pressedStarted;
                 UpDuration = 0;
+                _releasedStarted = 0;
+            }
+            else
+            {
+                DownDuration = 0;
+                UpDuration = time.TotalSeconds - _releasedStarted;
+                _pressedStarted = 0;
+            }
         }
 
         public static implicit operator bool(Button b)
