@@ -48,7 +48,7 @@ namespace Delta.Structures
         public static TimedRange Parse(string value)
         {
             TimedRange range = Empty;
-            value = value.Trim();  // don't worry about matching whitespace inside of the string.
+            value = value.Trim().ToLower();  // don't worry about matching whitespace inside of the string.
             Match match = _timedRangeRegex.Match(value);
             if (match.Success)
             {

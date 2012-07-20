@@ -106,7 +106,7 @@ namespace Delta.Structures
         public static Range Parse(string value)
         {
             Range range = Empty;
-            value = value.Trim();  // don't worry about matching whitespace inside of the string.
+            value = value.Trim().ToLower();  // don't worry about matching whitespace inside of the string.
             Match match = _rangeRegex.Match(value);
             if (match.Success)
             {

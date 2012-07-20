@@ -111,8 +111,9 @@ namespace Delta.Graphics
             newParticle.Emitter = this;
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
+            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(AngleRange.Lower, AngleRange.Upper) * SpeedRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower, VelocityAngleRange.Upper) * VelocityMagnitudeRange.RandomWithin();
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Tint = Tint;
