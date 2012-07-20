@@ -15,6 +15,7 @@ namespace Delta.UI
             _performanceMetrics.ForeColor = Color.White;
             _performanceMetrics.BackColor = Color.Gray;
             Add(_performanceMetrics);
+            Add(new Controls.Textbox() { BackColor = Color.Gray, Position = new Vector2(50, 50), Size = new Vector2(100, 100), AutoSize = false, VerticalTextAlignment = Controls.VerticalTextAlignment.Center, HorizontalTextAlignment = Controls.HorizontalTextAlignment.Center});
         }
     }
 }

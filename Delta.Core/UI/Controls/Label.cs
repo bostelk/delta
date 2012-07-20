@@ -25,6 +25,7 @@ namespace Delta.UI.Controls
     {
         Vector2 _textPosition = Vector2.Zero;
         Vector2 _textSize = Vector2.Zero;
+        Vector2 _textOrigin = Vector2.Zero;
         StringBuilder _text = new StringBuilder();
 
         int _previousTextHash;
@@ -70,19 +71,21 @@ namespace Delta.UI.Controls
         protected virtual void UpdateTextPosition()
         {
             _textPosition = Position;
+            _textOrigin = Vector2.Zero;
             if (!AutoSize)
             {
                 //horizontal alignment
-                _textPosition.X = 0;
                 if (Size.X >= _textSize.X)
                 {
                     if ((HorizontalTextAlignment & HorizontalTextAlignment.Center) != 0)
-                        _textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
+                    {
+                        _textOrigin.X = Size.X;
+                        //_textPosition.X += (Size.X * 0.5f) - (_textSize.X * 0.5f);
+                    }
                     else if ((HorizontalTextAlignment & HorizontalTextAlignment.Right) != 0)
                         _textPosition.X += Size.X - _textSize.X;
                 }
                 //vertical alignment
-                _textPosition.Y = 0;
                 if (Size.Y >= _textSize.Y)
                 {
                     if ((VerticalTextAlignment & VerticalTextAlignment.Center) != 0)
@@ -106,7 +109,7 @@ namespace Delta.UI.Controls
             _previousTextHash = Text.GetHashCode();
 
             base.Draw(time, spriteBatch);
-            spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Font, _text, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);
         }
     }
 }

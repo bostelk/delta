@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
@@ -24,7 +25,6 @@ namespace Delta.Input.States
 		private static char[] _chatpadOrangeMapping = new char[256];
 #endif
 
-       
         Button[] _buttons = new Button[256];
         float _initialTick = -1;
         KeyState _state;
@@ -129,13 +129,6 @@ namespace Delta.Input.States
             return (Keys[])_keyIndices.Clone();
         }
 
-        /// <summary>
-        /// <para>Gets the character for a given <see cref="Keys"/> key. Eg: <see cref="Keys.A"/> will output 'a'. Uses the current keyboard modifier key state; Shift will convert to upper case, etc.</para>
-        /// <para>Returns false if the key character is unknown</para>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="keyChar"></param>
-        /// <returns></returns>
         public bool TryGetKeyChar(Keys key, out char keyChar)
         {
 #if XBOX360
@@ -213,10 +206,10 @@ namespace Delta.Input.States
                 _buttons[32 * 1 + i].SetState((_currentFrame.currentState1 & ((uint)1) << i) != 0, time);
                 _buttons[32 * 2 + i].SetState((_currentFrame.currentState2 & ((uint)1) << i) != 0, time);
                 _buttons[32 * 3 + i].SetState((_currentFrame.currentState3 & ((uint)1) << i) != 0, time);
-                this._buttons[32 * 4 + i].SetState((_currentFrame.currentState4 & ((uint)1) << i) != 0, time);
-                this._buttons[32 * 5 + i].SetState((_currentFrame.currentState5 & ((uint)1) << i) != 0, time);
-                this._buttons[32 * 6 + i].SetState((_currentFrame.currentState6 & ((uint)1) << i) != 0, time);
-                this._buttons[32 * 7 + i].SetState((_currentFrame.currentState7 & ((uint)1) << i) != 0, time);
+                _buttons[32 * 4 + i].SetState((_currentFrame.currentState4 & ((uint)1) << i) != 0, time);
+                _buttons[32 * 5 + i].SetState((_currentFrame.currentState5 & ((uint)1) << i) != 0, time);
+                _buttons[32 * 6 + i].SetState((_currentFrame.currentState6 & ((uint)1) << i) != 0, time);
+                _buttons[32 * 7 + i].SetState((_currentFrame.currentState7 & ((uint)1) << i) != 0, time);
             }
         }
 
