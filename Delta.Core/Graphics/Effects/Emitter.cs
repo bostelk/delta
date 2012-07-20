@@ -92,32 +92,32 @@ namespace Delta.Graphics
                     Frequency = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "speed":
-                    SpeedRange = Range.Parse(value);
+                    SpeedRange = Range.TryParse(value);
                     return true;
                 case "lifespan":
-                    LifespanRange = Range.Parse(value);
+                    LifespanRange = Range.TryParse(value);
                     return true;
                 case "rotation":
                 case "rotationspeed":
-                    RotationRange = Range.Parse(value);
+                    RotationRange = Range.TryParse(value);
                     RotationRange.Lower = RotationRange.Lower.ToRadians();
                     RotationRange.Upper = RotationRange.Upper.ToRadians();
                     return true;
                 case "angle":
-                    AngleRange = Range.Parse(value);
+                    AngleRange = Range.TryParse(value);
                     AngleRange.Lower = AngleRange.Lower.ToRadians();
                     AngleRange.Upper = AngleRange.Upper.ToRadians();
                     return true;
                 case "scale":
                 case "size":
-                    ScaleRange = Range.Parse(value);
+                    ScaleRange = Range.TryParse(value);
                     return true;
                 case "acceleration":
-                    AccelerationRange = Range.Parse(value);
+                    AccelerationRange = Range.TryParse(value);
                     return true;
                 case "frameinterval":
                 case "frameduration":
-                    FrameIntervalRange = Range.Parse(value);
+                    FrameIntervalRange = Range.TryParse(value);
                     return true;
                 case "explode":
                     Explode = true;
@@ -127,10 +127,10 @@ namespace Delta.Graphics
                     Quantity = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "fadein":
-                    FadeInRange = Range.Parse(value);
+                    FadeInRange = Range.TryParse(value);
                     return true;
                 case "fadeout":
-                    FadeOutRange = Range.Parse(value);
+                    FadeOutRange = Range.TryParse(value);
                     return true;
                 case "fadeinmethod":
                     _fadeInMethodString = value;

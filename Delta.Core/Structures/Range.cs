@@ -53,9 +53,12 @@ namespace Delta.Structures
             return G.Random.Between(Lower, Upper);
         }
     
-        public bool IsEmpty()
+        public bool IsEmpty
         {
-            return Lower == default(float) && Upper == default(float);
+            get
+            {
+                return Lower == default(float) && Upper == default(float);
+            }
         }
 
         public static Range operator -(Range value1, float value2)
@@ -88,6 +91,18 @@ namespace Delta.Structures
             return value1;
         }
 
+        public static Range TryParse(string value)
+        {
+            try
+            {
+                return Parse(value);
+            }
+            catch
+            {
+                return new Range(float.Parse(value, CultureInfo.InvariantCulture));
+            }
+        }
+
         public static Range Parse(string value)
         {
             Range range = Empty;
@@ -97,6 +112,10 @@ namespace Delta.Structures
             {
                 range.Lower = float.Parse(match.Groups["value1"].Value, CultureInfo.InvariantCulture);
                 range.Upper = float.Parse(match.Groups["value2"].Value, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                throw new Exception(String.Format("The string '{0}' is not in the correct format", value));
             }
             return range;
         }

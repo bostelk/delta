@@ -92,7 +92,7 @@ namespace Delta.Graphics
                     _animationName = value;
                     return true;
                 case "timescale":
-                    TimeScaleRange = Range.Parse(value);
+                    TimeScaleRange = Range.TryParse(value);
                     return true;
                 case "looped":
                     SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.Looped : SpriteOptions;
