@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace Delta.Input.States
 {
@@ -30,6 +31,7 @@ namespace Delta.Input.States
 		public Button XButton2 { get { return _x1; } }
 		public int ScrollWheelValue { get { return _scroll; } }
 		public int ScrollWheelDelta { get { return _scrollDelta; } }
+        public Vector2 Position { get { return new Vector2(X, Y); } }
 		
 		internal void Update(DeltaTime time, ref MouseState mouseState)
 		{
