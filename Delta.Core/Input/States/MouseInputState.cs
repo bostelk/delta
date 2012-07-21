@@ -7,53 +7,32 @@ namespace Delta.Input.States
 #if WINDOWS
 	public sealed class MouseInputState
 	{
-		MouseState state;
-        Button _left;
-        Button _right; 
-        Button _middle; 
-        Button _x1; 
-        Button _x2;
-		int _x;
-        int _y;
-        int _xDelta;
-        int _yDelta;
-        int _scroll;
-        int _scrollDelta;
-
-		public int X { get { return _x; } }
-		public int Y { get { return _y; } }
-        public int XDelta { get { return _xDelta; } }
-        public int YDelta { get { return _yDelta; } }
-		public Button LeftButton { get { return _left; } }
-		public Button RightButton { get { return _right; } }
-		public Button MiddleButton { get { return _middle; } }
-		public Button XButton1 { get { return _x2; } }
-		public Button XButton2 { get { return _x1; } }
-		public int ScrollWheelValue { get { return _scroll; } }
-		public int ScrollWheelDelta { get { return _scrollDelta; } }
-        public Vector2 Position { get { return new Vector2(X, Y); } }
+        public MouseState MouseState { get; private set; }
+        public Vector2 Position { get; private set; }
+        public Vector2 PositionDelta { get; private set; }
+        public Button LeftButton { get; private set; }
+        public Button RightButton { get; private set; }
+        public Button MiddleButton { get; private set; }
+        public Button XButton1 { get; private set; }
+        public Button XButton2 { get; private set; }
+        public int ScrollWheelValue { get; private set; }
+        public int ScrollWheelDelta { get; private set; }
 		
 		internal void Update(DeltaTime time, ref MouseState mouseState)
 		{
-			state = mouseState;
+            MouseState = mouseState;
 
-            _xDelta = state.X - _x;
-            _yDelta = state.Y - _y;
-			_x = state.X;
-			_y = state.Y;
-			_scrollDelta = state.ScrollWheelValue - _scroll;
-			_scroll = state.ScrollWheelValue;
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            PositionDelta = mousePosition - Position; 
+            Position = mousePosition;
+			ScrollWheelDelta = mouseState.ScrollWheelValue - ScrollWheelValue;
+			ScrollWheelValue = mouseState.ScrollWheelValue;
 
-			_left.SetState(state.LeftButton == ButtonState.Pressed, time);
-			_right.SetState(state.RightButton == ButtonState.Pressed, time);
-			_middle.SetState(state.MiddleButton== ButtonState.Pressed, time);
-			_x1.SetState(state.XButton1 == ButtonState.Pressed, time);
-			_x2.SetState(state.XButton2 == ButtonState.Pressed, time);
-		}
-
-		public static implicit operator MouseState(MouseInputState input)
-		{
-			return input.state;
+			LeftButton.SetState(mouseState.LeftButton == ButtonState.Pressed, time);
+			RightButton.SetState(mouseState.RightButton == ButtonState.Pressed, time);
+			MiddleButton.SetState(mouseState.MiddleButton== ButtonState.Pressed, time);
+			XButton1.SetState(mouseState.XButton1 == ButtonState.Pressed, time);
+			XButton2.SetState(mouseState.XButton2 == ButtonState.Pressed, time);
 		}
 	}
 
