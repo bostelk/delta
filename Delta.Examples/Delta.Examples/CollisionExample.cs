@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples
 {

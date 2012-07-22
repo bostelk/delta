@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples
 {
@@ -34,10 +33,10 @@ namespace Delta.Examples
 
         protected override void Update(GameTime gameTime)
         {
-            if (G.Input.Keyboard.IsPressed(Keys.Tab))
-                (player1 as PhysicsCar).SwitchBody();
-            if (G.Input.Keyboard.IsPressed(Keys.RightControl))
-                (player2 as PhysicsCar).SwitchBody();
+            //if (G.Input.Keyboard.IsPressed(Keys.Tab))
+            //    (player1 as PhysicsCar).SwitchBody();
+            //if (G.Input.Keyboard.IsPressed(Keys.RightControl))
+            //    (player2 as PhysicsCar).SwitchBody();
             //if (IsMouseVisible && G.Input.Keyboard.Held(Keys.Space))
             //    player1.Position = G.World.Camera.ToWorldPosition(G.Input.Mouse.Position);
             //if (G.Input.Keyboard.JustPressed(Keys.F1))

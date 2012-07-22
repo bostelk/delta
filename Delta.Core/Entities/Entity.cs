@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Content;
 using Delta.Movement;
 using Delta.Structures;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 using Delta.Physics;
 
 namespace Delta

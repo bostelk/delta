@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 using Delta.Graphics;
 using Delta.Tiled;
 using Delta.Structures;
@@ -36,7 +35,6 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
-
             _map = Content.Load<Map>(@"Maps\Plains\3");
             G.World.Camera.BoundsEnabled = true;
             G.World.Camera.BoundedArea = new Rectangle(0, 0, _map.Width * _map.TileWidth, _map.Height * _map.TileHeight);
@@ -66,12 +64,9 @@ namespace Delta.Examples
             GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
 
-            if (G.Input.Keyboard.IsDown(Keys.F1))
-            {
-                Matrix view = G.World.Camera.View;
-                Matrix projection = G.World.Camera.Projection;
-                G.Collision.DrawDebug(ref view, ref projection);
-            }
+            Matrix view = G.World.Camera.View;
+            Matrix projection = G.World.Camera.Projection;
+            G.Collision.DrawDebug(ref view, ref projection);
             PoolManager.DebugDraw();
             //G.World.DebugDraw();
         }

@@ -96,7 +96,12 @@ namespace Delta
             return result;
         }
 
-       public static bool AlmostEqual(Vector2 a, Vector2 b)
+        public static bool AlmostZero(Vector2 a)
+        {
+            return AlmostEqual(a, Vector2.Zero);
+        }
+
+        public static bool AlmostEqual(Vector2 a, Vector2 b)
         {
             return (FloatExtensions.AlmostEqual(a.X, b.X, (float)MathExtensions.EPSILON) && FloatExtensions.AlmostEqual(a.Y, b.Y, (float)MathExtensions.EPSILON));
         }

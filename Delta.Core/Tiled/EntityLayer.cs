@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Delta.Collision.Geometry;
 using Delta.Collision;
 using Delta.Graphics;
 #endif
