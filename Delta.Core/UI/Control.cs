@@ -27,6 +27,7 @@ namespace Delta.UI
 
         protected internal override void OnInvalidate()
         {
+            base.OnInvalidate();
             UpdateColor();
         }
 
@@ -50,7 +51,6 @@ namespace Delta.UI
         }
 
 #if WINDOWS
-
         protected override void OnMouseEnter()
         {
             base.OnMouseEnter();
@@ -103,12 +103,12 @@ namespace Delta.UI
             base.OnMouseUp();
             Invalidate();
         }
-
 #endif
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle(AbsolutePosition, Size, CurrentColor);
+            if (CurrentColor.A > 0)
+                spriteBatch.DrawRectangle(AbsolutePosition, RenderSize, CurrentColor);
         }
 
     }

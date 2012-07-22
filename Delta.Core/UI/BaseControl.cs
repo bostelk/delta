@@ -10,16 +10,13 @@ namespace Delta.UI
     {
         bool _needsToInvalidate = true;
 
-        public bool IsClicked { get; set; }
-        public bool IsHighlighted { get; set;}
-        public bool IsSelected { get; set;}
-        public bool IsFocused { get; set; }
+        public bool IsClicked { get; internal set; }
         public bool IsFocusable { get; set; }
-        public Vector2 AbsolutePosition { get; private set; }
+        public Vector2 AbsolutePosition { get; internal set; }
+        protected Vector2 RenderSize { get; set; }
 
 #if WINDOWS
         public bool MouseIsInside { get; private set; }
-        //public bool MouseIsCaptured { get; set; }
 #endif
 
         BaseScreen _parentScreen = null;
@@ -78,6 +75,51 @@ namespace Delta.UI
             }
         }
 
+        bool _isSelected = false;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnSelectedChanged();
+                }
+            }
+        }
+
+        bool _isHighlighted = false;
+        public bool IsHighlighted
+        {
+            get { return _isHighlighted; }
+            set
+            {
+                if (_isHighlighted != value)
+                {
+                    _isHighlighted = value;
+                    OnHighlightedChanged();
+                }
+            }
+        }
+
+        bool _isFocused = false;
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+            set
+            {
+                if (_isFocused != value)
+                {
+                    _isFocused = value;
+                    if (value)
+                        OnGotFocus();
+                    else
+                        OnLostFocus();
+                }
+            }
+        }
+
         public BaseControl()
             : base()
         {
@@ -101,7 +143,18 @@ namespace Delta.UI
             }
         }
 
-        protected internal virtual void UpdateAbsolutePosition()
+        public void Invalidate()
+        {
+            _needsToInvalidate = true;
+        }
+
+        protected internal virtual void OnInvalidate()
+        {
+            UpdateAbsolutePosition();
+            UpdateRenderSize();
+        }
+
+        protected virtual void UpdateAbsolutePosition()
         {
             AbsolutePosition = _position;
             if (_parent != null)
@@ -118,13 +171,9 @@ namespace Delta.UI
             }
         }
 
-        public void Invalidate()
+        protected virtual void UpdateRenderSize()
         {
-            _needsToInvalidate = true;
-        }
-
-        protected internal virtual void OnInvalidate()
-        {
+            RenderSize = Size;
         }
 
 #if WINDOWS
@@ -169,7 +218,7 @@ namespace Delta.UI
                     {
                         OnMouseDown();
                         if (IsFocusable && !IsFocused)
-                            OnGotFocus();
+                            IsFocused = true;
                     }
                     handled = true;
                 }
@@ -220,11 +269,11 @@ namespace Delta.UI
             G.UI.ClickedControl = null;
         }
 
-        protected virtual void OnMouseCaptureChanged()
-        {
-            G.UI.CaptureControl = null;
-            IsClicked = false;
-        }
+        //protected virtual void OnMouseCaptureChanged()
+        //{
+        //    G.UI.CaptureControl = null;
+        //    IsClicked = false;
+        //}
 
         protected virtual void OnMouseEnter()
         {
@@ -248,7 +297,6 @@ namespace Delta.UI
         protected virtual void OnMouseScroll()
         {
         }
-
 #endif
 
         public virtual void ProcessKeyDown()
@@ -275,19 +323,17 @@ namespace Delta.UI
 
         protected virtual void OnGotFocus()
         {
-            IsFocused = true;
             if (G.UI.FocusedControl != this)
             {
                 if (G.UI.FocusedControl != null)
-                    G.UI.FocusedControl.OnLostFocus();
+                    G.UI.FocusedControl.IsFocused = false;
                 G.UI.FocusedControl = this;
             }
             Invalidate();
         }
 
-        protected internal virtual void OnLostFocus()
+        protected virtual void OnLostFocus()
         {
-            IsFocused = false;
             IsClicked = false;
             G.UI.FocusedControl = null;
             Invalidate();
@@ -297,8 +343,13 @@ namespace Delta.UI
         {
         }
 
+        protected virtual void OnHighlightedChanged()
+        {
+        }
+
         protected virtual void OnSizeChanged()
         {
+            UpdateRenderSize();
         }
 
         protected virtual void OnPositionChanged()
@@ -306,25 +357,26 @@ namespace Delta.UI
             UpdateAbsolutePosition();
         }
 
-        protected virtual void OnHighlightedChanged()
-        {
-        }
-
         protected virtual bool IntersectTest(Vector2 point)
         {
             bool returnValue = false;
-            if (Size.X > 0 && Size.Y > 0)
+            if (RenderSize.X > 0 && RenderSize.Y > 0)
                 if (point.X >= AbsolutePosition.X)
-                    if (point.X <= AbsolutePosition.X + Size.X)
+                    if (point.X <= AbsolutePosition.X + RenderSize.X)
                         if (point.Y >= AbsolutePosition.Y)
-                            if (point.Y <= AbsolutePosition.Y + Size.Y)
+                            if (point.Y <= AbsolutePosition.Y + RenderSize.Y)
                                 returnValue = true;
             return returnValue;
         }
 
         public void Focus()
         {
-            OnGotFocus();
+            IsFocused = true;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Name: {0}, Position: {1}, Size: ({2},{3})", Name, AbsolutePosition, RenderSize.X, RenderSize.Y);
         }
     }
 }
