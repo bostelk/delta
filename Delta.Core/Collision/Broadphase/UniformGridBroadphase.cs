@@ -44,9 +44,14 @@ namespace Delta.Collision
 
         public Point Offset;
 
-        public UniformGridBroadphase() { }
+        public UniformGridBroadphase() 
+        { 
+            // keep the collision from complaining if the 'world' isn't defined.
+            _pairs = new OverlappingPairCache();
+            _cells = new GridCell[0];
+        }
 
-        public UniformGridBroadphase(int width, int height, int cellSize)
+        public UniformGridBroadphase(int width, int height, int cellSize) : this()
         {
             Width = width;
             Height = height;

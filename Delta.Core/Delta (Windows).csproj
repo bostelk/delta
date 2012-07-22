@@ -124,7 +124,6 @@
     <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
     <Compile Include="Graphics\Effects\Emitter.cs" />
     <Compile Include="Entities\TextureEntity.cs" />
-    <Compile Include="Graphics\BitmapFont.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\PlayerInputCollection.cs" />
     <Compile Include="Input\States\GamePadInputState.cs" />

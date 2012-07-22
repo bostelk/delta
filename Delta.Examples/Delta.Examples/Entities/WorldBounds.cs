@@ -15,7 +15,7 @@ namespace Delta.Examples.Entities
 {
     public class WorldBounds
     {
-        Polygon p1, p2, p3, p4;
+        //Polygon p1, p2, p3, p4;
         
         public WorldBounds()
         {
