@@ -2,23 +2,78 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Collision.Geometry;
 using Delta.Collision;
 using Delta.Physics;
+using Microsoft.Xna.Framework;
+using Delta.Structures;
 
 namespace Delta.Collision
 {
-    public class Collider
+    public class Collider : IRecyclable
     {
+        static Pool<Collider> _pool;
+
         public Entity Tag;
 
-        public Polygon Geom;
+        private CollisionShape _shape;
+        public CollisionShape Shape
+        {
+            get
+            {
+                return _shape;
+            }
+            set
+            {
+                _shape = value;
+                IsActive = true;
+            }
+        }
 
-        public float Bounce;
+        Transform _worldTransform;
+        public Transform WorldTransform
+        {
+            get
+            {
+                return _worldTransform;
+            }
+            set
+            {
+                _worldTransform = value;
+                IsActive = true;
+            }
+        }
 
-        public float Friction;
+        public Vector2 Position
+        {
+            get
+            {
+                return _worldTransform.Origin;
+            }
+            set
+            {
+                if (Vector2Extensions.AlmostEqual(_worldTransform.Origin, value))
+                    return;
+                _worldTransform.Origin = value;
+                IsActive = true;
+            }
+        }
 
-        public float Mass;
+        public float Rotation
+        {
+            get
+            {
+                return _worldTransform.Rotation;
+            }
+            set
+            {
+                if (FloatExtensions.AlmostEqual(_worldTransform.Rotation, value))
+                    return;
+                _worldTransform.Rotation = value;
+                IsActive = true;
+            }
+        }
+
+        public BroadphaseProxy BroadphaseProxy { get; set; }
 
         /// <summary>
         /// Will not move due to collision. (No collision response).
@@ -26,40 +81,69 @@ namespace Delta.Collision
         public bool IsStatic;
 
         /// <summary>
-        /// A bounding area for fast detections.
+        /// The Collider has moved this frame.
         /// </summary>
-        public AABB AABB { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
-        /// The Geom is about to collide. (broad-phase intersection).
+        /// The shape is about to collide. (broadphase overlap).
         /// </summary>
         public BeforeCollisionEventHandler BeforeCollision;
 
         /// <summary>
-        /// The Geom is colliding. (narrow-phase intersection).
+        /// The shape is colliding. (narrowphase collision).
         /// </summary>
         public OnCollisionEventHandler OnCollision;
 
         /// <summary>
-        /// The Geom has been resolved since collision.
+        /// The shape has been resolved since collision.
         /// </summary>
         public AfterCollisionEventHandler AfterCollision;
 
         public OnSeparationEventHandler OnSeparation;
 
-        public Collider() { }
-
-        public Collider(Entity tag, Polygon geom)
+        static Collider()
         {
-            Tag = tag;
-            Geom = geom;
+            _pool = new Pool<Collider>(200);
         }
 
-        public Collider(Polygon geom)
+        public static Collider Create(Entity entity, CollisionShape shape)
         {
-            Geom = geom;
-            AABB = geom.AABB;
+            Collider collider = _pool.Fetch();
+            collider.Tag = entity;
+            collider.Shape = shape;
+            return collider;
         }
 
+        public Collider(Entity entity, CollisionShape shape)
+            : this()
+        {
+            Tag = entity;
+            Shape = shape;
+        }
+
+        public Collider() 
+        {
+            WorldTransform = Transform.Identity;
+        }
+
+        public void Recycle()
+        {
+            BroadphaseProxy.Recycle();
+            WorldTransform = Transform.Identity;
+            Tag = null;
+            Shape = null;
+            BeforeCollision = null;
+            OnCollision = null;
+            AfterCollision = null;
+            OnSeparation = null;
+
+            _pool.Release(this);
+        }
+
+        public override int GetHashCode()
+        {
+            return Shape.GetHashCode() + WorldTransform.GetHashCode();
+        }
     }
 }

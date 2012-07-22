@@ -42,7 +42,7 @@ namespace Delta
         public static bool IsVSyncEnabled { get { return _graphicsDeviceManager.SynchronizeWithVerticalRetrace; } }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static PrimitiveBatch PrimitiveBatch { get; private set; }
-        public static CollisionEngine Collision { get; private set; }
+        public static CollisionWorld Collision { get; private set; }
         public static Texture2D PixelTexture { get; private set; }
         public static SpriteFont Font { get; private set; }
         public static Random Random { get; private set; }
@@ -84,7 +84,7 @@ namespace Delta
             Random = new Random();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");
-            Collision = new CollisionEngine();
+            Collision = new CollisionWorld(new SeperatingAxisNarrowphase(), new UniformGridBroadphase());
             ScreenArea = new Rectangle(0, 0, screenWidth, screenHeight);
             ScreenCenter = ScreenArea.Center.ToVector2();
 #if WINDOWS

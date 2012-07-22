@@ -6,26 +6,31 @@ using Delta.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class Barrel : CollideableEntity
+    public class Barrel : Entity
     {
         SpriteEntity _sprite;
+        Collider collider;
 
         public Barrel()
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Play("barrel");
-            Polygon = new OBB(16, 16);
+        }
+
+        protected override void LateInitialize()
+        {
+            G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));
+            base.LateInitialize();
         }
 
         protected override void LightUpdate(DeltaTime time)
         {
             _sprite.InternalUpdate(time);
-            _sprite.Position = Position;
-            Collider.Geom.Position = Position;
+            _sprite.Position = Position - (_sprite.Size * new Vector2(0.5f, 0.5f));
+            collider.Position = Position;
             base.LightUpdate(time);
         }
 
@@ -35,16 +40,16 @@ namespace Delta.Examples.Entities
             base.Draw(time, spriteBatch);
         }
 
-        protected override bool OnCollision(Collider them, Vector2 normal)
+        protected bool OnCollision(Collider them, Vector2 normal)
         {
             Lily link = them.Tag as Lily;
             if (link != null && link.Velocity.LengthSquared() > MathExtensions.Square(50))
             {
                 Explode();
                 RemoveNextUpdate = true;
-                G.Collision.RemoveColider(Collider);
+                G.Collision.RemoveColider(collider);
             }
-            return base.OnCollision(them, normal);
+            return true;
         }
 
         public void Explode()

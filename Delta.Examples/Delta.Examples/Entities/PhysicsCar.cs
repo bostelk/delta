@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
@@ -25,54 +24,54 @@ namespace Delta.Examples.Entities
 
         public Vector2 Velocity;
 
-        public override Vector2 Position
-        {
-            get
-            {
-                return Collider.Geom.Position;
-            }
-            set
-            {
-                base.Position = value;
-                Collider.Geom.Position = value;
-            }
-        }
+        //public override Vector2 Position
+        //{
+        //    get
+        //    {
+        //        return Collider.Geom.Position;
+        //    }
+        //    set
+        //    {
+        //        base.Position = value;
+        //        Collider.Geom.Position = value;
+        //    }
+        //}
 
-        public override float Rotation
-        {
-            get
-            {
-                return base.Rotation;
-            }
-            set
-            {
-                base.Rotation = value;
-                Collider.Geom.Rotation = value;
-            }
-        }
+        //public override float Rotation
+        //{
+        //    get
+        //    {
+        //        return base.Rotation;
+        //    }
+        //    set
+        //    {
+        //        base.Rotation = value;
+        //        Collider.Geom.Rotation = value;
+        //    }
+        //}
 
-        public PhysicsCar()
-        {
-            G.Collision.AddCollider(new Collider()
-            {
-                Geom = new OBB(50, 100)
-            });
-        }
+        //public PhysicsCar()
+        //{
+        //    G.Collision.AddCollider(new Collider()
+        //    {
+        //        Geom = new OBB(50, 100)
+        //    });
+        //}
 
-        public void SwitchBody()
-        {
-            if (Collider.Geom is Circle)
-            {
-                Collider.Geom = new OBB(50, 100);
-            }
-            else if (Collider.Geom is OBB)
-            {
-                Collider.Geom = new Circle(50);
-            }
+        //public void SwitchBody()
+        //{
+        //    if (Collider.Geom is Circle)
+        //    {
+        //        Collider.Geom = new OBB(50, 100);
+        //    }
+        //    else if (Collider.Geom is OBB)
+        //    {
+        //        Collider.Geom = new Circle(50);
+        //    }
 
-            Collider.Geom.Position = base.Position;
-            Collider.Geom.Rotation = Rotation;
-        }
+        //    Collider.Geom.Position = base.Position;
+        //    Collider.Geom.Rotation = Rotation;
+        //}
 
         //protected override void LightUpdate(GameTime gameTime)
         //{

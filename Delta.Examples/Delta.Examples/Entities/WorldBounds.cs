@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
@@ -20,22 +19,22 @@ namespace Delta.Examples.Entities
         
         public WorldBounds()
         {
-            p1 = new Polygon(new Vector2(-600, 0), new Vector2(600, 0));
-            p1.Position = new Vector2(0, -320);
+            //p1 = new Polygon(new Vector2(-600, 0), new Vector2(600, 0));
+            //p1.Position = new Vector2(0, -320);
 
-            p2 = new Polygon(new Vector2(-600, 0), new Vector2(600, 0));
-            p2.Position = new Vector2(0, 320);
+            //p2 = new Polygon(new Vector2(-600, 0), new Vector2(600, 0));
+            //p2.Position = new Vector2(0, 320);
 
-            p3 = new Polygon(new Vector2(600, -320), new Vector2(600, 320));
-            p3.Position = new Vector2(-600, 0);
+            //p3 = new Polygon(new Vector2(600, -320), new Vector2(600, 320));
+            //p3.Position = new Vector2(-600, 0);
 
-            p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
-            p4.Position = new Vector2(600, 0);
+            //p4 = new Polygon(new Vector2(-600, -320), new Vector2(-600, 320));
+            //p4.Position = new Vector2(600, 0);
 
-            G.Collision.AddCollider(new Collider(p1) { IsStatic = true });
-            G.Collision.AddCollider(new Collider(p2) { IsStatic = true });
-            G.Collision.AddCollider(new Collider(p3) { IsStatic = true });
-            G.Collision.AddCollider(new Collider(p4) { IsStatic = true });
+            //G.Collision.AddCollider(new Collider(p1) { IsStatic = true });
+            //G.Collision.AddCollider(new Collider(p2) { IsStatic = true });
+            //G.Collision.AddCollider(new Collider(p3) { IsStatic = true });
+            //G.Collision.AddCollider(new Collider(p4) { IsStatic = true });
         }
 
     }

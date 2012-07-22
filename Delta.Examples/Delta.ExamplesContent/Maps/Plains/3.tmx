@@ -89,16 +89,7 @@
  <objectgroup name="Delta.BelowGround" width="40" height="40"/>
  <objectgroup name="Delta.Ground" width="40" height="40">
   <object name="Lily" type="Delta.Examples.Entities.Lily" x="272" y="80" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="272" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="288" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="304" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="304" y="240" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="288" y="240" width="16" height="16"/>
   <object type="Delta.Examples.Entities.Barrel" x="272" y="240" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="336" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="320" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="336" y="240" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="320" y="240" width="16" height="16"/>
  </objectgroup>
  <layer name="torches" width="40" height="40">
   <data encoding="base64" compression="gzip">
@@ -116,7 +107,7 @@
     <property name="Animation" value="flowermagic"/>
     <property name="Blend" value="Additive"/>
     <property name="FadeIn" value="range(0.2, 0.3)"/>
-    <property name="FadeOut" value="range(0.3, 0.5)"/>
+    <property name="FadeOut" value="range(0.5, 0.8)"/>
     <property name="FadeOutMethod" value="cubic.out"/>
     <property name="Frequency" value=".800"/>
     <property name="Lifespan" value="range(1, 5.5)"/>
@@ -129,8 +120,6 @@
     <property name="VelocityAngle" value="range(90, 90)"/>
    </properties>
   </object>
-  <object type="Delta.Examples.Entities.Barrel" x="352" y="256" width="16" height="16"/>
-  <object type="Delta.Examples.Entities.Barrel" x="352" y="240" width="16" height="16"/>
   <object type="SmokeEmitter" x="227" y="350" width="5" height="1"/>
   <object type="SmokeDustEmitter" x="227" y="350" width="5" height="1"/>
   <object type="SmokeEmitter" x="211" y="511" width="5" height="1"/>
@@ -139,5 +128,14 @@
   <object type="SmokeDustEmitter" x="498" y="527" width="5" height="1"/>
   <object type="SmokeEmitter" x="499" y="431" width="5" height="1"/>
   <object type="SmokeDustEmitter" x="499" y="431" width="5" height="1"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="240" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="272" y="256" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="240" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="288" y="256" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="304" y="256" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="256" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="336" y="240" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="336" y="256" width="16" height="16"/>
+  <object type="Delta.Examples.Entities.Barrel" x="320" y="240" width="16" height="16"/>
  </objectgroup>
 </map>

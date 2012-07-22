@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Delta.Audio;
 using Delta.Entities;
 using Delta.UI.Controls;
+using Delta.Collision;
 
 namespace Delta.Structures
 {
@@ -41,6 +42,8 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("ColliderPool: {0}\n", Pool<Collider>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("BroadphaseProxyPool: {0}\n", Pool<BroadphaseProxy>.PerformanceInfo));
             _infoLbl.Invalidate();
             G.SpriteBatch.Begin();
             _infoLbl.InternalDraw(G.UI.Time, G.SpriteBatch);

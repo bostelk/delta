@@ -10,11 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Delta.Collision;
-using Delta.Collision.Geometry;
 
 namespace Delta.Examples.Entities
 {
-    public class Lily : CollideableEntity
+    public class Lily : Entity
     {
         const float SPEED = 50;
 
@@ -26,13 +25,19 @@ namespace Delta.Examples.Entities
         float _trailInterval = 0.09f;
         float _trailTime = 0;
 
+        Collider collider;
+
         public Lily() : base("Lily")
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("blackspike");
+        }
 
-            Polygon = new Circle(8);
+        protected override void LateInitialize()
+        {
+            G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));           
+            base.LateInitialize();
         }
 
         //public void SwitchBody()
@@ -65,7 +70,7 @@ namespace Delta.Examples.Entities
             _sprite.InternalUpdate(time);
             Layer = Position.Y;
 
-            Collider.Geom.Position = Position;
+            collider.Position = Position;
             base.LightUpdate(time);
         }
 

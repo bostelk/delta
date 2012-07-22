@@ -13,6 +13,11 @@ namespace Delta
 {
     public static class FloatExtensions
     {
+        public static bool AlmostEqual(float a, float b)
+        {
+            return AlmostEqual(a, b, (float)MathExtensions.EPSILON);
+        }
+
         public static bool AlmostEqual(float a, float b, float epsilon)
         {
             float num = Math.Abs(a);
