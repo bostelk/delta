@@ -28,7 +28,7 @@ namespace Delta.UI
         public bool IsFocused { get; internal set; }
 
         protected Vector2 RenderSize { get; set; }
-        protected internal Screen Screen { get; internal set; }
+        protected internal Screen ParentScreen { get; internal set; }
 
         public Control()
         {
@@ -36,13 +36,13 @@ namespace Delta.UI
 
         public void Focus()
         {
-            if (Screen == null)
+            if (ParentScreen == null)
             {
                 IsFocused = false;
                 return;
             }
             IsFocused = true;
-            Screen.FocusedControl = this;
+            ParentScreen.FocusedControl = this;
             Invalidate();
         }
 
