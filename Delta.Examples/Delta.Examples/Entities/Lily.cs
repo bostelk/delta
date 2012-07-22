@@ -36,7 +36,7 @@ namespace Delta.Examples.Entities
 
         protected override void LateInitialize()
         {
-            G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));           
+            //G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));           
             base.LateInitialize();
         }
 
@@ -70,7 +70,7 @@ namespace Delta.Examples.Entities
             _sprite.InternalUpdate(time);
             Layer = Position.Y;
 
-            collider.Position = Position;
+           // collider.Position = Position;
             base.LightUpdate(time);
         }
 
