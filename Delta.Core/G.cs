@@ -35,7 +35,7 @@ namespace Delta
         public static InputManager Input { get; private set; }
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
-        public static ScreenManager UI { get; private set; }
+        public static UIManager UI { get; private set; }
 
         public new static GraphicsDevice GraphicsDevice { get { return _instance.GraphicsDevice; } }
         public new static bool IsMouseVisible { get { return _instance.IsMouseVisible; } set { _instance.IsMouseVisible = value; } }
@@ -80,7 +80,7 @@ namespace Delta
             Window.AllowUserResizing = true;
 #endif
             World = new World();
-            UI = new ScreenManager();
+            UI = new UIManager();
             Random = new Random();
             Input = new InputManager();
             Audio = new AudioManager(@"Content\Audio\audio.xgs", @"Content\Audio\Sound Bank.xsb", @"Content\Audio\Wave Bank.xwb", @"Content\Audio\StreamingBank.xwb");

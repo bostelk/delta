@@ -7,8 +7,9 @@ namespace Delta.Input.States
 #if WINDOWS
 	public sealed class MouseInputState
 	{
-        public MouseState MouseState { get; private set; }
+        internal MouseState MouseState { get; private set; }
         public Vector2 Position { get; private set; }
+        public Vector2 PositionOld { get; private set; }
         public Vector2 PositionDelta { get; private set; }
         public Button LeftButton { get; private set; }
         public Button RightButton { get; private set; }
@@ -17,14 +18,23 @@ namespace Delta.Input.States
         public Button XButton2 { get; private set; }
         public int ScrollWheelValue { get; private set; }
         public int ScrollWheelDelta { get; private set; }
+
+        internal MouseInputState()
+            : base()
+        {
+            LeftButton = new Button();
+            RightButton = new Button();
+            MiddleButton = new Button();
+            XButton1 = new Button();
+            XButton2 = new Button();
+        }
 		
 		internal void Update(DeltaTime time, ref MouseState mouseState)
 		{
             MouseState = mouseState;
-
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            PositionDelta = mousePosition - Position; 
-            Position = mousePosition;
+            PositionOld = Position;
+            Position = new Vector2(mouseState.X, mouseState.Y);
+            PositionDelta = Position - PositionOld;
 			ScrollWheelDelta = mouseState.ScrollWheelValue - ScrollWheelValue;
 			ScrollWheelValue = mouseState.ScrollWheelValue;
 

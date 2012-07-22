@@ -15,7 +15,7 @@ namespace Delta
         {
             output.WriteRawObject<EntityBase>(value as EntityBase);
             List<IEntity> gameComponents = new List<IEntity>();
-            foreach (var gameComponent in value.Components)
+            foreach (var gameComponent in value.Children)
                 gameComponents.Add(gameComponent);
             output.WriteObject<List<IEntity>>(gameComponents);
         }

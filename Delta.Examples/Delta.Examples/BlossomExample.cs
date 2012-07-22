@@ -50,7 +50,7 @@ namespace Delta.Examples
             lblControls.Position = new Vector2(G.ScreenCenter.X, 0);
             lblControls.BackColor = Color.Gray;
             lblControls.ForeColor = Color.White;
-            G.UI.DebugScreen.Add(lblControls);
+            G.UI.HUD.Add(lblControls);
 
             base.LoadContent();
         }

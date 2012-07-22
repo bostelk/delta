@@ -34,7 +34,7 @@ namespace Delta
 
         internal List<T> _components = new List<T>();
 
-        public ReadOnlyCollection<T> Components { get; private set; }
+        public ReadOnlyCollection<T> Children { get; private set; }
         public bool NeedsToSort { get; set; }
         public bool AlwaysSort { get; set; }
         public IComparer<T> Comparer { get; set; }
@@ -42,19 +42,19 @@ namespace Delta
         public EntityCollection()
             : base()
         {
-            Components = new ReadOnlyCollection<T>(_components);
+            Children = new ReadOnlyCollection<T>(_components);
             NeedsToSort = true;
             Comparer = null;
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return Components.GetEnumerator();
+            return Children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Components.GetEnumerator();
+            return Children.GetEnumerator();
         }
 
         void IEntityCollection.Add(IEntity item)

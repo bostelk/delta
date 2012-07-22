@@ -142,14 +142,14 @@ namespace Delta.Tiled
         protected internal override void OnAdded()
         {
             if (BelowGroundIndex > 0)
-                G.World.BelowGround = Components[BelowGroundIndex] as IEntityCollection;
+                G.World.BelowGround = Children[BelowGroundIndex] as IEntityCollection;
             if (GroundIndex > 0)
             {
-                G.World.Ground = Components[GroundIndex] as IEntityCollection;
+                G.World.Ground = Children[GroundIndex] as IEntityCollection;
                 G.World.Ground.AlwaysSort = true;
             }
             if (AboveGroundIndex > 0)
-                G.World.AboveGround = Components[AboveGroundIndex] as IEntityCollection;
+                G.World.AboveGround = Children[AboveGroundIndex] as IEntityCollection;
             base.OnAdded();
         }
 

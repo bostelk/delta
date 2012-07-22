@@ -122,6 +122,8 @@ namespace Delta.Input.States
         internal KeyboardInputState()
         {
             _state = new KeyState(_buttons);
+            for (int x = 0; x < 256; x++)
+                _buttons[x] = new Button();
         }
 
         public static Keys[] GetKeyArray()
@@ -142,8 +144,8 @@ namespace Delta.Input.States
 			return char.IsLetterOrDigit(keyChar) || char.IsPunctuation(keyChar) || char.IsWhiteSpace(keyChar);
 #else
             keyChar = '\0';
-            _keyStateBytes[0x10] = (byte)((this.KeyState.LeftShift | this.KeyState.RightShift) ? 0x80 : 0);
-            _keyStateBytes[0x11] = (byte)((this.KeyState.LeftControl | this.KeyState.RightControl) ? 0x80 : 0);
+            _keyStateBytes[0x10] = (byte)((KeyState.LeftShift.IsDown | KeyState.RightShift.IsDown) ? 0x80 : 0);
+            _keyStateBytes[0x11] = (byte)((KeyState.LeftControl.IsDown | KeyState.RightControl.IsDown) ? 0x80 : 0);
             return ToUnicodeEx((uint)key, _scanCodes[(uint)key], _keyStateBytes, out keyChar, 1, 0, _layout) == 1;
 #endif
         }
@@ -159,23 +161,23 @@ namespace Delta.Input.States
 
         public bool IsDown(Keys key)
         {
-            return _buttons[(int)key];
+            return _buttons[(int)key].IsDown;
         }
 
-        public bool IsDown(Keys key, float duration)
-        {
-            return _buttons[(int)key] && _buttons[(int)key].DownDuration >= duration;
-        }
+        //public bool IsDown(Keys key, float duration)
+        //{
+        //    return _buttons[(int)key].IsDown && _buttons[(int)key].DownDuration >= duration;
+        //}
 
         public bool IsUp(Keys key)
         {
-            return !_buttons[(int)key];
+            return !_buttons[(int)key].IsDown;
         }
 
-        public bool IsUp(Keys key, float duration)
-        {
-            return !_buttons[(int)key] && _buttons[(int)key].UpDuration >= duration;
-        }
+        //public bool IsUp(Keys key, float duration)
+        //{
+        //    return !_buttons[(int)key] && _buttons[(int)key].UpDuration >= duration;
+        //}
 
         public bool IsPressed(Keys key)
         {

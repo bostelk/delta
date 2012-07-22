@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Delta.Input.States;
@@ -101,6 +102,12 @@ namespace Delta.Input
                     PlayerInput[i].UpdatePadState(totalSeconds, ref keyboards[(int)this.PlayerInput[i].ControlInput]);
             }
 #endif
+            if (Mouse.PositionDelta != Vector2.Zero)
+                G.UI.MouseMove();
+            if (Mouse.LeftButton.IsPressed || Mouse.RightButton.IsPressed || Mouse.MiddleButton.IsPressed || Mouse.XButton1.IsPressed || Mouse.XButton2.IsPressed)
+                G.UI.MouseDown();
+            if (Mouse.LeftButton.IsReleased || Mouse.RightButton.IsReleased || Mouse.MiddleButton.IsReleased || Mouse.XButton1.IsReleased || Mouse.XButton2.IsReleased)
+                G.UI.MouseUp();
         }
 	}
  }

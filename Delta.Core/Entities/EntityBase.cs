@@ -13,8 +13,6 @@ namespace Delta
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class EntityBase : IRecyclable, IImportable, IEntity, IDisposable
     {
-        public static int Count { get; set; }
-
         public static IEntity Get(string id)
         {
             id = id.ToLower();
@@ -46,16 +44,42 @@ namespace Delta
 
         [ContentSerializerIgnore]
         protected bool IsLateInitialized { get; private set; }
-        [ContentSerializer]
-        public bool IsVisible { get; set; }
-        [ContentSerializer]
-        public bool IsEnabled { get; set; }
         [ContentSerializerIgnore]
         protected bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
         public bool IsLoaded { get; protected set; }
         [ContentSerializerIgnore]
         protected bool RemoveNextUpdate { get; set; }
+
+        bool _isEnabled = true;
+        [ContentSerializer]
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnEnabledChanged();
+                }
+            }
+        }
+
+        bool _isVisible = true;
+        [ContentSerializer]
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    OnVisibleChanged();
+                }
+            }
+        }
 
         float _layer = 0.0f;
         [ContentSerializer]
@@ -76,7 +100,6 @@ namespace Delta
         public EntityBase()
             : base()
         {
-            Count++;
             IsVisible = true;
             IsEnabled = true;
         }
@@ -94,8 +117,6 @@ namespace Delta
   
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-                Count--;
         }
 
 #if WINDOWS
@@ -166,7 +187,7 @@ namespace Delta
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void InternalUpdate(DeltaTime time)
+        public virtual void InternalUpdate(DeltaTime time)
         {
             if (RemoveNextUpdate)
                 RemoveImmediate();
@@ -230,6 +251,14 @@ namespace Delta
             IsLateInitialized = false;
             IsVisible = true;
             RemoveNextUpdate = false;
+        }
+
+        protected internal virtual void OnEnabledChanged()
+        {
+        }
+
+        protected internal virtual void OnVisibleChanged()
+        {
         }
 
         void IEntity.OnAdded()

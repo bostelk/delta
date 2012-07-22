@@ -4,7 +4,7 @@ using Delta.UI.Controls;
 
 namespace Delta.UI
 {
-    public class DebugScreen : Screen
+    public class DebugScreen : BaseScreen
     {
         PerformanceMetrics _performanceMetrics = new PerformanceMetrics();
 

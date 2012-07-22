@@ -5,25 +5,25 @@ using System.Text;
 
 namespace Delta.Input
 {
-    public struct Button
+    public class Button
     {
-        bool _previousFrameIsDown;
         float _pressedStarted;
         float _releasedStarted;
 
+        public bool WasDown { get; private set; }
         public bool IsDown { get; private set; }
         public float DownDuration { get; private set; }
         public float UpDuration { get; private set; }
-        public bool IsPressed { get { return IsDown && !_previousFrameIsDown; } }
-        public bool IsReleased { get { return IsDown && !_previousFrameIsDown; } }
+        public bool IsPressed { get { return IsDown && !WasDown; } }
+        public bool IsReleased { get { return !IsDown && WasDown; } }
 
         internal void SetState(bool value, DeltaTime time)
         {
             if (value && !IsDown)
                 _pressedStarted = time.TotalSeconds;
-            _previousFrameIsDown = IsDown;
+            WasDown = IsDown;
             IsDown = value;
-            if (!value && _previousFrameIsDown)
+            if (!value && WasDown)
                 _releasedStarted = time.TotalSeconds;
             if (value)
             {
@@ -39,9 +39,9 @@ namespace Delta.Input
             }
         }
 
-        public static implicit operator bool(Button b)
+        public override string ToString()
         {
-            return b.IsDown;
+            return String.Format("Down: {0}, WasDown: {1}", IsDown, WasDown);
         }
     }
 }

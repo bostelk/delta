@@ -91,13 +91,13 @@ namespace Delta.UI.Controls
             _textSize = Font.MeasureString(_renderText);
         }
 
-        protected override void UpdateRenderSize()
-        {
-            if (AutoSize)
-                RenderSize = _textSize;
-            else
-                base.UpdateRenderSize();
-        }
+        //protected override void UpdateRenderSize()
+        //{
+        //    if (AutoSize)
+        //        RenderSize = _textSize;
+        //    else
+        //        base.UpdateRenderSize();
+        //}
 
         protected virtual void UpdateTextPosition()
         {
@@ -124,7 +124,7 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected override void OnInvalidate()
+        protected internal override void OnInvalidate()
         {
             UpdateRenderText();
             UpdateTextSize();
