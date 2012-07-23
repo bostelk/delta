@@ -10,7 +10,6 @@ namespace Delta.UI.Controls
             : base()
         {
             ClickedColor = Color.DeepSkyBlue;
-            SelectedColor = Color.White * 0.75f;
             AutoSize = false;
             IsWordWrapped = true;
         }

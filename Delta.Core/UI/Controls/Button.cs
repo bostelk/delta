@@ -11,7 +11,6 @@ namespace Delta.UI.Controls
             BackColor = Color.RoyalBlue * 0.5f;
             HighlightedColor = Color.Blue * 0.75f;
             ClickedColor = Color.Navy;
-            SelectedColor = Color.Red * 0.75f;
             FocusedColor = Color.Yellow * 0.5f;
             AutoSize = false;
             IsWordWrapped = false;

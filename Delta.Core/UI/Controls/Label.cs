@@ -37,7 +37,7 @@ namespace Delta.UI.Controls
                 if (_isWordWrapped != value)
                 {
                     _isWordWrapped = value;
-                    Invalidate();
+                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace Delta.UI.Controls
                 if (_autoSize != value)
                 {
                     _autoSize = value;
-                    Invalidate();
+                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -76,32 +76,32 @@ namespace Delta.UI.Controls
             Font = G.Font;
         }
 
-        protected virtual void UpdateRenderText()
-        {
-            _renderText.Clear();
-            if (IsWordWrapped)
-                Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
-            else
-                for (int i = 0; i < Text.Length; i++)
-                    _renderText.Append(Text[i]);
-        }
-
         protected virtual void UpdateTextSize()
         {
             _textSize = Font.MeasureString(_renderText);
         }
 
+        protected virtual void UpdateRenderText()
+        {
+            _renderText.Clear();
+            if (IsWordWrapped && !AutoSize)
+                Text.WordWrap(ref _renderText, Font, InnerArea, Vector2.One);
+            else
+                for (int i = 0; i < Text.Length; i++)
+                    _renderText.Append(Text[i]);
+        }
+
         protected override void UpdateRenderSize()
         {
             if (AutoSize)
-                RenderSize = _textSize;
+                _renderSize = _textSize;
             else
                 base.UpdateRenderSize();
         }
 
         protected virtual void UpdateTextPosition()
         {
-            _textPosition = Position;
+            _textPosition = _renderPosition;
             _textOrigin = Vector2.Zero;
             if (!AutoSize)
             {
@@ -124,13 +124,11 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected internal override void OnInvalidate()
+        protected internal override void HeavyUpdate(DeltaTime time)
         {
-            UpdateRenderText();
             UpdateTextSize();
-            UpdateRenderSize();
+            base.HeavyUpdate(time);
             UpdateTextPosition();
-            base.OnInvalidate();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)

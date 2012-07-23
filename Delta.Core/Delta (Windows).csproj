@@ -195,7 +195,6 @@
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
     <Compile Include="UI\HUD.cs" />
-    <Compile Include="UI\BaseControl.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\CaptionBar.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\Cell.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\CheckBox.cs" />
@@ -216,13 +215,12 @@
     <Compile Include="UI\ODYSSEY\NewFolder1\TrackBar.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\Window.cs" />
     <Compile Include="UI\Control.cs" />
-    <Compile Include="UI\Screens\DebugScreen.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
     <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
-    <Compile Include="UI\BaseScreen.cs" />
+    <Compile Include="UI\Screen.cs" />
     <Compile Include="UI\UIManager.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="G.cs" />

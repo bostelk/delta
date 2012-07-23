@@ -11,14 +11,16 @@ using Delta.Input.States;
 
 namespace Delta.UI
 {
-    public class UIManager : EntityManager<BaseScreen>
+    public class UIManager : EntityManager<Screen>
     {
+        static RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+
         public HUD HUD { get; internal set; }
-        public BaseScreen ActiveScreen { get; internal set; }
-        public BaseControl FocusedControl { get; set; }
-        public BaseControl ClickedControl { get; set; }
-        public BaseControl CaptureControl { get; set; }
-        public BaseControl EnteredControl { get; set; }
+        public Screen ActiveScreen { get; internal set; }
+        public Control FocusedControl { get; set; }
+        public Control ClickedControl { get; set; }
+        //public Control CaptureControl { get; set; }
+        public Control EnteredControl { get; set; }
 
         internal Action<Keys> _keyDown;
         internal Action<Keys> _keyPress;
@@ -50,22 +52,27 @@ namespace Delta.UI
             HUD.InternalUpdate(time);
         }
 
+        protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, _rasterizerState, null, Camera.View);
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            base.Draw(time, spriteBatch);
             HUD.InternalDraw(time, spriteBatch);
+            base.Draw(time, spriteBatch);
             if (ActiveScreen != null)
                 ActiveScreen.InternalDraw(time, spriteBatch);
         }
 
-        public override void Add(BaseScreen item)
+        public override void Add(Screen item)
         {
             base.Add(item);
             if (ActiveScreen == null)
                 ActiveScreen = item;
         }
 
-        public override void Remove(BaseScreen item)
+        public override void Remove(Screen item)
         {
             if (ActiveScreen == item)
                 ActiveScreen = null;
@@ -76,8 +83,8 @@ namespace Delta.UI
         internal void MouseMove()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseMove();
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseMove();
             if (!handled && ActiveScreen != null)
                 handled = ActiveScreen.ProcessMouseMove();
             if (!handled)
@@ -90,8 +97,8 @@ namespace Delta.UI
         internal void MouseDown()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseUp();
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseUp();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseDown();
@@ -102,8 +109,8 @@ namespace Delta.UI
         internal void MouseUp()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseUp();
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseUp();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseUp();

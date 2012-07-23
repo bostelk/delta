@@ -11,7 +11,6 @@ namespace Delta.UI.Controls
             BackColor = new Color(170, 0, 150, 255) * 0.5f;
             HighlightedColor = Color.MediumBlue * 0.75f;
             ClickedColor = new Color(170, 0, 150, 255) * 0.75f;
-            SelectedColor = Color.Red * 0.75f;
             FocusedColor = new Color(170, 0, 150, 255) * 0.5f;
         }
     }

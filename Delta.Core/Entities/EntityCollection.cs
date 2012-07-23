@@ -113,6 +113,10 @@ namespace Delta
 
         protected override void LightUpdate(DeltaTime time)
         {
+        }
+
+        protected override void EndUpdate(DeltaTime time)
+        {
             if (AlwaysSort || NeedsToSort)
                 Sort();
             for (int i = 0; i < _components.Count; i++)
@@ -124,7 +128,7 @@ namespace Delta
             InternalDraw(time, spriteBatch);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < _components.Count; i++)
                 _components[i].Draw(time, spriteBatch);

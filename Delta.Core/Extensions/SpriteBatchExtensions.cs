@@ -24,6 +24,16 @@ namespace Delta
 
     public static class SpriteBatchExtensions
     {
+        static Rectangle _currentScissorRectangle = Rectangle.Empty;
+        static Rectangle _previousScissorRectangle = Rectangle.Empty;
+        static RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+
+        public static void Begin(this SpriteBatch spriteBatch, Camera camera, Rectangle scissor)
+        {
+            spriteBatch.GraphicsDevice.ScissorRectangle = scissor;
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, _rasterizerState, null, camera.View);
+        }
+
         public static void DrawStringOutline(this SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color color, Color outline)
         {
             spriteBatch.DrawString(font, text, position + new Vector2(1f, 1f), outline);

@@ -154,7 +154,7 @@ namespace Delta
             return font.MeasureString(_singleCharacterStringBuilder);
         }
 
-        public static void WordWrap(this StringBuilder stringBuilder, ref StringBuilder target, SpriteFont font, Vector2 maximumSize, Vector2 scale)
+        public static void WordWrap(this StringBuilder stringBuilder, ref StringBuilder target, SpriteFont font, Rectangle bounds, Vector2 scale)
         {
             int lastWhiteSpaceIndex = 0;
             float currentLineWidth = 0;
@@ -168,9 +168,9 @@ namespace Delta
                 lengthSinceLastWhiteSpace += characterSize.X;
                 if ((stringBuilder[i] != '\r') && (stringBuilder[i] != '\n'))
                 {
-                    if (currentLineWidth > maximumSize.X)
+                    if (currentLineWidth > bounds.X)
                     {
-                        if ((lines + 1) * font.LineSpacing > maximumSize.Y)
+                        if ((lines + 1) * font.LineSpacing > bounds.Y)
                             return;
                         lines++;
                         if (char.IsWhiteSpace(stringBuilder[i]))

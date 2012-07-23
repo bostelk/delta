@@ -18,17 +18,14 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
-            G.UI.HUD.Add(new Textbox()
-            {
-                Position = new Vector2(50, 50),
-                Size = new Vector2(40, 40),
-            });
-            G.UI.HUD.Add(new Button()
-            {
-                AutoSize = false,
-                Position = new Vector2(100, 100),
-                Size = new Vector2(40, 40),
-            });
+            Panel pnl = new Panel();
+            pnl.Position = new Point(50, 50);
+            pnl.Size = new Point(100, 100);
+            Button btn = new Button();
+            btn.Size = new Point(50, 50);
+            btn.Text.Append("Hi, I'm a button!");
+            //pnl.Add(btn);
+            //G.UI.HUD.Add(pnl);
         }
 
         protected override void Initialize()
@@ -51,7 +48,7 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.Black);
             base.Draw(gameTime);
         }
     }

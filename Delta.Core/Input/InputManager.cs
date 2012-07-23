@@ -103,7 +103,7 @@ namespace Delta.Input
             }
 #endif
 #if WINDOWS
-            if (Mouse.PositionDelta != Vector2.Zero)
+            if (Mouse.PositionDelta != Point.Zero)
                 G.UI.MouseMove();
             if (Mouse.LeftButton.IsPressed || Mouse.RightButton.IsPressed || Mouse.MiddleButton.IsPressed || Mouse.XButton1.IsPressed || Mouse.XButton2.IsPressed)
                 G.UI.MouseDown();
