@@ -53,7 +53,7 @@ namespace Delta.UI
                 Text.Concat((float)(_managedMemory / 1024f / 1024f), 2);
                 Text.Append(" mB");
             }
-            if (_deltaManagedMemory != 0)
+            if (_deltaManagedMemory > 0)
             {
                 if (_deltaManagedMemory < 1024)
                 {
