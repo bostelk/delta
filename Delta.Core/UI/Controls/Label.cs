@@ -65,6 +65,7 @@ namespace Delta.UI.Controls
         public Label()
             : base()
         {
+            AutoSize = true;
             Text = new StringBuilder();
             ForeColor = Color.White;
         }
@@ -78,12 +79,11 @@ namespace Delta.UI.Controls
         protected virtual void UpdateRenderText()
         {
             _renderText.Clear();
-            if (AutoSize || !_isWordWrapped)
-            {
+            if (IsWordWrapped)
+                Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
+            else
                 for (int i = 0; i < Text.Length; i++)
                     _renderText.Append(Text[i]);
-            }
-            Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
         }
 
         protected virtual void UpdateTextSize()
@@ -91,13 +91,13 @@ namespace Delta.UI.Controls
             _textSize = Font.MeasureString(_renderText);
         }
 
-        //protected override void UpdateRenderSize()
-        //{
-        //    if (AutoSize)
-        //        RenderSize = _textSize;
-        //    else
-        //        base.UpdateRenderSize();
-        //}
+        protected override void UpdateRenderSize()
+        {
+            if (AutoSize)
+                RenderSize = _textSize;
+            else
+                base.UpdateRenderSize();
+        }
 
         protected virtual void UpdateTextPosition()
         {
@@ -128,14 +128,20 @@ namespace Delta.UI.Controls
         {
             UpdateRenderText();
             UpdateTextSize();
-            base.OnInvalidate();
+            UpdateRenderSize();
             UpdateTextPosition();
+            base.OnInvalidate();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
             spriteBatch.DrawString(Font, _renderText, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}, Text: {1}", base.ToString(), _renderText);
         }
     }
 }

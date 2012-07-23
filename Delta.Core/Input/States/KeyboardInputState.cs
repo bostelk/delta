@@ -215,32 +215,7 @@ namespace Delta.Input.States
             }
         }
 
-        public void GetPressedKeys(Action<Keys> callback)
-        {
-            if (_currentFrame.currentState0 != _previousFrame.currentState0) PressCallback(callback, 0);
-            if (_currentFrame.currentState1 != _previousFrame.currentState1) PressCallback(callback, 1);
-            if (_currentFrame.currentState2 != _previousFrame.currentState2) PressCallback(callback, 2);
-            if (_currentFrame.currentState3 != _previousFrame.currentState3) PressCallback(callback, 3);
-            if (_currentFrame.currentState4 != _previousFrame.currentState4) PressCallback(callback, 4);
-            if (_currentFrame.currentState5 != _previousFrame.currentState5) PressCallback(callback, 5);
-            if (_currentFrame.currentState6 != _previousFrame.currentState6) PressCallback(callback, 6);
-            if (_currentFrame.currentState7 != _previousFrame.currentState7) PressCallback(callback, 7);
-        }
-
-        public void GetPressedKeys(List<Keys> pressedList)
-        {
-            pressedList.Clear();
-            if (_currentFrame.currentState0 != _previousFrame.currentState0) PressList(pressedList, 0);
-            if (_currentFrame.currentState1 != _previousFrame.currentState1) PressList(pressedList, 1);
-            if (_currentFrame.currentState2 != _previousFrame.currentState2) PressList(pressedList, 2);
-            if (_currentFrame.currentState3 != _previousFrame.currentState3) PressList(pressedList, 3);
-            if (_currentFrame.currentState4 != _previousFrame.currentState4) PressList(pressedList, 4);
-            if (_currentFrame.currentState5 != _previousFrame.currentState5) PressList(pressedList, 5);
-            if (_currentFrame.currentState6 != _previousFrame.currentState6) PressList(pressedList, 6);
-            if (_currentFrame.currentState7 != _previousFrame.currentState7) PressList(pressedList, 7);
-        }
-
-        public void GetHeldKeys(Action<Keys> callback)
+        public void KeyDown(Action<Keys> callback)
         {
             if (_currentFrame.currentState0 != 0) HeldCallback(callback, 0);
             if (_currentFrame.currentState1 != 0) HeldCallback(callback, 1);
@@ -252,18 +227,55 @@ namespace Delta.Input.States
             if (_currentFrame.currentState7 != 0) HeldCallback(callback, 7);
         }
 
-        public void GetHeldKeys(List<Keys> heldKeyList)
+        public void KeyPressed(Action<Keys> callback)
         {
-            heldKeyList.Clear();
-            if (_currentFrame.currentState0 != 0) HeldList(heldKeyList, 0);
-            if (_currentFrame.currentState1 != 0) HeldList(heldKeyList, 1);
-            if (_currentFrame.currentState2 != 0) HeldList(heldKeyList, 2);
-            if (_currentFrame.currentState3 != 0) HeldList(heldKeyList, 3);
-            if (_currentFrame.currentState4 != 0) HeldList(heldKeyList, 4);
-            if (_currentFrame.currentState5 != 0) HeldList(heldKeyList, 5);
-            if (_currentFrame.currentState6 != 0) HeldList(heldKeyList, 6);
-            if (_currentFrame.currentState7 != 0) HeldList(heldKeyList, 7);
+            if (_currentFrame.currentState0 != _previousFrame.currentState0) PressCallback(callback, 0);
+            if (_currentFrame.currentState1 != _previousFrame.currentState1) PressCallback(callback, 1);
+            if (_currentFrame.currentState2 != _previousFrame.currentState2) PressCallback(callback, 2);
+            if (_currentFrame.currentState3 != _previousFrame.currentState3) PressCallback(callback, 3);
+            if (_currentFrame.currentState4 != _previousFrame.currentState4) PressCallback(callback, 4);
+            if (_currentFrame.currentState5 != _previousFrame.currentState5) PressCallback(callback, 5);
+            if (_currentFrame.currentState6 != _previousFrame.currentState6) PressCallback(callback, 6);
+            if (_currentFrame.currentState7 != _previousFrame.currentState7) PressCallback(callback, 7);
         }
+
+        public void KeyUp(Action<Keys> callback)
+        {
+            if (_currentFrame.currentState0 != _previousFrame.currentState0) ReleaseCallback(callback, 0);
+            if (_currentFrame.currentState1 != _previousFrame.currentState1) ReleaseCallback(callback, 1);
+            if (_currentFrame.currentState2 != _previousFrame.currentState2) ReleaseCallback(callback, 2);
+            if (_currentFrame.currentState3 != _previousFrame.currentState3) ReleaseCallback(callback, 3);
+            if (_currentFrame.currentState4 != _previousFrame.currentState4) ReleaseCallback(callback, 4);
+            if (_currentFrame.currentState5 != _previousFrame.currentState5) ReleaseCallback(callback, 5);
+            if (_currentFrame.currentState6 != _previousFrame.currentState6) ReleaseCallback(callback, 6);
+            if (_currentFrame.currentState7 != _previousFrame.currentState7) ReleaseCallback(callback, 7);
+        }
+
+        //public void GetPressedKeys(List<Keys> pressedList)
+        //{
+        //    pressedList.Clear();
+        //    if (_currentFrame.currentState0 != _previousFrame.currentState0) PressList(pressedList, 0);
+        //    if (_currentFrame.currentState1 != _previousFrame.currentState1) PressList(pressedList, 1);
+        //    if (_currentFrame.currentState2 != _previousFrame.currentState2) PressList(pressedList, 2);
+        //    if (_currentFrame.currentState3 != _previousFrame.currentState3) PressList(pressedList, 3);
+        //    if (_currentFrame.currentState4 != _previousFrame.currentState4) PressList(pressedList, 4);
+        //    if (_currentFrame.currentState5 != _previousFrame.currentState5) PressList(pressedList, 5);
+        //    if (_currentFrame.currentState6 != _previousFrame.currentState6) PressList(pressedList, 6);
+        //    if (_currentFrame.currentState7 != _previousFrame.currentState7) PressList(pressedList, 7);
+        //}
+
+        //public void GetHeldKeys(List<Keys> heldKeyList)
+        //{
+        //    heldKeyList.Clear();
+        //    if (_currentFrame.currentState0 != 0) HeldList(heldKeyList, 0);
+        //    if (_currentFrame.currentState1 != 0) HeldList(heldKeyList, 1);
+        //    if (_currentFrame.currentState2 != 0) HeldList(heldKeyList, 2);
+        //    if (_currentFrame.currentState3 != 0) HeldList(heldKeyList, 3);
+        //    if (_currentFrame.currentState4 != 0) HeldList(heldKeyList, 4);
+        //    if (_currentFrame.currentState5 != 0) HeldList(heldKeyList, 5);
+        //    if (_currentFrame.currentState6 != 0) HeldList(heldKeyList, 6);
+        //    if (_currentFrame.currentState7 != 0) HeldList(heldKeyList, 7);
+        //}
 
         void PressCallback(Action<Keys> callback, int group)
         {
@@ -271,6 +283,14 @@ namespace Delta.Input.States
                 if (_buttons[32 * group + i].IsPressed)
                     callback((Keys)(32 * group + i));
         }
+
+        void ReleaseCallback(Action<Keys> callback, int group)
+        {
+            for (int i = 0; i < 32; i++)
+                if (_buttons[32 * group + i].IsReleased)
+                    callback((Keys)(32 * group + i));
+        }
+
         void HeldCallback(Action<Keys> callback, int group)
         {
             for (int i = 0; i < 32; i++)
@@ -278,17 +298,17 @@ namespace Delta.Input.States
                     callback((Keys)(32 * group + i));
         }
 
-        void PressList(List<Keys> list, int group)
-        {
-            for (int i = 0; i < 32; i++)
-                if (_buttons[32 * group + i].IsPressed)
-                    list.Add((Keys)(32 * group + i));
-        }
-        void HeldList(List<Keys> list, int group)
-        {
-            for (int i = 0; i < 32; i++)
-                if (_buttons[32 * group + i].IsDown)
-                    list.Add((Keys)(32 * group + i));
-        }
+        //void PressList(List<Keys> list, int group)
+        //{
+        //    for (int i = 0; i < 32; i++)
+        //        if (_buttons[32 * group + i].IsPressed)
+        //            list.Add((Keys)(32 * group + i));
+        //}
+        //void HeldList(List<Keys> list, int group)
+        //{
+        //    for (int i = 0; i < 32; i++)
+        //        if (_buttons[32 * group + i].IsDown)
+        //            list.Add((Keys)(32 * group + i));
+        //}
     }
 }

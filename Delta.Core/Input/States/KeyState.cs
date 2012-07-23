@@ -14,7 +14,7 @@ namespace Delta.Input.States
 
         public Button this[Keys key]
         {
-            get { return this._buttons[(int)key]; }
+            get { return _buttons[(int)key]; }
         }
 
         /// <summary>The 'A' button</summary>

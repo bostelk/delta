@@ -7,9 +7,6 @@ namespace Delta.Input
 {
     public class Button
     {
-        float _pressedStarted;
-        float _releasedStarted;
-
         public bool WasDown { get; private set; }
         public bool IsDown { get; private set; }
         public float DownDuration { get; private set; }
@@ -19,24 +16,16 @@ namespace Delta.Input
 
         internal void SetState(bool value, DeltaTime time)
         {
-            if (value && !IsDown)
-                _pressedStarted = time.TotalSeconds;
             WasDown = IsDown;
             IsDown = value;
-            if (!value && WasDown)
-                _releasedStarted = time.TotalSeconds;
-            if (value)
-            {
-                DownDuration = time.TotalSeconds - _pressedStarted;
-                UpDuration = 0;
-                _releasedStarted = 0;
-            }
+            if (IsDown && WasDown)
+                DownDuration += time.ElapsedSeconds;
             else
-            {
                 DownDuration = 0;
-                UpDuration = time.TotalSeconds - _releasedStarted;
-                _pressedStarted = 0;
-            }
+            if (!IsDown && !WasDown)
+                UpDuration += time.ElapsedSeconds;
+            else
+                UpDuration = 0;
         }
 
         public override string ToString()

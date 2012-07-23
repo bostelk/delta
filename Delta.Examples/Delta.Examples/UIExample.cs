@@ -39,7 +39,7 @@ namespace Delta.Examples
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(ClearColor);
+            GraphicsDevice.Clear(Color.Gray);
             base.Draw(gameTime);
         }
     }

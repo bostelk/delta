@@ -5,43 +5,38 @@ namespace Delta.UI.Controls
 {
     public class Textbox : Label
     {
-
         public Textbox()
             : base()
         {
+            AutoSize = false;
+            IsWordWrapped = true;
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void OnKeyDown(Keys key)
         {
-            base.LightUpdate(time);
-            //if (G.Input.Keyboard.IsPressed(Keys.Back) || G.Input.Keyboard.IsDown(Keys.Back, 0.6f));
-            //{
-            //    if (Text.Length > 0)
-            //        Text.Remove(Text.Length - 1, 1);
-            //}
-            G.Input.Keyboard.GetHeldKeys(AddKey);
+            Delta.Input.Button button = G.Input.Keyboard.KeyState[key];
+            if (button.IsPressed || button.DownDuration >= G.UI.KeyboardDelay)
+            {
+                switch (key)
+                {
+                    case Keys.Escape:
+                    case Keys.Back:
+                        if (Text.Length > 0)
+                        {
+                            Text.Remove(Text.Length - 1, 1);
+                            Invalidate();
+                        }
+                        break;
+                    default:
+                        Char charKey;
+                        if (G.Input.Keyboard.TryGetKeyChar(key, out charKey))
+                        {
+                            Text.Append(charKey);
+                            Invalidate();
+                        }
+                        break;
+                }
+            }
         }
-
-        void AddKey(Keys key)
-        {
-            //if (G.Input.Keyboard.IsPressed(key) || G.Input.Keyboard.IsDown(key, 0.6f))
-            //{
-            //    char charKey;
-            //    switch (key)
-            //    {
-            //        case Keys.Escape:
-            //        case Keys.Back:
-            //            return;
-            //        default:
-            //            if (G.Input.Keyboard.TryGetKeyChar(key, out charKey))
-            //            {
-            //                Text.Append(charKey);
-            //                Invalidate();
-            //            }
-            //            return;
-            //    }
-            //}
-        }
-
     }
 }

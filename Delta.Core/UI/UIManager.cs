@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Delta.Input;
 using Delta.Input.States;
 
@@ -19,10 +20,28 @@ namespace Delta.UI
         public BaseControl CaptureControl { get; set; }
         public BaseControl EnteredControl { get; set; }
 
+        internal Action<Keys> _keyDown;
+        internal Action<Keys> _keyPress;
+        internal Action<Keys> _keyUp;
+
+        int _keyboardDelay = 0;
+        public int KeyboardDelay
+        {
+            get
+            {
+                if (_keyboardDelay == 0)
+                    _keyboardDelay = System.Windows.Forms.SystemInformation.KeyboardDelay;
+                return _keyboardDelay;
+            }
+        }
+
         public UIManager()
             : base()
         {
             HUD = new HUD();
+            _keyDown = KeyDown;
+            _keyPress = KeyPress;
+            _keyUp = KeyUp;
         }
 
         protected override void LightUpdate(DeltaTime time)
@@ -91,17 +110,25 @@ namespace Delta.UI
             if (!handled)
                 HUD.ProcessMouseUp();
         }
+
+        internal void KeyDown(Keys key)
+        {
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyDown(key);
+        }
+
+        internal void KeyPress(Keys key)
+        {
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyPress(key);
+        }
+
+        internal void KeyUp(Keys key)
+        {
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyUp(key);
+        }
 #endif
-
-        //void ProcessKeyDown()
-        //{
-        //    ActiveScreen.FocusedControl.ProcessKeyDown();
-        //}
-
-        //void ProcessKeyPress()
-        //{
-        //    ActiveScreen.FocusedControl.ProcessKeyPress();
-        //}
 
     }
 }
