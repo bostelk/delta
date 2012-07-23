@@ -8,12 +8,10 @@ namespace Delta.UI.Controls
         public Button() //no difference between a label and a button right now lol.
             : base()
         {
-            BackColor = Color.RoyalBlue * 0.5f;
-            HighlightedColor = Color.Blue * 0.75f;
-            PressedColor = Color.Navy;
-            FocusedColor = Color.Yellow * 0.5f;
             AutoSize = false;
             IsWordWrapped = false;
+            VerticalTextAlignment = VerticalTextAlignment.Center;
+            HorizontalTextAlignment = HorizontalTextAlignment.Center;
         }
     }
 }

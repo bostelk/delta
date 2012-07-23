@@ -8,6 +8,7 @@ namespace Delta.UI
 {
     public abstract class Control : EntityCollection<Control>
     {
+        internal Rectangle _cullRectangle = Rectangle.Empty;
         internal Vector2 _renderPosition = Vector2.Zero;
         internal Vector2 _renderSize = Vector2.Zero;
         internal Vector2 _renderBorderSize = Vector2.Zero;
@@ -328,6 +329,7 @@ namespace Delta.UI
             UpdateRenderArea();
             UpdateInnerArea();
             UpdateColors();
+            UpdateCullRectangle();
             if (Children.Count != 0)
                 foreach (Control control in Children)
                     control.NeedsHeavyUpdate = true;
@@ -411,9 +413,16 @@ namespace Delta.UI
             }
         }
 
+        internal virtual void UpdateCullRectangle()
+        {
+            _cullRectangle = RenderArea;
+            if (Parent != null)
+                _cullRectangle = Rectangle.Intersect(_cullRectangle, Parent._cullRectangle);
+        }
+
         protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            G.GraphicsDevice.ScissorRectangle = RenderArea;
+            G.GraphicsDevice.ScissorRectangle = _cullRectangle;
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
@@ -535,12 +544,6 @@ namespace Delta.UI
                 G.UI.PressedControl = null;
         }
 
-        //protected virtual void OnMouseCaptureChanged()
-        //{
-        //    G.UI.CaptureControl = null;
-        //    IsClicked = false;
-        //}
-
         protected virtual void OnMouseEnter()
         {
             if (G.UI.EnteredControl != this)
@@ -550,12 +553,12 @@ namespace Delta.UI
                 G.UI.EnteredControl = this;
             }
             IsHighlighted = true;
-            //if (G.Input.Mouse.LeftButton.IsDown)
-            //{
-            //    if (G.UI.PressedControl != this)
-            //        return;
-            //        IsPressed = true;
-            //}
+            if (G.Input.Mouse.LeftButton.IsDown)
+            {
+                if (G.UI.PressedControl != this)
+                    return;
+                IsPressed = true;
+            }
         }
 
         protected virtual void OnMouseLeave()
@@ -563,16 +566,16 @@ namespace Delta.UI
             if (G.UI.EnteredControl == this)
                 G.UI.EnteredControl = null;
             IsHighlighted = false;
-            //if (G.Input.Mouse.LeftButton.IsDown)
-            //{
-            //    if (G.UI.PressedControl == this)
-            //    {
-            //        IsHighlighted = false;
-            //        IsPressed = false;
-            //    }
-            //    else
-            //        return;
-            //}
+            if (G.Input.Mouse.LeftButton.IsDown)
+            {
+                if (G.UI.PressedControl == this)
+                {
+                    IsHighlighted = false;
+                    IsPressed = false;
+                }
+                else
+                    return;
+            }
         }
 
         protected virtual void OnMouseScroll()

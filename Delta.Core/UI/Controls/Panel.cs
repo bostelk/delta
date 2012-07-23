@@ -8,10 +8,6 @@ namespace Delta.UI.Controls
         public Panel() //no difference between a control and a panel right now lol.
             : base()
         {
-            BackColor = new Color(170, 0, 150, 255) * 0.5f;
-            HighlightedColor = Color.MediumBlue * 0.75f;
-            PressedColor = new Color(170, 0, 150, 255) * 0.75f;
-            FocusedColor = new Color(170, 0, 150, 255) * 0.5f;
         }
     }
 }

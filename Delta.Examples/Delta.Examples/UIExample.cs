@@ -20,12 +20,12 @@ namespace Delta.Examples
         {
             Panel pnl = new Panel();
             pnl.Position = new Point(50, 50);
-            pnl.Size = new Point(100, 100);
+            pnl.Size = new Point(40, 100);
             Button btn = new Button();
-            btn.Size = new Point(50, 50);
+            btn.AutoSize = true;
             btn.Text.Append("Hi, I'm a button!");
-            //pnl.Add(btn);
-            //G.UI.HUD.Add(pnl);
+            pnl.Add(btn);
+            G.UI.HUD.Add(pnl);
         }
 
         protected override void Initialize()
