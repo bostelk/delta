@@ -8,13 +8,13 @@ namespace Delta.UI
         public HUD()
             : base()
         {
-            Add(new Controls.Label()
+            Add(new Controls.Textbox()
             {
                 AutoSize = false,
                 Position = new Vector2(50, 50),
                 Size = new Vector2(40, 40),
                 BackColor = Color.White,
-                HighlightedColor = Color.Transparent,
+                HighlightedColor = Color.DarkRed,
                 FocusedColor = Color.Green,
                 ClickedColor = Color.Orange,
             });

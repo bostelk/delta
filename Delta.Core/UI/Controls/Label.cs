@@ -65,6 +65,7 @@ namespace Delta.UI.Controls
         public Label()
             : base()
         {
+            AutoSize = true;
             Text = new StringBuilder();
             ForeColor = Color.White;
         }

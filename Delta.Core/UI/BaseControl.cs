@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Delta.Input;
 using Delta.Input.States;
+using Microsoft.Xna.Framework.Input;
 
 namespace Delta.UI
 {
@@ -299,25 +300,30 @@ namespace Delta.UI
         }
 #endif
 
-        public virtual void ProcessKeyDown()
+        public virtual void ProcessKeyDown(Keys key)
         {
-            OnKeyDown();
+            OnKeyDown(key);
         }
 
-        public virtual void ProcessKeyPress()
+        public virtual void ProcessKeyPress(Keys key)
         {
-            OnKeyPress();
+            OnKeyPress(key);
         }
 
-        protected virtual void OnKeyDown()
+        public virtual void ProcessKeyUp(Keys key)
+        {
+            OnKeyUp(key);
+        }
+
+        protected virtual void OnKeyDown(Keys key)
         {
         }
 
-        protected virtual void OnKeyPress()
+        protected virtual void OnKeyPress(Keys key)
         {
         }
 
-        protected virtual void OnKeyUp()
+        protected virtual void OnKeyUp(Keys key)
         {
         }
 

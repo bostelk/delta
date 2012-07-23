@@ -10,37 +10,30 @@ namespace Delta.UI
 
     public class PerformanceMetrics : Label
     {
-        Stopwatch _stopwatch;
-        int _frames;
+        int _frames = 0;
         long _managedMemory = 0;
-
-        public int FPS { get; private set; }
+        float _timer = 0;
+        int _fps = 0;
 
         public PerformanceMetrics()
         {
-            _stopwatch = new Stopwatch();
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            _stopwatch.Start();
         }
 
         protected override void LightUpdate(DeltaTime time)
         {
-            if (_stopwatch.Elapsed > TimeSpan.FromSeconds(1))
+            _timer += time.ElapsedSeconds;
+            if (_timer >= 1)
             {
-                FPS = (int)(_frames / _stopwatch.Elapsed.TotalSeconds);
-                _managedMemory = GC.GetTotalMemory(false);
-                _stopwatch.Restart();
+                _fps = (int)(_frames / _timer);
                 _frames = 0;
+                _timer = 0;
             }
-            Text.Length = 0;
+            Text.Clear();
             Text.Append("FPS: ");
-            Text.Concat(FPS);
+            Text.Concat(_fps);
             Text.AppendLine();
             Text.Append("MEM: ");
+            _managedMemory = GC.GetTotalMemory(false);
             if (_managedMemory < 1024)
             {
                 Text.Concat(_managedMemory);
