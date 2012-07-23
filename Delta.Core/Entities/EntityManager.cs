@@ -37,7 +37,6 @@ namespace Delta
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
             base.InternalDraw(_time, G.SpriteBatch);
             G.SpriteBatch.End();
-
             G.SpriteBatch.Begin();
             Camera.Draw(_time, G.SpriteBatch);
             G.SpriteBatch.End();

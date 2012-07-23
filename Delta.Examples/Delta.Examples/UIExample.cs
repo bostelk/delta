@@ -16,7 +16,26 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
-
+            G.UI.HUD.Add(new Delta.UI.Controls.Textbox()
+            {
+                AutoSize = false,
+                Position = new Vector2(50, 50),
+                Size = new Vector2(40, 40),
+                BackColor = Color.White,
+                HighlightedColor = Color.DarkRed,
+                FocusedColor = Color.Green,
+                ClickedColor = Color.Orange,
+            });
+            G.UI.HUD.Add(new Delta.UI.Controls.Label()
+            {
+                AutoSize = false,
+                Position = new Vector2(100, 100),
+                Size = new Vector2(40, 40),
+                BackColor = Color.White,
+                HighlightedColor = Color.Yellow,
+                FocusedColor = Color.Green,
+                ClickedColor = Color.Orange,
+            });
         }
 
         protected override void Initialize()
