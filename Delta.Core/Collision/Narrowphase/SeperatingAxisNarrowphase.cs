@@ -39,7 +39,7 @@ namespace Delta.Collision
                 Collider colA = pair.ProxyA.ClientObject as Collider;
                 Collider colB = pair.ProxyB.ClientObject as Collider;
 
-                if (colA.Shape is Box && colA.Shape is Box)
+                if (colA.Shape is Box && colB.Shape is Box)
                 {
                     result = BoxBox.SolveCollision(colA, colB);
                 }
@@ -49,7 +49,7 @@ namespace Delta.Collision
                 }
                 else if (colA.Shape is Box && colB.Shape is Circle)
                 {
-                    result = CircleBox.SolveCollision(colA, colB);
+                    result = CircleBox.SolveCollision(colB, colA);
                 }
                 else if (colA.Shape is Circle && colB.Shape is Box)
                 {
@@ -77,8 +77,5 @@ namespace Delta.Collision
             }
         }
 
-        public void DrawDebug() 
-        {
-        }
     }
 }

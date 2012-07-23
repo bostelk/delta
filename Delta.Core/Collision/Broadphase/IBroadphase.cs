@@ -12,6 +12,7 @@ namespace Delta.Collision
 
         void CalculateCollisionPairs();
         void SetProxyAABB(BroadphaseProxy proxy, ref AABB aabb);
+        void RemoveProxy(BroadphaseProxy proxy);
         //void AABBAtPoint(Vector2 point);
         //void AABBsWithinArea(Rectangle area);
     }

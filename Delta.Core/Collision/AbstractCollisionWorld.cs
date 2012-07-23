@@ -14,7 +14,7 @@ namespace Delta.Collision
 
         public abstract void AddCollider(Collider colider);
 
-        public abstract void RemoveColider(Collider colider);
+        public abstract void RemoveCollider(Collider colider);
 
         public abstract void DrawDebug(ref Matrix view, ref Matrix projection);
     }

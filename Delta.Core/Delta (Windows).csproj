@@ -101,6 +101,7 @@
     <Compile Include="Collision\Broadphase\OverlappingPair.cs" />
     <Compile Include="Collision\Broadphase\OverlappingPairCache.cs" />
     <Compile Include="Collision\CollisionGlobals.cs" />
+    <Compile Include="Collision\ICollideable.cs" />
     <Compile Include="Collision\Narrowphase\BoxBoxSolver.cs" />
     <Compile Include="Collision\Narrowphase\CircleBoxSolver.cs" />
     <Compile Include="Collision\Narrowphase\CircleCirlceSovler.cs" />

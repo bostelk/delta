@@ -84,10 +84,16 @@ namespace Delta.Collision
 
         public void SetProxyAABB(BroadphaseProxy proxy, ref AABB aabb)
         {
-            // maintain the uniform grid as the proxy moves.
+            // maintain the uniform grid as the aabb moves. this works by removing
+            // the stale aabb proxies and then adding the fresh aabb proxies.
             RemoveProxyFromCells(proxy);
             proxy.AABB = aabb;
             AddProxyToCells(proxy);
+        }
+
+        public void RemoveProxy(BroadphaseProxy proxy)
+        {
+            RemoveProxyFromCells(proxy);
         }
 
         public void AddProxyToCells(BroadphaseProxy proxy)
@@ -100,7 +106,6 @@ namespace Delta.Collision
                 for (int x = start.X; x <= end.X; x++)
                 {
                     _cells[x + y * CellsWide].AddBroadphaseProxy(proxy);
-                    CollisionGlobals.ProxiesInCells++;
                 }
             }
         }
@@ -115,7 +120,6 @@ namespace Delta.Collision
                 for (int x = start.X; x <= end.X; x++)
                 {
                     _cells[x + y * CellsWide].RemoveBroadphaseProxy(proxy);
-                    CollisionGlobals.ProxiesInCells--;
                 }
             }
         }
@@ -129,8 +133,10 @@ namespace Delta.Collision
             BroadphaseProxy proxyA, proxyB;
 
             _pairs.ClearCache();
+            CollisionGlobals.ProxiesInCells = 0;
             for (int i = 0; i < _cells.Length; i++)
             {
+                CollisionGlobals.ProxiesInCells += _cells[i].Proxies.Count;
                 for (int n = 4; n < neighbourOffset.Length; n++)
                 {
                     int ii = neighbourOffset[n] + i;

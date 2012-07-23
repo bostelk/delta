@@ -14,6 +14,7 @@ namespace Delta.Collision
     public class CollisionWorld : AbstractCollisionWorld
     {
         List<Collider> _colliders;
+
         IBroadphase _broadphase;
         INarrowphase _narrowphase;
         bool _forceUpdateAABBs; // forces an update of all aabbs for a single frame
@@ -39,6 +40,7 @@ namespace Delta.Collision
             if (!_colliders.Contains(collider))
             {
                 _colliders.Add(collider);
+                collider.OnAdded();
 
                 // add broadphase proxy
                 collider.BroadphaseProxy = BroadphaseProxy.Create(collider);
@@ -47,15 +49,14 @@ namespace Delta.Collision
             }
         }
 
-        public override void RemoveColider(Collider collider)
+        public override void RemoveCollider(Collider collider)
         {
             Debug.Assert(collider != null);
             if (_colliders.Contains(collider))
             {
                 _colliders.FastRemove<Collider>(collider);
-                
-                // will also recycle the collider's broadphase proxy too.
-                collider.Recycle();
+                _broadphase.RemoveProxy(collider.BroadphaseProxy);
+                collider.OnRemoved();
                 CollisionGlobals.TotalColliders--;
             }
         }
@@ -69,7 +70,7 @@ namespace Delta.Collision
 
         protected bool CanSimulate()
         {
-            return !(_broadphase == null || _narrowphase == null);
+            return _broadphase != null && _narrowphase != null;
         }
 
         protected void InternalUpdate()
@@ -108,7 +109,6 @@ namespace Delta.Collision
             _broadphase.SetProxyAABB(collider.BroadphaseProxy, ref aabb);
         }
 
-
         public override void DrawDebug(ref Matrix view, ref Matrix projection)
         {
             G.PrimitiveBatch.Begin(ref projection, ref view);
@@ -132,11 +132,11 @@ namespace Delta.Collision
                     else if (col.Shape is Circle)
                     {
                         Circle circle = (Circle)col.Shape;
-                        Vector2 orientation;
+                        Vector2 extents;
                         Transform transform = col.WorldTransform;
-                        circle.CalculateOrientation(ref transform, out orientation);
+                        circle.CalculateExtents(ref transform, out extents);
                         G.PrimitiveBatch.DrawCircle(col.Position, circle.Radius, CollisionGlobals.PolygonColor);
-                        G.PrimitiveBatch.DrawSegment(col.Position, col.Position + orientation, CollisionGlobals.ExtentsColor);
+                        G.PrimitiveBatch.DrawSegment(col.Position, col.Position + extents, CollisionGlobals.ExtentsColor);
                     }
                     else
                     {

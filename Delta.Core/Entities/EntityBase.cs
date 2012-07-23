@@ -11,7 +11,7 @@ namespace Delta
     /// Base class for all Delta game components.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityBase : IRecyclable, IImportable, IEntity, IDisposable
+    public abstract class EntityBase : IRecyclable, IImportable, IEntity, IDisposable
     {
         public static IEntity Get(string id)
         {
