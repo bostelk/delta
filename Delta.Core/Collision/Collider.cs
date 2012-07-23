@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Delta.Collision;
-using Delta.Physics;
 using Microsoft.Xna.Framework;
 using Delta.Structures;
 
 namespace Delta.Collision
 {
-    public class Collider : IRecyclable
+    public sealed class Collider : ICollideable, IWrappedBody, IRecyclable
     {
         static Pool<Collider> _pool;
 
-        public Entity Tag;
+        public object Owner { get; set; }
 
         private CollisionShape _shape;
         public CollisionShape Shape
@@ -51,10 +50,11 @@ namespace Delta.Collision
             }
             set
             {
-                if (Vector2Extensions.AlmostEqual(_worldTransform.Origin, value))
-                    return;
-                _worldTransform.Origin = value;
-                IsActive = true;
+                if (!Vector2Extensions.AlmostEqual(_worldTransform.Origin, value))
+                {
+                    _worldTransform.Origin = value;
+                    IsActive = true;
+                }
             }
         }
 
@@ -66,10 +66,11 @@ namespace Delta.Collision
             }
             set
             {
-                if (FloatExtensions.AlmostEqual(_worldTransform.Rotation, value))
-                    return;
-                _worldTransform.Rotation = value;
-                IsActive = true;
+                if (!FloatExtensions.AlmostEqual(_worldTransform.Rotation, value))
+                {
+                    _worldTransform.Rotation = value;
+                    IsActive = true;
+                }
             }
         }
 
@@ -84,6 +85,8 @@ namespace Delta.Collision
         /// The Collider has moved this frame.
         /// </summary>
         public bool IsActive { get; set; }
+
+        public bool RemoveNextUpdate { get; set; }
 
         /// <summary>
         /// The shape is about to collide. (broadphase overlap).
@@ -102,23 +105,54 @@ namespace Delta.Collision
 
         public OnSeparationEventHandler OnSeparation;
 
+        #region IWrappedBody
+        public Vector2 SimulationPosition
+        {
+            get { return Position; }
+            set { Position = value; }
+        }
+
+        public float SimulationRotation
+        {
+            get { return Rotation; }
+            set { Rotation = value; }
+        }
+
+        public Func<IWrappedBody, bool> BeforeCollisionEvent { get; set; }
+
+        public Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
+        #endregion
+
         static Collider()
         {
             _pool = new Pool<Collider>(200);
         }
 
+        // alias for entities
+        public static IWrappedBody CreateBody(CollisionShape shape)
+        {
+            return Create(null, shape) as IWrappedBody;
+        }
+
+        public static IWrappedBody CreateBody(Entity entity, CollisionShape shape)
+        {
+            return Create(entity, shape) as IWrappedBody;
+        }
+
         public static Collider Create(Entity entity, CollisionShape shape)
         {
             Collider collider = _pool.Fetch();
-            collider.Tag = entity;
+            collider.Owner = entity;
             collider.Shape = shape;
+            collider.OnCollision += collider.HandleOnCollision;
+            collider.BeforeCollision += collider.HandleBeforeCollision;
             return collider;
         }
 
         public Collider(Entity entity, CollisionShape shape)
             : this()
         {
-            Tag = entity;
+            Owner = entity;
             Shape = shape;
         }
 
@@ -127,11 +161,45 @@ namespace Delta.Collision
             WorldTransform = Transform.Identity;
         }
 
+        public void AddToSimulation()
+        {
+            G.Collision.AddCollider(this);
+        }
+
+        public void RemoveFromSimulation()
+        {
+            G.Collision.RemoveCollider(this);
+            //RemoveNextUpdate = true;
+        }
+
+        public void OnAdded() { }
+
+        public void OnRemoved()
+        {
+            RemoveNextUpdate = false;
+            Recycle(); // will also recycle the collider's broadphase proxy too.
+        }
+
+        private bool HandleBeforeCollision(Collider them)
+        {
+            if (BeforeCollisionEvent != null)
+                return BeforeCollisionEvent(them as IWrappedBody);
+            return true;
+        }
+
+        private bool HandleOnCollision(Collider them, Vector2 normal)
+        {
+            if (OnCollisionEvent != null)
+                return OnCollisionEvent(them as IWrappedBody, normal);
+            return true;
+        }
+
         public void Recycle()
         {
             BroadphaseProxy.Recycle();
             WorldTransform = Transform.Identity;
-            Tag = null;
+            RemoveNextUpdate = false;
+            Owner = null;
             Shape = null;
             BeforeCollision = null;
             OnCollision = null;
@@ -145,5 +213,6 @@ namespace Delta.Collision
         {
             return Shape.GetHashCode() + WorldTransform.GetHashCode();
         }
+
     }
 }

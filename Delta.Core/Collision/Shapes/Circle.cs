@@ -11,8 +11,19 @@ namespace Delta.Collision
     {
         const int SEGMENTS = 32;
 
-        [ContentSerializer]
-        public float Radius;
+        float _radius;
+        public float Radius
+        {
+            get
+            {
+                return _radius;
+            }
+            set
+            {
+                // can't have negative or zero values.
+                _radius = Math.Max((float)MathExtensions.EPSILON, value);
+            }
+        }
 
         [ContentSerializerIgnore]
         public float Circumference
@@ -20,15 +31,6 @@ namespace Delta.Collision
             get
             {
                 return Radius * (float)Math.PI * 2f;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public float Area
-        {
-            get
-            {
-                return 0;
             }
         }
 
@@ -40,6 +42,7 @@ namespace Delta.Collision
         {
             Radius = radius;
             Vertices = new Vector2[segments];
+            Normals = new Vector2[segments];
 
             double theta = 0;
             double angleInterval = Math.PI * 2 / segments;
@@ -71,5 +74,6 @@ namespace Delta.Collision
         {
             projection = Radius * axis;
         }
+
     }
 }

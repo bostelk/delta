@@ -25,8 +25,6 @@ namespace Delta.Examples.Entities
         float _trailInterval = 0.09f;
         float _trailTime = 0;
 
-        Collider collider;
-
         public Lily() : base("Lily")
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
@@ -36,21 +34,21 @@ namespace Delta.Examples.Entities
 
         protected override void LateInitialize()
         {
-            //G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));           
+            WrappedBody = Collider.CreateBody(new Box(16, 16));
             base.LateInitialize();
         }
 
-        //public void SwitchBody()
-        //{
-        //    if (Polygon is Circle)
-        //    {
-        //        Polygon = new OBB(16, 16);
-        //    }
-        //    else if (Polygon is OBB)
-        //    {
-        //        Polygon = new Circle(8);
-        //    }
-        //}
+        public void SwitchBody()
+        {
+            if (WrappedBody.Shape is Circle)
+            {
+                WrappedBody.Shape= new Box(16, 16);
+            }
+            else if (WrappedBody.Shape is Box)
+            {
+                WrappedBody.Shape = new Circle(8);
+            }
+        }
 
         protected override void LightUpdate(DeltaTime time)
         {
@@ -58,6 +56,10 @@ namespace Delta.Examples.Entities
             Vector2Extensions.SafeNormalize(ref direction);
             Velocity = ((G.Input.Keyboard.IsDown(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
             Position += Velocity * (float)time.ElapsedSeconds;
+
+
+            if (G.Input.Keyboard.IsPressed(Keys.Tab))
+                SwitchBody();
 
             // if boosting leave a motion trail
             if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
@@ -70,7 +72,6 @@ namespace Delta.Examples.Entities
             _sprite.InternalUpdate(time);
             Layer = Position.Y;
 
-           // collider.Position = Position;
             base.LightUpdate(time);
         }
 

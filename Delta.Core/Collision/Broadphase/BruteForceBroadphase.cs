@@ -23,6 +23,11 @@ namespace Delta.Collision
             proxy.AABB = aabb;
         }
 
+        public void RemoveProxy(BroadphaseProxy proxy)
+        {
+            _proxies.FastRemove<BroadphaseProxy>(proxy);
+        }
+
         public void CalculateCollisionPairs()
         {
             _pairs.ClearCache();

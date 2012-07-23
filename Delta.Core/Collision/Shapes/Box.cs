@@ -12,12 +12,37 @@ namespace Delta.Collision
     /// </summary>
     public class Box : ConvexShape
     {
-        [ContentSerializer]
-        public float HalfWidth { get; private set; }
-        [ContentSerializer]
-        public float HalfHeight { get; private set; }
+        float _halfWidth;
+        public float HalfWidth 
+        {
+            get
+            {
+                return _halfWidth;
+            }
+            set
+            {
+                // can't have negative of zero values.
+                _halfWidth = Math.Max((float)MathExtensions.EPSILON, value);
+                OnShapeChanged();
+            }
+        }
 
-        public Box() { }
+        float _halfHeight;
+        public float HalfHeight
+        {
+            get
+            {
+                return _halfHeight;
+            }
+            set
+            {
+                // can't have negative of zero values.
+                _halfHeight = Math.Max((float)MathExtensions.EPSILON, value);
+                OnShapeChanged();
+            }
+        }
+
+        public Box() : this(1, 1) { }
 
         /// <summary>
         /// Create an Orientated Bounding Box

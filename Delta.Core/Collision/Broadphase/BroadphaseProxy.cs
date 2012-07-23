@@ -11,7 +11,7 @@ namespace Delta.Collision
         static Pool<BroadphaseProxy> _pool;
 
         public AABB AABB;
-        public Object ClientObject;
+        public object ClientObject;
 
         static BroadphaseProxy()
         {
@@ -22,12 +22,11 @@ namespace Delta.Collision
         {
             BroadphaseProxy proxy = _pool.Fetch();
             proxy.ClientObject = client;
+            CollisionGlobals.TotalProxies++;
             return proxy;
         }
 
-        public BroadphaseProxy()
-        {
-        }
+        public BroadphaseProxy() { }
 
         public BroadphaseProxy(object client, AABB aabb)
         {
@@ -39,6 +38,8 @@ namespace Delta.Collision
         {
             AABB = AABB.Zero;
             ClientObject = null;
+
+            CollisionGlobals.TotalProxies--;
             _pool.Release(this);
         }
 

@@ -16,6 +16,7 @@ namespace Delta.Collision
         public Polygon(params Vector2[] vertices)
         {
             Vertices = new Vector2[vertices.Length];
+            Normals = new Vector2[vertices.Length];
 
             CalculateCentroid();
             if (!Vector2Extensions.AlmostZero(Centroid))

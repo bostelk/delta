@@ -12,7 +12,6 @@ namespace Delta.Examples.Entities
     public class Barrel : Entity
     {
         SpriteEntity _sprite;
-        Collider collider;
 
         public Barrel()
         {
@@ -22,7 +21,8 @@ namespace Delta.Examples.Entities
 
         protected override void LateInitialize()
         {
-            //G.Collision.AddCollider(collider = Collider.Create(this, new Box(16, 16)));
+            WrappedBody = Collider.CreateBody(new Box(16, 16));
+            WrappedBody.OnCollisionEvent += OnCollision;
             base.LateInitialize();
         }
 
@@ -30,7 +30,6 @@ namespace Delta.Examples.Entities
         {
             _sprite.InternalUpdate(time);
             _sprite.Position = Position - (_sprite.Size * new Vector2(0.5f, 0.5f));
-            //collider.Position = Position;
             base.LightUpdate(time);
         }
 
@@ -40,14 +39,13 @@ namespace Delta.Examples.Entities
             base.Draw(time, spriteBatch);
         }
 
-        protected bool OnCollision(Collider them, Vector2 normal)
+        protected bool OnCollision(IWrappedBody them, Vector2 normal)
         {
-            Lily link = them.Tag as Lily;
-            if (link != null && link.Velocity.LengthSquared() > MathExtensions.Square(50))
+            Lily link = them.Owner as Lily;
+            if (link != null)
             {
                 Explode();
                 RemoveNextUpdate = true;
-                G.Collision.RemoveColider(collider);
             }
             return true;
         }

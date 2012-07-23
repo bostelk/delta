@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Content;
 using Delta.Movement;
 using Delta.Structures;
 using Delta.Collision;
-using Delta.Physics;
 
 namespace Delta
 {
@@ -362,7 +361,7 @@ namespace Delta
             {
                 //don't fire OnChanged functions! We don't want to get into a fight between reading and writing off the WrappedBody!
                 _position = WrappedBody.SimulationPosition - Offset;
-                _rotation = WrappedBody.SimulationRotation.ToDegrees();
+                _rotation = WrappedBody.SimulationRotation;
                 UpdateRenderPosition();
                 UpdateRenderRotation();
             }
@@ -419,6 +418,16 @@ namespace Delta
 
         protected virtual void OnWrappedBodyChanged()
         {
+            WrappedBody.AddToSimulation();
+            WrappedBody.Owner = this;
+            UpdateToWrappedBody();
+        }
+
+        protected internal override void OnRemoved()
+        {
+            if (WrappedBody != null)
+                WrappedBody.RemoveFromSimulation();
+            base.OnRemoved();
         }
 
         public override void Recycle()

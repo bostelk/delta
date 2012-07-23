@@ -28,11 +28,10 @@ namespace Delta.Collision
 
         public OverlappingPair AddOverlappingPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB) 
         {
-            // do not form a pair with yourself!
-            if (proxyA == proxyB)
+            // do not form a pair with yourself and ignore null proxies!
+            if (proxyA == proxyB || proxyA == null || proxyB == null)
                 return OverlappingPair.EmptyPair;
-            //Debug.Assert(proxyA != proxyB); baaaaaad idea.
-            if (!NeedsBroadphaseCollision(proxyA, proxyB))
+            else if (!NeedsBroadphaseCollision(proxyA, proxyB))
                 return OverlappingPair.EmptyPair;
             else
                 return InternalAddPair(proxyA, proxyB);
