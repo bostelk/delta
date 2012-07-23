@@ -61,7 +61,7 @@ namespace Delta.UI
             }
         }
 
-        bool _isFocusable = false;
+        bool _isFocusable = true;
         public bool IsFocusable
         {
             get { return _isFocusable; }
@@ -127,7 +127,7 @@ namespace Delta.UI
         }
 #endif
 
-        Color _backColor = Color.RoyalBlue;
+        Color _backColor = Color.SeaGreen;
         public Color BackColor
         {
             get { return _backColor; }
@@ -141,7 +141,7 @@ namespace Delta.UI
             }
         }
 
-        Color _borderColor = Color.Gray;
+        Color _borderColor = Color.DarkSeaGreen;
         public Color BorderColor
         {
             get { return _borderColor; }
@@ -169,7 +169,7 @@ namespace Delta.UI
             }
         }
 
-        Color _disabledBorderColor = Color.Gray;
+        Color _disabledBorderColor = Color.DarkGray;
         public Color DisabledBorderColor
         {
             get { return _disabledBorderColor; }
@@ -184,7 +184,7 @@ namespace Delta.UI
         }
 
 
-        Color _highlightedColor = Color.BlueViolet;
+        Color _highlightedColor = Color.DarkKhaki;
         public Color HighlightedColor
         {
             get { return _highlightedColor; }
@@ -198,7 +198,7 @@ namespace Delta.UI
             }
         }
 
-        Color _highlightedBorderColor = Color.BlueViolet;
+        Color _highlightedBorderColor = Color.Khaki;
         public Color HighlightedBorderColor
         {
             get { return _highlightedBorderColor; }
@@ -212,7 +212,7 @@ namespace Delta.UI
             }
         }
 
-        Color _clickedColor = Color.Gray;
+        Color _clickedColor = Color.DarkViolet;
         public Color ClickedColor
         {
             get { return _clickedColor; }
@@ -226,7 +226,7 @@ namespace Delta.UI
             }
         }
 
-        Color _clickedBorderColor = Color.Gray;
+        Color _clickedBorderColor = Color.Violet;
         public Color ClickedBorderColor
         {
             get { return _clickedBorderColor; }
@@ -240,7 +240,7 @@ namespace Delta.UI
             }
         }
 
-        Color _focusedColor = Color.DeepSkyBlue;
+        Color _focusedColor = Color.DarkSlateBlue;
         public Color FocusedColor
         {
             get { return _focusedColor; }
@@ -254,7 +254,7 @@ namespace Delta.UI
             }
         }
 
-        Color _focusedBorderColor = Color.Gray;
+        Color _focusedBorderColor = Color.SlateBlue;
         public Color FocusedBorderColor
         {
             get { return _focusedBorderColor; }
@@ -329,34 +329,34 @@ namespace Delta.UI
                     control.NeedsHeavyUpdate = true;
         }
 
-        internal void UpdateRenderBorderSize()
+        internal virtual void UpdateRenderBorderSize()
         {
             _renderBorderSize = new Vector2(_borderSize.X, _borderSize.Y);
         }
 
-        internal void UpdateRenderPosition()
+        internal virtual void UpdateRenderPosition()
         {
             _renderPosition = new Vector2(_position.X, _position.Y);
             if (Parent != null)
                 _renderPosition += Parent._renderPosition;
         }
 
-        internal void UpdateInnerRenderPosition()
+        internal virtual void UpdateInnerRenderPosition()
         {
             _innerRenderPosition = _renderPosition + _renderBorderSize;
         }
 
-        internal void UpdateRenderSize()
+        internal virtual void UpdateRenderSize()
         {
             _renderSize = new Vector2(Size.X, Size.Y);
         }
 
-        internal void UpdateInnerRenderSize()
+        internal virtual void UpdateInnerRenderSize()
         {
             _innerRenderSize = _renderSize - _renderBorderSize * 2;
         }
 
-        internal void UpdateRenderArea()
+        internal virtual void UpdateRenderArea()
         {
             RenderArea = new Rectangle(
                 (int)_renderPosition.X, 
@@ -365,7 +365,7 @@ namespace Delta.UI
                 (int)_renderSize.Y);
         }
 
-        internal void UpdateInnerArea()
+        internal virtual void UpdateInnerArea()
         {
             InnerArea = new Rectangle(
                 (int)_innerRenderPosition.X, 
@@ -375,7 +375,7 @@ namespace Delta.UI
                 );
         }
 
-        internal void UpdateColors()
+        internal virtual void UpdateColors()
         {
             if (IsEnabled)
             {

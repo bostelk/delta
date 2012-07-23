@@ -19,8 +19,6 @@ namespace Delta.UI
 
         public PerformanceMetrics()
         {
-            AutoSize = false;
-            Size = new Point(50, 50);
         }
 
         protected override void LightUpdate(DeltaTime time)

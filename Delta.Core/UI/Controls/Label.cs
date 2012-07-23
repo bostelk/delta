@@ -73,27 +73,29 @@ namespace Delta.UI.Controls
         protected override void LoadContent()
         {
             base.LoadContent();
-            Font = G.Font;
+            if (Font == null)
+                Font = G.Font;
         }
-
-        //internal override void UpdateRenderSize()
-        //{
-        //    if (AutoSize)
-        //        _renderSize = _textSize;
-        //    else
-        //        base.UpdateRenderSize();
-        //}
 
         protected internal override void HeavyUpdate(DeltaTime time)
         {
             UpdateTextSize();
             base.HeavyUpdate(time);
             UpdateRenderText();
+            UpdateTextPosition();
         }
 
-        protected void UpdateTextSize()
+        internal virtual void UpdateTextSize()
         {
             _textSize = Font.MeasureString(_renderText);
+        }
+
+        internal override void UpdateRenderSize()
+        {
+            if (AutoSize)
+                _renderSize = _textSize + _renderBorderSize * 2;
+            else
+                base.UpdateRenderSize();
         }
 
         protected void UpdateRenderText()
@@ -108,7 +110,7 @@ namespace Delta.UI.Controls
 
         protected virtual void UpdateTextPosition()
         {
-            _textPosition = _renderPosition;
+            _textPosition = _innerRenderPosition;
             _textOrigin = Vector2.Zero;
             if (!AutoSize)
             {

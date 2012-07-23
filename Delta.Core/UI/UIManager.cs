@@ -98,7 +98,7 @@ namespace Delta.UI
         {
             bool handled = false;
             if (EnteredControl != null)
-                handled = EnteredControl.ProcessMouseUp();
+                handled = EnteredControl.ProcessMouseDown();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseDown();
