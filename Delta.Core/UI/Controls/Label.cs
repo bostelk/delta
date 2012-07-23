@@ -76,12 +76,27 @@ namespace Delta.UI.Controls
             Font = G.Font;
         }
 
-        protected virtual void UpdateTextSize()
+        //internal override void UpdateRenderSize()
+        //{
+        //    if (AutoSize)
+        //        _renderSize = _textSize;
+        //    else
+        //        base.UpdateRenderSize();
+        //}
+
+        protected internal override void HeavyUpdate(DeltaTime time)
+        {
+            UpdateTextSize();
+            base.HeavyUpdate(time);
+            UpdateRenderText();
+        }
+
+        protected void UpdateTextSize()
         {
             _textSize = Font.MeasureString(_renderText);
         }
 
-        protected virtual void UpdateRenderText()
+        protected void UpdateRenderText()
         {
             _renderText.Clear();
             if (IsWordWrapped && !AutoSize)
@@ -89,14 +104,6 @@ namespace Delta.UI.Controls
             else
                 for (int i = 0; i < Text.Length; i++)
                     _renderText.Append(Text[i]);
-        }
-
-        protected override void UpdateRenderSize()
-        {
-            if (AutoSize)
-                _renderSize = _textSize;
-            else
-                base.UpdateRenderSize();
         }
 
         protected virtual void UpdateTextPosition()
@@ -122,13 +129,6 @@ namespace Delta.UI.Controls
                         _textPosition.Y += Size.Y - _textSize.Y;
                 }
             }
-        }
-
-        protected internal override void HeavyUpdate(DeltaTime time)
-        {
-            UpdateTextSize();
-            base.HeavyUpdate(time);
-            UpdateTextPosition();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)

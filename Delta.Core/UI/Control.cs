@@ -10,6 +10,7 @@ namespace Delta.UI
     {
         internal Vector2 _renderPosition = Vector2.Zero;
         internal Vector2 _renderSize = Vector2.Zero;
+        internal Vector2 _renderBorderSize = Vector2.Zero;
         internal Vector2 _innerRenderPosition = Vector2.Zero;
         internal Vector2 _innerRenderSize = Vector2.Zero;
         internal Color _currentColor = Color.White;
@@ -315,8 +316,11 @@ namespace Delta.UI
         protected internal override void HeavyUpdate(DeltaTime time)
         {
             base.HeavyUpdate(time);
+            UpdateRenderBorderSize();
             UpdateRenderPosition();
+            UpdateInnerRenderPosition();
             UpdateRenderSize();
+            UpdateInnerRenderSize();
             UpdateRenderArea();
             UpdateInnerArea();
             UpdateColors();
@@ -325,34 +329,53 @@ namespace Delta.UI
                     control.NeedsHeavyUpdate = true;
         }
 
-        internal virtual void UpdateRenderPosition()
+        internal void UpdateRenderBorderSize()
+        {
+            _renderBorderSize = new Vector2(_borderSize.X, _borderSize.Y);
+        }
+
+        internal void UpdateRenderPosition()
         {
             _renderPosition = new Vector2(_position.X, _position.Y);
             if (Parent != null)
                 _renderPosition += Parent._renderPosition;
         }
 
-        protected virtual void UpdateRenderSize()
+        internal void UpdateInnerRenderPosition()
+        {
+            _innerRenderPosition = _renderPosition + _renderBorderSize;
+        }
+
+        internal void UpdateRenderSize()
         {
             _renderSize = new Vector2(Size.X, Size.Y);
         }
 
-        protected virtual void UpdateRenderArea()
+        internal void UpdateInnerRenderSize()
         {
-            RenderArea = new Rectangle((int)_renderPosition.X, (int)_renderPosition.Y, (int)_renderSize.X, (int)_renderSize.Y);
+            _innerRenderSize = _renderSize - _renderBorderSize * 2;
         }
 
-        protected virtual void UpdateInnerArea()
+        internal void UpdateRenderArea()
+        {
+            RenderArea = new Rectangle(
+                (int)_renderPosition.X, 
+                (int)_renderPosition.Y, 
+                (int)_renderSize.X, 
+                (int)_renderSize.Y);
+        }
+
+        internal void UpdateInnerArea()
         {
             InnerArea = new Rectangle(
-                RenderArea.X + BorderSize.X, 
-                RenderArea.Y + BorderSize.Y, 
-                RenderArea.Width - (BorderSize.X * 2), 
-                RenderArea.Height - (BorderSize.Y * 2)
+                (int)_innerRenderPosition.X, 
+                (int)_innerRenderPosition.Y, 
+                (int)_innerRenderSize.X, 
+                (int)_innerRenderSize.Y
                 );
         }
 
-        protected internal virtual void UpdateColors()
+        internal void UpdateColors()
         {
             if (IsEnabled)
             {
