@@ -18,9 +18,10 @@ namespace Delta.UI
         public HUD HUD { get; internal set; }
         public Screen ActiveScreen { get; internal set; }
         public Control FocusedControl { get; set; }
-        public Control ClickedControl { get; set; }
-        //public Control CaptureControl { get; set; }
+        public Control PressedControl { get; set; }
+#if WINDOWS
         public Control EnteredControl { get; set; }
+#endif
 
         internal Action<Keys> _keyDown;
         internal Action<Keys> _keyPress;
@@ -91,7 +92,9 @@ namespace Delta.UI
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseMove();
             if (!handled)
-                HUD.ProcessMouseMove();
+                handled = HUD.ProcessMouseMove();
+            if (!handled && EnteredControl != null)
+                EnteredControl.MouseIsInside = false;
         }
 
         internal void MouseDown()
@@ -103,7 +106,9 @@ namespace Delta.UI
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseDown();
             if (!handled)
-                HUD.ProcessMouseDown();
+                handled = HUD.ProcessMouseDown();
+            if (!handled && FocusedControl != null)
+                FocusedControl.IsFocused = false;
         }
 
         internal void MouseUp()
@@ -115,7 +120,9 @@ namespace Delta.UI
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseUp();
             if (!handled)
-                HUD.ProcessMouseUp();
+                handled = HUD.ProcessMouseUp();
+            if (!handled && FocusedControl != null)
+                FocusedControl.IsFocused = false;
         }
 
         internal void KeyDown(Keys key)

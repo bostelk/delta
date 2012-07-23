@@ -47,15 +47,19 @@ namespace Delta.UI
             }
         }
 
-        bool _isClicked = false;
-        public bool IsClicked
+        bool _isPressed = false;
+        public bool IsPressed
         {
-            get { return _isClicked; }
+            get { return _isPressed; }
             internal set
             {
-                if (_isClicked != value)
+                if (_isPressed != value)
                 {
-                    _isClicked = value;
+                    _isPressed = value;
+                    if (value)
+                        OnPressed();
+                    else
+                        OnReleased();
                     NeedsHeavyUpdate = true;
                 }
             }
@@ -212,29 +216,29 @@ namespace Delta.UI
             }
         }
 
-        Color _clickedColor = Color.DarkViolet;
-        public Color ClickedColor
+        Color _pressedColor = Color.DarkViolet;
+        public Color PressedColor
         {
-            get { return _clickedColor; }
+            get { return _pressedColor; }
             set
             {
-                if (_clickedColor != value)
+                if (_pressedColor != value)
                 {
-                    _clickedColor = value;
+                    _pressedColor = value;
                     NeedsHeavyUpdate = true;
                 }
             }
         }
 
-        Color _clickedBorderColor = Color.Violet;
-        public Color ClickedBorderColor
+        Color _pressedBorderColor = Color.Violet;
+        public Color PressedBorderColor
         {
-            get { return _clickedBorderColor; }
+            get { return _pressedBorderColor; }
             set
             {
-                if (_clickedBorderColor != value)
+                if (_pressedBorderColor != value)
                 {
-                    _clickedBorderColor = value;
+                    _pressedBorderColor = value;
                     NeedsHeavyUpdate = true;
                 }
             }
@@ -379,10 +383,10 @@ namespace Delta.UI
         {
             if (IsEnabled)
             {
-                if (IsClicked)
+                if (IsPressed)
                 {
-                    _currentColor = _clickedColor;
-                    _currentBorderColor = _clickedBorderColor;
+                    _currentColor = _pressedColor;
+                    _currentBorderColor = _pressedBorderColor;
                 }
                 else if (IsFocused)
                 {
@@ -464,8 +468,9 @@ namespace Delta.UI
                 MouseInputState mouse = G.Input.Mouse;
                 if (IntersectTest(mouse.Position))
                 {
-                    if (!IsClicked && IsEnabled)
+                    if (!IsPressed && IsEnabled)
                     {
+                        IsPressed = true;
                         OnMouseDown();
                         if (IsFocusable && !IsFocused)
                             IsFocused = true;
@@ -492,8 +497,7 @@ namespace Delta.UI
                 MouseInputState mouse = G.Input.Mouse;
                 if (IntersectTest(G.Input.Mouse.Position))
                 {
-                    if (IsClicked)
-                        OnMouseClick();
+                    IsPressed = false;
                     OnMouseUp();
                     handled = true;
                 }
@@ -509,18 +513,26 @@ namespace Delta.UI
 
         protected virtual void OnMouseDown()
         {
-            IsClicked = true;
-            G.UI.ClickedControl = this;
-        }
-
-        protected virtual void OnMouseClick()
-        {
         }
 
         protected virtual void OnMouseUp()
         {
-            IsClicked = false;
-            G.UI.ClickedControl = null;
+        }
+
+        protected virtual void OnPressed()
+        {
+            if (G.UI.PressedControl != this)
+            {
+                if (G.UI.PressedControl != null)
+                    G.UI.PressedControl.OnReleased();
+                G.UI.PressedControl = this;
+            }
+        }
+
+        protected virtual void OnReleased()
+        {
+            if (G.UI.PressedControl == this)
+                G.UI.PressedControl = null;
         }
 
         //protected virtual void OnMouseCaptureChanged()
@@ -537,38 +549,30 @@ namespace Delta.UI
                     G.UI.EnteredControl.OnMouseLeave();
                 G.UI.EnteredControl = this;
             }
-            if (G.Input.Mouse.LeftButton.IsDown)
-            {
-                if (G.UI.ClickedControl == this)
-                    IsClicked = true;
-                else
-                    return;
-            }
-            else
-            {
-                IsHighlighted = true;
-                Invalidate();
-            }
+            IsHighlighted = true;
+            //if (G.Input.Mouse.LeftButton.IsDown)
+            //{
+            //    if (G.UI.PressedControl != this)
+            //        return;
+            //        IsPressed = true;
+            //}
         }
 
         protected virtual void OnMouseLeave()
         {
             if (G.UI.EnteredControl == this)
                 G.UI.EnteredControl = null;
-            if (G.Input.Mouse.LeftButton.IsDown)
-            {
-                if (G.UI.ClickedControl == this)
-                {
-                    IsHighlighted = false;
-                    IsClicked = false;
-                }
-                else
-                    return;
-            }
-            else
-            {
-                IsHighlighted = false;
-            }
+            IsHighlighted = false;
+            //if (G.Input.Mouse.LeftButton.IsDown)
+            //{
+            //    if (G.UI.PressedControl == this)
+            //    {
+            //        IsHighlighted = false;
+            //        IsPressed = false;
+            //    }
+            //    else
+            //        return;
+            //}
         }
 
         protected virtual void OnMouseScroll()
@@ -615,7 +619,7 @@ namespace Delta.UI
 
         protected virtual void OnLostFocus()
         {
-            IsClicked = false;
+            IsPressed = false;
             G.UI.FocusedControl = null;
         }
 

@@ -9,7 +9,7 @@ namespace Delta.UI.Controls
         public Textbox()
             : base()
         {
-            ClickedColor = Color.DeepSkyBlue;
+            PressedColor = Color.DeepSkyBlue;
             AutoSize = false;
             IsWordWrapped = true;
         }

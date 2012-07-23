@@ -11,7 +11,7 @@ namespace Delta.UI
             Add(new PerformanceMetrics());
         }
 
-        internal void ProcessMouseMove()
+        internal bool ProcessMouseMove()
         {
             bool handled = false;
             foreach (Control control in this)
@@ -20,9 +20,10 @@ namespace Delta.UI
                 if (handled)
                     break;
             }
+            return handled;
         }
 
-        internal void ProcessMouseDown()
+        internal bool ProcessMouseDown()
         {
             bool handled = false;
             foreach (Control control in this)
@@ -31,9 +32,10 @@ namespace Delta.UI
                 if (handled)
                     break;
             }
+            return handled;
         }
 
-        internal void ProcessMouseUp()
+        internal bool ProcessMouseUp()
         {
             bool handled = false;
             foreach (Control control in this)
@@ -42,6 +44,7 @@ namespace Delta.UI
                 if (handled)
                     break;
             }
+            return handled;
         }
     }
 }
