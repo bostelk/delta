@@ -8,7 +8,7 @@ namespace Delta.UI
         public HUD()
             : base()
         {
-            Add(new PerformanceMetrics() { BackColor = Color.DarkGray, HighlightedColor = Color.DarkGreen, FocusedColor = Color.DarkOrange, ClickedColor = Color.DarkOrchid });
+            Add(new PerformanceMetrics());
         }
     }
 }

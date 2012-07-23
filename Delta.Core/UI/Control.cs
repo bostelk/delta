@@ -18,6 +18,12 @@ namespace Delta.UI
         public Control()
             : base()
         {
+            BackColor = Color.Black * 0.5f;
+            HighlightedColor = Color.Black * 0.75f;
+            ClickedColor = Color.Black;
+            DisabledColor = Color.Gray * 0.5f;
+            SelectedColor = Color.White * 0.75f;
+            FocusedColor = Color.DeepSkyBlue * 0.5f;
         }
 
         public Control(string name)

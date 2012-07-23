@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Delta.UI;
+using Delta.UI.Controls;
 
 namespace Delta.Examples
 {
@@ -16,25 +18,16 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
-            G.UI.HUD.Add(new Delta.UI.Controls.Textbox()
+            G.UI.HUD.Add(new Textbox()
             {
-                AutoSize = false,
                 Position = new Vector2(50, 50),
                 Size = new Vector2(40, 40),
-                BackColor = Color.White,
-                HighlightedColor = Color.DarkRed,
-                FocusedColor = Color.Green,
-                ClickedColor = Color.Orange,
             });
-            G.UI.HUD.Add(new Delta.UI.Controls.Label()
+            G.UI.HUD.Add(new Button()
             {
                 AutoSize = false,
                 Position = new Vector2(100, 100),
                 Size = new Vector2(40, 40),
-                BackColor = Color.White,
-                HighlightedColor = Color.Yellow,
-                FocusedColor = Color.Green,
-                ClickedColor = Color.Orange,
             });
         }
 

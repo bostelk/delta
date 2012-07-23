@@ -17,7 +17,7 @@ namespace Delta
         }
     }
 
-    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable<T>, IEnumerable where T : IEntity
+    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable where T : IEntity
     {
         static Comparison<T> _defaultComparer = (a, b) => (a.Layer.CompareTo(b.Layer));
         static List<IEntity> _globalComponents = new List<IEntity>();
@@ -45,11 +45,6 @@ namespace Delta
             Children = new ReadOnlyCollection<T>(_components);
             NeedsToSort = true;
             Comparer = null;
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return Children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

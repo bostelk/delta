@@ -190,33 +190,21 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="UI\Controls\Button.cs" />
     <Compile Include="UI\Controls\Label.cs" />
+    <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
     <Compile Include="UI\HUD.cs" />
-    <Compile Include="UI\ODYSSEY\ColorArray.cs" />
-    <Compile Include="UI\ODYSSEY\FontManager.cs" />
-    <Compile Include="UI\ODYSSEY\Graphics.cs" />
-    <Compile Include="UI\ODYSSEY\Intersection.cs" />
     <Compile Include="UI\BaseControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\Button.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\CaptionBar.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\Cell.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\CheckBox.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\ContainerControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\ControlCollection.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\DefaultShapeControl.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\DialogBox.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\DropDownList.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\GroupBox.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\IActivableControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\ICircularControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\IContainer.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\IRenderableControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\ISpriteControl.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\Label.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\OptionButton.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\OptionGroup.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder1\Panel.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\PictureBox.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\ProgressBar.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\RenderableControl.cs" />
@@ -227,17 +215,6 @@
     <Compile Include="UI\ODYSSEY\NewFolder1\TextBox.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\TrackBar.cs" />
     <Compile Include="UI\ODYSSEY\NewFolder1\Window.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder2\DebugManager.cs" />
-    <Compile Include="UI\ODYSSEY\NewFolder2\Timer.cs" />
-    <Compile Include="UI\ODYSSEY\ShapeDescriptor.cs" />
-    <Compile Include="UI\ODYSSEY\Style\ColorArray.cs" />
-    <Compile Include="UI\ODYSSEY\Style\LabelFormatter.cs" />
-    <Compile Include="UI\ODYSSEY\Style\LabelPage.cs" />
-    <Compile Include="UI\ODYSSEY\Style\Shapes.cs" />
-    <Compile Include="UI\ODYSSEY\Style\StyleManager.cs" />
-    <Compile Include="UI\ODYSSEY\Style\TextStyle.cs" />
-    <Compile Include="UI\ODYSSEY\Style\UIParser.cs" />
-    <Compile Include="UI\ODYSSEY\TextManager.cs" />
     <Compile Include="UI\Control.cs" />
     <Compile Include="UI\Screens\DebugScreen.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
@@ -277,7 +254,7 @@
     <None Include="Resources\TinyFont.xnb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dynamics\" />
+    <Folder Include="Entities\Dynamics\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
