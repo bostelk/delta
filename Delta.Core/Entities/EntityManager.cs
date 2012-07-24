@@ -39,6 +39,7 @@ namespace Delta
 
         protected override void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
+            base.EndDraw(time, spriteBatch);
             G.SpriteBatch.End();
             G.SpriteBatch.Begin();
             Camera.Draw(_time, G.SpriteBatch);
