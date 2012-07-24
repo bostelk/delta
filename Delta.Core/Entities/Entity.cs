@@ -168,6 +168,9 @@ namespace Delta
 
         float _rotation = 0.0f;
         [ContentSerializer]
+        /// <summary>
+        /// The rotation expressed in degrees. clockwise: positive, counter-clockwise: negative;
+        /// </summary>
         public virtual float Rotation
         {
             get { return _rotation; }
