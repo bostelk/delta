@@ -35,6 +35,20 @@ namespace Delta.Collision
             return true;
         }
 
+        /// <summary>
+        /// A less expensive check before we waste cycles on a narrow phase detection.
+        /// </summary>
+        /// <returns>If the two polygons are about to intersect.</returns>
+        public static bool TestOverlap(ref AABB a, ref AABB b)
+        {
+            // Exit with no intersection if separated along an axis
+            if (a.Max.X < b.Min.X || a.Min.X > b.Max.X) return false;
+            if (a.Max.Y < b.Min.Y || a.Min.Y > b.Max.Y) return false;
+            // Overlapping on all axes means AABBs are intersecting
+            return true;
+        }
+
+
         public bool Equals(AABB other)
         {
             return Min == other.Min && Max == other.Max;

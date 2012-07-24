@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Delta.Collision
 {
-    public class OverlappingPairCache
+    public class OverlappingPairCache : IEnumerable
     {
         HashSet<OverlappingPair> _pairs;
-
-        /// <summary>
-        /// lazy hack: should implement IEnumerable...
-        /// </summary>
-        public HashSet<OverlappingPair> hashset
-        {
-            get
-            {
-                return _pairs;
-            }
-        }
 
         public OverlappingPairCache()
         {
             _pairs = new HashSet<OverlappingPair>();
         }
+
+		public IEnumerator GetEnumerator()
+		{
+            return _pairs.GetEnumerator();
+		}
+ 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+            return _pairs.GetEnumerator();
+		}
 
         public OverlappingPair AddOverlappingPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB) 
         {

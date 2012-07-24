@@ -42,14 +42,14 @@ namespace Delta
         /// Rotate the vector.
         /// </summary>
         /// <param name="v"></param>
-        /// <param name="theta">Angle in radians.</param>
+        /// <param name="radians">Angle in radians.</param>
         /// <returns></returns>
-        public static Vector2 Rotate(this Vector2 v, float theta)
+        public static Vector2 Rotate(this Vector2 v, float radians)
         {
             // early exit if theta is 0 or PI ?
             Vector2 result = Vector2.Zero;
-            float cos = (float)Math.Cos(theta);
-            float sin = (float)Math.Sin(theta);
+            float cos = (float)Math.Cos(radians);
+            float sin = (float)Math.Sin(radians);
             result.X = v.X * cos - v.Y * sin;
             result.Y = v.X * sin + v.Y * cos;
             return result;

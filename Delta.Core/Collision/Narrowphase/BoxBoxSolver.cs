@@ -13,8 +13,8 @@ namespace Delta.Collision
         {
             Box boxA = (Box)colA.Shape;
             Box boxB = (Box)colB.Shape;
-            Transform transformA = colA.WorldTransform;
-            Transform transformB = colB.WorldTransform;
+            Matrix2D transformA = colA.WorldTransform;
+            Matrix2D transformB = colB.WorldTransform;
 
             float projectedDistance = 0;
             float minPenetration = float.MaxValue;
@@ -26,7 +26,7 @@ namespace Delta.Collision
             // For AABB's we only need to check 2 axis since they don't rotate.
             Vector2[] axisToCheck = new Vector2[4];
             boxA.CalculateOrientation(ref transformA, out axisToCheck[0]);
-            boxB.CalculateOrientation(ref transformA, out axisToCheck[1]);
+            boxB.CalculateOrientation(ref transformB, out axisToCheck[1]);
             axisToCheck[2] = Vector2Extensions.PerpendicularLeft(axisToCheck[0]);
             axisToCheck[3] = Vector2Extensions.PerpendicularLeft(axisToCheck[1]);
 

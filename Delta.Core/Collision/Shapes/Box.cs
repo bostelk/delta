@@ -70,27 +70,41 @@ namespace Delta.Collision
             };
         }
 
-        public override void CalculateAABB(ref Transform transform, out AABB aabb)
+        public override void CalculateAABB(ref Matrix2D transform, out AABB aabb)
         {
-            aabb.Min = transform.Origin - new Vector2(HalfWidth, HalfHeight);
-            aabb.Max = transform.Origin + new Vector2(HalfWidth, HalfHeight);
+            Vector2 halfWidth, halfHeight;
+            CalculateExtents(ref transform, out halfWidth, out halfHeight);
+
+            Vector2 halfWidthOther, halfHeightOther;
+            CalculateOtherExtents(ref transform, out halfWidthOther, out halfHeightOther);
+   
+            aabb.Min = Vector2.Min(halfWidth, halfWidthOther) + Vector2.Min(halfHeight, halfHeightOther) - transform.Origin;
+            aabb.Max = Vector2.Max(halfWidth, halfWidthOther) + Vector2.Max(halfHeight, halfHeightOther) - transform.Origin;
         }
 
-        public void ProjectOnto(ref Transform transform, ref Vector2 axisNormal, out Vector2 projection)
+        public void ProjectOnto(ref Matrix2D transform, ref Vector2 axisNormal, out Vector2 projection)
         {
-            Vector2 halfwidthX, halfwidthY;
-            CalculateExtents(ref transform, out halfwidthX, out halfwidthY);
-            projection.X = Vector2.Dot(halfwidthX, axisNormal);
-            projection.Y = Vector2.Dot(halfwidthY, axisNormal);
+            Vector2 halfWidth, halfHeight;
+            CalculateExtents(ref transform, out halfWidth, out halfHeight);
+            halfWidth -= transform.Origin; halfHeight -= transform.Origin;
+            projection.X = Vector2.Dot(halfWidth, axisNormal);
+            projection.Y = Vector2.Dot(halfHeight, axisNormal);
         }
 
-        public void CalculateExtents(ref Transform transform, out Vector2 halfwidthX, out Vector2 halfwidthY)
+        public void CalculateExtents(ref Matrix2D transform, out Vector2 halfWidth, out Vector2 halfHeight)
         {
-            Vector2 orientation;
-            CalculateOrientation(ref transform, out orientation);
-            halfwidthX = orientation * HalfWidth;
-            halfwidthY = Vector2Extensions.PerpendicularLeft(orientation) * HalfHeight;
+            halfWidth = new Vector2(HalfWidth, 0);
+            halfHeight = new Vector2(0, HalfHeight);
+            transform.TransformVector(ref halfWidth);
+            transform.TransformVector(ref halfHeight);
         }
 
+        public void CalculateOtherExtents(ref Matrix2D transform, out Vector2 halfWidth, out Vector2 halfHeight)
+        {
+            halfWidth = new Vector2(-HalfWidth, 0);
+            halfHeight = new Vector2(0, -HalfHeight);
+            transform.TransformVector(ref halfWidth);
+            transform.TransformVector(ref halfHeight);
+        }
     }
 }

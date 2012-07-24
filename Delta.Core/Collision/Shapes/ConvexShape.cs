@@ -70,10 +70,13 @@ namespace Delta.Collision
             }
         }
 
-        public void CalculateOrientation(ref Transform transform, out Vector2 orientation)
+        public void CalculateOrientation(ref Matrix2D transform, out Vector2 orientation)
         {
-            orientation.X = (float)Math.Cos(transform.Rotation);
-            orientation.Y = (float)Math.Sin(transform.Rotation);
+            orientation = Vector2.UnitX;
+            transform.TransformVector(ref orientation);
+            orientation -= transform.Origin;
+            //orientation.X = (float)Math.Cos(transform.Rotation);
+            //orientation.Y = (float)Math.Sin(transform.Rotation);
         }
 
         ///// <summary>

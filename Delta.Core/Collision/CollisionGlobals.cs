@@ -11,13 +11,14 @@ namespace Delta.Collision
         None = 1 << 0,
         AABB = 1 << 1,
         Shape = 1 << 2,
-        CollisionResponse = 1 << 3,
-        All = AABB | Shape | CollisionResponse
+        Extents = 1 << 3,
+        CollisionResponse = 1 << 4,
+        All = AABB | Shape | Extents | CollisionResponse
     }
 
     public static class CollisionGlobals
     {
-        public static Color PolygonColor = Color.White;
+        public static Color ShapeColor = Color.White;
         public static Color BoundingColor = Color.Blue;
         public static Color ExtentsColor = Color.Green;
         public static Color ResponseColor = Color.Red;

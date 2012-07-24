@@ -13,7 +13,7 @@ namespace Delta.Collision
         {
             Circle circleA = (Circle)colA.Shape;
             Box boxB = (Box)colB.Shape;
-            Transform transformB = colB.WorldTransform;
+            Matrix2D transformB = colB.WorldTransform;
 
             float projectedDistance = 0;
             float minPenetration = float.MaxValue;

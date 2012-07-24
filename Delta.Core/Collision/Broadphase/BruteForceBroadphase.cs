@@ -38,7 +38,7 @@ namespace Delta.Collision
                 {
                     BroadphaseProxy proxyB = _proxies[j];
 
-                    if (AABB.TestOverlap(proxyA.AABB, proxyB.AABB))
+                    if (AABB.TestOverlap(ref proxyA.AABB,ref proxyB.AABB))
                         _pairs.AddOverlappingPair(proxyA, proxyB);
                 }
             }

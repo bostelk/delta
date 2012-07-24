@@ -24,52 +24,63 @@ namespace Delta.Collision
             set
             {
                 _shape = value;
-                IsActive = true;
+                IsAwake = true;
             }
         }
 
-        Transform _worldTransform;
-        public Transform WorldTransform
+        Matrix2D _worldTransform;
+        /// <summary>
+        /// Transform the shape into world space.
+        /// </summary>
+        public Matrix2D WorldTransform
         {
             get
             {
+                if (IsAwake) // re-calculate on awaken, then cache.
+                {
+                    Matrix2D translation = Matrix2D.CreateTranslation(_position);
+                    Matrix2D rotation = Matrix2D.CreateRotation(_rotation);
+                    Matrix2D.Multiply(ref translation, ref rotation, out _worldTransform);
+                }
                 return _worldTransform;
             }
-            set
+            private set
             {
                 _worldTransform = value;
-                IsActive = true;
             }
         }
 
+
+        Vector2 _position;
         public Vector2 Position
         {
             get
             {
-                return _worldTransform.Origin;
+                return _position;
             }
             set
             {
-                if (!Vector2Extensions.AlmostEqual(_worldTransform.Origin, value))
+                if (!Vector2Extensions.AlmostEqual(_position, value))
                 {
-                    _worldTransform.Origin = value;
-                    IsActive = true;
+                    _position = value;
+                    IsAwake = true; // re-calculate aabb
                 }
             }
         }
 
+        float _rotation;
         public float Rotation
         {
             get
             {
-                return _worldTransform.Rotation;
+                return _rotation;
             }
             set
             {
-                if (!FloatExtensions.AlmostEqual(_worldTransform.Rotation, value))
+                if (!FloatExtensions.AlmostEqual(_rotation, value))
                 {
-                    _worldTransform.Rotation = value;
-                    IsActive = true;
+                    _rotation = value;
+                    IsAwake = true; // re-calculate aabb
                 }
             }
         }
@@ -84,7 +95,7 @@ namespace Delta.Collision
         /// <summary>
         /// The Collider has moved this frame.
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool IsAwake { get; set; }
 
         public bool RemoveNextUpdate { get; set; }
 
@@ -158,7 +169,7 @@ namespace Delta.Collision
 
         public Collider() 
         {
-            WorldTransform = Transform.Identity;
+            WorldTransform = Matrix2D.Identity;
         }
 
         public void AddToSimulation()
@@ -197,7 +208,7 @@ namespace Delta.Collision
         public void Recycle()
         {
             BroadphaseProxy.Recycle();
-            WorldTransform = Transform.Identity;
+            WorldTransform = Matrix2D.Identity;
             RemoveNextUpdate = false;
             Owner = null;
             Shape = null;

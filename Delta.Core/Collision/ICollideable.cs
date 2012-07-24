@@ -8,11 +8,11 @@ namespace Delta.Collision
 {
     interface ICollideable
     {
-        bool IsActive { get; set; }
+        bool IsAwake { get; set; }
         bool RemoveNextUpdate { get; set; }
         CollisionShape Shape { get; set; }
         BroadphaseProxy BroadphaseProxy { get; set; }
-        Transform WorldTransform { get; set; }
+        Matrix2D WorldTransform { get; }
         Vector2 Position { get; set; }
         float Rotation { get; set; }
 

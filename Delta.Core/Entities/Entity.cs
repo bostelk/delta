@@ -361,7 +361,7 @@ namespace Delta
             {
                 //don't fire OnChanged functions! We don't want to get into a fight between reading and writing off the WrappedBody!
                 _position = WrappedBody.SimulationPosition - Offset;
-                _rotation = WrappedBody.SimulationRotation;
+                _rotation = WrappedBody.SimulationRotation.ToDegrees();
                 UpdateRenderPosition();
                 UpdateRenderRotation();
             }

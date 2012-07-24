@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using System;
  
 namespace Delta
 {
@@ -11,7 +12,7 @@ namespace Delta
 	/// but this felt cleaner.  I don't know the internals of Dictionary but I'm
 	/// guessing it's similar to a heap or std::map in c++, which is generally
 	/// implemented as a binary search tree.
-	public class HashSet<T> : IEnumerable where T : class
+    public class HashSet<T> : IEnumerable where T : IEquatable<T>
 	{
 		Dictionary<T, bool> _data = new Dictionary<T, bool>();
  

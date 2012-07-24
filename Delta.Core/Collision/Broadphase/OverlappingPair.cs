@@ -8,27 +8,35 @@ namespace Delta.Collision
     /// <summary>
     /// Represents two unique colliders found overlapping in the Broadphase. Ie. A possible collision.
     /// </summary>
-    public class OverlappingPair : IEquatable<OverlappingPair>
+    public struct OverlappingPair : IEquatable<OverlappingPair>
     {
-        public static OverlappingPair EmptyPair = new OverlappingPair(null, null);
+        public static OverlappingPair EmptyPair = new OverlappingPair();
 
         public BroadphaseProxy ProxyA { get; internal set; }
         public BroadphaseProxy ProxyB { get; internal set; }
 
-        public OverlappingPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB)
+        public OverlappingPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB): this()
         {
             ProxyA = proxyA;
             ProxyB = proxyB;
         }
 
-        public override int GetHashCode()
-        {
-            return ProxyA.GetHashCode() + ProxyB.GetHashCode();
-        }
-
         public bool Equals(OverlappingPair other)
         {
             return (ProxyA == other.ProxyA && ProxyB == other.ProxyB);
+        }
+
+        public override bool Equals(object other)
+        {
+            bool result = false;
+            if (other is OverlappingPair)
+                result = Equals((OverlappingPair)other);
+            return result;
+        }
+
+        public override int GetHashCode()
+        {
+            return ProxyA.GetHashCode() + ProxyB.GetHashCode();
         }
 
         public bool IsEmpty

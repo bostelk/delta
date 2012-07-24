@@ -91,10 +91,10 @@ namespace Delta.Collision
                 Collider collider = _colliders[i];
 
                 // only update an aabb if the collider has moved
-                if (collider.IsActive || _forceUpdateAABBs)
+                if (collider.IsAwake || _forceUpdateAABBs)
                 {
                     UpdateAABB(collider);
-                    _colliders[i].IsActive = false; // HACK: collider should deactivate itself.
+                    _colliders[i].IsAwake = false; // HACK: collider should deactivate itself.
                     CollisionGlobals.UpdatedAABBs++;
                 }
             }
@@ -104,7 +104,7 @@ namespace Delta.Collision
         protected void UpdateAABB(Collider collider)
         {
             AABB aabb;
-            Transform worldTransform = collider.WorldTransform;
+            Matrix2D worldTransform = collider.WorldTransform;
             collider.Shape.CalculateAABB(ref worldTransform, out aabb);
             _broadphase.SetProxyAABB(collider.BroadphaseProxy, ref aabb);
         }
@@ -118,45 +118,45 @@ namespace Delta.Collision
                 if (col.Shape == null) 
                     continue;
 
+                Matrix2D transform = col.WorldTransform;
                 if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.Shape))
+                {
+                    Vector2[] transformedVerts = col.Shape.VerticesCopy;
+                    for (int j = 0; j < transformedVerts.Length; j++)
+                        transform.TransformVector(ref transformedVerts[j]);
+                    G.PrimitiveBatch.DrawPolygon(transformedVerts, transformedVerts.Length, CollisionGlobals.ShapeColor);
+                }
+
+                if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.Extents))
                 {
                     if (col.Shape is Box)
                     {
                         Box box = (Box)col.Shape;
                         Vector2 halfwidthX, halfwidthY;
-                        Transform transform = col.WorldTransform;
                         box.CalculateExtents(ref transform, out halfwidthX, out halfwidthY);
-                        G.PrimitiveBatch.DrawSegment(col.Position, col.Position + halfwidthX, CollisionGlobals.ExtentsColor);
-                        G.PrimitiveBatch.DrawSegment(col.Position, col.Position + halfwidthY, CollisionGlobals.ExtentsColor);
+                        G.PrimitiveBatch.DrawSegment(col.Position, halfwidthX, CollisionGlobals.ExtentsColor);
+                        G.PrimitiveBatch.DrawSegment(col.Position,  halfwidthY, CollisionGlobals.ExtentsColor);
                     }
                     else if (col.Shape is Circle)
                     {
                         Circle circle = (Circle)col.Shape;
                         Vector2 extents;
-                        Transform transform = col.WorldTransform;
                         circle.CalculateExtents(ref transform, out extents);
-                        G.PrimitiveBatch.DrawCircle(col.Position, circle.Radius, CollisionGlobals.PolygonColor);
-                        G.PrimitiveBatch.DrawSegment(col.Position, col.Position + extents, CollisionGlobals.ExtentsColor);
-                    }
-                    else
-                    {
-                        Polygon poly = (Polygon)col.Shape;
-                        G.PrimitiveBatch.DrawPolygon(poly.Vertices, poly.Vertices.Length, CollisionGlobals.PolygonColor);
+                        G.PrimitiveBatch.DrawSegment(col.Position, extents, CollisionGlobals.ExtentsColor);
                     }
                 }
-
+                 
                 if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.AABB))
                 {
                     AABB aabb;
-                    Transform worldTransform = col.WorldTransform;
-                    col.Shape.CalculateAABB(ref worldTransform, out aabb);
+                    col.Shape.CalculateAABB(ref transform, out aabb);
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Min.Y), new Vector2(aabb.Max.X, aabb.Min.Y), CollisionGlobals.BoundingColor);
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Max.X, aabb.Min.Y), new Vector2(aabb.Max.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Max.Y), new Vector2(aabb.Max.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Min.Y), new Vector2(aabb.Min.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                 }
             }
-            if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.CollisionResponse) && CollisionGlobals.Results.Count > 0)
+            if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.CollisionResponse))
             {
                 while (CollisionGlobals.Results.Count > 0)
                 {

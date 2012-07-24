@@ -151,7 +151,7 @@ namespace Delta.Collision
                         for (int k = j + 1; k < cell.Proxies.Count; k++)
                         {
                             proxyB = cell.Proxies[k];
-                            if (AABB.TestOverlap(proxyA.AABB, proxyB.AABB))
+                            if (AABB.TestOverlap(ref proxyA.AABB, ref proxyB.AABB))
                                 _pairs.AddOverlappingPair(proxyA, proxyB);
                         }
                     }
