@@ -17,7 +17,7 @@ namespace Delta
         }
     }
 
-    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable<T>, IEnumerable where T : IEntity
+    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable where T : IEntity
     {
         static Comparison<T> _defaultComparer = (a, b) => (a.Layer.CompareTo(b.Layer));
         static List<IEntity> _globalComponents = new List<IEntity>();
@@ -45,11 +45,6 @@ namespace Delta
             Children = new ReadOnlyCollection<T>(_components);
             NeedsToSort = true;
             Comparer = null;
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return Children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -118,6 +113,10 @@ namespace Delta
 
         protected override void LightUpdate(DeltaTime time)
         {
+        }
+
+        protected override void EndUpdate(DeltaTime time)
+        {
             if (AlwaysSort || NeedsToSort)
                 Sort();
             for (int i = 0; i < _components.Count; i++)
@@ -129,7 +128,7 @@ namespace Delta
             InternalDraw(time, spriteBatch);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < _components.Count; i++)
                 _components[i].Draw(time, spriteBatch);

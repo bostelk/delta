@@ -3,32 +3,48 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.UI
 {
-    public class HUD : BaseControl
+    public class HUD : EntityCollection<Control>
     {
         public HUD()
             : base()
         {
-            Add(new Controls.Textbox()
+            Add(new PerformanceMetrics());
+        }
+
+        internal bool ProcessMouseMove()
+        {
+            bool handled = false;
+            foreach (Control control in this)
             {
-                AutoSize = false,
-                Position = new Vector2(50, 50),
-                Size = new Vector2(40, 40),
-                BackColor = Color.White,
-                HighlightedColor = Color.DarkRed,
-                FocusedColor = Color.Green,
-                ClickedColor = Color.Orange,
-            });
-            Add(new Controls.Label()
+                handled = control.ProcessMouseMove();
+                if (handled)
+                    break;
+            }
+            return handled;
+        }
+
+        internal bool ProcessMouseDown()
+        {
+            bool handled = false;
+            foreach (Control control in this)
             {
-                AutoSize = false,
-                Position = new Vector2(100, 100),
-                Size = new Vector2(40, 40),
-                BackColor = Color.White,
-                HighlightedColor = Color.Yellow,
-                FocusedColor = Color.Green,
-                ClickedColor = Color.Orange,
-            });
-            Add(new PerformanceMetrics() { BackColor = Color.DarkGray, HighlightedColor = Color.DarkGreen, FocusedColor = Color.DarkOrange, ClickedColor = Color.DarkOrchid });
+                handled = control.ProcessMouseDown();
+                if (handled)
+                    break;
+            }
+            return handled;
+        }
+
+        internal bool ProcessMouseUp()
+        {
+            bool handled = false;
+            foreach (Control control in this)
+            {
+                handled = control.ProcessMouseUp();
+                if (handled)
+                    break;
+            }
+            return handled;
         }
     }
 }

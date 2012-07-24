@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Delta.UI.Controls
@@ -8,6 +9,7 @@ namespace Delta.UI.Controls
         public Textbox()
             : base()
         {
+            PressedColor = Color.DeepSkyBlue;
             AutoSize = false;
             IsWordWrapped = true;
         }

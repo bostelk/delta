@@ -137,8 +137,8 @@ namespace Delta
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            World.Draw();
-            UI.Draw();
+            World.InternalDraw(World.Time, G.SpriteBatch);
+            UI.InternalDraw(UI.Time, G.SpriteBatch);
         }
 
         public static void ToggleFullScreen()

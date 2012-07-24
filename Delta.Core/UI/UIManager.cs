@@ -11,14 +11,19 @@ using Delta.Input.States;
 
 namespace Delta.UI
 {
-    public class UIManager : EntityManager<BaseScreen>
+    public class UIManager : EntityManager<Screen>
     {
+        internal RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        internal Point _dragStartPosition = Point.Zero;
+
         public HUD HUD { get; internal set; }
-        public BaseScreen ActiveScreen { get; internal set; }
-        public BaseControl FocusedControl { get; set; }
-        public BaseControl ClickedControl { get; set; }
-        public BaseControl CaptureControl { get; set; }
-        public BaseControl EnteredControl { get; set; }
+        public Screen ActiveScreen { get; internal set; }
+        public Control FocusedControl { get; set; }
+        public Control PressedControl { get; set; }
+#if WINDOWS
+        public Control EnteredControl { get; set; }
+        public Control DraggedControl { get; set; }
+#endif
 
         internal Action<Keys> _keyDown;
         internal Action<Keys> _keyPress;
@@ -50,22 +55,27 @@ namespace Delta.UI
             HUD.InternalUpdate(time);
         }
 
+        protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, _rasterizerState, null, Camera.View);
+        }
+
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            base.Draw(time, spriteBatch);
             HUD.InternalDraw(time, spriteBatch);
+            base.Draw(time, spriteBatch);
             if (ActiveScreen != null)
                 ActiveScreen.InternalDraw(time, spriteBatch);
         }
 
-        public override void Add(BaseScreen item)
+        public override void Add(Screen item)
         {
             base.Add(item);
             if (ActiveScreen == null)
                 ActiveScreen = item;
         }
 
-        public override void Remove(BaseScreen item)
+        public override void Remove(Screen item)
         {
             if (ActiveScreen == item)
                 ActiveScreen = null;
@@ -76,39 +86,52 @@ namespace Delta.UI
         internal void MouseMove()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseMove();
+            if (DraggedControl != null)
+            {
+                Point newDragPosition = G.Input.Mouse.Position;
+                DraggedControl.Position = new Point(DraggedControl.Position.X + newDragPosition.X - _dragStartPosition.X, DraggedControl.Position.Y + newDragPosition.Y - _dragStartPosition.Y);
+                _dragStartPosition = newDragPosition;
+                DraggedControl.Invalidate();
+            }
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseMove();
             if (!handled && ActiveScreen != null)
                 handled = ActiveScreen.ProcessMouseMove();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseMove();
             if (!handled)
-                HUD.ProcessMouseMove();
+                handled = HUD.ProcessMouseMove();
+            if (!handled && EnteredControl != null)
+                EnteredControl.MouseIsInside = false;
         }
 
         internal void MouseDown()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseUp();
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseDown();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseDown();
             if (!handled)
-                HUD.ProcessMouseDown();
+                handled = HUD.ProcessMouseDown();
+            if (!handled && FocusedControl != null)
+                FocusedControl.IsFocused = false;
         }
 
         internal void MouseUp()
         {
             bool handled = false;
-            if (CaptureControl != null)
-                handled = CaptureControl.ProcessMouseUp();
+            if (EnteredControl != null)
+                handled = EnteredControl.ProcessMouseUp();
             if (!handled)
                 for (int x = 0; x < Children.Count; x++)
                     handled = Children[x].ProcessMouseUp();
             if (!handled)
-                HUD.ProcessMouseUp();
+                handled = HUD.ProcessMouseUp();
+            if (!handled && FocusedControl != null)
+                FocusedControl.IsFocused = false;
         }
 
         internal void KeyDown(Keys key)

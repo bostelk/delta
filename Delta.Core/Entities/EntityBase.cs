@@ -199,12 +199,14 @@ namespace Delta
             InternalLoadContent();
             if (CanUpdate())
             {
+                BeginUpdate(time);
                 LightUpdate(time);
                 if (NeedsHeavyUpdate)
                 {
                     NeedsHeavyUpdate = false;
                     HeavyUpdate(time);
                 }
+                EndUpdate(time);
             }
         }
 
@@ -213,11 +215,19 @@ namespace Delta
             return IsEnabled;
         }
 
+        protected virtual void BeginUpdate(DeltaTime time)
+        {
+        }
+
         protected virtual void LightUpdate(DeltaTime time)
         {
         }
 
         protected internal virtual void HeavyUpdate(DeltaTime time)
+        {
+        }
+
+        protected virtual void EndUpdate(DeltaTime time)
         {
         }
 
@@ -230,7 +240,11 @@ namespace Delta
         public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             if (CanDraw())
+            {
+                BeginDraw(time, spriteBatch);
                 Draw(time, spriteBatch);
+                EndDraw(time, spriteBatch);
+            }
         }
 
         protected virtual bool CanDraw()
@@ -238,7 +252,15 @@ namespace Delta
             return IsVisible; 
         }
 
+        protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+        }
+
         protected virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+        }
+
+        protected virtual void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
         }
 

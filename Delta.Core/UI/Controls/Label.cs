@@ -37,7 +37,7 @@ namespace Delta.UI.Controls
                 if (_isWordWrapped != value)
                 {
                     _isWordWrapped = value;
-                    Invalidate();
+                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace Delta.UI.Controls
                 if (_autoSize != value)
                 {
                     _autoSize = value;
-                    Invalidate();
+                    NeedsHeavyUpdate = true;
                 }
             }
         }
@@ -73,35 +73,44 @@ namespace Delta.UI.Controls
         protected override void LoadContent()
         {
             base.LoadContent();
-            Font = G.Font;
+            if (Font == null)
+                Font = G.Font;
         }
 
-        protected virtual void UpdateRenderText()
+        protected internal override void HeavyUpdate(DeltaTime time)
+        {
+            UpdateTextSize();
+            base.HeavyUpdate(time);
+            UpdateRenderText();
+            UpdateTextPosition();
+        }
+
+        internal virtual void UpdateTextSize()
+        {
+            _textSize = Font.MeasureString(_renderText);
+        }
+
+        internal override void UpdateRenderSize()
+        {
+            if (AutoSize)
+                _renderSize = _textSize + _renderBorderSize * 2;
+            else
+                base.UpdateRenderSize();
+        }
+
+        protected void UpdateRenderText()
         {
             _renderText.Clear();
-            if (IsWordWrapped)
-                Text.WordWrap(ref _renderText, Font, Size, Vector2.One);
+            if (IsWordWrapped && !AutoSize)
+                Text.WordWrap(ref _renderText, Font, InnerArea, Vector2.One);
             else
                 for (int i = 0; i < Text.Length; i++)
                     _renderText.Append(Text[i]);
         }
 
-        protected virtual void UpdateTextSize()
-        {
-            _textSize = Font.MeasureString(_renderText);
-        }
-
-        protected override void UpdateRenderSize()
-        {
-            if (AutoSize)
-                RenderSize = _textSize;
-            else
-                base.UpdateRenderSize();
-        }
-
         protected virtual void UpdateTextPosition()
         {
-            _textPosition = Position;
+            _textPosition = _innerRenderPosition;
             _textOrigin = Vector2.Zero;
             if (!AutoSize)
             {
@@ -122,15 +131,6 @@ namespace Delta.UI.Controls
                         _textPosition.Y += Size.Y - _textSize.Y;
                 }
             }
-        }
-
-        protected internal override void OnInvalidate()
-        {
-            UpdateRenderText();
-            UpdateTextSize();
-            UpdateRenderSize();
-            UpdateTextPosition();
-            base.OnInvalidate();
         }
 
         protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)

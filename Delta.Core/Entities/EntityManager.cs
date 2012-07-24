@@ -32,12 +32,14 @@ namespace Delta
             }
         }
 
-        internal void Draw()
+        protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
         {
             G.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera.View);
-            base.InternalDraw(_time, G.SpriteBatch);
-            G.SpriteBatch.End();
+        }
 
+        protected override void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            G.SpriteBatch.End();
             G.SpriteBatch.Begin();
             Camera.Draw(_time, G.SpriteBatch);
             G.SpriteBatch.End();

@@ -11,7 +11,9 @@ namespace Delta.UI
     public class PerformanceMetrics : Label
     {
         int _frames = 0;
+        long _previousManagedMemory = 0;
         long _managedMemory = 0;
+        long _deltaManagedMemory = 0;
         float _timer = 0;
         int _fps = 0;
 
@@ -25,6 +27,9 @@ namespace Delta.UI
             if (_timer >= 1)
             {
                 _fps = (int)(_frames / _timer);
+                _previousManagedMemory = _managedMemory;
+                _managedMemory = GC.GetTotalMemory(false);
+                _deltaManagedMemory = _managedMemory - _previousManagedMemory;
                 _frames = 0;
                 _timer = 0;
             }
@@ -33,7 +38,6 @@ namespace Delta.UI
             Text.Concat(_fps);
             Text.AppendLine();
             Text.Append("MEM: ");
-            _managedMemory = GC.GetTotalMemory(false);
             if (_managedMemory < 1024)
             {
                 Text.Concat(_managedMemory);
@@ -48,6 +52,27 @@ namespace Delta.UI
             {
                 Text.Concat((float)(_managedMemory / 1024f / 1024f), 2);
                 Text.Append(" mB");
+            }
+            if (_deltaManagedMemory > 0)
+            {
+                if (_deltaManagedMemory < 1024)
+                {
+                    Text.Append(" (+");
+                    Text.Concat(_deltaManagedMemory);
+                    Text.Append(" B/sec)");
+                }
+                else if (_deltaManagedMemory < (1024 * 1024))
+                {
+                    Text.Append(" (+");
+                    Text.Concat((float)(_deltaManagedMemory / 1024f), 2);
+                    Text.Append(" kB/sec)");
+                }
+                else if (_deltaManagedMemory < (1024 * 1024 * 1024))
+                {
+                    Text.Append(" (+");
+                    Text.Concat((float)(_deltaManagedMemory / 1024f / 1024f), 2);
+                    Text.Append(" mB/sec)");
+                }
             }
             Invalidate();
         }
