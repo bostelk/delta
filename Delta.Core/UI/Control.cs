@@ -130,6 +130,40 @@ namespace Delta.UI
                 }
             }
         }
+
+        bool _isDragged = false;
+        public bool IsDragged
+        {
+            get { return _isDragged; }
+            internal set
+            {
+                if (_isDragged != value)
+                {
+                    _isDragged = value;
+                    if (value)
+                    {
+                        G.UI.DraggedControl = this;
+                        G.UI._dragStartPosition = G.Input.Mouse.Position;
+                    }
+                    else
+                        G.UI.DraggedControl = null;
+                }
+            }
+        }
+
+        bool _isDraggable = false;
+        public bool IsDraggable
+        {
+            get { return _isDraggable; }
+            internal set
+            {
+                if (_isDraggable != value)
+                {
+                    _isDraggable = value;
+                }
+            }
+        }
+
 #endif
 
         Color _backColor = Color.SeaGreen;
@@ -418,6 +452,7 @@ namespace Delta.UI
             _cullRectangle = RenderArea;
             if (Parent != null)
                 _cullRectangle = Rectangle.Intersect(_cullRectangle, Parent._cullRectangle);
+            _cullRectangle = Rectangle.Intersect(_cullRectangle, G.ScreenArea);
         }
 
         protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
@@ -522,10 +557,14 @@ namespace Delta.UI
 
         protected virtual void OnMouseDown()
         {
+            if (_isDraggable && !_isDragged)
+                IsDragged = true;
         }
 
         protected virtual void OnMouseUp()
         {
+            if (_isDragged)
+                IsDragged = false;
         }
 
         protected virtual void OnPressed()
@@ -582,17 +621,17 @@ namespace Delta.UI
         {
         }
 
-        public virtual void ProcessKeyDown(Keys key)
+        protected internal virtual void ProcessKeyDown(Keys key)
         {
             OnKeyDown(key);
         }
 
-        public virtual void ProcessKeyPress(Keys key)
+        protected internal virtual void ProcessKeyPress(Keys key)
         {
             OnKeyPress(key);
         }
 
-        public virtual void ProcessKeyUp(Keys key)
+        protected internal virtual void ProcessKeyUp(Keys key)
         {
             OnKeyUp(key);
         }

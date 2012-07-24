@@ -13,7 +13,8 @@ namespace Delta.UI
 {
     public class UIManager : EntityManager<Screen>
     {
-        static RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        internal RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        internal Point _dragStartPosition = Point.Zero;
 
         public HUD HUD { get; internal set; }
         public Screen ActiveScreen { get; internal set; }
@@ -21,6 +22,7 @@ namespace Delta.UI
         public Control PressedControl { get; set; }
 #if WINDOWS
         public Control EnteredControl { get; set; }
+        public Control DraggedControl { get; set; }
 #endif
 
         internal Action<Keys> _keyDown;
@@ -84,6 +86,13 @@ namespace Delta.UI
         internal void MouseMove()
         {
             bool handled = false;
+            if (DraggedControl != null)
+            {
+                Point newDragPosition = G.Input.Mouse.Position;
+                DraggedControl.Position = new Point(DraggedControl.Position.X + newDragPosition.X - _dragStartPosition.X, DraggedControl.Position.Y + newDragPosition.Y - _dragStartPosition.Y);
+                _dragStartPosition = newDragPosition;
+                DraggedControl.Invalidate();
+            }
             if (EnteredControl != null)
                 handled = EnteredControl.ProcessMouseMove();
             if (!handled && ActiveScreen != null)

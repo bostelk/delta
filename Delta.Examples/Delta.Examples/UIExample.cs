@@ -18,14 +18,12 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
-            Panel pnl = new Panel();
-            pnl.Position = new Point(50, 50);
-            pnl.Size = new Point(40, 100);
-            Button btn = new Button();
-            btn.AutoSize = true;
-            btn.Text.Append("Hi, I'm a button!");
-            pnl.Add(btn);
-            G.UI.HUD.Add(pnl);
+            Window wnd = new Window();
+
+            wnd.Position = new Point(50, 50);
+            wnd.Size = new Point(100, 100);
+
+            G.UI.HUD.Add(wnd);
         }
 
         protected override void Initialize()
