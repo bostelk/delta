@@ -15,7 +15,8 @@ namespace Delta.Examples.Entities
 {
     public class Lily : Entity
     {
-        const float SPEED = 30;
+        [Tweakable]
+        float SPEED = 30;
 
         SpriteEntity _sprite;
 

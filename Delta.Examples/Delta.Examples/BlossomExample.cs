@@ -42,6 +42,8 @@ namespace Delta.Examples
 
             G.World.Add(_map);
             G.World.Camera.Follow(_player = Entity.Get("Lily") as Entity);
+            G.UI.HUD.RegisterForTweaking(_player);
+            Tweaker.FindTweakables(_player)["SPEED"].SetValue(35);
 
             Label lblControls = new Label();
             lblControls.Text.Append(CONTROLS);
