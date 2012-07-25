@@ -47,7 +47,7 @@ namespace Delta.Examples
 
             Label lblControls = new Label();
             lblControls.Text.Append(CONTROLS);
-            lblControls.Position = new Point((int)G.ScreenCenter.X, 0);
+            lblControls.Position = new Vector2(G.ScreenCenter.X, 0);
             lblControls.BackColor = Color.Gray;
             lblControls.ForeColor = Color.White;
             G.UI.HUD.Add(lblControls);

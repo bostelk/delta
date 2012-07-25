@@ -154,7 +154,7 @@ namespace Delta
             return font.MeasureString(_singleCharacterStringBuilder);
         }
 
-        public static void WordWrap(this StringBuilder stringBuilder, ref StringBuilder target, SpriteFont font, Rectangle bounds, Vector2 scale)
+        public static void WordWrap(this StringBuilder stringBuilder, ref StringBuilder target, SpriteFont font, Vector2 bounds, Vector2 scale)
         {
             int lastWhiteSpaceIndex = 0;
             float currentLineWidth = 0;

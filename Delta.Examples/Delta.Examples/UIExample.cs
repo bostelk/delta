@@ -18,12 +18,6 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
-            Window wnd = new Window();
-
-            wnd.Position = new Point(50, 50);
-            wnd.Size = new Point(100, 100);
-
-            G.UI.HUD.Add(wnd);
         }
 
         protected override void Initialize()

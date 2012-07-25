@@ -8,9 +8,9 @@ namespace Delta.Input.States
 	public sealed class MouseInputState
 	{
         internal MouseState MouseState { get; private set; }
-        public Point Position { get; private set; }
-        public Point PositionOld { get; private set; }
-        public Point PositionDelta { get; private set; }
+        public Vector2 Position { get; private set; }
+        public Vector2 PositionOld { get; private set; }
+        public Vector2 PositionDelta { get; private set; }
         public Button LeftButton { get; private set; }
         public Button RightButton { get; private set; }
         public Button MiddleButton { get; private set; }
@@ -33,8 +33,8 @@ namespace Delta.Input.States
 		{
             MouseState = mouseState;
             PositionOld = Position;
-            Position = new Point(mouseState.X, mouseState.Y);
-            PositionDelta = new Point(Position.X - PositionOld.X, Position.Y - PositionOld.Y);
+            Position = new Vector2(mouseState.X, mouseState.Y);
+            PositionDelta = Position - PositionOld;
 			ScrollWheelDelta = mouseState.ScrollWheelValue - ScrollWheelValue;
 			ScrollWheelValue = mouseState.ScrollWheelValue;
 

@@ -24,14 +24,12 @@ namespace Delta
 
     public static class SpriteBatchExtensions
     {
-        static Rectangle _currentScissorRectangle = Rectangle.Empty;
-        static Rectangle _previousScissorRectangle = Rectangle.Empty;
-        static RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        internal static RasterizerState _cullRasterizerState = new RasterizerState() { ScissorTestEnable = true };
 
-        public static void Begin(this SpriteBatch spriteBatch, Camera camera, Rectangle scissor)
+        public static void Begin(this SpriteBatch spriteBatch, SpriteSortMode spriteSortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, Effect effect, Camera camera, Rectangle scissor)
         {
             spriteBatch.GraphicsDevice.ScissorRectangle = scissor;
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, _rasterizerState, null, camera.View);
+            spriteBatch.Begin(spriteSortMode, blendState, samplerState, depthStencilState, _cullRasterizerState, effect, camera.View);
         }
 
         public static void DrawStringOutline(this SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color color, Color outline)
@@ -93,12 +91,12 @@ namespace Delta
             spriteBatch.Draw(G.PixelTexture, rectangle, color);
         }
 
-        public static void DrawRectangleOutline(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Color color)
+        public static void DrawRectangleOutline(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Vector2 borderSize, Color color)
         {
-            spriteBatch.DrawLine(position, new Vector2(position.X + size.X, position.Y), color, 1);
-            spriteBatch.DrawLine(position, new Vector2(position.X, position.Y + size.Y), color, 1);
-            spriteBatch.DrawLine(new Vector2(position.X, position.Y + size.Y), new Vector2(position.X + size.X, position.Y + size.Y), color, 1);
-            spriteBatch.DrawLine(new Vector2(position.X + size.X, position.Y), new Vector2(position.X + size.X, position.Y + size.Y), color, 1);
+            DrawRectangle(spriteBatch, position, new Vector2(size.X, borderSize.Y), color); //top
+            DrawRectangle(spriteBatch, position, new Vector2(borderSize.X, size.Y), color); //left
+            DrawRectangle(spriteBatch, new Vector2(position.X + size.X - borderSize.X, position.Y), new Vector2(borderSize.X, size.Y), color); //right
+            DrawRectangle(spriteBatch, new Vector2(position.X, position.Y + size.Y - borderSize.Y), new Vector2(size.Y, borderSize.Y), color); //bottom
         }
 
         public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Color color)

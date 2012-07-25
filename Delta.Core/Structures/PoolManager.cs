@@ -18,7 +18,7 @@ namespace Delta.Structures
 
         static PoolManager()
         {
-            _infoLbl.Position = new Point(0, 50);
+            _infoLbl.Position = new Vector2(0, 50);
             _infoLbl.BackColor = Color.Black * 0.5f;
             _infoLbl.HighlightedColor = Color.Black * 0.75f;
             _infoLbl.ForeColor = Color.White;

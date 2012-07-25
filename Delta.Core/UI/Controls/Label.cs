@@ -93,7 +93,7 @@ namespace Delta.UI.Controls
         internal override void UpdateRenderSize()
         {
             if (AutoSize)
-                _renderSize = _textSize + _renderBorderSize * 2;
+                RenderSize = _textSize + RenderBorderSize * 2;
             else
                 base.UpdateRenderSize();
         }
@@ -102,7 +102,7 @@ namespace Delta.UI.Controls
         {
             _renderText.Clear();
             if (IsWordWrapped && !AutoSize)
-                Text.WordWrap(ref _renderText, Font, InnerArea, Vector2.One);
+                Text.WordWrap(ref _renderText, Font, InnerRenderSize, Vector2.One);
             else
                 for (int i = 0; i < Text.Length; i++)
                     _renderText.Append(Text[i]);
@@ -110,7 +110,7 @@ namespace Delta.UI.Controls
 
         protected virtual void UpdateTextPosition()
         {
-            _textPosition = _innerRenderPosition;
+            _textPosition = InnerRenderPosition;
             _textOrigin = Vector2.Zero;
             if (!AutoSize)
             {
