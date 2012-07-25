@@ -21,7 +21,7 @@ namespace Delta
 
     public enum IntercardinalDirection
     {
-        None,
+        Idle,
         North,
         NorthEast,
         East,

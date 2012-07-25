@@ -101,7 +101,7 @@ namespace Delta.Examples.Entities
                 case IntercardinalDirection.East:
                     WalkEast();
                     break;
-                case IntercardinalDirection.None:
+                case IntercardinalDirection.Idle:
                     Idle();
                     break;
             }
@@ -112,7 +112,7 @@ namespace Delta.Examples.Entities
             for (int i = 0; i < _intercardinalVectors.Length; i++)
                 if (Vector2Extensions.AlmostEqual(ref _intercardinalVectors[i], ref direction))
                     return (IntercardinalDirection) i;
-            return IntercardinalDirection.None;
+            return IntercardinalDirection.Idle;
         }
 
         public override string ToString()
