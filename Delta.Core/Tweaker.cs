@@ -24,17 +24,17 @@ namespace Delta
             public string InstanceName { get { return _instance.ToString(); } }
             public string VariableName { get { return _property.Name; } }
 
-            public TweakProperty(object tweaking, PropertyInfo property)
+            public TweakProperty(object instance, PropertyInfo property)
             {
-                if (tweaking == null)
+                if (instance == null)
                 {
-                    throw new ArgumentNullException("tweaking is null");
+                    throw new ArgumentNullException("instance is null");
                 }
                 if (property == null)
                 {
                     throw new ArgumentNullException("field is null");
                 }
-                _instance = tweaking;
+                _instance = instance;
                 _property = property;
             }
 
@@ -68,17 +68,17 @@ namespace Delta
             public string InstanceName { get { return _instance.ToString(); } }
             public string VariableName { get { return _field.Name; } }
 
-            public TweakField(object tweaking, FieldInfo field)
+            public TweakField(object instance, FieldInfo field)
             {
-                if (tweaking == null)
+                if (instance == null)
                 {
-                    throw new ArgumentNullException("tweaking is null");
+                    throw new ArgumentNullException("instance is null");
                 }
                 if (field == null)
                 {
                     throw new ArgumentNullException("field is null");
                 }
-                _instance = tweaking;
+                _instance = instance;
                 _field = field;
             }
 
