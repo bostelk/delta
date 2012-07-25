@@ -22,10 +22,10 @@ namespace Delta.Examples.Entities
         public Vector2 Input { get; set; }
         public Vector2 Velocity;
 
-        float _trailInterval = 0.09f;
+        float _trailInterval = 0.1f;
         float _trailTime = 0;
 
-        LilySpriteController _spriteController;
+        CardinalSpriteController _spriteController;
 
         public Lily() : base("Lily")
         {
@@ -33,7 +33,7 @@ namespace Delta.Examples.Entities
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("walkdown");
 
-            _spriteController = new LilySpriteController(_sprite);
+            _spriteController = new CardinalSpriteController(_sprite);
         }
 
         protected override void LateInitialize()
@@ -62,24 +62,7 @@ namespace Delta.Examples.Entities
                 Rotation = (Rotation - (0.5f));
             Rotation = Rotation.Wrap(0, 360);
 
-            Vector2 direction = Vector2.Zero;
-            if (G.Input.Keyboard.IsDown(Keys.Left))
-            {
-                direction -= Vector2.UnitX;
-            }
-            if (G.Input.Keyboard.IsDown(Keys.Right))
-            {
-                direction += Vector2.UnitX;
-            }
-            if (G.Input.Keyboard.IsDown(Keys.Up))
-            {
-                direction -= Vector2.UnitY;
-            }
-            if (G.Input.Keyboard.IsDown(Keys.Down))
-            {
-                direction += Vector2.UnitY;
-            }
-            Vector2Extensions.SafeNormalize(ref direction);
+            Vector2 direction = G.Input.ArrowDirection;
             _spriteController.Walk(direction);
 
             Velocity = ((G.Input.Keyboard.IsDown(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
@@ -91,7 +74,7 @@ namespace Delta.Examples.Entities
             // if boosting leave a motion trail
             //if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
             //{
-            //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", _spriteController.ToString(), Position + (direction * -2 * time.ElapsedSeconds));
+            //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", _spriteController.ToString(), Position);
             //    _trailTime = (float)time.TotalSeconds;
             //}
 
