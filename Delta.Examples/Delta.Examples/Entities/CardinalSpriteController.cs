@@ -11,7 +11,17 @@ namespace Delta.Examples.Entities
     class CardinalSpriteController //: ISpriteController
     {
         static readonly float INV_SQRT_2 = (float)(1.0 / Math.Sqrt(2.0));
-        static readonly Vector2[] _intercardinalVectors = new Vector2[] {            new Vector2(0),             // idle            new Vector2(0, -1),         // north            new Vector2(INV_SQRT_2, -INV_SQRT_2),   // north east            new Vector2(1, 0),          // east            new Vector2(INV_SQRT_2, INV_SQRT_2),   // south east            new Vector2(0, 1),          // south            new Vector2(-INV_SQRT_2, INV_SQRT_2),   // south west            new Vector2(-1, 0),         // west            new Vector2(-INV_SQRT_2, -INV_SQRT_2),   // north west        };
+        static readonly Vector2[] _intercardinalVectors = new Vector2[] {
+            new Vector2(0),             // idle
+            new Vector2(0, -1),         // north
+            new Vector2(INV_SQRT_2, -INV_SQRT_2),   // north east
+            new Vector2(1, 0),          // east
+            new Vector2(INV_SQRT_2, INV_SQRT_2),   // south east
+            new Vector2(0, 1),          // south
+            new Vector2(-INV_SQRT_2, INV_SQRT_2),   // south west
+            new Vector2(-1, 0),         // west
+            new Vector2(-INV_SQRT_2, -INV_SQRT_2),   // north west
+        };
 
         SpriteEntity _sprite;
         string _animation;

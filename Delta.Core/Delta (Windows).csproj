@@ -143,7 +143,7 @@
     <Compile Include="Structures\TimedRange.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="TEMP\CardinalDirection.cs" />
+    <Compile Include="CardinalDirection.cs" />
     <Compile Include="Interfaces\IRecyclable.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -190,6 +190,8 @@
     <Compile Include="Tiled\IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="Tweakable.cs" />
+    <Compile Include="Tweaker.cs" />
     <Compile Include="UI\Controls\ControlBase.cs" />
     <Compile Include="UI\Controls\Button.cs" />
     <Compile Include="UI\Controls\Label.cs" />

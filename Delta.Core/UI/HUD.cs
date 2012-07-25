@@ -21,7 +21,7 @@ namespace Delta.UI
             foreach(KeyValuePair<string, Delta.Tweaker.ITweak> tweakable in tweakables) {
                 tweakingLabel.Text.Append(String.Format("Variable: {0} Value {1}\n", tweakable.Value.VariableName, tweakable.Value.GetValue()));
             }
-            tweakingLabel.Position = new Point(0, 120);
+            tweakingLabel.Position = new Vector2(0, 120);
             Add(tweakingLabel);
         }
 
