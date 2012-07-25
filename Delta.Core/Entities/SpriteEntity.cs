@@ -267,9 +267,6 @@ namespace Delta.Graphics
 
         public void Play(string animation, AnimationPlayOptions options, int frameOffset)
         {
-            if (IsAnimationPlaying && (options & AnimationPlayOptions.Force) == 0)
-                return;
-
             _animationName = animation;
             IsAnimationPaused = false;
             IsAnimationLooped = ((options & AnimationPlayOptions.Looped) != 0);

@@ -1,27 +1,34 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
 
-//namespace Delta
-//{
-//    public enum CardinalDirection
-//    {
-//        North,
-//        East,
-//        South,
-//        West
-//    }
+namespace Delta
+{
 
-//    public enum IntercardinalDirection
-//    {
-//        North,
-//        NorthEast,
-//        East,
-//        SouthEast,
-//        South,
-//        SouthWest,
-//        West,
-//        NorthWest,
-//    }
-//}
+    public struct SpriteDirection
+    {
+    }
+
+    public enum CardinalDirection
+    {
+        North,
+        East,
+        South,
+        West
+    }
+
+    public enum IntercardinalDirection
+    {
+        None,
+        North,
+        NorthEast,
+        East,
+        SouthEast,
+        South,
+        SouthWest,
+        West,
+        NorthWest,
+    }
+}

@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="AnimationExample.cs" />
     <Compile Include="AudioExample.cs" />
+    <Compile Include="Entities\LilySprite.cs" />
     <Compile Include="UIExample.cs" />
     <Compile Include="InputExample.cs" />
     <Compile Include="Entities\Barrel.cs" />

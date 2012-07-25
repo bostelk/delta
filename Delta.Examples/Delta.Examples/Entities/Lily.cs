@@ -15,7 +15,7 @@ namespace Delta.Examples.Entities
 {
     public class Lily : Entity
     {
-        const float SPEED = 50;
+        const float SPEED = 30;
 
         SpriteEntity _sprite;
 
@@ -25,11 +25,15 @@ namespace Delta.Examples.Entities
         float _trailInterval = 0.09f;
         float _trailTime = 0;
 
+        LilySpriteController _spriteController;
+
         public Lily() : base("Lily")
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("walkdown");
+
+            _spriteController = new LilySpriteController(_sprite);
         }
 
         protected override void LateInitialize()
@@ -59,31 +63,24 @@ namespace Delta.Examples.Entities
             Rotation = Rotation.Wrap(0, 360);
 
             Vector2 direction = Vector2.Zero;
-            if (G.Input.Keyboard.IsDown(Keys.Up))
-            {
-                direction -= Vector2.UnitY;
-                _sprite.Play("walkup", AnimationPlayOptions.Looped);
-                _sprite.SpriteEffects = SpriteEffects.None;
-            }
-            if (G.Input.Keyboard.IsDown(Keys.Down))
-            {
-                direction += Vector2.UnitY;
-                _sprite.Play("walkdown", AnimationPlayOptions.Looped);
-                _sprite.SpriteEffects = SpriteEffects.None;
-            }
             if (G.Input.Keyboard.IsDown(Keys.Left))
             {
                 direction -= Vector2.UnitX;
-                _sprite.Play("walkright", AnimationPlayOptions.Looped);
-                _sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
             }
             if (G.Input.Keyboard.IsDown(Keys.Right))
             {
                 direction += Vector2.UnitX;
-                _sprite.Play("walkright", AnimationPlayOptions.Looped);
-                _sprite.SpriteEffects = SpriteEffects.None;
+            }
+            if (G.Input.Keyboard.IsDown(Keys.Up))
+            {
+                direction -= Vector2.UnitY;
+            }
+            if (G.Input.Keyboard.IsDown(Keys.Down))
+            {
+                direction += Vector2.UnitY;
             }
             Vector2Extensions.SafeNormalize(ref direction);
+            _spriteController.Walk(direction);
 
             Velocity = ((G.Input.Keyboard.IsDown(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
             Position += Velocity * (float)time.ElapsedSeconds;
@@ -92,11 +89,11 @@ namespace Delta.Examples.Entities
                 SwitchBody();
 
             // if boosting leave a motion trail
-            if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
-            {
-                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "walkup", Position + (direction * -2 * time.ElapsedSeconds));
-                _trailTime = (float)time.TotalSeconds;
-            }
+            //if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
+            //{
+            //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", _spriteController.ToString(), Position + (direction * -2 * time.ElapsedSeconds));
+            //    _trailTime = (float)time.TotalSeconds;
+            //}
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(time);
