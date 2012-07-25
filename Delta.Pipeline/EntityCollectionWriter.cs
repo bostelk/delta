@@ -13,7 +13,7 @@ namespace Delta
     {
         protected override void Write(ContentWriter output, EntityCollection<T> value)
         {
-            output.WriteRawObject<EntityBase>(value as EntityBase);
+            output.WriteRawObject<Entity>(value as Entity);
             List<IEntity> gameComponents = new List<IEntity>();
             foreach (var gameComponent in value.Children)
                 gameComponents.Add(gameComponent);

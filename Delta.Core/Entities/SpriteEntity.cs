@@ -29,7 +29,7 @@ namespace Delta.Graphics
         RemoveWhenFinished = 1 << 3,
     }
 
-    public class SpriteEntity : Entity, IRecyclable
+    public class SpriteEntity : TransformableEntity, IRecyclable
     {
         static Pool<SpriteEntity> _pool;
 
@@ -252,7 +252,7 @@ namespace Delta.Graphics
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             }
-            spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, RenderColor, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
         }
 
         public void Play(string animation)

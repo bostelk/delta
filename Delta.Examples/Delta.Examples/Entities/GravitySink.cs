@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class GravitySink : Entity
+    public class GravitySink : TransformableEntity
     {
         const int NUM_PARTICLES = 1000;
         const float GRAVITY = 6.6f;
@@ -47,7 +47,7 @@ namespace Delta.Examples.Entities
         protected override void LightUpdate(DeltaTime time)
         {
             if (_lucas == null)
-                _lucas = Entity.Get("Lucas") as Lucas;
+                _lucas = TransformableEntity.Get("Lucas") as Lucas;
             for (int i = 0; i < NUM_PARTICLES; i++)
             {
                 _particles[i].Velocity = -GRAVITY * (M1 * M2 / MathExtensions.Square(Vector2.Distance(_particles[i].Position, _lucas.Position))) * (_particles[i].Position - _lucas.Position);

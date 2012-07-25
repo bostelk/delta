@@ -13,7 +13,7 @@ using Delta.Collision;
 
 namespace Delta.Examples.Entities
 {
-    public class BouncingBody : Entity
+    public class BouncingBody : TransformableEntity
     {
         const float SPEED = 50;
 

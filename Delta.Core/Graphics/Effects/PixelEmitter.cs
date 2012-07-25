@@ -15,7 +15,7 @@ namespace Delta.Graphics
     public class PixelEmitter : Emitter
     {
 
-        internal class PixelEntity : Entity 
+        internal class PixelEntity : TransformableEntity 
         {
             static Pool<PixelEntity> _pool;
 

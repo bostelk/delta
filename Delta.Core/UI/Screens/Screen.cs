@@ -12,7 +12,7 @@ namespace Delta.UI.Screens
     }
 
 
-    public abstract class Screen : ControlBase
+    public abstract class Screen : EntityCollection<ControlBase>
     {
         bool _isExiting = false;
 
@@ -25,12 +25,6 @@ namespace Delta.UI.Screens
         public Screen()
             : base()
         {
-        }
-
-        protected override void LateInitialize()
-        {
-            base.LateInitialize();
-            Size = new Vector2(G.ScreenArea.Width, G.ScreenArea.Height);
         }
 
         protected override void LightUpdate(DeltaTime time)
@@ -105,6 +99,44 @@ namespace Delta.UI.Screens
             //    }
         }
 
+#if WINDOWS
+        internal virtual bool ProcessMouseMove()
+        {
+            bool handled = false;
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseMove();
+                if (handled)
+                    break;
+            }
+            return handled;
+        }
+
+        internal virtual bool ProcessMouseDown()
+        {
+            bool handled = false;
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseDown();
+                if (handled)
+                    break;
+            }
+            return handled;
+        }
+
+        internal virtual bool ProcessMouseUp()
+        {
+            bool handled = false;
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseUp();
+                if (handled)
+                    break;
+            }
+            return handled;
+        }
+#endif
+
         //public virtual void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         //{
         //    this.otherScreenHasFocus = otherScreenHasFocus;
@@ -154,8 +186,8 @@ namespace Delta.UI.Screens
         {
             if (TransitionOffTime <= 0)
             {
-                if (Parent != null)
-                    Parent.Remove(this);
+                if (ParentCollection != null)
+                    ParentCollection.Remove(this);
                 else
                     G.UI.Remove(this);
             }

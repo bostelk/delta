@@ -10,7 +10,7 @@ using Delta.Structures;
 
 namespace Delta.Entities
 {
-    public class SpriteFrameEntity : Entity
+    public class SpriteFrameEntity : TransformableEntity
     {
         static Pool<SpriteFrameEntity> _pool;
 

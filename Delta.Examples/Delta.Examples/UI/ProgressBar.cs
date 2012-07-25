@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class ProgressBar : Entity
+    public class ProgressBar : TransformableEntity
     {
         public enum Mode
         {

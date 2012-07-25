@@ -9,12 +9,12 @@ using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class MovingSpeaker : Entity
+    public class MovingSpeaker : TransformableEntity
     {
 
         float _rotation;
         Texture2D _texture;
-        Entity _orbiting;
+        TransformableEntity _orbiting;
 
         public bool IsOrbiting
         {
@@ -38,7 +38,7 @@ namespace Delta.Examples.Entities
         {
         }
 
-        public void Orbit(Entity e)
+        public void Orbit(TransformableEntity e)
         {
             _orbiting = e;
             IsOrbiting = true;

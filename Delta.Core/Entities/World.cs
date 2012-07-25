@@ -20,7 +20,7 @@ namespace Delta
         {
         }
 
-        public List<T> GetEntitiesUnderMouse<T>() where T: Entity
+        public List<T> GetEntitiesUnderMouse<T>() where T: TransformableEntity
         {
             List<T> result = new List<T>();
             //foreach (Entity entity in Entity.GlobalEntities)

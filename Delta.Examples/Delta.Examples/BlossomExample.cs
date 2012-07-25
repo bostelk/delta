@@ -24,7 +24,7 @@ namespace Delta.Examples
     {
         const string CONTROLS = "[wads] camera movement.";
         Map _map;
-        Entity _player;
+        TransformableEntity _player;
 
         public BlossomExample() : base("BlossomExample")
         {
@@ -41,7 +41,7 @@ namespace Delta.Examples
             G.Collision.DefineWorld(_map.Width * _map.TileWidth, _map.Height * _map.TileHeight, 32);
 
             G.World.Add(_map);
-            G.World.Camera.Follow(_player = Entity.Get("Lily") as Entity);
+            G.World.Camera.Follow(_player = TransformableEntity.Get("Lily") as TransformableEntity);
             G.UI.HUD.RegisterForTweaking(_player);
             Tweaker.FindTweakables(_player)["SPEED"].SetValue(35);
 

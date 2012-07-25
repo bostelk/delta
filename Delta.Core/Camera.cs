@@ -127,7 +127,7 @@ namespace Delta
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
         public Matrix World { get; private set; }
-        public Entity Tracking { get; set; }
+        public TransformableEntity Tracking { get; set; }
 
         public bool IsTracking
         {
@@ -335,7 +335,7 @@ namespace Delta
             World = Matrix.Identity;
         }
 
-        public void Follow(Entity target)
+        public void Follow(TransformableEntity target)
         {
             if (target == null)
                 return;
@@ -463,7 +463,7 @@ namespace Delta
             return ViewingArea.Intersects(rectangle) || ViewingArea.Contains(rectangle.Center.X, rectangle.Center.Y);
         }
 
-        public bool IsViewable(Entity e)
+        public bool IsViewable(TransformableEntity e)
         {
             return IsViewable(e.Position); // TODO: Add hitbox testing too.
         }

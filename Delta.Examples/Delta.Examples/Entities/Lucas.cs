@@ -14,7 +14,7 @@ using Delta.Audio;
 
 namespace Delta.Examples.Entities
 {
-    public class Lucas : Entity
+    public class Lucas : TransformableEntity
     {
         const float BOOST_ZOOM = 3.3f;
         const float NORMAL_ZOOM = 4f;
@@ -49,7 +49,7 @@ namespace Delta.Examples.Entities
 
         protected override void LateInitialize()
         {
-            HUD = Entity.Get("GameHud") as GameHud;
+            HUD = TransformableEntity.Get("GameHud") as GameHud;
             HUD.Alpha = 0f;
 
             G.World.Camera.ZoomImmediate(BOOST_ZOOM);

@@ -9,7 +9,7 @@ namespace Delta.Movement
 {
     public abstract class BaseTransform : ITransform, IRecyclable
     {
-        protected Entity _entity;
+        protected TransformableEntity _entity;
 
         /// <summary>
         /// Length of the transform in seconds.

@@ -2,261 +2,95 @@
 using System.ComponentModel;
 using System.Globalization;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Delta.Movement;
-using Delta.Structures;
-using Delta.Collision;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    public abstract class Entity : EntityBase, IEntity
+    /// <summary>
+    /// Base class for all game entites.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract class Entity : IRecyclable, IImportable, IEntity, IDisposable
     {
-        #region TEMP: Transformer
-        Transformer _transformer;
-
-        [ContentSerializer]
-        public bool _fadeRandom { get; set; } // won't serialize fields? wtf. totally temp.
-        TimedRange _fadeRange;
-        [ContentSerializer]
-        public TimedRange FadeRange
+        public static IEntity Get(string id)
         {
-            get { return _fadeRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _fadeRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    if (_fadeRandom)
-                    {
-                        // start the transformer off in a random position within the range.
-                        float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
-                        _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
-                        _transformer.OnTransformFinished(() =>
-                        {
-                            // remove the start-up transform logic.
-                            _transformer.ClearSequence();
-                            _transformer.OnTransformFinished(null);
-                            // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
-                            if (G.Random.FiftyFifty())
-                                _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
-                            else
-                                _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
-                            _transformer.Loop();
-                        });
-                    }
-                    else
-                    {
-                        _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
-                        _transformer.Loop();
-                    }
-                }
-            }
+            id = id.ToLower();
+            if (EntityHelper._idReferences.ContainsKey(id))
+                return EntityHelper._idReferences[id];
+            return null;
         }
-
-        TimedRange _flickerRange;
-        [ContentSerializer]
-        public TimedRange FlickerRange
-        {
-            get { return _flickerRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _flickerRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
-                    _transformer.Loop();
-                }
-            }
-        }
-
-        TimedRange _blinkRange;
-        [ContentSerializer]
-        public TimedRange BlinkRange
-        {
-            get { return _blinkRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _blinkRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
-                    _transformer.Loop();
-                }
-            }
-        }
-        #endregion
-
-        Rectangle _renderArea = Rectangle.Empty;
 
         [ContentSerializerIgnore]
-        protected Vector2 RenderPosition { get; private set; }
+        protected internal IEntityCollection ParentCollection { get; internal set; }
+
         [ContentSerializerIgnore]
-        protected Vector2 RenderOrigin { get; private set; }
+        IEntityCollection IEntity.Collection
+        {
+            get { return ParentCollection; }
+            set { ParentCollection = value; }
+        }
+
+        [ContentSerializer]
+        public string Name { get; internal set; }
+
+        string IEntity.Name
+        {
+            get { return Name; }
+            set { Name = value; }
+        }
+
         [ContentSerializerIgnore]
-        protected float RenderRotation { get; private set; }
+        protected bool IsLateInitialized { get; private set; }
         [ContentSerializerIgnore]
-        protected Vector2 RenderSize { get; private set; }
+        protected bool NeedsHeavyUpdate { get; set; }
         [ContentSerializerIgnore]
-        protected Rectangle RenderArea { get { return _renderArea; } }
-
-        Vector2 _position = Vector2.Zero;
-        [ContentSerializer]
-        public virtual Vector2 Position
-        {
-            get { return _position; }
-            set
-            {
-                if (_position != value)
-                {
-                    _position = value;
-                    OnPositionChanged();
-                }
-            }
-        }
-
-        Vector2 _offset = Vector2.Zero;
-        [ContentSerializer]
-        public virtual Vector2 Offset
-        {
-            get { return _offset; }
-            set
-            {
-                if (_offset != value)
-                {
-                    _offset = value;
-                    OnPositionChanged();
-                }
-            }
-        }
-
-        Vector2 _size = Vector2.Zero;
-        [ContentSerializer]
-        public virtual Vector2 Size
-        {
-            get { return _size; }
-            set
-            {
-                if (_size != value)
-                {
-                    _size = value;
-                    OnSizeChanged();
-                }
-            }
-        }
-
-        Vector2 _scale = Vector2.One;
-        [ContentSerializer]
-        public virtual Vector2 Scale
-        {
-            get { return _scale; }
-            set
-            {
-                if (_scale != value)
-                {
-                    _scale = value;
-                    OnScaleChanged();
-                }
-            }
-        }
-
-        float _rotation = 0.0f;
-        [ContentSerializer]
-        /// <summary>
-        /// The rotation expressed in degrees. clockwise: positive, counter-clockwise: negative;
-        /// </summary>
-        public virtual float Rotation
-        {
-            get { return _rotation; }
-            set
-            {
-                if (_rotation != value)
-                {
-                    _rotation = value;
-                    OnRotationChanged();
-                }
-            }
-        }
-
-        Vector2 _origin = Vector2.Zero;
-        [ContentSerializer]
-        public Vector2 Origin
-        {
-            get { return _origin; }
-            set
-            {
-                if (_origin != value)
-                {
-                    _origin = value.Clamp(Vector2.Zero, Vector2.One);
-                    OnOriginChanged();
-                }
-            }
-        }
-
-        Vector2 _pivot = Vector2.One * 0.5f;
-        [ContentSerializer]
-        public Vector2 Pivot
-        {
-            get { return _pivot; }
-            set
-            {
-                if (_pivot != value)
-                {
-                    _pivot = value.Clamp(Vector2.Zero, Vector2.One);
-                    OnPivotChanged();
-                }
-            }
-        }
-
-        [ContentSerializer(ElementName = "Tint")]
-        Color _tint = Color.White;
+        protected internal bool IsLoaded { get; internal set; }
         [ContentSerializerIgnore]
-        public virtual Color Tint
-        {
-            get { return _tint * _alpha; }
-            set
-            {
-                if (_tint != value)
-                {
-                    _tint = value;
-                    OnTintChanged();
-                }
-            }
-        }
+        protected bool RemoveNextUpdate { get; set; }
 
-        float _alpha = 1.0f;
+        bool _isEnabled = true;
         [ContentSerializer]
-        public virtual float Alpha
+        public bool IsEnabled
         {
-            get { return _alpha; }
+            get { return _isEnabled; }
             set
             {
-                value = value.Clamp(0.0f, 1.0f);
-                if (_alpha != value)
+                if (_isEnabled != value)
                 {
-                    _alpha = value;
-                    OnAlphaChanged();
+                    _isEnabled = value;
+                    OnEnabledChanged();
                 }
             }
         }
 
-        IWrappedBody _wrappedBody;
-        [ContentSerializerIgnore]
-        public IWrappedBody WrappedBody
+        bool _isVisible = true;
+        [ContentSerializer]
+        public bool IsVisible
         {
-            get { return _wrappedBody; }
+            get { return _isVisible; }
             set
             {
-                if (value != null)
+                if (_isVisible != value)
                 {
-                    _wrappedBody = value;
-                    OnWrappedBodyChanged();
+                    _isVisible = value;
+                    OnVisibleChanged();
+                }
+            }
+        }
+
+        float _layer = 0.0f;
+        [ContentSerializer]
+        public float Layer
+        {
+            get { return _layer; }
+            set
+            {
+                if (_layer != value)
+                {
+                    _layer = value;
+                    if (ParentCollection != null)
+                        ParentCollection.NeedsToSort = true;
                 }
             }
         }
@@ -264,195 +98,210 @@ namespace Delta
         public Entity()
             : base()
         {
-            Name = string.Empty;
+            IsVisible = true;
+            IsEnabled = true;
             NeedsHeavyUpdate = true;
-            RenderOrigin = Vector2.Zero;
-            RenderRotation = 0.0f;
         }
 
-        public Entity(string name)
-            : this()
+        ~Entity()
+        {      
+            Dispose(false);
+        }
+ 
+        public void Dispose()
         {
-            Name = name;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+  
+        protected virtual void Dispose(bool disposing)
+        {
         }
 
 #if WINDOWS
-        protected internal override bool ImportCustomValues(string name, string value)
+        bool IImportable.ImportCustomValues(string name, string value)
+        {
+            return ImportCustomValues(name, value);
+        }
+
+        protected internal virtual bool ImportCustomValues(string name, string value)
         {
             switch (name)
             {
-                case "pos":
-                case "position":
-                    Position = Vector2Extensions.Parse(value);
+                case "visible":
+                case "isvisible":
+                    IsVisible = bool.Parse(value);
                     return true;
-                case "offset":
-                    Offset = Vector2Extensions.Parse(value);
+                case "enabled":
+                case "isenabled":
+                    IsEnabled = bool.Parse(value);
                     return true;
-                case "scale":
-                    Scale = Vector2Extensions.Parse(value);
+                case "layer":
+                case "order":
+                case "draworder":
+                case "updateorder":
+                    Layer = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
-                case "rot":
-                case "rotation":
-                    Rotation = float.Parse(value, CultureInfo.InvariantCulture).ToRadians();
-                    return true;
-                case "tint":
-                case "color":
-                    Tint = value.ToColor();
-                    return true;
-                case "opacity":
-                case "alpha":
-                    Alpha = float.Parse(value, CultureInfo.InvariantCulture);
-                    return true;
-                case "fade":
-                    _fadeRange = TimedRange.Parse(value);
-                    return true;
-                case "faderandom":
-                    _fadeRange = TimedRange.Parse(value);
-                    _fadeRandom = true;
-                    return true;
-                case "flicker":
-                    _flickerRange = TimedRange.Parse(value);
-                    return true;
-                case "blink":
-                    _blinkRange = TimedRange.Parse(value);
-                    return true;
-            }
-            return base.ImportCustomValues(name, value);
+             }
+            return false;
         }
 #endif
 
-        protected virtual void UpdateRenderSize()
+        public void RemoveNextFrame()
         {
-            RenderSize = Size * Scale;
+            RemoveNextUpdate = true;
         }
 
-        protected virtual void UpdateRenderPosition()
+        public void RemoveImmediate()
         {
-            RenderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
+            if (ParentCollection != null)
+                ParentCollection.Remove(this);
         }
 
-        protected virtual void UpdateRenderOrigin()
+        protected virtual void LateInitialize()
         {
-            RenderOrigin = Pivot * RenderSize;
         }
 
-        protected virtual void UpdateRenderRotation()
+        void IEntity.LoadContent()
         {
-            RenderRotation = Rotation.ToRadians();
+            InternalLoadContent();
         }
 
-        protected virtual void UpdateRenderArea()
+        internal void InternalLoadContent()
         {
-            _renderArea.X = (int)(Position.X + Offset.X);
-            _renderArea.Y = (int)(Position.Y + Offset.Y);
-            _renderArea.Width = (int)RenderSize.X;
-            _renderArea.Height = (int)RenderSize.Y;
-        }
-
-        protected virtual void UpdateToWrappedBody()
-        {
-            if (WrappedBody != null)
+            if (!IsLoaded)
             {
-                WrappedBody.SimulationPosition = Position + Offset;
-                WrappedBody.SimulationRotation = RenderRotation;
+                IsLoaded = true;
+                LoadContent();
             }
         }
 
-        protected virtual void UpdateFromWrappedBody()
+        protected virtual void LoadContent()
         {
-            if (WrappedBody != null)
+        }
+
+        void IEntity.Update(DeltaTime time)
+        {
+            InternalUpdate(time);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual void InternalUpdate(DeltaTime time)
+        {
+            if (RemoveNextUpdate)
+                RemoveImmediate();
+            if (!IsLateInitialized)
             {
-                //don't fire OnChanged functions! We don't want to get into a fight between reading and writing off the WrappedBody!
-                _position = WrappedBody.SimulationPosition - Offset;
-                _rotation = WrappedBody.SimulationRotation.ToDegrees();
-                UpdateRenderPosition();
-                UpdateRenderRotation();
+                IsLateInitialized = true;
+                LateInitialize();
+            }
+            InternalLoadContent();
+            if (CanUpdate())
+            {
+                BeginUpdate(time);
+                LightUpdate(time);
+                if (NeedsHeavyUpdate)
+                {
+                    NeedsHeavyUpdate = false;
+                    HeavyUpdate(time);
+                }
+                EndUpdate(time);
             }
         }
 
-        protected internal virtual void OnPositionChanged()
+        protected virtual bool CanUpdate()
         {
-            UpdateRenderPosition();
-            UpdateToWrappedBody();
-            UpdateRenderArea();
+            return IsEnabled;
         }
 
-        protected internal virtual void OnSizeChanged()
-        {
-            UpdateRenderSize();
-            UpdateRenderOrigin();
-            UpdateRenderPosition();
-            UpdateRenderArea();
-        }
-
-        protected internal virtual void OnScaleChanged()
-        {
-            UpdateRenderSize();
-            UpdateRenderOrigin();
-            UpdateRenderPosition();
-            UpdateRenderArea();
-        }
-
-        protected internal virtual void OnRotationChanged()
-        {
-            UpdateRenderRotation();
-            UpdateToWrappedBody();
-        }
-
-        protected virtual void OnOriginChanged()
-        {
-            UpdateRenderOrigin();
-            UpdateRenderPosition();
-        }
-
-        protected virtual void OnPivotChanged()
-        {
-            UpdateRenderOrigin();
-            UpdateRenderPosition();
-        }
-
-        protected virtual void OnTintChanged()
+        protected virtual void BeginUpdate(DeltaTime time)
         {
         }
 
-        protected virtual void OnAlphaChanged()
+        protected virtual void LightUpdate(DeltaTime time)
         {
         }
 
-        protected virtual void OnWrappedBodyChanged()
+        protected internal virtual void HeavyUpdate(DeltaTime time)
         {
-            WrappedBody.AddToSimulation();
-            WrappedBody.Owner = this;
-            UpdateToWrappedBody();
         }
 
-        protected internal override void OnRemoved()
+        protected virtual void EndUpdate(DeltaTime time)
         {
-            if (WrappedBody != null)
-                WrappedBody.RemoveFromSimulation();
-            base.OnRemoved();
         }
 
-        public override void Recycle()
+        void IEntity.Draw(DeltaTime time, SpriteBatch spriteBatch)
         {
-            base.Recycle();
-            Name = string.Empty;
-            _renderArea = Rectangle.Empty;
-            RenderPosition = Vector2.Zero;
-            RenderOrigin = Vector2.Zero;
-            RenderRotation = 0.0f;
-            RenderSize = Vector2.Zero;
-            _alpha = 1.0f;
-            _offset = Vector2.Zero;
-            _origin = Vector2.Zero;
-            _pivot = Vector2.One * 0.5f;
-            _position = Vector2.Zero;
-            _rotation = 0.0f;
-            _scale = Vector2.One;
-            _size = Vector2.Zero;
-            _tint = Color.White;
-            _wrappedBody = null;
+            InternalDraw(time, spriteBatch);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void InternalDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+            if (CanDraw())
+            {
+                BeginDraw(time, spriteBatch);
+                Draw(time, spriteBatch);
+                EndDraw(time, spriteBatch);
+            }
+        }
+
+        protected virtual bool CanDraw()
+        {
+            return IsVisible; 
+        }
+
+        protected virtual void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+        }
+
+        protected virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+        }
+
+        protected virtual void EndDraw(DeltaTime time, SpriteBatch spriteBatch)
+        {
+        }
+
+        public virtual void Recycle()
+        {
+            ParentCollection = null;
+            _layer = 0.0f;
+            IsLoaded = false;
+            IsEnabled = true;
+            IsLateInitialized = false;
+            IsVisible = true;
+            RemoveNextUpdate = false;
+        }
+
+        protected internal virtual void OnEnabledChanged()
+        {
+        }
+
+        protected internal virtual void OnVisibleChanged()
+        {
+        }
+
+        void IEntity.OnAdded()
+        {
+            OnAdded();
+        }
+
+        protected internal virtual void OnAdded()
+        {
+        }
+
+        void IEntity.OnRemoved()
+        {
+            OnRemoved();
+        }
+
+        protected internal virtual void OnRemoved()
+        {
+            RemoveNextUpdate = false;
+            ParentCollection = null;
         }
 
     }
+
 }

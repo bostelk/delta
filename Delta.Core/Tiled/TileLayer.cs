@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Delta.Tiled
 {
 
-    public class TileLayer : EntityBase
+    public class TileLayer : Entity
     {
         [ContentSerializer(FlattenContent = true, CollectionItemName = "Tile")]
         internal List<Tile> _tiles = new List<Tile>();

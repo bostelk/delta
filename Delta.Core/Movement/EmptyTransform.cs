@@ -9,7 +9,7 @@ namespace Delta.Movement
     {
         public float Duration { get; set; }
 
-        public EmptyTransform(Entity entity, float duration)
+        public EmptyTransform(TransformableEntity entity, float duration)
         {
         }
 

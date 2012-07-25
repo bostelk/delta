@@ -61,8 +61,8 @@ namespace Delta.Examples
         protected override void LateInitialize()
         {
             G.Audio.PlaySound("SFX_Ambiance_1");
-            Entity lucas = Entity.Get("Lucas") as Entity;
-            MovingSpeaker speaker = Entity.Get("Speaker") as MovingSpeaker;
+            TransformableEntity lucas = TransformableEntity.Get("Lucas") as TransformableEntity;
+            MovingSpeaker speaker = TransformableEntity.Get("Speaker") as MovingSpeaker;
             speaker.Orbit(Vector2.Zero);
             speaker.OrbitLength = 100;
 

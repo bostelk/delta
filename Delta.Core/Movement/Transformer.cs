@@ -11,12 +11,12 @@ namespace Delta.Movement
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.
     /// Use additional Transformers to create parallel sequences.
     /// </summary>
-    public class Transformer : EntityBase
+    public class Transformer : Entity
     {
         static Pool<Transformer> _pool;
         float _elapsed;
         int _repeat;
-        Entity _entity;
+        TransformableEntity _entity;
         Action _onTransformFinished;
         Action _onSequenceFinished;
         Queue<ITransform> _transforms;
@@ -34,7 +34,7 @@ namespace Delta.Movement
             IsVisible = false;
         }
 
-        static Transformer Create(Entity entity)
+        static Transformer Create(TransformableEntity entity)
         {
             Transformer transformer = _pool.Fetch();
             transformer._entity = entity;
@@ -46,7 +46,7 @@ namespace Delta.Movement
         /// </summary>
         /// <param name="entity">Entity to transform.</param>
         /// <returns></returns>
-        public static Transformer ThisEntity(Entity entity)
+        public static Transformer ThisEntity(TransformableEntity entity)
         {
             Transformer transform = Create(entity);
             G.World.Add(transform);

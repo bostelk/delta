@@ -19,7 +19,7 @@ namespace Delta.Movement
             _pool = new Pool<FadeTransform>(100);
         }
 
-        public static FadeTransform Create(Entity entity, float goalAlpha, float duration)
+        public static FadeTransform Create(TransformableEntity entity, float goalAlpha, float duration)
         {
             FadeTransform transform = _pool.Fetch();
             transform._entity = entity;

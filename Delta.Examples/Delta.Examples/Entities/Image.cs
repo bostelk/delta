@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class Image : Entity
+    public class Image : TransformableEntity
     {
         Texture2D _texture;
         string _filepath;

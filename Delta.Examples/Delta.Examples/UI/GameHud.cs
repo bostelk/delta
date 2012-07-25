@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Examples.Entities
 {
-    public class GameHud : Entity
+    public class GameHud : TransformableEntity
     {
         Texture2D _healthBar;
         Texture2D _ammoBar;

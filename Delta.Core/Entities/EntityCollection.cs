@@ -17,7 +17,7 @@ namespace Delta
         }
     }
 
-    public class EntityCollection<T> : EntityBase, IEntityCollection, IEnumerable where T : IEntity
+    public class EntityCollection<T> : Entity, IEntityCollection, IEnumerable where T : IEntity
     {
         static Comparison<T> _defaultComparer = (a, b) => (a.Layer.CompareTo(b.Layer));
         static List<IEntity> _globalComponents = new List<IEntity>();
@@ -151,7 +151,7 @@ namespace Delta
         {
             if (value == null)
                 value = new EntityCollection<T>();
-            input.ReadRawObject<EntityBase>(value as EntityBase);
+            input.ReadRawObject<Entity>(value as Entity);
             List<T> gameComponents = input.ReadObject<List<T>>();
             foreach (var item in gameComponents)
                 value.Add(item);

@@ -19,7 +19,7 @@ namespace Delta.Examples
     public class CollisionExample : ExampleBase
     {
         const string CONTROLS = "[wasd] move.[f2] switch geometry.";
-        Entity player;
+        TransformableEntity player;
         //List<Obstacle> _obstacles;
 
         public CollisionExample() : base("CollisionExample")

@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.Graphics
 {
-    public abstract class Emitter : Entity
+    public abstract class Emitter : TransformableEntity
     {
         [ContentSerializer]
         string _fadeInMethodString;
@@ -179,7 +179,7 @@ namespace Delta.Graphics
             _blendString = "AlphaBlend";
         }
 
-        internal class Particle<T> : IRecyclable where T: Entity
+        internal class Particle<T> : IRecyclable where T: TransformableEntity
         {
             public Emitter Emitter;
 

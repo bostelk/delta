@@ -10,7 +10,7 @@ using Delta.Structures;
 
 namespace Delta.Entities
 {
-    public class TextureEntity : Entity
+    public class TextureEntity : TransformableEntity
     {
         static Pool<TextureEntity> _pool;
 

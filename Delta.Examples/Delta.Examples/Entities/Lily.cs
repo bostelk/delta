@@ -13,7 +13,7 @@ using Delta.Collision;
 
 namespace Delta.Examples.Entities
 {
-    public class Lily : Entity
+    public class Lily : TransformableEntity
     {
         [Tweakable]
         float SPEED = 30;

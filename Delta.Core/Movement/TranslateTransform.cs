@@ -21,7 +21,7 @@ namespace Delta.Movement
 
         public TranslateTransform() { }
         
-        public static TranslateTransform Create(Entity entity, Vector2 goalPosition, float duration) {
+        public static TranslateTransform Create(TransformableEntity entity, Vector2 goalPosition, float duration) {
             TranslateTransform transform = _pool.Fetch();
             transform._entity = entity;
             transform._goalPosition = goalPosition;

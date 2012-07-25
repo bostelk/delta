@@ -13,7 +13,7 @@ using Delta.Collision;
 
 namespace Delta.Examples.Entities
 {
-    public class PhysicsCar : Entity
+    public class PhysicsCar : TransformableEntity
     {
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;

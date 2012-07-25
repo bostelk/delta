@@ -9,7 +9,7 @@ using Delta.Collision;
 
 namespace Delta.Examples.Entities
 {
-    public class Barrel : Entity
+    public class Barrel : TransformableEntity
     {
         SpriteEntity _sprite;
 

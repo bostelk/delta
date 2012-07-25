@@ -117,7 +117,7 @@
     <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\SpriteFrameEntity.cs" />
     <Compile Include="Entities\EntitySpawner.cs" />
-    <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityHelper.cs" />
     <Compile Include="Extensions\BlendStateExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -198,6 +198,7 @@
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
     <Compile Include="UI\Controls\Window.cs" />
+    <Compile Include="UI\EntityUIBase.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
@@ -207,7 +208,7 @@
     <Compile Include="Tiled\Tileset.cs" />
     <Compile Include="UI\Screens\Screen.cs" />
     <Compile Include="UI\UIManager.cs" />
-    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\TransformableEntity.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
     <Compile Include="Input\InputManager.cs" />

@@ -218,13 +218,13 @@ namespace Delta.UI.Controls
 
         protected virtual void OnParentChanged()
         {
-            Screen parentScreen = Parent as Screen;
-            if (parentScreen != null)
-            {
-                ParentScreen = parentScreen;
-                for (int x = 0; x < this.Children.Count; x++)
-                    Children[x].ParentScreen = parentScreen;
-            }
+            //Screen parentScreen = Parent as Screen;
+            //if (parentScreen != null)
+            //{
+            //    ParentScreen = parentScreen;
+            //    for (int x = 0; x < this.Children.Count; x++)
+            //        Children[x].ParentScreen = parentScreen;
+            //}
         }
 
         protected virtual void OnPositionChanged()

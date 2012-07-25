@@ -145,12 +145,12 @@ namespace Delta.Collision
             return Create(null, shape) as IWrappedBody;
         }
 
-        public static IWrappedBody CreateBody(Entity entity, CollisionShape shape)
+        public static IWrappedBody CreateBody(TransformableEntity entity, CollisionShape shape)
         {
             return Create(entity, shape) as IWrappedBody;
         }
 
-        public static Collider Create(Entity entity, CollisionShape shape)
+        public static Collider Create(TransformableEntity entity, CollisionShape shape)
         {
             Collider collider = _pool.Fetch();
             collider.Owner = entity;
@@ -160,7 +160,7 @@ namespace Delta.Collision
             return collider;
         }
 
-        public Collider(Entity entity, CollisionShape shape)
+        public Collider(TransformableEntity entity, CollisionShape shape)
             : this()
         {
             Owner = entity;
