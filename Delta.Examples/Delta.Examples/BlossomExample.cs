@@ -64,11 +64,13 @@ namespace Delta.Examples
             GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
 
+#if DEBUG
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
             G.Collision.DrawDebug(ref view, ref projection);
             PoolManager.DebugDraw();
             //G.World.DebugDraw();
+#endif
         }
     }
 }

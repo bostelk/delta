@@ -17,7 +17,7 @@ namespace Delta.Collision
         {
             get
             {
-                return _vertices;     
+                return _vertices;
             }
             protected set
             {

@@ -34,7 +34,7 @@ namespace Delta.Collision
             for (int i = 0; i < _proxies.Count; i++)
             {
                 BroadphaseProxy proxyA = _proxies[i];
-                for (int j = i; j < _proxies.Count; j++)
+                for (int j = i + 1; j < _proxies.Count; j++)
                 {
                     BroadphaseProxy proxyB = _proxies[j];
 
