@@ -10,7 +10,7 @@ namespace Delta
     {
         public interface ITweak
         {
-            string ObjectName { get; }
+            string InstanceName { get; }
             string VariableName { get; }
             void SetValue(object value);
             object GetValue();
@@ -18,10 +18,10 @@ namespace Delta
 
         public struct TweakProperty : ITweak
         {
-            object _tweaking;
+            object _instance;
             PropertyInfo _property;
 
-            public string ObjectName { get { return _tweaking.ToString(); } }
+            public string InstanceName { get { return _instance.ToString(); } }
             public string VariableName { get { return _property.Name; } }
 
             public TweakProperty(object tweaking, PropertyInfo property)
@@ -34,14 +34,14 @@ namespace Delta
                 {
                     throw new ArgumentNullException("field is null");
                 }
-                _tweaking = tweaking;
+                _instance = tweaking;
                 _property = property;
             }
 
             public void SetValue(object value)
             {
                 // there's a chance the object no longer exists...
-                if (_tweaking == null)
+                if (_instance == null)
                     return;
                 if (value == null)
                 {
@@ -51,21 +51,21 @@ namespace Delta
                 {
                     throw new InvalidOperationException();
                 }
-                _property.SetValue(_tweaking, value, null);
+                _property.SetValue(_instance, value, null);
             }
 
             public object GetValue()
             {
-                return _property.GetValue(_tweaking, null);
+                return _property.GetValue(_instance, null);
             }
         }
 
         public struct TweakField : ITweak
         {
-            object _tweaking;
+            object _instance;
             FieldInfo _field;
 
-            public string ObjectName { get { return _tweaking.ToString(); } }
+            public string InstanceName { get { return _instance.ToString(); } }
             public string VariableName { get { return _field.Name; } }
 
             public TweakField(object tweaking, FieldInfo field)
@@ -78,14 +78,14 @@ namespace Delta
                 {
                     throw new ArgumentNullException("field is null");
                 }
-                _tweaking = tweaking;
+                _instance = tweaking;
                 _field = field;
             }
 
             public void SetValue(object value)
             {
                 // there's a chance the object no longer exists...
-                if (_tweaking == null)
+                if (_instance == null)
                     return;
                 if (value == null)
                 {
@@ -95,12 +95,12 @@ namespace Delta
                 {
                     throw new InvalidOperationException();
                 }
-                _field.SetValue(_tweaking, value);
+                _field.SetValue(_instance, value);
             }
 
             public object GetValue()
             {
-                return _field.GetValue(_tweaking);
+                return _field.GetValue(_instance);
             }
         }
 
