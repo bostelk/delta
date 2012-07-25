@@ -22,7 +22,7 @@ namespace Delta.Graphics
         /// <summary>
         /// Restarts the animation if it is already playing.
         /// </summary>
-        Restart = 1 << 3,
+        Force = 1 << 3,
         /// <summary>
         /// Remove the animation once it has finished animating.
         /// </summary>
@@ -267,6 +267,9 @@ namespace Delta.Graphics
 
         public void Play(string animation, AnimationPlayOptions options, int frameOffset)
         {
+            if (IsAnimationPlaying && (options & AnimationPlayOptions.Force) == 0)
+                return;
+
             _animationName = animation;
             IsAnimationPaused = false;
             IsAnimationLooped = ((options & AnimationPlayOptions.Looped) != 0);

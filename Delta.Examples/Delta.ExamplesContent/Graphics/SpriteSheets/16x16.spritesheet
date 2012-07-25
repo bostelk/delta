@@ -103,5 +103,23 @@
       <FrameDuration>0.5</FrameDuration>
     </Animation>
   </Image>
-
+  <Image>
+    <Path>Graphics\AnimatedMisc\lily-16x17.png</Path>
+    <FrameSize>16, 17</FrameSize>
+    <Animation>
+      <Name>walkdown</Name>
+      <Frames>0,1,2,3,4,5,6,7</Frames>
+      <FrameDuration>0.0833</FrameDuration>
+    </Animation>
+    <Animation>
+      <Name>walkright</Name>
+      <Frames>8,9,10,11,12,13,14,15</Frames>
+      <FrameDuration>0.0833</FrameDuration>
+    </Animation>
+    <Animation>
+      <Name>walkup</Name>
+      <Frames>16,17,18,19,20,21,22,23</Frames>
+      <FrameDuration>0.0833</FrameDuration>
+    </Animation>
+  </Image>
 </SpriteSheet>

@@ -29,7 +29,7 @@ namespace Delta.Examples.Entities
         {
             _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
-            _sprite.Play("blackspike");
+            _sprite.Play("walkdown");
         }
 
         protected override void LateInitialize()
@@ -52,11 +52,41 @@ namespace Delta.Examples.Entities
 
         protected override void LightUpdate(DeltaTime time)
         {
-            Vector2 direction = G.Input.ArrowDirection;
+            if (G.Input.Keyboard.IsDown(Keys.Q))
+                Rotation = (Rotation + (0.5f));
+            else if (G.Input.Keyboard.IsDown(Keys.E))
+                Rotation = (Rotation - (0.5f));
+            Rotation = Rotation.Wrap(0, 360);
+
+            Vector2 direction = Vector2.Zero;
+            if (G.Input.Keyboard.IsDown(Keys.Up))
+            {
+                direction -= Vector2.UnitY;
+                _sprite.Play("walkup", AnimationPlayOptions.Looped);
+                _sprite.SpriteEffects = SpriteEffects.None;
+            }
+            if (G.Input.Keyboard.IsDown(Keys.Down))
+            {
+                direction += Vector2.UnitY;
+                _sprite.Play("walkdown", AnimationPlayOptions.Looped);
+                _sprite.SpriteEffects = SpriteEffects.None;
+            }
+            if (G.Input.Keyboard.IsDown(Keys.Left))
+            {
+                direction -= Vector2.UnitX;
+                _sprite.Play("walkright", AnimationPlayOptions.Looped);
+                _sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
+            }
+            if (G.Input.Keyboard.IsDown(Keys.Right))
+            {
+                direction += Vector2.UnitX;
+                _sprite.Play("walkright", AnimationPlayOptions.Looped);
+                _sprite.SpriteEffects = SpriteEffects.None;
+            }
             Vector2Extensions.SafeNormalize(ref direction);
+
             Velocity = ((G.Input.Keyboard.IsDown(Keys.LeftShift)) ? direction * 2.5f : direction) * SPEED;
             Position += Velocity * (float)time.ElapsedSeconds;
-
 
             if (G.Input.Keyboard.IsPressed(Keys.Tab))
                 SwitchBody();
@@ -64,7 +94,7 @@ namespace Delta.Examples.Entities
             // if boosting leave a motion trail
             if (G.World.SecondsPast(_trailTime + _trailInterval) && G.Input.Keyboard.IsDown(Keys.LeftShift))
             {
-                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "blackspike", Position + (direction * -2 * time.ElapsedSeconds));
+                Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", "walkup", Position + (direction * -2 * time.ElapsedSeconds));
                 _trailTime = (float)time.TotalSeconds;
             }
 
