@@ -9,10 +9,17 @@ namespace Delta.Collision
     class BoxBoxSolver : ICollisionSolver
     {
 
+        Vector2[] _axisToCheck = new Vector2[4];
+
+        public BoxBoxSolver()
+            : base()
+        {
+        }
+
         public CollisionResult SolveCollision(Collider colA, Collider colB)
         {
-            Box boxA = (Box)colA.Shape;
-            Box boxB = (Box)colB.Shape;
+            Box boxA = colA.Shape as Box;
+            Box boxB = colB.Shape as Box;
             Matrix2D transformA = colA.WorldTransform;
             Matrix2D transformB = colB.WorldTransform;
 
@@ -24,20 +31,19 @@ namespace Delta.Collision
             // merge normals from both polygons
             // NOTE: For OBB's we only need to check their half widths. ie. 4 axis total.
             // For AABB's we only need to check 2 axis since they don't rotate.
-            Vector2[] axisToCheck = new Vector2[4];
-            boxA.CalculateOrientation(ref transformA, out axisToCheck[0]);
-            boxB.CalculateOrientation(ref transformB, out axisToCheck[1]);
-            axisToCheck[2] = Vector2Extensions.PerpendicularLeft(axisToCheck[0]);
-            axisToCheck[3] = Vector2Extensions.PerpendicularLeft(axisToCheck[1]);
+            boxA.CalculateOrientation(ref transformA, out _axisToCheck[0]);
+            boxB.CalculateOrientation(ref transformB, out _axisToCheck[1]);
+            _axisToCheck[2] = Vector2Extensions.PerpendicularLeft(_axisToCheck[0]);
+            _axisToCheck[3] = Vector2Extensions.PerpendicularLeft(_axisToCheck[1]);
 
             // TODO: remove parallel normals
 
-            for (int i = 0; i < axisToCheck.Length; i++)
+            for (int i = 0; i < _axisToCheck.Length; i++)
             {
                 Vector2 projectionA, projectionB;
-                projectedDistance = Math.Abs(Vector2.Dot(distance, axisToCheck[i]));
-                boxA.ProjectOnto(ref transformA, ref axisToCheck[i], out projectionA);
-                boxB.ProjectOnto(ref transformB, ref axisToCheck[i], out projectionB);
+                projectedDistance = Math.Abs(Vector2.Dot(distance, _axisToCheck[i]));
+                boxA.ProjectOnto(ref transformA, ref _axisToCheck[i], out projectionA);
+                boxB.ProjectOnto(ref transformB, ref _axisToCheck[i], out projectionB);
                 float aSize = Math.Abs(projectionA.X) + Math.Abs(projectionA.Y);
                 float bSize = Math.Abs(projectionB.X) + Math.Abs(projectionB.Y);
                 float abSize = aSize + bSize;
@@ -52,7 +58,7 @@ namespace Delta.Collision
                 else if (Math.Abs(penetration) < Math.Abs(minPenetration))
                 {
                     minPenetration = penetration;
-                    mtv = axisToCheck[i];
+                    mtv = _axisToCheck[i];
                 }
             }
             // the distance vector determines the direction of movement. the distance and mtv
