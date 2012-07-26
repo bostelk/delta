@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Delta.Structures;
 using Microsoft.Xna.Framework;
-using Delta.Movement;
+using Delta.Transformations;
 using Delta.Entities;
 
 namespace Delta.Graphics

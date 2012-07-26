@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Delta.Movement
+namespace Delta.Transformations
 {
     internal class EmptyTransform : ITransform
     {

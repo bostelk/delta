@@ -6,7 +6,8 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Collision
 {
-       public delegate bool BeforeCollisionEventHandler(Collider them);
+   
+    public delegate bool BeforeCollisionEventHandler(Collider them);
 
     public delegate bool OnCollisionEventHandler(Collider them, Vector2 normal);
 

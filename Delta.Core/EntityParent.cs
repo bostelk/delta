@@ -47,8 +47,20 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public EntityParent()
+        protected internal EntityParent()
             : base()
+        {
+            Children = new ReadOnlyCollection<T>(_children);
+            NeedsToSort = true;
+            Comparer = null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="EntityParent{T}"/>.</param>
+        public EntityParent(string name)
+            : base(name)
         {
             Children = new ReadOnlyCollection<T>(_children);
             NeedsToSort = true;

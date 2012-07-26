@@ -6,7 +6,7 @@ using Delta.Structures;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Delta.Movement;
+using Delta.Transformations;
 using System.Globalization;
 using Delta.Entities;
 

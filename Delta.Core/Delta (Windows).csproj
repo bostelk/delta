@@ -31,6 +31,7 @@
     <XnaCompressContent>false</XnaCompressContent>
     <DocumentationFile>
     </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -158,17 +159,17 @@
     <Compile Include="Graphics\PrimitiveBatch.cs" />
     <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
-    <Compile Include="Movement\Interpolation.cs" />
-    <Compile Include="Movement\BlinkTransform.cs" />
-    <Compile Include="Movement\BaseTransform.cs" />
-    <Compile Include="Movement\FlickerTransform.cs" />
-    <Compile Include="Movement\EmptyTransform.cs" />
-    <Compile Include="Movement\FadeTransform.cs" />
-    <Compile Include="Movement\ITransform.cs" />
-    <Compile Include="Movement\TranslateTransform.cs" />
-    <Compile Include="Movement\RotateTransform.cs" />
-    <Compile Include="Movement\ScaleTransform.cs" />
-    <Compile Include="Movement\Transformer.cs" />
+    <Compile Include="Transformations\Interpolation.cs" />
+    <Compile Include="Transformations\BlinkTransform.cs" />
+    <Compile Include="Transformations\BaseTransform.cs" />
+    <Compile Include="Transformations\FlickerTransform.cs" />
+    <Compile Include="Transformations\EmptyTransform.cs" />
+    <Compile Include="Transformations\FadeTransform.cs" />
+    <Compile Include="Transformations\ITransform.cs" />
+    <Compile Include="Transformations\TranslateTransform.cs" />
+    <Compile Include="Transformations\RotateTransform.cs" />
+    <Compile Include="Transformations\ScaleTransform.cs" />
+    <Compile Include="Transformations\Transformer.cs" />
     <Compile Include="Collision\Callbacks.cs" />
     <Compile Include="Collision\Broadphase\GridCell.cs" />
     <Compile Include="Collision\Broadphase\UniformGridBroadphase.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="Collision\Narrowphase\SeperatingAxisNarrowphase.cs" />
     <Compile Include="IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
-    <Compile Include="HashSet.cs" />
     <Compile Include="Structures\Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="IImportable.cs" />

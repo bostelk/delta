@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
-using Delta.Movement;
+using Delta.Transformations;
 using Delta.Structures;
 using Delta.Entities;
 

@@ -4,7 +4,7 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Delta.Movement;
+using Delta.Transformations;
 using Delta.Structures;
 using Delta.Collision;
 
@@ -15,86 +15,7 @@ namespace Delta
     /// </summary>
     public abstract class TransformableEntity : Entity, IEntity
     {
-        #region TEMP: Transformer
         Transformer _transformer;
-
-        [ContentSerializer]
-        public bool _fadeRandom { get; set; } // won't serialize fields? wtf. totally temp.
-        TimedRange _fadeRange;
-        [ContentSerializer]
-        public TimedRange FadeRange
-        {
-            get { return _fadeRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _fadeRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    if (_fadeRandom)
-                    {
-                        // start the transformer off in a random position within the range.
-                        float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
-                        _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
-                        _transformer.OnTransformFinished(() =>
-                        {
-                            // remove the start-up transform logic.
-                            _transformer.ClearSequence();
-                            _transformer.OnTransformFinished(null);
-                            // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
-                            if (G.Random.FiftyFifty())
-                                _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
-                            else
-                                _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
-                            _transformer.Loop();
-                        });
-                    }
-                    else
-                    {
-                        _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
-                        _transformer.Loop();
-                    }
-                }
-            }
-        }
-
-        TimedRange _flickerRange;
-        [ContentSerializer]
-        public TimedRange FlickerRange
-        {
-            get { return _flickerRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _flickerRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
-                    _transformer.Loop();
-                }
-            }
-        }
-
-        TimedRange _blinkRange;
-        [ContentSerializer]
-        public TimedRange BlinkRange
-        {
-            get { return _blinkRange; }
-            set
-            {
-                if (!value.IsEmpty())
-                {
-                    _blinkRange = value;
-                    if (_transformer != null)
-                        _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
-                    _transformer.Loop();
-                }
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Gets the position used when rendering the <see cref="TransformableEntity"/>.
@@ -122,6 +43,11 @@ namespace Delta
         /// </summary>
         [ContentSerializer]
         protected Color RenderColor { get; private set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="TransformableEntity"/> fades randomly.
+        /// </summary>
+        [ContentSerializer]
+        public bool FadeRandomly { get; set; }
 
         Vector2 _position = Vector2.Zero;
         /// <summary>
@@ -220,7 +146,7 @@ namespace Delta
 
         Vector2 _origin = Vector2.Zero;
         /// <summary>
-        /// Gets or sets the positional origin of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="Size"/> and <see cref="Scale"/>.
+        /// Gets or sets the positional origin of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="RenderSize"/>.
         /// </summary>
         /// <remarks>The default is 0% (the top left) with a <see cref="Vector2"/> value of {0.0f, 0.0f}.</remarks>
         [ContentSerializer]
@@ -239,7 +165,7 @@ namespace Delta
 
         Vector2 _pivot = Vector2.One * 0.5f;
         /// <summary>
-        /// Gets or sets the positional pivot of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="Size"/> and <see cref="Scale"/>.
+        /// Gets or sets the positional pivot of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="RenderSize"/>.
         /// </summary>
         /// <remarks>The default is 50% (the center) with a <see cref="Vector2"/> value of {0.5f, 0.5f}.</remarks>
         [ContentSerializer]
@@ -296,7 +222,10 @@ namespace Delta
             }
         }
 
-        IWrappedBody _wrappedBody;
+        IWrappedBody _wrappedBody = null;
+        /// <summary>
+        /// Gets or sets the <see cref="IWrappedBody"/> of the <see cref="TransformableEntity"/>.
+        /// </summary>
         [ContentSerializerIgnore]
         public IWrappedBody WrappedBody
         {
@@ -311,20 +240,139 @@ namespace Delta
             }
         }
 
-        public TransformableEntity()
+        TimedRange _fadeRange;
+        /// <summary>
+        /// Gets or sets the fade range of the <see cref="TransformableEntity"/>.
+        /// </summary>
+        [ContentSerializer]
+        public TimedRange FadeRange
+        {
+            get { return _fadeRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _fadeRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    if (FadeRandomly)
+                    {
+                        // start the transformer off in a random position within the range.
+                        float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
+                        _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
+                        _transformer.OnTransformFinished(() =>
+                        {
+                            // remove the start-up transform logic.
+                            _transformer.ClearSequence();
+                            _transformer.OnTransformFinished(null);
+                            // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
+                            if (G.Random.FiftyFifty())
+                                _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
+                            else
+                                _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                            _transformer.Loop();
+                        });
+                    }
+                    else
+                    {
+                        _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                        _transformer.Loop();
+                    }
+                }
+            }
+        }
+
+        TimedRange _flickerRange;
+        /// <summary>
+        /// Gets or sets the flicker range of the <see cref="TransformableEntity"/>.
+        /// </summary>
+        [ContentSerializer]
+        public TimedRange FlickerRange
+        {
+            get { return _flickerRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _flickerRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
+                    _transformer.Loop();
+                }
+            }
+        }
+
+        TimedRange _blinkRange;
+        /// <summary>
+        /// Gets or sets the blink range of the <see cref="TransformableEntity"/>.
+        /// </summary>
+        [ContentSerializer]
+        public TimedRange BlinkRange
+        {
+            get { return _blinkRange; }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    _blinkRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
+                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
+                    _transformer.Loop();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        protected internal TransformableEntity()
             : base()
         {
-            Name = string.Empty;
             RenderColor = Color.White;
         }
 
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="TransformableEntity"/>.</param>
         public TransformableEntity(string name)
-            : this()
+            : base(name)
         {
-            Name = name;
+            RenderColor = Color.White;
+        }
+
+        /// <summary>
+        /// Recycles the <see cref="TransformableEntity"/> so it may be re-used.
+        /// </summary>
+        public override void Recycle()
+        {
+            base.Recycle();
+            RenderPosition = Vector2.Zero;
+            RenderOrigin = Vector2.Zero;
+            RenderRotation = 0.0f;
+            RenderSize = Vector2.Zero;
+            RenderColor = Color.White;
+            _alpha = 1.0f;
+            _offset = Vector2.Zero;
+            _origin = Vector2.Zero;
+            _pivot = Vector2.One * 0.5f;
+            _position = Vector2.Zero;
+            _rotation = 0.0f;
+            _scale = Vector2.One;
+            _size = Vector2.Zero;
+            _tint = Color.White;
+            _wrappedBody = null;
         }
 
 #if WINDOWS
+        /// <summary>
+        /// Sets a field's value by it's name.
+        /// </summary>
+        /// <param name="name">Value name.</param>
+        /// <param name="value">Value.</param>
+        /// <returns>A value indicating whether the field exists and that it's value was sucessfully set.</returns>
         protected internal override bool SetField(string name, string value)
         {
             switch (name)
@@ -341,7 +389,7 @@ namespace Delta
                     return true;
                 case "rot":
                 case "rotation":
-                    Rotation = float.Parse(value, CultureInfo.InvariantCulture).ToRadians();
+                    Rotation = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "tint":
                 case "color":
@@ -349,6 +397,7 @@ namespace Delta
                     return true;
                 case "opacity":
                 case "alpha":
+                case "a":
                     Alpha = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "fade":
@@ -356,7 +405,7 @@ namespace Delta
                     return true;
                 case "faderandom":
                     _fadeRange = TimedRange.Parse(value);
-                    _fadeRandom = true;
+                    FadeRandomly = true;
                     return true;
                 case "flicker":
                     _flickerRange = TimedRange.Parse(value);
@@ -369,26 +418,41 @@ namespace Delta
         }
 #endif
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/>'s <see cref="RenderSize"/>.
+        /// </summary>
         protected virtual void UpdateRenderSize()
         {
             RenderSize = Size * Scale;
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/>'s <see cref="RenderPosition"/>.
+        /// </summary>
         protected virtual void UpdateRenderPosition()
         {
             RenderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/>'s <see cref="RenderOrigin"/>.
+        /// </summary>
         protected virtual void UpdateRenderOrigin()
         {
             RenderOrigin = Pivot * RenderSize;
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/>'s <see cref="RenderRotation"/>.
+        /// </summary>
         protected virtual void UpdateRenderRotation()
         {
             RenderRotation = Rotation.ToRadians();
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/> to the <see cref="WrappedBody"/>.
+        /// </summary>
         protected virtual void UpdateToWrappedBody()
         {
             if (WrappedBody != null)
@@ -398,6 +462,9 @@ namespace Delta
             }
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/> from the <see cref="WrappedBody"/>.
+        /// </summary>
         protected virtual void UpdateFromWrappedBody()
         {
             if (WrappedBody != null)
@@ -410,12 +477,18 @@ namespace Delta
             }
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Position"/> has changed.
+        /// </summary>
         protected internal virtual void OnPositionChanged()
         {
             UpdateRenderPosition();
             UpdateToWrappedBody();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Size"/> has changed.
+        /// </summary>
         protected internal virtual void OnSizeChanged()
         {
             UpdateRenderSize();
@@ -423,6 +496,9 @@ namespace Delta
             UpdateRenderPosition();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Scale"/> has changed.
+        /// </summary>
         protected internal virtual void OnScaleChanged()
         {
             UpdateRenderSize();
@@ -430,34 +506,52 @@ namespace Delta
             UpdateRenderPosition();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Rotation"/> has changed.
+        /// </summary>
         protected internal virtual void OnRotationChanged()
         {
             UpdateRenderRotation();
             UpdateToWrappedBody();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Origin"/> has changed.
+        /// </summary>
         protected virtual void OnOriginChanged()
         {
             UpdateRenderOrigin();
             UpdateRenderPosition();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Pivot"/> has changed.
+        /// </summary>
         protected virtual void OnPivotChanged()
         {
             UpdateRenderOrigin();
             UpdateRenderPosition();
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Tint"/> has changed.
+        /// </summary>
         protected virtual void OnTintChanged()
         {
             RenderColor = Tint * Alpha;
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="Alpha"/> has changed.
+        /// </summary>
         protected virtual void OnAlphaChanged()
         {
             RenderColor = Tint * Alpha;
         }
 
+        /// <summary>
+        /// Called when the <see cref="TransformableEntity"/>'s <see cref="WrappedBody"/> has changed.
+        /// </summary>
         protected virtual void OnWrappedBodyChanged()
         {
             WrappedBody.AddToSimulation();
@@ -465,32 +559,14 @@ namespace Delta
             UpdateToWrappedBody();
         }
 
+        /// <summary>
+        /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.
+        /// </summary>
         protected internal override void OnRemoved()
         {
             if (WrappedBody != null)
                 WrappedBody.RemoveFromSimulation();
             base.OnRemoved();
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            Name = string.Empty;
-            RenderPosition = Vector2.Zero;
-            RenderOrigin = Vector2.Zero;
-            RenderRotation = 0.0f;
-            RenderSize = Vector2.Zero;
-            RenderColor = Color.White;
-            _alpha = 1.0f;
-            _offset = Vector2.Zero;
-            _origin = Vector2.Zero;
-            _pivot = Vector2.One * 0.5f;
-            _position = Vector2.Zero;
-            _rotation = 0.0f;
-            _scale = Vector2.One;
-            _size = Vector2.Zero;
-            _tint = Color.White;
-            _wrappedBody = null;
         }
 
     }

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Delta.Structures;
 
-namespace Delta.Movement
+namespace Delta.Transformations
 {
     /// <summary>
     /// Transforms manipulate a property of over a period of time. Use a single Transformer to create a sequence of Transforms.

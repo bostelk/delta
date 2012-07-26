@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Delta.Structures;
 
-namespace Delta.Movement
+namespace Delta.Transformations
 {
     internal class FadeTransform : BaseTransform
     {

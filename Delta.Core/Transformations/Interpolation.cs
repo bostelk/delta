@@ -2,7 +2,7 @@
 using Delta;
 using Microsoft.Xna.Framework;
 
-namespace Delta.Movement
+namespace Delta.Transformations
 {
     /// <summary>
     /// A static class that contains predefined methods of interpolation.

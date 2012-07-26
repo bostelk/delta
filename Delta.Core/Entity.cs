@@ -45,10 +45,10 @@ namespace Delta
     public abstract class Entity : IRecyclable, IImportable, IEntity, IDisposable
     {
         /// <summary>
-        /// Retrieves an <see cref="IEntity"/> by it's global name.
+        /// Retrieves an <see cref="IEntity"/> by it's name.
         /// </summary>
         /// <param name="name">The name of the <see cref="IEntity"/> to retrieve.</param>
-        /// <returns>The <see cref="IEntity"/> with the specified name. Returns null if an <see cref="IEntity"/> with the specified name could not be found.</returns>
+        /// <returns>The <see cref="IEntity"/> with the specified name. Returns <see cref="null"/> if an <see cref="IEntity"/> with the specified name could not be found.</returns>
         public static IEntity Get(string name)
         {
             name = name.ToLower();
@@ -159,12 +159,22 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public Entity()
+        protected internal Entity()
             : base()
         {
             IsVisible = true;
             IsEnabled = true;
             NeedsHeavyUpdate = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="Entity"/>.</param>
+        public Entity(string name)
+            : this()
+        {
+            Name = name;
         }
 
         /// <summary>
@@ -187,7 +197,7 @@ namespace Delta
         /// <summary>
         /// Disposes any resources the <see cref="Entity"/> is using.
         /// </summary>
-        /// <param name="disposing"></param>
+        /// <param name="disposing">Indicates whether to dispose managed resources.</param>
         protected virtual void Dispose(bool disposing)
         {
         }
@@ -199,6 +209,7 @@ namespace Delta
         {
             if (ParentCollection != null)
                 ParentCollection.UnsafeRemove(this);
+            Name = string.Empty;
             ParentCollection = null;
             HasInitialized = false;
             HasLoadedContent = false;
@@ -317,7 +328,7 @@ namespace Delta
             return IsEnabled;
         }
 
-        /// <summary>
+        /// <summary>o
         /// Updates the <see cref="Entity"/>. Override this method to add custom update logic which is executed every frame.
         /// </summary>
         /// <param name="time">time</param>
@@ -372,14 +383,14 @@ namespace Delta
         }
 
         /// <summary>
-        /// Called when <see cref="IsEnabled"/> changes.
+        /// Called when the <see cref="Entity"/>'s <see cref="IsEnabled"/> has changed.
         /// </summary>
         protected internal virtual void OnIsEnabledChanged()
         {
         } 
 
         /// <summary>
-        /// Called when <see cref="IsVisible"/> changes.
+        /// Called when the <see cref="Entity"/>'s <see cref="IsVisible"/> has changed.
         /// </summary>
         protected internal virtual void OnIsVisibleChanged()
         {

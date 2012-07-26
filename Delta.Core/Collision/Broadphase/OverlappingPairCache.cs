@@ -7,24 +7,24 @@ using System.Collections;
 
 namespace Delta.Collision
 {
-    public class OverlappingPairCache : IEnumerable
+    public class OverlappingPairCache //: IEnumerable
     {
-        HashSet<OverlappingPair> _pairs;
+        internal List<OverlappingPair> _pairs = new List<OverlappingPair>();
 
         public OverlappingPairCache()
+            : base()
         {
-            _pairs = new HashSet<OverlappingPair>();
         }
 
-		public IEnumerator GetEnumerator()
-		{
-            return _pairs.GetEnumerator();
-		}
+        //public IEnumerator GetEnumerator()
+        //{
+        //    return _pairs.GetEnumerator();
+        //}
  
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-            return _pairs.GetEnumerator();
-		}
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    return _pairs.GetEnumerator();
+        //}
 
         public OverlappingPair AddOverlappingPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB) 
         {

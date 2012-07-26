@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Delta.Graphics;
-using Delta.Movement;
+using Delta.Transformations;
 using Microsoft.Xna.Framework;
 using Delta.Audio;
 using Delta.Entities;

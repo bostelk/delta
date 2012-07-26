@@ -33,7 +33,7 @@ namespace Delta.Collision
         public void SolveCollisions(OverlappingPairCache overlappingPairs)
         {
             CollisionGlobals.NarrowphaseDetections = 0;
-            foreach (OverlappingPair pair in overlappingPairs)
+            foreach (OverlappingPair pair in overlappingPairs._pairs)
             {
                 CollisionResult result;
                 Collider colA = pair.ProxyA.ClientObject as Collider;
