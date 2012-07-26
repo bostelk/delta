@@ -1,20 +1,93 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using Delta.Input.States;
 
 namespace Delta.UI.Controls
 {
-    public abstract class Control : ControlBase
+    public abstract class Control : EntityParent<Control>
     {
-        internal Color _currentColor = Color.White;
-        internal Color _currentBorderColor = Color.White;
-        internal Control _parentControl = null;
+        internal Rectangle _cullRectangle = Rectangle.Empty;
 
-        protected Vector2 RenderBorderSize { get; set; }
-        protected Vector2 InnerRenderPosition { get; set; }
-        protected Vector2 InnerRenderSize { get; set; }
+        protected internal Vector2 RenderPosition { get; internal set; }
+        protected internal Vector2 RenderSize { get; internal set; }
+        protected internal Color RenderColor { get; internal set; }
+
+        Control _parent = null;
+        public Control Parent
+        {
+            get { return _parent; }
+            internal set
+            {
+                if (_parent != value)
+                {
+                    _parent = value;
+                    OnParentChanged();
+                }
+            }
+        }
+
+        Vector2 _position = Vector2.Zero;
+        public Vector2 Position
+        {
+            get { return _position; }
+            set
+            {
+                if (_position != value)
+                {
+                    _position = value;
+                    OnPositionChanged();
+                }
+            }
+        }
+
+        Vector2 _size = Vector2.Zero;
+        public Vector2 Size
+        {
+            get { return _size; }
+            set
+            {
+                if (_size != value)
+                {
+                    _size = value;
+                    OnSizeChanged();
+                }
+            }
+        }
+
+        bool _isFocusable = true;
+        public bool IsFocusable
+        {
+            get { return _isFocusable; }
+            set
+            {
+                if (_isFocusable != value)
+                {
+                    _isFocusable = value;
+                    if (!value && _isFocused)
+                        IsFocused = false;
+                }
+            }
+        }
+
+        bool _isFocused = false;
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+            internal set
+            {
+                if (_isFocused != value)
+                {
+                    _isFocused = value;
+                    if (value)
+                        OnGotFocus();
+                    else
+                        OnLostFocus();
+                    NeedsHeavyUpdate = true;
+                }
+            }
+        }
 
         bool _isPressed = false;
         public bool IsPressed
@@ -65,43 +138,9 @@ namespace Delta.UI.Controls
                 }
             }
         }
-
-        bool _isDragged = false;
-        public bool IsDragged
-        {
-            get { return _isDragged; }
-            internal set
-            {
-                if (_isDragged != value)
-                {
-                    _isDragged = value;
-                    //if (value)
-                    //{
-                    //    G.UI.DraggedControl = this;
-                    //    G.UI._dragStartPosition = G.Input.Mouse.Position;
-                    //}
-                    //else
-                    //    G.UI.DraggedControl = null;
-                }
-            }
-        }
-
-        bool _isDraggable = false;
-        public bool IsDraggable
-        {
-            get { return _isDraggable; }
-            internal set
-            {
-                if (_isDraggable != value)
-                {
-                    _isDraggable = value;
-                }
-            }
-        }
-
 #endif
 
-        Color _backColor = Color.SeaGreen;
+        Color _backColor = Color.Black;
         public Color BackColor
         {
             get { return _backColor; }
@@ -110,21 +149,7 @@ namespace Delta.UI.Controls
                 if (_backColor != value)
                 {
                     _backColor = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
-        Color _borderColor = Color.DarkSeaGreen;
-        public Color BorderColor
-        {
-            get { return _borderColor; }
-            set
-            {
-                if (_borderColor != value)
-                {
-                    _borderColor = value;
-                    NeedsHeavyUpdate = true;
+                    UpdateColors();
                 }
             }
         }
@@ -138,25 +163,10 @@ namespace Delta.UI.Controls
                 if (_disabledColor != value)
                 {
                     _disabledColor = value;
-                    NeedsHeavyUpdate = true;
+                    UpdateColors();
                 }
             }
         }
-
-        Color _disabledBorderColor = Color.DarkGray;
-        public Color DisabledBorderColor
-        {
-            get { return _disabledBorderColor; }
-            set
-            {
-                if (_disabledBorderColor != value)
-                {
-                    _disabledBorderColor = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
 
         Color _highlightedColor = Color.DarkKhaki;
         public Color HighlightedColor
@@ -167,21 +177,7 @@ namespace Delta.UI.Controls
                 if (_highlightedColor != value)
                 {
                     _highlightedColor = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
-        Color _highlightedBorderColor = Color.Khaki;
-        public Color HighlightedBorderColor
-        {
-            get { return _highlightedBorderColor; }
-            set
-            {
-                if (_highlightedBorderColor != value)
-                {
-                    _highlightedBorderColor = value;
-                    NeedsHeavyUpdate = true;
+                    UpdateColors();
                 }
             }
         }
@@ -195,21 +191,7 @@ namespace Delta.UI.Controls
                 if (_pressedColor != value)
                 {
                     _pressedColor = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
-        Color _pressedBorderColor = Color.Violet;
-        public Color PressedBorderColor
-        {
-            get { return _pressedBorderColor; }
-            set
-            {
-                if (_pressedBorderColor != value)
-                {
-                    _pressedBorderColor = value;
-                    NeedsHeavyUpdate = true;
+                    UpdateColors();
                 }
             }
         }
@@ -223,49 +205,22 @@ namespace Delta.UI.Controls
                 if (_focusedColor != value)
                 {
                     _focusedColor = value;
-                    NeedsHeavyUpdate = true;
+                    UpdateColors();
                 }
             }
         }
 
-        Color _focusedBorderColor = Color.SlateBlue;
-        public Color FocusedBorderColor
+        float _alpha = 0.5f;
+        public virtual float Alpha
         {
-            get { return _focusedBorderColor; }
+            get { return _alpha; }
             set
             {
-                if (_focusedBorderColor != value)
+                value = value.Clamp(0.0f, 1.0f);
+                if (_alpha != value)
                 {
-                    _focusedBorderColor = value;
-                    NeedsHeavyUpdate = true;
-                }
-            }
-        }
-
-        Point _size = new Point(25, 25);
-        public Point Size
-        {
-            get { return _size; }
-            set
-            {
-                if (_size != value)
-                {
-                    _size = value;
-                    OnSizeChanged();
-                }
-            }
-        }
-
-        Point _borderSize = new Point(1, 1);
-        public Point BorderSize
-        {
-            get { return _borderSize; }
-            set
-            {
-                if (_borderSize != value)
-                {
-                    _borderSize = value;
-                    OnBorderSizeChanged();
+                    _alpha = value;
+                    OnAlphaChanged();
                 }
             }
         }
@@ -275,28 +230,67 @@ namespace Delta.UI.Controls
         {
         }
 
+        public void Focus()
+        {
+            IsFocused = true;
+        }
+
+        public void UnFocus()
+        {
+            IsFocused = false;
+        }
+
+        public void Invalidate()
+        {
+            NeedsHeavyUpdate = true;
+        }
+
+        protected virtual bool IntersectTest(Vector2 position)
+        {
+            if (RenderSize.X > 0 && RenderSize.Y > 0)
+                if (position.X >= RenderPosition.X)
+                    if (position.X <= RenderPosition.X + RenderSize.X)
+                        if (position.Y >= RenderPosition.Y)
+                            if (position.Y <= RenderPosition.Y + RenderSize.Y)
+                                return true;
+            return false;
+        }
+
         protected internal override void HeavyUpdate(DeltaGameTime time)
         {
-            UpdateRenderBorderSize();
-            UpdateColors();
             base.HeavyUpdate(time);
-            UpdateInnerRenderPosition();
-            UpdateInnerRenderSize();
+            if (Children.Count != 0)
+                foreach (Control control in Children)
+                    control.NeedsHeavyUpdate = true;
+            UpdateRenderPosition();
+            UpdateRenderSize();
+            UpdateCullRectangle();
+            UpdateColors();
         }
 
-        internal virtual void UpdateRenderBorderSize()
+        internal virtual void UpdateRenderPosition()
         {
-            RenderBorderSize = new Vector2(_borderSize.X, _borderSize.Y);
+            RenderPosition = Position;
+            if (Parent != null)
+                RenderPosition += Parent.RenderPosition;
         }
 
-        internal virtual void UpdateInnerRenderPosition()
+        internal virtual void UpdateRenderSize()
         {
-            InnerRenderPosition = RenderPosition + RenderBorderSize;
+            RenderSize = Size;
         }
 
-        internal virtual void UpdateInnerRenderSize()
+        internal virtual void UpdateCullRectangle()
         {
-            InnerRenderSize = RenderSize - RenderBorderSize * 2;
+            _cullRectangle = Rectangle.Intersect(
+                new Rectangle(
+                    (int)RenderPosition.X,
+                    (int)RenderPosition.Y,
+                    (int)RenderSize.X,
+                    (int)RenderSize.Y),
+                G.ScreenArea);
+            if (Parent != null)
+                _cullRectangle = Rectangle.Intersect(_cullRectangle, Parent._cullRectangle);
         }
 
         internal virtual void UpdateColors()
@@ -304,31 +298,16 @@ namespace Delta.UI.Controls
             if (IsEnabled)
             {
                 if (IsPressed)
-                {
-                    _currentColor = _pressedColor;
-                    _currentBorderColor = _pressedBorderColor;
-                }
+                    RenderColor = _pressedColor * Alpha;
                 else if (IsFocused)
-                {
-                    _currentColor = _focusedColor;
-                    _currentBorderColor = _focusedBorderColor;
-                }
+                    RenderColor = _focusedColor * Alpha;
                 else if (IsHighlighted)
-                {
-                    _currentColor = _highlightedColor;
-                    _currentBorderColor = _highlightedBorderColor;
-                }
+                    RenderColor = _highlightedColor * Alpha;
                 else
-                {
-                    _currentColor = _backColor;
-                    _currentBorderColor = _borderColor;
-                }
+                    RenderColor = _backColor * Alpha;
             }
             else
-            {
-                _currentColor = _disabledColor;
-                _currentBorderColor = _disabledBorderColor;
-            }
+                RenderColor = _disabledColor * Alpha;
         }
 
         protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
@@ -338,39 +317,25 @@ namespace Delta.UI.Controls
 
         protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
-            DrawBorder(time, spriteBatch);
-            DrawBack(time, spriteBatch);
-        }
-
-        protected virtual void DrawBack(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            if (_currentColor.A <= 0 || InnerRenderSize.X <= 0 || InnerRenderSize.Y <= 0)
-                return;
-            else
-                spriteBatch.DrawRectangle(InnerRenderPosition, InnerRenderSize, _currentColor);
-        }
-
-        protected virtual void DrawBorder(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            if (_currentBorderColor.A <= 0 || RenderSize.X <= 0 || RenderSize.Y <= 0 || RenderBorderSize.X <= 0 || RenderBorderSize.Y <= 0)
-                return;
-            else
-                spriteBatch.DrawRectangle(RenderPosition, RenderSize, _currentBorderColor);
+            spriteBatch.DrawRectangle(RenderPosition, RenderSize, RenderColor);
         }
 
 #if WINDOWS
-        internal override bool ProcessMouseMove()
+        internal virtual bool ProcessMouseMove()
         {
             bool handled = false;
-            handled = base.ProcessMouseMove();
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseMove();
+                if (handled)
+                    break;
+            }
             if (!handled)
             {
                 MouseInputState mouse = G.Input.Mouse;
                 if (IntersectTest(mouse.Position))
                 {
                     MouseIsInside = true;
-                    //if (mouse.ScrollWheelDelta != 0)
-                    //    OnMouseScroll();
                     OnMouseMove();
                     handled = true;
                 }
@@ -383,14 +348,18 @@ namespace Delta.UI.Controls
             return handled;
         }
 
-        internal override bool ProcessMouseDown()
+        internal virtual bool ProcessMouseDown()
         {
             bool handled = false;
-            handled = base.ProcessMouseDown();
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseDown();
+                if (handled)
+                    break;
+            }
             if (!handled)
             {
-                MouseInputState mouse = G.Input.Mouse;
-                if (IntersectTest(mouse.Position))
+                if (IntersectTest(G.Input.Mouse.Position))
                 {
                     if (!IsPressed && IsEnabled)
                     {
@@ -407,13 +376,17 @@ namespace Delta.UI.Controls
             return handled;
         }
 
-        internal override bool ProcessMouseUp()
+        internal virtual bool ProcessMouseUp()
         {
             bool handled = false;
-            handled = base.ProcessMouseUp();
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseUp();
+                if (handled)
+                    break;
+            }
             if (!handled)
             {
-                MouseInputState mouse = G.Input.Mouse;
                 if (IntersectTest(G.Input.Mouse.Position))
                 {
                     IsPressed = false;
@@ -424,76 +397,6 @@ namespace Delta.UI.Controls
                     handled = false;
             }
             return handled;
-        }
-
-        protected virtual void OnMouseMove()
-        {
-        }
-
-        protected virtual void OnMouseDown()
-        {
-            if (_isDraggable && !_isDragged)
-                IsDragged = true;
-        }
-
-        protected virtual void OnMouseUp()
-        {
-            if (_isDragged)
-                IsDragged = false;
-        }
-
-        protected virtual void OnPressed()
-        {
-            //if (G.UI.PressedControl != this)
-            //{
-            //    if (G.UI.PressedControl != null)
-            //        G.UI.PressedControl.OnReleased();
-            //    G.UI.PressedControl = this;
-            //}
-        }
-
-        protected virtual void OnReleased()
-        {
-            //if (G.UI.PressedControl == this)
-            //    G.UI.PressedControl = null;
-        }
-
-        protected virtual void OnMouseEnter()
-        {
-            //if (G.UI.EnteredControl != this)
-            //{
-            //    if (G.UI.EnteredControl != null)
-            //        G.UI.EnteredControl.OnMouseLeave();
-            //    G.UI.EnteredControl = this;
-            //}
-            //IsHighlighted = true;
-            //if (G.Input.Mouse.LeftButton.IsDown)
-            //{
-            //    if (G.UI.PressedControl != this)
-            //        return;
-            //    IsPressed = true;
-            //}
-        }
-
-        protected virtual void OnMouseLeave()
-        {
-            //if (G.UI.EnteredControl == this)
-            //    G.UI.EnteredControl = null;
-            //IsHighlighted = false;
-            //if (G.Input.Mouse.LeftButton.IsDown)
-            //{
-            //    if (G.UI.PressedControl == this)
-            //    {
-            //        IsHighlighted = false;
-            //        IsPressed = false;
-            //    }
-            //    else
-            //        return;
-            //}
-        }
-
-        protected virtual void OnMouseScroll()
-        {
         }
 
         protected internal virtual void ProcessKeyDown(Keys key)
@@ -510,6 +413,68 @@ namespace Delta.UI.Controls
         {
             OnKeyUp(key);
         }
+#endif
+
+        protected internal override void OnAdded()
+        {
+            base.OnAdded();
+            Control parentControl = ParentCollection as Control;
+            if (parentControl != null)
+                Parent = parentControl;
+        }
+
+        protected internal override void OnRemoved()
+        {
+            base.OnRemoved();
+            Parent = null;
+        }
+
+#if WINDOWS
+        protected virtual void OnMouseMove()
+        {
+        }
+
+        protected virtual void OnMouseDown()
+        {
+        }
+
+        protected virtual void OnMouseUp()
+        {
+        }
+
+        protected virtual void OnMouseEnter()
+        {
+            if (G.UI.EnteredControl != this)
+            {
+                if (G.UI.EnteredControl != null)
+                    G.UI.EnteredControl.OnMouseLeave();
+                G.UI.EnteredControl = this;
+            }
+            IsHighlighted = true;
+            if (G.Input.Mouse.LeftButton.IsDown)
+            {
+                if (G.UI.PressedControl != this)
+                    return;
+                IsPressed = true;
+            }
+        }
+
+        protected virtual void OnMouseLeave()
+        {
+            if (G.UI.EnteredControl == this)
+                G.UI.EnteredControl = null;
+            IsHighlighted = false;
+            if (G.Input.Mouse.LeftButton.IsDown)
+            {
+                if (G.UI.PressedControl == this)
+                {
+                    IsHighlighted = false;
+                    IsPressed = false;
+                }
+                else
+                    return;
+            }
+        }
 
         protected virtual void OnKeyDown(Keys key)
         {
@@ -522,53 +487,57 @@ namespace Delta.UI.Controls
         protected virtual void OnKeyUp(Keys key)
         {
         }
-
 #endif
 
-        protected override void OnGotFocus()
+        protected virtual void OnGotFocus()
         {
-            //if (G.UI.FocusedControl != this)
-            //{
-            //    if (G.UI.FocusedControl != null)
-            //        G.UI.FocusedControl.IsFocused = false;
-            //    G.UI.FocusedControl = this;
-            //}
+            if (G.UI.FocusedControl != this)
+            {
+                if (G.UI.FocusedControl != null)
+                    G.UI.FocusedControl.IsFocused = false;
+                G.UI.FocusedControl = this;
+            }
         }
 
-        protected override void OnLostFocus()
+        protected virtual void OnLostFocus()
         {
-            //IsPressed = false;
-            //G.UI.FocusedControl = null;
+            IsPressed = false;
+            G.UI.FocusedControl = null;
         }
 
-        protected override void OnParentChanged()
+        protected virtual void OnPressed()
         {
-            base.OnParentChanged();
-            Control parentControl = Parent as Control;
-            if (parentControl != null)
-                _parentControl = parentControl;
+            if (G.UI.PressedControl != this)
+            {
+                if (G.UI.PressedControl != null)
+                    G.UI.PressedControl.OnReleased();
+                G.UI.PressedControl = this;
+            }
         }
 
-        protected virtual void OnBorderSizeChanged()
+        protected virtual void OnReleased()
+        {
+            if (G.UI.PressedControl == this)
+                G.UI.PressedControl = null;
+        }
+
+        protected virtual void OnParentChanged()
+        {
+        }
+
+        protected virtual void OnPositionChanged()
         {
             NeedsHeavyUpdate = true;
         }
 
-        protected virtual bool IntersectTest(Vector2 position)
+        protected virtual void OnSizeChanged()
         {
-            if (RenderSize.X > 0 && RenderSize.Y > 0)
-                if (position.X >= RenderPosition.X)
-                    if (position.X <= RenderPosition.X + RenderSize.X)
-                        if (position.Y >= RenderPosition.Y)
-                            if (position.Y <= RenderPosition.Y + RenderSize.Y)
-                                return true;
-            return false;
+            NeedsHeavyUpdate = true;
         }
 
-        public override string ToString()
+        protected virtual void OnAlphaChanged()
         {
-            return String.Format("Name: {0}, Position: ({1},{2}), Size: ({3},{4})", Name, RenderPosition.X, RenderPosition.Y, RenderSize.X, RenderSize.Y);
+            UpdateColors();
         }
-
     }
 }

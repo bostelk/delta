@@ -9,7 +9,6 @@ namespace Delta.UI.Controls
         public Window()
             : base()
         {
-            IsDraggable = true;
         }
 
     }

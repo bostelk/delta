@@ -12,7 +12,7 @@ namespace Delta.UI.Screens
     }
 
 
-    public abstract class Screen : EntityParent<ControlBase>
+    public abstract class Screen : EntityParent<Control>
     {
         bool _isExiting = false;
 

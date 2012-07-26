@@ -18,17 +18,15 @@ namespace Delta.UI
         internal Point _dragStartPosition = Point.Zero;
 
         public HUD HUD { get; internal set; }
-        public Screen ActiveScreen { get; internal set; }
-//        public Control FocusedControl { get; set; }
-//        public Control PressedControl { get; set; }
-//#if WINDOWS
-//        public Control EnteredControl { get; set; }
-//        public Control DraggedControl { get; set; }
-//#endif
+        public Control FocusedControl { get; set; }
+        public Control PressedControl { get; set; }
+#if WINDOWS
+        public Control EnteredControl { get; set; }
+#endif
 
-        internal Action<Keys> _keyDown;
-        internal Action<Keys> _keyPress;
-        internal Action<Keys> _keyUp;
+        internal Action<Keys> _keyDown = null;
+        internal Action<Keys> _keyPress = null;
+        internal Action<Keys> _keyUp = null;
 
         int _keyboardDelay = 0;
         public int KeyboardDelay
@@ -72,22 +70,6 @@ namespace Delta.UI
         {
             HUD.InternalDraw(time, spriteBatch);
             base.Draw(time, spriteBatch);
-            if (ActiveScreen != null)
-                ActiveScreen.InternalDraw(time, spriteBatch);
-        }
-
-        public override void Add(Screen item)
-        {
-            base.Add(item);
-            if (ActiveScreen == null)
-                ActiveScreen = item;
-        }
-
-        public override void Remove(Screen item)
-        {
-            if (ActiveScreen == item)
-                ActiveScreen = null;
-            base.Remove(item);
         }
 
 #if WINDOWS
