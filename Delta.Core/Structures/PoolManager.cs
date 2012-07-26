@@ -47,7 +47,7 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("BroadphaseProxyPool: {0}\n", Pool<BroadphaseProxy>.PerformanceInfo));
             _infoLbl.Invalidate();
             G.SpriteBatch.Begin();
-            _infoLbl.InternalDraw(G.UI.Time, G.SpriteBatch);
+            _infoLbl.InternalDraw(G._time, G.SpriteBatch);
             G.SpriteBatch.End();
         }
     }

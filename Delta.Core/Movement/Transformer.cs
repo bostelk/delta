@@ -264,7 +264,7 @@ namespace Delta.Movement
             _onSequenceFinished = callback;
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (_transforms.Count > 0 && !IsPaused)
             {

@@ -99,7 +99,7 @@ namespace Delta.Graphics
         }
 
 #if WINDOWS
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected internal override bool SetField(string name, string value)
         {
             switch (name)
             {
@@ -172,7 +172,7 @@ namespace Delta.Graphics
                     _animationFrameOffset = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
-            return base.ImportCustomValues(name, value);
+            return base.SetField(name, value);
         }
 #endif
 
@@ -185,14 +185,14 @@ namespace Delta.Graphics
             base.LoadContent();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (_animation != null && !IsAnimationFinished && !IsAnimationPaused)
                 UpdateAnimationFrame(time);
             base.LightUpdate(time);
         }
 
-        protected internal virtual void UpdateAnimationFrame(DeltaTime time)
+        protected internal virtual void UpdateAnimationFrame(DeltaGameTime time)
         {
             _frameDurationTimer -= time.ElapsedSeconds * TimeScale;
             if (_frameDurationTimer <= 0f)
@@ -237,7 +237,7 @@ namespace Delta.Graphics
         //    return (viewingArea.Contains(spriteArea) || viewingArea.Intersects(spriteArea));
         //}
 
-        protected override void Draw(DeltaTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime gameTime, SpriteBatch spriteBatch)
         {
             if (IsOutlined)
             {

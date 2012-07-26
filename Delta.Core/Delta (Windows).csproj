@@ -29,6 +29,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -113,19 +115,17 @@
     <Compile Include="Collision\Shapes\CollisionShape.cs" />
     <Compile Include="Collision\Shapes\ConvexShape.cs" />
     <Compile Include="Collision\Matrix2D.cs" />
-    <Compile Include="DeltaTime.cs" />
-    <Compile Include="Entities\EntityManager.cs" />
-    <Compile Include="Entities\SpriteFrameEntity.cs" />
-    <Compile Include="Entities\EntitySpawner.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityHelper.cs" />
+    <Compile Include="DeltaGameTime.cs" />
+    <Compile Include="Graphics\SpriteFrameEntity.cs" />
+    <Compile Include="EntitySpawner.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Extensions\BlendStateExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Graphics\Effects\PixelEmitter.cs" />
     <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
     <Compile Include="Graphics\Effects\Emitter.cs" />
-    <Compile Include="Entities\TextureEntity.cs" />
+    <Compile Include="Graphics\TextureEntity.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\PlayerInputCollection.cs" />
     <Compile Include="Input\States\GamePadInputState.cs" />
@@ -137,14 +137,13 @@
     <Compile Include="Input\States\KeyState.cs" />
     <Compile Include="Input\States\KeyboardInputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
-    <Compile Include="Interfaces\IEntityCollection.cs" />
-    <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="Interfaces\IEntityManager.cs" />
+    <Compile Include="IEntityCollection.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="Structures\TimedRange.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
-    <Compile Include="Interfaces\IRecyclable.cs" />
+    <Compile Include="IRecyclable.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -157,7 +156,7 @@
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
-    <Compile Include="Entities\SpriteEntity.cs" />
+    <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Movement\Interpolation.cs" />
     <Compile Include="Movement\BlinkTransform.cs" />
@@ -182,12 +181,12 @@
     <Compile Include="Collision\Shapes\Polygon.cs" />
     <Compile Include="Collision\AbstractCollisionWorld.cs" />
     <Compile Include="Collision\Narrowphase\SeperatingAxisNarrowphase.cs" />
-    <Compile Include="Interfaces\IWrappedBody.cs" />
+    <Compile Include="IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
-    <Compile Include="Collections\HashSet.cs" />
+    <Compile Include="HashSet.cs" />
     <Compile Include="Structures\Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
-    <Compile Include="Tiled\IImportable.cs" />
+    <Compile Include="IImportable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tweakable.cs" />
@@ -208,9 +207,9 @@
     <Compile Include="Tiled\Tileset.cs" />
     <Compile Include="UI\Screens\Screen.cs" />
     <Compile Include="UI\UIManager.cs" />
-    <Compile Include="Entities\TransformableEntity.cs" />
+    <Compile Include="TransformableEntity.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="Entities\EntityCollection.cs" />
+    <Compile Include="EntityParent.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputMap.cs" />
     <Compile Include="Input\MouseHelper.cs" />
@@ -224,7 +223,7 @@
     <Compile Include="Structures\IPool.cs" />
     <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
-    <Compile Include="Entities\World.cs" />
+    <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedContent.resx">
@@ -237,9 +236,7 @@
     <None Include="Resources\SimpleEffect.xnb" />
     <None Include="Resources\TinyFont.xnb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Dynamics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

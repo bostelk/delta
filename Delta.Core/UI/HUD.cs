@@ -5,7 +5,7 @@ using Delta.UI.Controls;
 
 namespace Delta.UI
 {
-    public class HUD : EntityCollection<Control>
+    public class HUD : EntityParent<Control>
     {
         public HUD()
             : base()
@@ -28,36 +28,36 @@ namespace Delta.UI
         internal bool ProcessMouseMove()
         {
             bool handled = false;
-            foreach (Control control in this)
-            {
-                handled = control.ProcessMouseMove();
-                if (handled)
-                    break;
-            }
+            //foreach (Control control in this)
+            //{
+            //    handled = control.ProcessMouseMove();
+            //    if (handled)
+            //        break;
+            //}
             return handled;
         }
 
         internal bool ProcessMouseDown()
         {
             bool handled = false;
-            foreach (Control control in this)
-            {
-                handled = control.ProcessMouseDown();
-                if (handled)
-                    break;
-            }
+            //foreach (Control control in this)
+            //{
+            //    handled = control.ProcessMouseDown();
+            //    if (handled)
+            //        break;
+            //}
             return handled;
         }
 
         internal bool ProcessMouseUp()
         {
             bool handled = false;
-            foreach (Control control in this)
-            {
-                handled = control.ProcessMouseUp();
-                if (handled)
-                    break;
-            }
+            //foreach (Control control in this)
+            //{
+            //    handled = control.ProcessMouseUp();
+            //    if (handled)
+            //        break;
+            //}
             return handled;
         }
     }

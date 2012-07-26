@@ -25,12 +25,12 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
-            base.LateInitialize();
+            base.Initialize();
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             //spriteBatch.End();
 

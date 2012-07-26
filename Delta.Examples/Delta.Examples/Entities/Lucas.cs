@@ -47,7 +47,7 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
             HUD = TransformableEntity.Get("GameHud") as GameHud;
             HUD.Alpha = 0f;
@@ -57,10 +57,10 @@ namespace Delta.Examples.Entities
             G.World.Camera.Follow(this);
             G.World.Camera.ZoomOverDuration(NORMAL_ZOOM, 3f);
             G.Audio.SetSoundVolume("SFX_Ambiance_1", 0.8f);
-            base.LateInitialize();
+            base.Initialize();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             Velocity.X = MathHelper.SmoothStep(Velocity.X, 0, _decel);
             Velocity.Y = MathHelper.SmoothStep(Velocity.Y, 0, _decel);
@@ -162,7 +162,7 @@ namespace Delta.Examples.Entities
             }
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             Vector2 offset = new Vector2(_sheet.Width / 2, _sheet.Height / 2);
             spriteBatch.Draw(_sheet, Position, null, Color.White, _rotation + MathHelper.Pi * 0.5f, offset, 1, SpriteEffects.None, 0);

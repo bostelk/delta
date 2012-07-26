@@ -13,7 +13,7 @@ using Delta.UI.Controls;
 
 namespace Delta.UI
 {
-    public class UIManager : EntityManager<Screen>
+    public class UIManager : EntityParent<Screen>
     {
         internal Point _dragStartPosition = Point.Zero;
 
@@ -50,18 +50,25 @@ namespace Delta.UI
             _keyUp = KeyUp;
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             base.LightUpdate(time);
             HUD.InternalUpdate(time);
         }
 
-        protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, SpriteBatchExtensions._cullRasterizerState, null, Camera.View);
+            base.OnBeginDraw(time, spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, SpriteBatchExtensions._cullRasterizerState, null);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void OnEndDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            base.OnEndDraw(time, spriteBatch);
+            spriteBatch.End();
+        }
+
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             HUD.InternalDraw(time, spriteBatch);
             base.Draw(time, spriteBatch);

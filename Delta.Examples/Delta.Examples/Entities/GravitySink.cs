@@ -32,7 +32,7 @@ namespace Delta.Examples.Entities
             _particles = new Particle[NUM_PARTICLES];
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
             for (int i = 0; i < NUM_PARTICLES; i++)
                 _particles[i] = new Particle()
@@ -41,10 +41,10 @@ namespace Delta.Examples.Entities
                     Position = Position + new Vector2(G.Random.Between(10, 20), G.Random.Between(10, 20)),
                 };
 
-            base.LateInitialize();
+            base.Initialize();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (_lucas == null)
                 _lucas = TransformableEntity.Get("Lucas") as Lucas;
@@ -55,7 +55,7 @@ namespace Delta.Examples.Entities
             }
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             foreach (Particle p in _particles)
                 spriteBatch.Draw(G.PixelTexture, p.Position, Color.White);

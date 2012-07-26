@@ -19,21 +19,21 @@ namespace Delta.Examples.Entities
             _sprite.Play("barrel");
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
             WrappedBody = Collider.CreateBody(new Box(16, 16));
             WrappedBody.OnCollisionEvent += OnCollision;
-            base.LateInitialize();
+            base.Initialize();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             _sprite.InternalUpdate(time);
             _sprite.Position = Position - (_sprite.Size * new Vector2(0.5f, 0.5f));
             base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             _sprite.InternalDraw(time, spriteBatch);
             base.Draw(time, spriteBatch);
@@ -45,7 +45,7 @@ namespace Delta.Examples.Entities
             if (link != null)
             {
                 Explode();
-                RemoveNextUpdate = true;
+                RemoveNextFrame();
             }
             return true;
         }

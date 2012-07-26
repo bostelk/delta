@@ -84,7 +84,7 @@ namespace Delta.Tiled
             }
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             Tile tile;
             Rectangle tileArea = Rectangle.Empty;
@@ -103,7 +103,7 @@ namespace Delta.Tiled
 
         public override string ToString()
         {
-            return String.Format("Name:{0}, Layer:{1}, Tiles:{2}", Name, Layer, _tiles.Count);
+            return String.Format("Name:{0}, Layer:{1}, Tiles:{2}", Name, Depth, _tiles.Count);
         }
     }
 }

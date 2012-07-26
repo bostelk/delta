@@ -14,7 +14,7 @@ namespace Delta.Input
         public bool IsPressed { get { return IsDown && !WasDown; } }
         public bool IsReleased { get { return !IsDown && WasDown; } }
 
-        internal void SetState(bool value, DeltaTime time)
+        internal void SetState(bool value, DeltaGameTime time)
         {
             WasDown = IsDown;
             IsDown = value;

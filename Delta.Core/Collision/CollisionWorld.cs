@@ -112,10 +112,10 @@ namespace Delta.Collision
         public override void DrawDebug(ref Matrix view, ref Matrix projection)
         {
             G.PrimitiveBatch.Begin(ref projection, ref view);
-            for(int i = 0; i < _colliders.Count; i++)
+            for (int i = 0; i < _colliders.Count; i++)
             {
                 Collider col = _colliders[i];
-                if (col.Shape == null) 
+                if (col.Shape == null)
                     continue;
 
                 Matrix2D transform = col.WorldTransform;
@@ -135,7 +135,7 @@ namespace Delta.Collision
                         Vector2 halfwidthX, halfwidthY;
                         box.CalculateExtents(ref transform, out halfwidthX, out halfwidthY);
                         G.PrimitiveBatch.DrawSegment(col.Position, halfwidthX, CollisionGlobals.ExtentsColor);
-                        G.PrimitiveBatch.DrawSegment(col.Position,  halfwidthY, CollisionGlobals.ExtentsColor);
+                        G.PrimitiveBatch.DrawSegment(col.Position, halfwidthY, CollisionGlobals.ExtentsColor);
                     }
                     else if (col.Shape is Circle)
                     {
@@ -145,7 +145,7 @@ namespace Delta.Collision
                         G.PrimitiveBatch.DrawSegment(col.Position, extents, CollisionGlobals.ExtentsColor);
                     }
                 }
-                 
+
                 if (CollisionGlobals.DebugViewOptions.HasFlag(DebugViewFlags.AABB))
                 {
                     AABB aabb;

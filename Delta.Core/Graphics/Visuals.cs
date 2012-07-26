@@ -25,8 +25,8 @@ namespace Delta.Graphics
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation, AnimationPlayOptions.RemoveWhenFinished);
-            se.Layer = position.Y;
-            G.World.Ground.Add(se);
+            se.Depth = position.Y;
+            G.World.Ground.UnsafeAdd(se);
         }
  
         /// <summary>
@@ -43,10 +43,10 @@ namespace Delta.Graphics
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
             se.Play(animation);
-            se.Layer = position.Y;
-            G.World.BelowGround.Add(se);
+            se.Depth = position.Y;
+            G.World.BelowGround.UnsafeAdd(se);
 
-            Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.RemoveImmediate(); se.Recycle(); });
+            Transformer.ThisEntity(se).FadeTo(0, 0.5f).OnSequenceFinished(() => { se.Recycle(); });
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace Delta.Graphics
             sfe.Position = position;
             sfe.Origin = new Vector2(0.5f, 0.5f);
             sfe.Alpha = 0.5f;
-            sfe.Layer = position.Y;
-            G.World.BelowGround.Add(sfe);
+            sfe.Depth = position.Y;
+            G.World.BelowGround.UnsafeAdd(sfe);
 
-            Transformer.ThisEntity(sfe).FadeTo(0, 0.3f).OnSequenceFinished(() => { sfe.RemoveImmediate(); sfe.Recycle(); });
+            Transformer.ThisEntity(sfe).FadeTo(0, 0.3f).OnSequenceFinished(() => { sfe.Recycle(); });
         }
 
 
@@ -89,8 +89,8 @@ namespace Delta.Graphics
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation, AnimationPlayOptions.StartRandom);
                 see.Pause();
-                see.Layer = position.Y;
-                G.World.AboveGround.Add(see);
+                see.Depth = position.Y;
+                G.World.AboveGround.UnsafeAdd(see);
             }
 
             // rotate the cross randomly

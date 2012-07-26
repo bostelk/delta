@@ -189,7 +189,7 @@ namespace Delta.Input.States
             return _buttons[(int)key].IsReleased;
         }
 
-        internal void Update(DeltaTime time, ref KeyboardState keyboardState)
+        internal void Update(DeltaGameTime time, ref KeyboardState keyboardState)
         {
             if (_initialTick <= -1)
             {

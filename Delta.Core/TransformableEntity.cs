@@ -325,7 +325,7 @@ namespace Delta
         }
 
 #if WINDOWS
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected internal override bool SetField(string name, string value)
         {
             switch (name)
             {
@@ -365,7 +365,7 @@ namespace Delta
                     _blinkRange = TimedRange.Parse(value);
                     return true;
             }
-            return base.ImportCustomValues(name, value);
+            return base.SetField(name, value);
         }
 #endif
 

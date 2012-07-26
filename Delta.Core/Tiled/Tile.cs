@@ -19,12 +19,12 @@ namespace Delta.Tiled
             set { }
         }
 
-        float IEntity.Layer
+        float IEntity.Depth
         {
             get { return 0; }
         }
 
-        IEntityCollection IEntity.Collection
+        IEntityCollection IEntity.ParentCollection
         {
             get { return null; }
             set { }
@@ -81,12 +81,12 @@ namespace Delta.Tiled
         {
         }
 
-        void IEntity.Update(DeltaTime time)
+        void IEntity.Update(DeltaGameTime time)
         {
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        public void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
         }

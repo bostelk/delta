@@ -37,10 +37,10 @@ namespace Delta.Examples.Entities
             _spriteController = new CardinalSpriteController(_sprite);
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
             WrappedBody = Collider.CreateBody(new Box(16, 16));
-            base.LateInitialize();
+            base.Initialize();
         }
 
         public void SwitchBody()
@@ -55,7 +55,7 @@ namespace Delta.Examples.Entities
             }
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (G.Input.Keyboard.IsDown(Keys.Q))
                 Rotation = (Rotation + (0.5f));
@@ -81,12 +81,12 @@ namespace Delta.Examples.Entities
 
             _sprite.Position = Position;
             _sprite.InternalUpdate(time);
-            Layer = Position.Y;
+            Depth = Position.Y;
 
             base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             _sprite.InternalDraw(time, spriteBatch);
         }

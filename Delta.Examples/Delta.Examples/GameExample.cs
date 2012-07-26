@@ -36,13 +36,13 @@ namespace Delta.Examples
             G.World.Camera.Tint = (new Color(0, 0, 0, 50));
             G.World.Camera.TintEnabled = true;
 
-            G.World.Add(new Image(@"Graphics\Background") { Layer = (int)DrawLayers.BackgroundLow });
-            G.World.Add(new Image(@"Graphics\ForeGround") { Layer = (int)DrawLayers.Background });
-            G.World.Add(new GravitySink() { Layer = (int)DrawLayers.Ground });
-            G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0), Layer = (int)DrawLayers.Ground });
-            G.World.Add(new Lucas() { Layer = (int)DrawLayers.Flyers });
+            G.World.Add(new Image(@"Graphics\Background") { Depth = (int)DrawLayers.BackgroundLow });
+            G.World.Add(new Image(@"Graphics\ForeGround") { Depth = (int)DrawLayers.Background });
+            G.World.Add(new GravitySink() { Depth = (int)DrawLayers.Ground });
+            G.World.Add(new MovingSpeaker() { Position = new Vector2(200, 0), Depth = (int)DrawLayers.Ground });
+            G.World.Add(new Lucas() { Depth = (int)DrawLayers.Flyers });
 
-            FuelAtom atom = new FuelAtom() { Layer = (int)DrawLayers.Ground };
+            FuelAtom atom = new FuelAtom() { Depth = (int)DrawLayers.Ground };
             G.World.Add(atom);
             Transformer.ThisEntity(atom).TranslateTo(atom.Position + new Vector2(200, 0), 10f, Interpolation.EaseInOutCubic).TranslateTo(atom.Position, 10f, Interpolation.EaseInOutCubic).Repeat(4);
             Transformer.ThisEntity(atom).ScaleTo(new Vector2(2, 2), 10f).ScaleTo(new Vector2(1, 1), 10f).Loop();
@@ -50,7 +50,7 @@ namespace Delta.Examples
             Transformer.ThisEntity(atom).FlickerFor(0.5f, 1, 0.2f).Loop();
 
             //UI.Add(new GameHud());
-            UI.Camera.ZoomImmediate(4.0f);
+            //UI.Camera.ZoomImmediate(4.0f);
         }
 
         protected override void LoadContent()

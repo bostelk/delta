@@ -36,9 +36,9 @@ namespace Delta.Examples.Entities
             //};
         }
 
-        protected override void  LateInitialize()
+        protected override void  Initialize()
         {
-            base.LateInitialize();
+            base.Initialize();
            
             Velocity = Vector2Extensions.RandomDirection() * SPEED;
         }
@@ -55,7 +55,7 @@ namespace Delta.Examples.Entities
             //}
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             //if (AutoRotate || MoveAndRotate)
             //    Rotation += 0.01f;

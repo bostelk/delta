@@ -23,7 +23,7 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : EntityCollection
+    public class Map : EntityParent<IEntity>
     {
         internal static Map Instance { get; set; }
 
@@ -54,13 +54,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         private int AboveGroundIndex;
         [ContentSerializer]
-        public EntityCollection PostEffects { get; private set; }
+        public EntityParent<SpriteEntity> PostEffects { get; private set; }
 
         public Map()
             : base()
         {
             Instance = this;
-            PostEffects = new EntityCollection();
+            PostEffects = new EntityParent<SpriteEntity>();
         }
 
 #if WINDOWS
@@ -99,10 +99,10 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Layer = layerOrder});
+                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Depth = layerOrder});
                         break;
                     case "objectgroup":
-                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Layer = layerOrder }; 
+                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Depth = layerOrder }; 
                         switch (layerName.ToLower())
                         {
                             case "delta.belowground":
@@ -114,7 +114,6 @@ namespace Delta.Tiled
                             case "delta.g":
                             case "d.g":
                                 GroundIndex = layerOrder;
-                                entityLayer.AlwaysSort = true;
                                 break;
                             case "delta.aboveground":
                             case "delta.ag":
@@ -144,10 +143,7 @@ namespace Delta.Tiled
             if (BelowGroundIndex > 0)
                 G.World.BelowGround = Children[BelowGroundIndex] as IEntityCollection;
             if (GroundIndex > 0)
-            {
                 G.World.Ground = Children[GroundIndex] as IEntityCollection;
-                G.World.Ground.AlwaysSort = true;
-            }
             if (AboveGroundIndex > 0)
                 G.World.AboveGround = Children[AboveGroundIndex] as IEntityCollection;
             base.OnAdded();
@@ -164,7 +160,7 @@ namespace Delta.Tiled
         public override string ToString()
         {
             string info = String.Empty;
-            foreach (IEntity gameComponent in _components)
+            foreach (IEntity gameComponent in _children)
                 info += gameComponent.ToString() + "\n";
             return info;
         }
@@ -183,7 +179,7 @@ namespace Delta.Tiled
                 string name = propertyNode.Attributes["name"] == null ? string.Empty : propertyNode.Attributes["name"].Value.ToLower();
                 string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
-                    isFound = importable.ImportCustomValues(name, value);
+                    isFound = importable.SetField(name, value);
                 else
                     continue;
                 if (!isFound)

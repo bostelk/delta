@@ -12,7 +12,7 @@ namespace Delta.UI.Screens
     }
 
 
-    public abstract class Screen : EntityCollection<ControlBase>
+    public abstract class Screen : EntityParent<ControlBase>
     {
         bool _isExiting = false;
 
@@ -27,7 +27,7 @@ namespace Delta.UI.Screens
         {
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             base.LightUpdate(time);
             if (_isExiting)
@@ -187,7 +187,7 @@ namespace Delta.UI.Screens
             if (TransitionOffTime <= 0)
             {
                 if (ParentCollection != null)
-                    ParentCollection.Remove(this);
+                    ParentCollection.UnsafeRemove(this);
                 else
                     G.UI.Remove(this);
             }

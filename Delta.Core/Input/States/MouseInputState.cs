@@ -29,7 +29,7 @@ namespace Delta.Input.States
             XButton2 = new Button();
         }
 		
-		internal void Update(DeltaTime time, ref MouseState mouseState)
+		internal void Update(DeltaGameTime time, ref MouseState mouseState)
 		{
             MouseState = mouseState;
             PositionOld = Position;

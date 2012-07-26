@@ -275,7 +275,7 @@ namespace Delta.UI.Controls
         {
         }
 
-        protected internal override void HeavyUpdate(DeltaTime time)
+        protected internal override void HeavyUpdate(DeltaGameTime time)
         {
             UpdateRenderBorderSize();
             UpdateColors();
@@ -331,18 +331,18 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected override void BeginDraw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             G.GraphicsDevice.ScissorRectangle = _cullRectangle;
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             DrawBorder(time, spriteBatch);
             DrawBack(time, spriteBatch);
         }
 
-        protected virtual void DrawBack(DeltaTime time, SpriteBatch spriteBatch)
+        protected virtual void DrawBack(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             if (_currentColor.A <= 0 || InnerRenderSize.X <= 0 || InnerRenderSize.Y <= 0)
                 return;
@@ -350,7 +350,7 @@ namespace Delta.UI.Controls
                 spriteBatch.DrawRectangle(InnerRenderPosition, InnerRenderSize, _currentColor);
         }
 
-        protected virtual void DrawBorder(DeltaTime time, SpriteBatch spriteBatch)
+        protected virtual void DrawBorder(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             if (_currentBorderColor.A <= 0 || RenderSize.X <= 0 || RenderSize.Y <= 0 || RenderBorderSize.X <= 0 || RenderBorderSize.Y <= 0)
                 return;

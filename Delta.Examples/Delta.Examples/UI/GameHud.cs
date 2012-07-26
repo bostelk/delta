@@ -60,12 +60,12 @@ namespace Delta.Examples.Entities
         {
             _healthBar = G.Content.Load<Texture2D>(@"Graphics\HealthBar");
             _ammoBar = G.Content.Load<Texture2D>(@"Graphics\AmmoBar");
-            _leftPosition = new Vector2(G.UI.Camera.ViewingArea.Width * 0.02f, G.UI.Camera.ViewingArea.Height * 0.55f);
-            _rightPosition = new Vector2(G.UI.Camera.ViewingArea.Width * 0.93f, G.UI.Camera.ViewingArea.Height * 0.55f);
+            //_leftPosition = new Vector2(G.UI.Camera.ViewingArea.Width * 0.02f, G.UI.Camera.ViewingArea.Height * 0.55f);
+            //_rightPosition = new Vector2(G.UI.Camera.ViewingArea.Width * 0.93f, G.UI.Camera.ViewingArea.Height * 0.55f);
             base.LoadContent();
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             //spriteBatch.DrawRectangleOutline(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int)(60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(Alpha), true);
             //spriteBatch.DrawRectangleOutline(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int)(60.0f * _rightFillPercent)), RightBarColor.SetAlpha(Alpha), true);

@@ -4,7 +4,7 @@ using Delta.UI.Screens;
 
 namespace Delta.UI.Controls
 {
-    public class ControlBase : EntityCollection<ControlBase>
+    public class ControlBase : EntityParent<ControlBase>
     {
         internal Rectangle _cullRectangle = Rectangle.Empty;
         internal Rectangle _renderArea = Rectangle.Empty;
@@ -159,7 +159,7 @@ namespace Delta.UI.Controls
         }
 #endif
 
-        protected internal override void HeavyUpdate(DeltaTime time)
+        protected internal override void HeavyUpdate(DeltaGameTime time)
         {
             base.HeavyUpdate(time);
             if (Children.Count != 0)
@@ -195,7 +195,7 @@ namespace Delta.UI.Controls
                 _cullRectangle = Rectangle.Intersect(_cullRectangle, Parent._cullRectangle);
         }
 
-        protected override void BeginDraw(DeltaTime time, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        protected override void OnBeginDraw(DeltaGameTime time, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             G.GraphicsDevice.ScissorRectangle = _cullRectangle;
         }

@@ -13,7 +13,7 @@ using Delta.Graphics;
 namespace Delta.Tiled
 {
 
-    public class EntityLayer : EntityCollection
+    public class EntityLayer : EntityParent<TransformableEntity>
     {
         public string Name { get; set; }
 
@@ -112,7 +112,7 @@ namespace Delta.Tiled
 #endif
         public override string ToString()
         {
-            return String.Format("Name:{0}, Layer:{1}, Components:{2}", Name, Layer, Children.Count);
+            return String.Format("Name:{0}, Layer:{1}, Components:{2}", Name, Depth, Children.Count);
         }
     }
 }

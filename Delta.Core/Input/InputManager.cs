@@ -83,7 +83,7 @@ namespace Delta.Input
 #endif
 		}
 
-        internal void Update(DeltaTime time)
+        internal void Update(DeltaGameTime time)
         {
             for (int i = 0; i < 4; i++)
 			{

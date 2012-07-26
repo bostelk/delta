@@ -29,7 +29,7 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             Vector2 offset = new Vector2(_texture.Width / 2, _texture.Height / 2);
             spriteBatch.Draw(_texture, Position - offset, Color.White);

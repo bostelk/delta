@@ -85,7 +85,7 @@ namespace Delta.Graphics
             _blendString = "AlphaBlend";
         }
 
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected internal override bool SetField(string name, string value)
         {
             switch (name)
             {
@@ -156,7 +156,7 @@ namespace Delta.Graphics
                     _blendString = value;
                     return true;
             }
-            return base.ImportCustomValues(name, value);
+            return base.SetField(name, value);
         }
 
         public override void Recycle()
@@ -217,7 +217,7 @@ namespace Delta.Graphics
                 FadeInPercent = 0;
             }
 
-            public virtual void Update(DeltaTime time)
+            public virtual void Update(DeltaGameTime time)
             {
                 if (FadeInPercent > 0)
                     Entity.Alpha = Emitter.FadeInInterpolator(0, 1, Life / (FadeInPercent * Lifespan)); 
@@ -225,7 +225,7 @@ namespace Delta.Graphics
                     Entity.Alpha = Entity.Alpha - Emitter.FadeOutInterpolator(0, 1, (Life - (Lifespan - FadeOutPercent * Lifespan)) / (FadeOutPercent * Lifespan));
             }
 
-            public virtual void Draw(DeltaTime time, SpriteBatch spriteBatch) { }
+            public virtual void Draw(DeltaGameTime time, SpriteBatch spriteBatch) { }
             public virtual void OnEmitted() { }
 
         }

@@ -62,13 +62,13 @@ namespace Delta.Examples.Entities
             base.LoadContent();
         }
 
-        protected override void LateInitialize()
+        protected override void Initialize()
         {
             G.Audio.PlayPositionalSound("BGM_Ice", this);
-            base.LateInitialize();
+            base.Initialize();
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (!IsOrbiting)
                 return;
@@ -85,7 +85,7 @@ namespace Delta.Examples.Entities
             base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, Color.White);
             base.Draw(time, spriteBatch);

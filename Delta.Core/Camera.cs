@@ -157,7 +157,7 @@ namespace Delta
             PixelFix = false; // broken.
         }
 
-        protected internal virtual void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected internal virtual void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             if (TintEnabled)
             {
@@ -170,7 +170,7 @@ namespace Delta
             }
         }
 
-        internal virtual void Update(DeltaTime time)
+        internal virtual void Update(DeltaGameTime time)
         {
             // are we following the tracking entity, the player, or the goal position?
             if (IsTracking && Mode != CameraMode.FollowPlayer)

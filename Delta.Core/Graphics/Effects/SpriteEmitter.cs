@@ -18,13 +18,13 @@ namespace Delta.Graphics
         internal class SpriteParticle : Particle<SpriteEntity>
         {
 
-            public override void Update(DeltaTime time)
+            public override void Update(DeltaGameTime time)
             {
                 Entity.InternalUpdate(time);
                 base.Update(time);
             }
 
-            public override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+            public override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
             {
                 Entity.InternalDraw(time, spriteBatch);
                 base.Draw(time, spriteBatch);
@@ -63,7 +63,7 @@ namespace Delta.Graphics
             SpriteEmitter emitter = _pool.Fetch();
             emitter._spriteSheet = spriteSheet;
             emitter._animationName = animationName;
-            G.World.AboveGround.Add(emitter);
+            G.World.AboveGround.UnsafeAdd(emitter);
             return emitter;
         }
 
@@ -79,7 +79,7 @@ namespace Delta.Graphics
             TimeScaleRange = new Range(1);
         }
 
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected internal override bool SetField(string name, string value)
         {
             switch (name)
             {
@@ -102,7 +102,7 @@ namespace Delta.Graphics
                     SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.StartRandom : SpriteOptions;
                     return true;
             }
-            return base.ImportCustomValues(name, value);
+            return base.SetField(name, value);
         }
 
         public void Emit()
@@ -127,7 +127,7 @@ namespace Delta.Graphics
             _particles.Add(newParticle);
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (G.World.SecondsPast(_lastEmitTime + Frequency))
             {
@@ -159,7 +159,7 @@ namespace Delta.Graphics
             base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);

@@ -77,7 +77,7 @@ namespace Delta.UI.Controls
                 Font = G.Font;
         }
 
-        protected internal override void HeavyUpdate(DeltaTime time)
+        protected internal override void HeavyUpdate(DeltaGameTime time)
         {
             UpdateTextSize();
             base.HeavyUpdate(time);
@@ -133,7 +133,7 @@ namespace Delta.UI.Controls
             }
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
             spriteBatch.DrawString(Font, _renderText, _textPosition, ForeColor, 0, _textOrigin, Vector2.One, SpriteEffects.None, 0);

@@ -29,7 +29,7 @@ namespace Delta
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
         internal static bool _lateInitialized = false;
         internal static Game _instance = null;
-        internal static DeltaTime _time = new DeltaTime();
+        internal static DeltaGameTime _time = new DeltaGameTime();
 
         public new static ContentManager Content { get; private set; }
         public static InputManager Input { get; private set; }
@@ -116,7 +116,6 @@ namespace Delta
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _time.IsRunningSlowly = gameTime.IsRunningSlowly;
             _time.ElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time.TotalSeconds += _time.ElapsedSeconds;
             Input.Update(_time);
@@ -128,8 +127,8 @@ namespace Delta
             }
             if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
             {
-                World.Update();
-                UI.Update();
+                World.InternalUpdate(_time);
+                UI.InternalUpdate(_time);
             }
             Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
         }
@@ -138,7 +137,7 @@ namespace Delta
         {
             base.Draw(gameTime);
             World.InternalDraw(World.Time, G.SpriteBatch);
-            UI.InternalDraw(UI.Time, G.SpriteBatch);
+            UI.InternalDraw(_time, G.SpriteBatch);
         }
 
         public static void ToggleFullScreen()

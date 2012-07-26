@@ -359,7 +359,7 @@ namespace Delta.Audio
         {
         }
 
-        public void Update(DeltaTime time)
+        public void Update(DeltaGameTime time)
         {
             // don't complain if the audio engine isn't ready yet
             if (_audioEngine == null)

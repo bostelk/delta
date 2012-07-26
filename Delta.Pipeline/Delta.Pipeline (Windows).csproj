@@ -110,7 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityCollectionWriter.cs" />
+    <Compile Include="EntityParentWriter.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

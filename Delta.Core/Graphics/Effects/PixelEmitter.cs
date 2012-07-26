@@ -44,7 +44,7 @@ namespace Delta.Graphics
                 _particlePool.Release(this);
             }
 
-            public override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+            public override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
             {
                 spriteBatch.Draw(G.PixelTexture, Entity.Position, null , Entity.Tint, Entity.Rotation, Entity.Origin * Entity.Size, Entity.Scale, SpriteEffects.None, 0);
                 base.Draw(time, spriteBatch);
@@ -69,7 +69,7 @@ namespace Delta.Graphics
         public static PixelEmitter Create()
         {
             PixelEmitter emitter = _pool.Fetch();
-            G.World.AboveGround.Add(emitter);
+            G.World.AboveGround.UnsafeAdd(emitter);
             return emitter;
         }
 
@@ -85,7 +85,7 @@ namespace Delta.Graphics
             Colors = new List<Color>();
         }
 
-        protected internal override bool ImportCustomValues(string name, string value)
+        protected internal override bool SetField(string name, string value)
         {
             switch (name)
             {
@@ -97,7 +97,7 @@ namespace Delta.Graphics
                     }
                     return true;
             }
-            return base.ImportCustomValues(name, value);
+            return base.SetField(name, value);
         }
 
         public void Emit()
@@ -119,7 +119,7 @@ namespace Delta.Graphics
             _particles.Add(newParticle);
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             if (G.World.SecondsPast(_lastEmitTime + Frequency))
             {
@@ -151,7 +151,7 @@ namespace Delta.Graphics
             base.LightUpdate(time);
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);

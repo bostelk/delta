@@ -21,7 +21,7 @@ namespace Delta.UI
         {
         }
 
-        protected override void LightUpdate(DeltaTime time)
+        protected override void LightUpdate(DeltaGameTime time)
         {
             _timer += time.ElapsedSeconds;
             if (_timer >= 1)
@@ -77,7 +77,7 @@ namespace Delta.UI
             Invalidate();
         }
 
-        protected override void Draw(DeltaTime time, SpriteBatch spriteBatch)
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
             _frames++;
