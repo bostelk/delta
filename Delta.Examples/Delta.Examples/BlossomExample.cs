@@ -65,7 +65,6 @@ namespace Delta.Examples
         {
             GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-
 #if DEBUG
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;

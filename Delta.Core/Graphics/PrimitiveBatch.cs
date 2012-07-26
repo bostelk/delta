@@ -93,6 +93,7 @@ namespace Delta.Graphics
             {
                 throw new InvalidOperationException("End must be called before Begin can be called again.");
             }
+            G.GraphicsDevice.ScissorRectangle = G.GraphicsDevice.Viewport.Bounds;
 
             //tell our basic effect to begin.
             _basicEffect.Projection = projection;
