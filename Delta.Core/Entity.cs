@@ -318,15 +318,15 @@ namespace Delta
         }
 
         /// <summary>
-        /// Updates the <see cref="Entity"/>. Override to add custom update logic which is executed every frame.
+        /// Updates the <see cref="Entity"/>. Override this method to add custom update logic which is executed every frame.
         /// </summary>
         /// <param name="time">time</param>
         protected virtual void LightUpdate(DeltaGameTime time)
         {
-        }
+        }  
 
         /// <summary>
-        /// Updates the <see cref="Entity"/>. Override to add custom update logic which is too expensive to execute every frame.
+        /// Updates the <see cref="Entity"/>. Override this method to add custom update logic which is too expensive to execute every frame.
         /// </summary>
         /// <param name="time">time</param>
         protected internal virtual void HeavyUpdate(DeltaGameTime time)
