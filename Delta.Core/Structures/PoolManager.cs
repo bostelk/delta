@@ -19,9 +19,6 @@ namespace Delta.Structures
         static PoolManager()
         {
             _infoLbl.Position = new Vector2(0, 50);
-            _infoLbl.BackColor = Color.Black * 0.5f;
-            _infoLbl.HighlightedColor = Color.Black * 0.75f;
-            _infoLbl.ForeColor = Color.White;
             _infoLbl.InternalLoadContent();
         }
 
@@ -46,6 +43,7 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("ColliderPool: {0}\n", Pool<Collider>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("BroadphaseProxyPool: {0}\n", Pool<BroadphaseProxy>.PerformanceInfo));
             _infoLbl.Invalidate();
+            _infoLbl.InternalUpdate(G._time);
             G.SpriteBatch.Begin();
             _infoLbl.InternalDraw(G._time, G.SpriteBatch);
             G.SpriteBatch.End();
