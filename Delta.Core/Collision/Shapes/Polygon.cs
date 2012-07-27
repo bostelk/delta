@@ -18,6 +18,7 @@ namespace Delta.Collision
             Vertices = new Vector2[vertices.Length];
             Normals = new Vector2[vertices.Length];
 
+            // re-center the polygon so that the centroid is on the origin.
             CalculateCentroid();
             if (!Vector2Extensions.AlmostZero(Centroid))
             {

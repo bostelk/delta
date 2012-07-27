@@ -11,6 +11,9 @@ namespace Delta.Collision
         static Pool<BroadphaseProxy> _pool;
 
         public AABB AABB;
+        public CollisionGroups CollisionFilterGroup;
+        public CollisionGroups CollisionFilterMask;
+        public Action<object> NeedsCollisionWith;
         public object ClientObject;
 
         static BroadphaseProxy()
@@ -20,8 +23,15 @@ namespace Delta.Collision
 
         public static BroadphaseProxy Create(object client)
         {
+            return Create(client, CollisionGroups.Group1, CollisionGroups.All);
+        }
+
+        public static BroadphaseProxy Create(object client, CollisionGroups group, CollisionGroups mask)
+        {
             BroadphaseProxy proxy = _pool.Fetch();
             proxy.ClientObject = client;
+            proxy.CollisionFilterGroup = group;
+            proxy.CollisionFilterMask = mask;
             CollisionGlobals.TotalProxies++;
             return proxy;
         }
@@ -34,10 +44,17 @@ namespace Delta.Collision
             AABB = aabb;
         }
 
+        public bool ShouldCollide(BroadphaseProxy other)
+        {
+            return (CollisionFilterGroup & other.CollisionFilterMask) != 0;
+        }
+
         public void Recycle()
         {
             AABB = AABB.Zero;
             ClientObject = null;
+            CollisionFilterGroup = CollisionGroups.None;
+            CollisionFilterMask = CollisionGroups.None;
 
             CollisionGlobals.TotalProxies--;
             _pool.Release(this);

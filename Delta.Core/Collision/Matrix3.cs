@@ -39,6 +39,14 @@ namespace Delta.Collision
             }
         }
 
+        public Vector2 Basis
+        {
+            get
+            {
+                return new Vector2(M22, M21);
+            }
+        }
+
         public Matrix3(ref Matrix3 m)
         {
             M11 = m.M11; M12 = m.M12; M13 = m.M13;

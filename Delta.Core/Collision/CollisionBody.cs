@@ -8,13 +8,22 @@ using Delta.Structures;
 
 namespace Delta.Collision
 {
-    public sealed class Collider : ICollideable, IWrappedBody, IRecyclable
+
+    /// <summary>
+    /// A Body that belongs in the CollisionWorld. Provides the detection of collisions between shapes.
+    /// </summary>
+    public sealed class CollisionBody : ICollideable, IWrappedBody, IRecyclable
     {
-        static Pool<Collider> _pool;
+        static Pool<CollisionBody> _pool;
 
         public object Owner { get; set; }
 
+        public BroadphaseProxy BroadphaseProxy { get; set; }
+
         private CollisionShape _shape;
+        /// <summary>
+        /// The shape the body is represented by.
+        /// </summary>
         public CollisionShape Shape
         {
             get
@@ -30,13 +39,13 @@ namespace Delta.Collision
 
         Matrix3 _worldTransform;
         /// <summary>
-        /// Transform the shape into world space.
+        /// Transforms the body to world space.
         /// </summary>
         public Matrix3 WorldTransform
         {
             get
             {
-                if (IsAwake) // re-calculate on awaken, then cache.
+                if (IsAwake) // re-calculate on awaken and cache.
                 {
                     Matrix3 translation = Matrix3.CreateTranslation(_position);
                     Matrix3 rotation = Matrix3.CreateRotation(_rotation);
@@ -50,8 +59,10 @@ namespace Delta.Collision
             }
         }
 
-
         Vector2 _position;
+        /// <summary>
+        /// Position of the Body in world space.
+        /// </summary>
         public Vector2 Position
         {
             get
@@ -69,6 +80,9 @@ namespace Delta.Collision
         }
 
         float _rotation;
+        /// <summary>
+        /// Rotation of the body in world space in radians.
+        /// </summary>
         public float Rotation
         {
             get
@@ -84,13 +98,6 @@ namespace Delta.Collision
                 }
             }
         }
-
-        public BroadphaseProxy BroadphaseProxy { get; set; }
-
-        /// <summary>
-        /// Will not move due to collision. (No collision response).
-        /// </summary>
-        public bool IsStatic;
 
         /// <summary>
         /// The Collider has moved this frame.
@@ -116,7 +123,7 @@ namespace Delta.Collision
 
         public OnSeparationEventHandler OnSeparation;
 
-        #region IWrappedBody
+        #region IWrappedBody Contract
         public Vector2 SimulationPosition
         {
             get { return Position; }
@@ -132,27 +139,28 @@ namespace Delta.Collision
         public Func<IWrappedBody, bool> BeforeCollisionEvent { get; set; }
 
         public Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
-        #endregion
-
-        static Collider()
-        {
-            _pool = new Pool<Collider>(200);
-        }
-
-        // alias for entities
+        
+        // shortcut
         public static IWrappedBody CreateBody(CollisionShape shape)
         {
             return Create(null, shape) as IWrappedBody;
         }
 
+        // shortcut
         public static IWrappedBody CreateBody(TransformableEntity entity, CollisionShape shape)
         {
             return Create(entity, shape) as IWrappedBody;
         }
+        #endregion
 
-        public static Collider Create(TransformableEntity entity, CollisionShape shape)
+        static CollisionBody()
         {
-            Collider collider = _pool.Fetch();
+            _pool = new Pool<CollisionBody>(200);
+        }
+
+        public static CollisionBody Create(TransformableEntity entity, CollisionShape shape)
+        {
+            CollisionBody collider = _pool.Fetch();
             collider.Owner = entity;
             collider.Shape = shape;
             collider.OnCollision += collider.HandleOnCollision;
@@ -160,14 +168,14 @@ namespace Delta.Collision
             return collider;
         }
 
-        public Collider(TransformableEntity entity, CollisionShape shape)
+        public CollisionBody(TransformableEntity entity, CollisionShape shape)
             : this()
         {
             Owner = entity;
             Shape = shape;
         }
 
-        public Collider() 
+        public CollisionBody() 
         {
             WorldTransform = Matrix3.Identity;
         }
@@ -180,7 +188,6 @@ namespace Delta.Collision
         public void RemoveFromSimulation()
         {
             G.Collision.RemoveCollider(this);
-            //RemoveNextUpdate = true;
         }
 
         public void OnAdded() { }
@@ -191,14 +198,24 @@ namespace Delta.Collision
             Recycle(); // will also recycle the collider's broadphase proxy too.
         }
 
-        private bool HandleBeforeCollision(Collider them)
+        public void BelongsToGroup(CollisionGroups group)
+        {
+            BroadphaseProxy.CollisionFilterGroup = group;
+        }
+
+        public void CollidesWithGroup(CollisionGroups mask)
+        {
+            BroadphaseProxy.CollisionFilterMask = mask;
+        }
+
+        private bool HandleBeforeCollision(CollisionBody them)
         {
             if (BeforeCollisionEvent != null)
                 return BeforeCollisionEvent(them as IWrappedBody);
             return true;
         }
 
-        private bool HandleOnCollision(Collider them, Vector2 normal)
+        private bool HandleOnCollision(CollisionBody them, Vector2 normal)
         {
             if (OnCollisionEvent != null)
                 return OnCollisionEvent(them as IWrappedBody, normal);

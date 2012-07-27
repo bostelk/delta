@@ -7,15 +7,18 @@ using Microsoft.Xna.Framework;
 namespace Delta.Collision
 {
     [Flags]
-    public enum CollisionOptions
+    public enum CollisionFlags
     {
         Solid,
         Response,
-        Ignore, // don't fire events.
+        /// <summary>
+        /// Stops the detection at the broadphase.
+        /// </summary>
+        Ignore,
     }
 
     /// <summary>
-    /// Defines a wrapped body.
+    /// Defines either a RigidBody or a CollisionBody.
     /// </summary>
     public interface IWrappedBody
     {
@@ -51,5 +54,7 @@ namespace Delta.Collision
         /// The shape is colliding with another. Narrowpahse detection.
         /// </summary>
         Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
+        void BelongsToGroup(CollisionGroups group);
+        void CollidesWithGroup(CollisionGroups mask);
     }
 }

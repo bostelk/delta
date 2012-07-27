@@ -91,6 +91,16 @@ namespace Delta.Collision
             AddProxyToCells(proxy);
         }
 
+        public void SetProxyGroup(BroadphaseProxy proxy, ref CollisionGroups group)
+        {
+            proxy.CollisionFilterGroup = group;
+        }
+
+        public void SetProxyFilterMask(BroadphaseProxy proxy, ref CollisionGroups mask)
+        {
+            proxy.CollisionFilterMask = mask;
+        }
+
         public void RemoveProxy(BroadphaseProxy proxy)
         {
             RemoveProxyFromCells(proxy);

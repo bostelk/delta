@@ -12,9 +12,9 @@ namespace Delta.Collision
     {
         public abstract void Simulate(float timeStep);
 
-        public abstract void AddCollider(Collider colider);
+        public abstract void AddCollider(CollisionBody colider);
 
-        public abstract void RemoveCollider(Collider colider);
+        public abstract void RemoveCollider(CollisionBody colider);
 
         public abstract void DrawDebug(ref Matrix view, ref Matrix projection);
     }

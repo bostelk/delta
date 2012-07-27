@@ -8,8 +8,15 @@ namespace Delta.Collision
 {
     class PolyPolySolver : ICollisionSolver
     {
-    
-        public CollisionResult SolveCollision(Collider colA, Collider colB)
+
+        public bool IsSolveable(CollisionBody colA, CollisionBody colB)
+        {
+            // we assume the calling function has checked for null shapes.
+            if (colA.Shape is Polygon && colB.Shape is Polygon) return true;
+            else return false;
+        }
+
+        public CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB)
         {
             Polygon polyA = (Polygon)colA.Shape;
             Polygon polyB = (Polygon)colB.Shape;

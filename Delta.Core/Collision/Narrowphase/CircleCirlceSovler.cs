@@ -8,7 +8,15 @@ namespace Delta.Collision
 {
     class CircleCircleSolver : ICollisionSolver
     {
-        public CollisionResult SolveCollision(Collider colA, Collider colB)
+
+        public bool IsSolveable(CollisionBody colA, CollisionBody colB)
+        {
+            // we the assume calling function has checked for null shapes.
+            if (colA.Shape is Circle && colB.Shape is Circle) return true;
+            else return false;
+        }
+
+        public CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB)
         {
             Circle circleA = (Circle)colA.Shape;
             Circle circleB = (Circle)colB.Shape;

@@ -39,14 +39,14 @@ namespace Delta.Collision
 
         private bool NeedsBroadphaseCollision(BroadphaseProxy proxyA, BroadphaseProxy proxyB) 
         {
-            bool shouldCollide = true; // proxyA and proxyB should collide with each other (same ground or wtvr).
-            bool ignoreBroadphaseColA = false;
-            bool ignoreBroadphaseColB = false;
+            bool shouldCollide = proxyA.ShouldCollide(proxyB) && proxyB.ShouldCollide(proxyA);
+            bool ignoreBroadphaseA = false;
+            bool ignoreBroadphaseB = false;
             //if (proxyA.BeforeCollision != null)
             //    ignoreBroadphaseColA = proxyA.BeforeCollision(proxyB);
             //if (proxyB.BeforeCollision != null)
             //    ignoreBroadphaseColB = proxyB.BeforeCollision(proxyA);
-            return shouldCollide && !ignoreBroadphaseColA && !ignoreBroadphaseColB;
+            return shouldCollide && !ignoreBroadphaseA && !ignoreBroadphaseB;
         }
 
         private OverlappingPair InternalAddPair(BroadphaseProxy proxyA, BroadphaseProxy proxyB) 

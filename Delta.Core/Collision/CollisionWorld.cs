@@ -15,17 +15,17 @@ namespace Delta.Collision
 {
     public class CollisionWorld : AbstractCollisionWorld
     {
-        List<Collider> _colliders;
+        List<CollisionBody> _colliders;
 
         IBroadphase _broadphase;
         INarrowphase _narrowphase;
         bool _forceUpdateAABBs; // forces an update of all aabbs for a single frame
 
-        public ReadOnlyCollection<Collider> GlobalColliders { get { return new ReadOnlyCollection<Collider>(_colliders); } }
+        public ReadOnlyCollection<CollisionBody> GlobalColliders { get { return new ReadOnlyCollection<CollisionBody>(_colliders); } }
 
         public CollisionWorld(INarrowphase narrowphase, IBroadphase broadphase)
         {
-            _colliders = new List<Collider>(200);
+            _colliders = new List<CollisionBody>(200);
             _broadphase = broadphase;
             _narrowphase = narrowphase;
             _forceUpdateAABBs = true;
@@ -36,7 +36,7 @@ namespace Delta.Collision
             _broadphase = new UniformGridBroadphase(width, height, size);
         }
 
-        public override void AddCollider(Collider collider)
+        public override void AddCollider(CollisionBody collider)
         {
             Debug.Assert(collider != null);
             if (!_colliders.Contains(collider))
@@ -51,13 +51,13 @@ namespace Delta.Collision
             }
         }
 
-        public override void RemoveCollider(Collider collider)
+        public override void RemoveCollider(CollisionBody collider)
         {
             Debug.Assert(collider != null);
             if (_colliders.Contains(collider))
             {
-                _colliders.FastRemove<Collider>(collider);
                 _broadphase.RemoveProxy(collider.BroadphaseProxy);
+                _colliders.FastRemove<CollisionBody>(collider);
                 collider.OnRemoved();
                 CollisionGlobals.TotalColliders--;
             }
@@ -90,7 +90,7 @@ namespace Delta.Collision
             CollisionGlobals.UpdatedAABBs = 0;
             for (int i = 0; i < _colliders.Count; i++)
             {
-                Collider collider = _colliders[i];
+                CollisionBody collider = _colliders[i];
 
                 // only update an aabb if the collider has moved
                 if (collider.IsAwake || _forceUpdateAABBs)
@@ -103,7 +103,7 @@ namespace Delta.Collision
             _forceUpdateAABBs = false;
         }
 
-        protected void UpdateAABB(Collider collider)
+        protected void UpdateAABB(CollisionBody collider)
         {
             AABB aabb;
             Matrix3 worldTransform = collider.WorldTransform;
@@ -116,7 +116,7 @@ namespace Delta.Collision
             G.PrimitiveBatch.Begin(ref projection, ref view);
             for (int i = 0; i < _colliders.Count; i++)
             {
-                Collider col = _colliders[i];
+                CollisionBody col = _colliders[i];
                 if (col.Shape == null)
                     continue;
 

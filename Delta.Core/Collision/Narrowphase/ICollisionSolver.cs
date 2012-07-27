@@ -7,6 +7,7 @@ namespace Delta.Collision
 {
     interface ICollisionSolver
     {
-        CollisionResult SolveCollision(Collider shapeA, Collider shapeB);
+        CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB);
+        bool IsSolveable(CollisionBody colA, CollisionBody colB);
     }
 }

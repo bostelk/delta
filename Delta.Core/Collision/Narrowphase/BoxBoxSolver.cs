@@ -16,7 +16,14 @@ namespace Delta.Collision
         {
         }
 
-        public CollisionResult SolveCollision(Collider colA, Collider colB)
+        public bool IsSolveable(CollisionBody colA, CollisionBody colB)
+        {
+            // we assume the calling function has checked for null shapes.
+            if (colA.Shape is Box && colB.Shape is Box) return true;
+            else return false;
+        }
+
+        public CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB)
         {
             Box boxA = colA.Shape as Box;
             Box boxB = colB.Shape as Box;

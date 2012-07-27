@@ -40,7 +40,7 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
-            _infoLbl.Text.Append(String.Format("ColliderPool: {0}\n", Pool<Collider>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("ColliderPool: {0}\n", Pool<CollisionBody>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("BroadphaseProxyPool: {0}\n", Pool<BroadphaseProxy>.PerformanceInfo));
             _infoLbl.Invalidate();
             _infoLbl.InternalUpdate(G._time);

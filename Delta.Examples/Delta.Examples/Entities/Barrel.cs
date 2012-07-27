@@ -21,8 +21,10 @@ namespace Delta.Examples.Entities
 
         protected override void Initialize()
         {
-            WrappedBody = Collider.CreateBody(new Box(16, 16));
+            WrappedBody = CollisionBody.CreateBody(new Box(16, 16));
             WrappedBody.OnCollisionEvent += OnCollision;
+            WrappedBody.BelongsToGroup(CollisionGroups.Group2);
+            WrappedBody.CollidesWithGroup(CollisionGroups.Group2);
             base.Initialize();
         }
 

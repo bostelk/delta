@@ -105,6 +105,7 @@
     <Compile Include="Collision\Broadphase\OverlappingPair.cs" />
     <Compile Include="Collision\Broadphase\OverlappingPairCache.cs" />
     <Compile Include="Collision\CollisionGlobals.cs" />
+    <Compile Include="Collision\CollisionGroups.cs" />
     <Compile Include="Collision\ICollideable.cs" />
     <Compile Include="Collision\Matrix3.cs" />
     <Compile Include="Collision\Narrowphase\BoxBoxSolver.cs" />
@@ -177,7 +178,7 @@
     <Compile Include="Collision\CollisionWorld.cs" />
     <Compile Include="Collision\Broadphase\AABB.cs" />
     <Compile Include="Collision\Shapes\Circle.cs" />
-    <Compile Include="Collision\Collider.cs" />
+    <Compile Include="Collision\CollisionBody.cs" />
     <Compile Include="Collision\Shapes\Box.cs" />
     <Compile Include="Collision\Shapes\Polygon.cs" />
     <Compile Include="Collision\AbstractCollisionWorld.cs" />

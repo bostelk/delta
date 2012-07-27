@@ -8,9 +8,25 @@ namespace Delta.Collision
 {
     class CircleBoxSolver : ICollisionSolver
     {
- 
-        public CollisionResult SolveCollision(Collider colA, Collider colB)
+         public bool IsSolveable(CollisionBody colA, CollisionBody colB)
         {
+            // we the assume the calling function has checked for null shapes.
+            if (colA.Shape is Circle && colB.Shape is Box) return true;
+            else if (colA.Shape is Box && colB.Shape is Circle) return true;
+            else return false;
+        }
+
+        public CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB)
+        {
+            // normalize parameters such that colA is the circle and colB is the box.
+            // there are only two possibilities, therefore we only need to swap if colB is the circle.
+            if (colB.Shape is Circle) {
+                CollisionBody tmp = colA;
+                colA = colB;
+                colB = tmp;
+                tmp = null;
+            }
+
             Circle circleA = (Circle)colA.Shape;
             Box boxB = (Box)colB.Shape;
             Matrix3 transformB = colB.WorldTransform;

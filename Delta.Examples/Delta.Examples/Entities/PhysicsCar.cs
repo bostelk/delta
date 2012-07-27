@@ -18,7 +18,7 @@ namespace Delta.Examples.Entities
         const float SPEED = 250;
         const float ROTATION_SPEED = 200;
 
-        public Collider Collider { get; private set; }
+        public CollisionBody Collider { get; private set; }
 
         public Vector2 Input { get; set; }
 

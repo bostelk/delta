@@ -9,8 +9,8 @@ namespace Delta.Collision
 
     public struct CollisionResult
     {
-        public Collider Us;
-        public Collider Them;
+        public CollisionBody Us;
+        public CollisionBody Them;
 
         /// <summary>
         /// The shapes interesct each other.
@@ -18,7 +18,7 @@ namespace Delta.Collision
         public bool IsColliding;
 
         /// <summary>
-        /// The minimum translation vector to seperate the two shapes.
+        /// The minimum translation vector to seperate the us from them.
         /// </summary>
         public Vector2 CollisionResponse;
 
