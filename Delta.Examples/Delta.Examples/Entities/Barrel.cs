@@ -32,6 +32,7 @@ namespace Delta.Examples.Entities
         {
             _sprite.InternalUpdate(time);
             _sprite.Position = Position - (_sprite.Size * new Vector2(0.5f, 0.5f));
+            Depth = Position.Y;
             base.LightUpdate(time);
         }
 
