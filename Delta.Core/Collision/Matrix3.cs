@@ -12,7 +12,7 @@ namespace Delta.Collision
     /// A 2x2 Transformation matrix; currently lacking a lot of code...
     /// </summary>
     [DebuggerDisplay("{ {{M11} {M12} {M13}} {{M21} {M22} {M23}} {{M31} {M32} {M33}} }")]
-    public struct Matrix2D : IEquatable<Matrix2D>
+    public struct Matrix3 : IEquatable<Matrix3>
     {
         public float M11;
         public float M12;
@@ -24,8 +24,8 @@ namespace Delta.Collision
         public float M32;
         public float M33;
 
-        public static Matrix2D Zero = new Matrix2D();
-        public static Matrix2D Identity = new Matrix2D() {
+        public static Matrix3 Zero = new Matrix3();
+        public static Matrix3 Identity = new Matrix3() {
             M11 = 1, M12 = 0, M13 = 0,
             M21 = 0, M22 = 1, M23 = 0,
             M31 = 0, M32 = 0, M33 = 1,
@@ -39,39 +39,39 @@ namespace Delta.Collision
             }
         }
 
-        public Matrix2D(ref Matrix2D m)
+        public Matrix3(ref Matrix3 m)
         {
             M11 = m.M11; M12 = m.M12; M13 = m.M13;
             M21 = m.M21; M22 = m.M22; M23 = m.M23;
             M31 = m.M31; M32 = m.M32; M33 = m.M33;
         }
 
-        public Matrix2D(float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33)
+        public Matrix3(float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33)
         {
             M11 = m11; M12 = m12; M13 = m13;
             M21 = m21; M22 = m22; M23 = m23;
             M31 = m31; M32 = m32; M33 = m33;
         }
 
-        public static Matrix2D CreateTranslation(Vector2 delta)
+        public static Matrix3 CreateTranslation(Vector2 delta)
         {
-            Matrix2D result = Matrix2D.Identity;
+            Matrix3 result = Matrix3.Identity;
             result.M31 = delta.X;
             result.M32 = delta.Y;
             return result;
         }
 
-        public static void CreateTranslation(ref Vector2 delta, out Matrix2D result)
+        public static void CreateTranslation(ref Vector2 delta, out Matrix3 result)
         {
-            result = Matrix2D.Identity;
+            result = Matrix3.Identity;
             result.M31 = delta.X;
             result.M32 = delta.Y;
         }
 
         // clock-wise rotation.
-        public static Matrix2D CreateRotation(float radians)
+        public static Matrix3 CreateRotation(float radians)
         {
-            Matrix2D result = Matrix2D.Identity;
+            Matrix3 result = Matrix3.Identity;
             float cos = (float)Math.Cos(radians);
             float sin = (float)Math.Sin(radians);
             result.M11 = cos;
@@ -81,9 +81,9 @@ namespace Delta.Collision
             return result;
         }
         
-        public static void CreateRotation(float radians, out Matrix2D result)
+        public static void CreateRotation(float radians, out Matrix3 result)
         {
-            result = Matrix2D.Identity;
+            result = Matrix3.Identity;
             float cos = (float)Math.Cos(radians);
             float sin = (float)Math.Sin(radians);
             result.M11 = cos; 
@@ -92,24 +92,24 @@ namespace Delta.Collision
             result.M22 = cos; 
         }
 
-        public static Matrix2D CreateScale(Vector2 scale) 
+        public static Matrix3 CreateScale(Vector2 scale) 
         {
-            Matrix2D result = Matrix2D.Identity;
+            Matrix3 result = Matrix3.Identity;
             result.M11 = scale.X;
             result.M22 = scale.Y;
             return result;
         }
         
-        public static void CreateScale(ref Vector2 scale, out Matrix2D result) 
+        public static void CreateScale(ref Vector2 scale, out Matrix3 result) 
         {
-            result = Matrix2D.Identity;
+            result = Matrix3.Identity;
             result.M11 = scale.X;
             result.M22 = scale.Y;
         }
 
-        public static void Multiply(ref Matrix2D a, ref Matrix2D b, out Matrix2D c)
+        public static void Multiply(ref Matrix3 a, ref Matrix3 b, out Matrix3 c)
         {
-            c = Matrix2D.Identity;
+            c = Matrix3.Identity;
             c.M11 = a.M11 * b.M11 + a.M21 * b.M12 + a.M31 * b.M13; 
             c.M12 = a.M12 * b.M11 + a.M22 * b.M12 + a.M32 * b.M13; 
             c.M13 = a.M13 * b.M11 + a.M23 * b.M12 + a.M33 * b.M13; 
@@ -123,9 +123,9 @@ namespace Delta.Collision
             c.M33 = a.M13 * b.M31 + a.M23 * b.M32 + a.M33 * b.M33;
         }
 
-        public static Matrix2D operator *(Matrix2D a, Matrix2D b) 
+        public static Matrix3 operator *(Matrix3 a, Matrix3 b) 
         {
-            Matrix2D c = Matrix2D.Identity;
+            Matrix3 c = Matrix3.Identity;
             c.M11 = a.M11 * b.M11 + a.M12 * b.M21 + a.M13 * b.M31; 
             c.M12 = a.M11 * b.M12 + a.M12 * b.M22 + a.M13 * b.M32;
             c.M13 = a.M11 * b.M13 + a.M12 * b.M32 + a.M13 * b.M33;
@@ -153,7 +153,7 @@ namespace Delta.Collision
             v.Y = M21 * x + M22 * y + M32;
         }
 
-        public bool Equals(Matrix2D other)
+        public bool Equals(Matrix3 other)
         {
             return M11 == other.M11 && M12 == other.M12 && M13 == other.M13 &&
                    M21 == other.M21 && M22 == other.M22 && M23 == other.M23 &&
@@ -163,8 +163,8 @@ namespace Delta.Collision
         public override bool Equals(object obj)
         {
             bool result = false;
-            if (obj is Matrix2D)
-                result = Equals((Matrix2D)obj);
+            if (obj is Matrix3)
+                result = Equals((Matrix3)obj);
             return result;
         }
 

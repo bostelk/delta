@@ -57,14 +57,14 @@ namespace Delta.Collision
             CalculateNormals();
         }
 
-        public override void CalculateAABB(ref Matrix2D transform, out AABB aabb)
+        public override void CalculateAABB(ref Matrix3 transform, out AABB aabb)
         {
             Vector2 radius = new Vector2(Radius, Radius);
             aabb.Min = transform.Origin - radius;
             aabb.Max = transform.Origin + radius;
         }
         
-        public void CalculateExtents(ref Matrix2D transform, out Vector2 extents)
+        public void CalculateExtents(ref Matrix3 transform, out Vector2 extents)
         {
             extents = new Vector2(Radius, 0);
             transform.TransformVector(ref extents);

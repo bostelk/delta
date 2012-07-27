@@ -20,8 +20,8 @@ namespace Delta.Collision
         {
             Box boxA = colA.Shape as Box;
             Box boxB = colB.Shape as Box;
-            Matrix2D transformA = colA.WorldTransform;
-            Matrix2D transformB = colB.WorldTransform;
+            Matrix3 transformA = colA.WorldTransform;
+            Matrix3 transformB = colB.WorldTransform;
 
             float projectedDistance = 0;
             float minPenetration = float.MaxValue;

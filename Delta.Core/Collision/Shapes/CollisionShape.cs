@@ -42,7 +42,7 @@ namespace Delta.Collision
         /// </summary>
         public Vector2[] Normals { get; protected set; }
 
-        public abstract void CalculateAABB(ref Matrix2D transform, out AABB aabb);
+        public abstract void CalculateAABB(ref Matrix3 transform, out AABB aabb);
 
         protected void OnShapeChanged() { }
 

@@ -28,19 +28,19 @@ namespace Delta.Collision
             }
         }
 
-        Matrix2D _worldTransform;
+        Matrix3 _worldTransform;
         /// <summary>
         /// Transform the shape into world space.
         /// </summary>
-        public Matrix2D WorldTransform
+        public Matrix3 WorldTransform
         {
             get
             {
                 if (IsAwake) // re-calculate on awaken, then cache.
                 {
-                    Matrix2D translation = Matrix2D.CreateTranslation(_position);
-                    Matrix2D rotation = Matrix2D.CreateRotation(_rotation);
-                    Matrix2D.Multiply(ref translation, ref rotation, out _worldTransform);
+                    Matrix3 translation = Matrix3.CreateTranslation(_position);
+                    Matrix3 rotation = Matrix3.CreateRotation(_rotation);
+                    Matrix3.Multiply(ref translation, ref rotation, out _worldTransform);
                 }
                 return _worldTransform;
             }
@@ -169,7 +169,7 @@ namespace Delta.Collision
 
         public Collider() 
         {
-            WorldTransform = Matrix2D.Identity;
+            WorldTransform = Matrix3.Identity;
         }
 
         public void AddToSimulation()
@@ -208,7 +208,7 @@ namespace Delta.Collision
         public void Recycle()
         {
             BroadphaseProxy.Recycle();
-            WorldTransform = Matrix2D.Identity;
+            WorldTransform = Matrix3.Identity;
             RemoveNextUpdate = false;
             Owner = null;
             Shape = null;

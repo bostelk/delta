@@ -106,6 +106,7 @@
     <Compile Include="Collision\Broadphase\OverlappingPairCache.cs" />
     <Compile Include="Collision\CollisionGlobals.cs" />
     <Compile Include="Collision\ICollideable.cs" />
+    <Compile Include="Collision\Matrix3.cs" />
     <Compile Include="Collision\Narrowphase\BoxBoxSolver.cs" />
     <Compile Include="Collision\Narrowphase\CircleBoxSolver.cs" />
     <Compile Include="Collision\Narrowphase\CircleCirlceSovler.cs" />
@@ -115,7 +116,6 @@
     <Compile Include="Collision\Narrowphase\PolyPolySolver.cs" />
     <Compile Include="Collision\Shapes\CollisionShape.cs" />
     <Compile Include="Collision\Shapes\ConvexShape.cs" />
-    <Compile Include="Collision\Matrix2D.cs" />
     <Compile Include="DeltaGameTime.cs" />
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
@@ -230,6 +230,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <None Include="Resources\DeltaEffect.xnb" />
     <None Include="Resources\SimpleEffect.xnb" />
     <None Include="Resources\TinyFont.xnb" />

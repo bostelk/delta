@@ -27,7 +27,7 @@ namespace Delta.Collision
             CalculateCentroid();
         }
 
-        public override void CalculateAABB(ref Matrix2D transform, out AABB aabb)
+        public override void CalculateAABB(ref Matrix3 transform, out AABB aabb)
         {
             float farthestX, farthestY;
             farthestX = farthestY = 0;

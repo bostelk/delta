@@ -12,7 +12,7 @@ namespace Delta.Collision
         bool RemoveNextUpdate { get; set; }
         CollisionShape Shape { get; set; }
         BroadphaseProxy BroadphaseProxy { get; set; }
-        Matrix2D WorldTransform { get; }
+        Matrix3 WorldTransform { get; }
         Vector2 Position { get; set; }
         float Rotation { get; set; }
 

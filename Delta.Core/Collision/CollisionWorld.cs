@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
+using Delta.Extensions;
+
 namespace Delta.Collision
 {
     public class CollisionWorld : AbstractCollisionWorld
@@ -104,7 +106,7 @@ namespace Delta.Collision
         protected void UpdateAABB(Collider collider)
         {
             AABB aabb;
-            Matrix2D worldTransform = collider.WorldTransform;
+            Matrix3 worldTransform = collider.WorldTransform;
             collider.Shape.CalculateAABB(ref worldTransform, out aabb);
             _broadphase.SetProxyAABB(collider.BroadphaseProxy, ref aabb);
         }
@@ -118,8 +120,8 @@ namespace Delta.Collision
                 if (col.Shape == null)
                     continue;
 
-                Matrix2D transform = col.WorldTransform;
-                if ((CollisionGlobals.DebugViewOptions & DebugViewFlags.Shape) != 0)
+                Matrix3 transform = col.WorldTransform;
+                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.Shape))
                 {
                     Vector2[] transformedVerts = col.Shape.VerticesCopy;
                     for (int j = 0; j < transformedVerts.Length; j++)
@@ -127,7 +129,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawPolygon(transformedVerts, transformedVerts.Length, CollisionGlobals.ShapeColor);
                 }
 
-                if ((CollisionGlobals.DebugViewOptions & DebugViewFlags.Extents) != 0)
+                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.Extents))
                 {
                     if (col.Shape is Box)
                     {
@@ -146,7 +148,7 @@ namespace Delta.Collision
                     }
                 }
 
-                if ((CollisionGlobals.DebugViewOptions & DebugViewFlags.AABB) != 0)
+                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.AABB))
                 {
                     AABB aabb;
                     col.Shape.CalculateAABB(ref transform, out aabb);
@@ -156,7 +158,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Min.Y), new Vector2(aabb.Min.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                 }
             }
-            if ((CollisionGlobals.DebugViewOptions & DebugViewFlags.CollisionResponse) != 0)
+            if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.CollisionResponse))
             {
                 while (CollisionGlobals.Results.Count > 0)
                 {

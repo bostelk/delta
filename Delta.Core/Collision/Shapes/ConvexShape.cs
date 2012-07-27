@@ -70,7 +70,7 @@ namespace Delta.Collision
             }
         }
 
-        public void CalculateOrientation(ref Matrix2D transform, out Vector2 orientation)
+        public void CalculateOrientation(ref Matrix3 transform, out Vector2 orientation)
         {
             orientation = Vector2.UnitX;
             transform.TransformVector(ref orientation);

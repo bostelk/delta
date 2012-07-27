@@ -70,7 +70,7 @@ namespace Delta.Collision
             };
         }
 
-        public override void CalculateAABB(ref Matrix2D transform, out AABB aabb)
+        public override void CalculateAABB(ref Matrix3 transform, out AABB aabb)
         {
             Vector2 halfWidth, halfHeight;
             CalculateExtents(ref transform, out halfWidth, out halfHeight);
@@ -82,7 +82,7 @@ namespace Delta.Collision
             aabb.Max = Vector2.Max(halfWidth, halfWidthOther) + Vector2.Max(halfHeight, halfHeightOther) - transform.Origin;
         }
 
-        public void ProjectOnto(ref Matrix2D transform, ref Vector2 axisNormal, out Vector2 projection)
+        public void ProjectOnto(ref Matrix3 transform, ref Vector2 axisNormal, out Vector2 projection)
         {
             Vector2 halfWidth, halfHeight;
             CalculateExtents(ref transform, out halfWidth, out halfHeight);
@@ -91,7 +91,7 @@ namespace Delta.Collision
             projection.Y = Vector2.Dot(halfHeight, axisNormal);
         }
 
-        public void CalculateExtents(ref Matrix2D transform, out Vector2 halfWidth, out Vector2 halfHeight)
+        public void CalculateExtents(ref Matrix3 transform, out Vector2 halfWidth, out Vector2 halfHeight)
         {
             halfWidth = new Vector2(HalfWidth, 0);
             halfHeight = new Vector2(0, HalfHeight);
@@ -99,7 +99,7 @@ namespace Delta.Collision
             transform.TransformVector(ref halfHeight);
         }
 
-        public void CalculateOtherExtents(ref Matrix2D transform, out Vector2 halfWidth, out Vector2 halfHeight)
+        public void CalculateOtherExtents(ref Matrix3 transform, out Vector2 halfWidth, out Vector2 halfHeight)
         {
             halfWidth = new Vector2(-HalfWidth, 0);
             halfHeight = new Vector2(0, -HalfHeight);
