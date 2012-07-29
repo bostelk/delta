@@ -1,6 +1,6 @@
 using System;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Delta.UI.Controls;
 
 namespace Delta.UI
@@ -28,36 +28,36 @@ namespace Delta.UI
         internal bool ProcessMouseMove()
         {
             bool handled = false;
-            //foreach (Control control in this)
-            //{
-            //    handled = control.ProcessMouseMove();
-            //    if (handled)
-            //        break;
-            //}
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseMove();
+                if (handled)
+                    break;
+            }
             return handled;
         }
 
         internal bool ProcessMouseDown()
         {
             bool handled = false;
-            //foreach (Control control in this)
-            //{
-            //    handled = control.ProcessMouseDown();
-            //    if (handled)
-            //        break;
-            //}
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseDown();
+                if (handled)
+                    break;
+            }
             return handled;
         }
 
         internal bool ProcessMouseUp()
         {
             bool handled = false;
-            //foreach (Control control in this)
-            //{
-            //    handled = control.ProcessMouseUp();
-            //    if (handled)
-            //        break;
-            //}
+            for (int x = 0; x < Children.Count; x++)
+            {
+                handled = Children[x].ProcessMouseUp();
+                if (handled)
+                    break;
+            }
             return handled;
         }
     }

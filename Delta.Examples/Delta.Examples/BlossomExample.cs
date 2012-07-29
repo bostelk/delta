@@ -69,7 +69,7 @@ namespace Delta.Examples
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
             G.Collision.DrawDebug(ref view, ref projection);
-            PoolManager.DebugDraw();
+            //PoolManager.DebugDraw();
             //G.World.DebugDraw();
 #endif
         }

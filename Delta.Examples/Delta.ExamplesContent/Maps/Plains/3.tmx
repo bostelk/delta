@@ -88,7 +88,7 @@
  </layer>
  <objectgroup name="Delta.BelowGround" width="40" height="40"/>
  <objectgroup name="Delta.Ground" width="40" height="40">
-  <object name="Lily" type="Delta.Examples.Entities.Lily" x="272" y="80" width="16" height="16"/>
+  <object name="Lily" type="Delta.Examples.Entities.Lily" x="303" y="373" width="16" height="16"/>
   <object type="Delta.Examples.Entities.Barrel" x="272" y="240" width="16" height="16"/>
  </objectgroup>
  <layer name="torches" width="40" height="40">

@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Delta.UI.Controls;
+using Delta.UI.Screens.Transitions;
 
 namespace Delta.UI.Screens
 {
@@ -11,92 +13,17 @@ namespace Delta.UI.Screens
         TransitionOff,
     }
 
-
     public abstract class Screen : EntityParent<Control>
     {
-        bool _isExiting = false;
+        Transition _currentTransition = null;
 
-        public PlayerIndex? ControllingPlayer { get; set; }
         public ScreenState State { get; internal set; }
-        public float TransitionOnTime { get; set; }
-        public float TransitionOffTime { get; set; }
-        public float CurrentTransitionProgress { get; set; }
+        public Transition OnTransition { get; set; }
+        public Transition OffTransition { get; set; }
 
         public Screen()
             : base()
         {
-        }
-
-        protected override void LightUpdate(DeltaGameTime time)
-        {
-            base.LightUpdate(time);
-            if (_isExiting)
-            {
-
-                //        // If the screen is going away to die, it should transition off.
-                //        screenState = ScreenState.TransitionOff;
-
-                //        if (!UpdateTransition(gameTime, transitionOffTime, 1))
-                //        {
-                //            // When the transition finishes, remove the screen.
-                //            ScreenManager.RemoveScreen(this);
-                //        }
-            }
-            if (State == ScreenState.TransitionOn || State == ScreenState.TransitionOff)
-            {
-                float transitionTime = 0;
-                if (State == ScreenState.TransitionOn)
-                    transitionTime = TransitionOnTime;
-                else if (State == ScreenState.TransitionOff)
-                    transitionTime = TransitionOffTime;
-                if (CurrentTransitionProgress <= 0)
-                    OnTransitionStarted();
-                CurrentTransitionProgress = (time.ElapsedSeconds / transitionTime * 100).Clamp(0, 100);
-                if (CurrentTransitionProgress >= 100)
-                {
-                    OnTransitionFinished();
-                    State = ScreenState.None;
-                }
-            }
-            //    if (isExiting)
-            //    {
-            //        // If the screen is going away to die, it should transition off.
-            //        screenState = ScreenState.TransitionOff;
-
-            //        if (!UpdateTransition(gameTime, transitionOffTime, 1))
-            //        {
-            //            // When the transition finishes, remove the screen.
-            //            ScreenManager.RemoveScreen(this);
-            //        }
-            //    }
-            //    else if (coveredByOtherScreen)
-            //    {
-            //        // If the screen is covered by another, it should transition off.
-            //        if (UpdateTransition(gameTime, transitionOffTime, 1))
-            //        {
-            //            // Still busy transitioning.
-            //            screenState = ScreenState.TransitionOff;
-            //        }
-            //        else
-            //        {
-            //            // Transition finished!
-            //            screenState = ScreenState.Hidden;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        // Otherwise the screen should transition on and become active.
-            //        if (UpdateTransition(gameTime, transitionOnTime, -1))
-            //        {
-            //            // Still busy transitioning.
-            //            screenState = ScreenState.TransitionOn;
-            //        }
-            //        else
-            //        {
-            //            // Transition finished!
-            //            screenState = ScreenState.Active;
-            //        }
-            //    }
         }
 
 #if WINDOWS
@@ -137,66 +64,75 @@ namespace Delta.UI.Screens
         }
 #endif
 
-        //public virtual void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
-        //{
-        //    this.otherScreenHasFocus = otherScreenHasFocus;
+        protected override void LightUpdate(DeltaGameTime time)
+        {
+            base.LightUpdate(time);
+            if (_currentTransition == null)
+            {
+                if (State == ScreenState.TransitionOn)
+                    _currentTransition = OnTransition;
+                else if (State == ScreenState.TransitionOff)
+                    _currentTransition = OffTransition;
+                else
+                    return;
+            }
+            if (_currentTransition == null)
+            {
+                State = ScreenState.None;
+                return;
+            }
+            if (_currentTransition.Progress <= 0)
+                OnTransitionStarted();
+            _currentTransition.Progress = (time.ElapsedSeconds / _currentTransition.Time * 100).Clamp(0, 100);
+            if (_currentTransition.Progress == 100)
+            {
+                OnTransitionFinished();
+                State = ScreenState.None;
+                _currentTransition = null;
+                return;
+            }
+            _currentTransition.InternalUpdate(time);
+        }
 
-        //    if (isExiting)
-        //    {
-        //        // If the screen is going away to die, it should transition off.
-        //        screenState = ScreenState.TransitionOff;
-
-        //        if (!UpdateTransition(gameTime, transitionOffTime, 1))
-        //        {
-        //            // When the transition finishes, remove the screen.
-        //            ScreenManager.RemoveScreen(this);
-        //        }
-        //    }
-        //    else if (coveredByOtherScreen)
-        //    {
-        //        // If the screen is covered by another, it should transition off.
-        //        if (UpdateTransition(gameTime, transitionOffTime, 1))
-        //        {
-        //            // Still busy transitioning.
-        //            screenState = ScreenState.TransitionOff;
-        //        }
-        //        else
-        //        {
-        //            // Transition finished!
-        //            screenState = ScreenState.Hidden;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // Otherwise the screen should transition on and become active.
-        //        if (UpdateTransition(gameTime, transitionOnTime, -1))
-        //        {
-        //            // Still busy transitioning.
-        //            screenState = ScreenState.TransitionOn;
-        //        }
-        //        else
-        //        {
-        //            // Transition finished!
-        //            screenState = ScreenState.Active;
-        //        }
-        //    }
-        //}
+        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            base.Draw(time, spriteBatch);
+            if (_currentTransition != null)
+                _currentTransition.InternalDraw(time, spriteBatch);
+        }
 
         public void Exit()
         {
-            if (TransitionOffTime <= 0)
-            {
-                if (ParentCollection != null)
-                    ParentCollection.UnsafeRemove(this);
-                else
-                    G.UI.Remove(this);
-            }
+            if (OffTransition == null || OffTransition.Time <= 0)
+                ExitImmediately();
             else
-                _isExiting = true;
+                State = ScreenState.TransitionOff;
+        }
+
+        public void ExitImmediately()
+        {
+            if (ParentCollection != null)
+                ParentCollection.UnsafeRemove(this);
+            else
+                G.UI.Remove(this);
+        }
+
+        protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            base.OnBeginDraw(time, spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, SpriteBatchExtensions._cullRasterizerState, null, _currentTransition == null ? Matrix.Identity : _currentTransition.View);
+        }
+
+        protected override void OnEndDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            spriteBatch.End();
+            base.OnEndDraw(time, spriteBatch);
         }
 
         protected virtual void OnTransitionStarted()
         {
+            To DO //MAKE ON/OFF TRANSITIONS ENCAPSULATE ONE CLASS
+                // use basiceffect? We want to alpha things/out
         }
 
         protected virtual void OnTransitionFinished()

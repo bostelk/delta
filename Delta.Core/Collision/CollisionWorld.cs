@@ -167,10 +167,9 @@ namespace Delta.Collision
                 }
             }
             G.PrimitiveBatch.End();
-
-            G.SpriteBatch.Begin();
-            G.SpriteBatch.DrawString(G.Font, DebugInfo, new Vector2(0, 50), Color.White);
-            G.SpriteBatch.End();
+            //G.SpriteBatch.Begin();
+            //G.SpriteBatch.DrawString(G.Font, DebugInfo, new Vector2(0, 50), Color.White);
+            //G.SpriteBatch.End();
         }
 
         public string DebugInfo
