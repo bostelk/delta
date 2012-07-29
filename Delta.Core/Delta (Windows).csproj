@@ -197,7 +197,6 @@
     <Compile Include="UI\Controls\Label.cs" />
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
-    <Compile Include="UI\Controls\TweakableLabel.cs" />
     <Compile Include="UI\Controls\Window.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
