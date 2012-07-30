@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Delta.UI.Controls;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta.UI
 {
@@ -10,6 +11,7 @@ namespace Delta.UI
         public HUD()
             : base()
         {
+            Name = "hud";
             Add(new PerformanceMetrics());
         }
 
@@ -25,6 +27,7 @@ namespace Delta.UI
             Add(tweakingLabel);
         }
 
+#if WINDOWS
         internal bool ProcessMouseMove()
         {
             bool handled = false;
@@ -59,6 +62,19 @@ namespace Delta.UI
                     break;
             }
             return handled;
+        }
+#endif
+
+        protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            base.OnBeginDraw(time, spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, SpriteBatchExtensions._cullRasterizerState, null);
+        }
+
+        protected override void OnEndDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            base.OnEndDraw(time, spriteBatch);
+            spriteBatch.End();
         }
     }
 }

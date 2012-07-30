@@ -52,18 +52,6 @@ namespace Delta.UI
             HUD.InternalUpdate(time);
         }
 
-        protected override void OnBeginDraw(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            base.OnBeginDraw(time, spriteBatch);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, SpriteBatchExtensions._cullRasterizerState, null);
-        }
-
-        protected override void OnEndDraw(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            base.OnEndDraw(time, spriteBatch);
-            spriteBatch.End();
-        }
-
         protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             HUD.InternalDraw(time, spriteBatch);
@@ -80,56 +68,54 @@ namespace Delta.UI
             //    _dragStartPosition = newDragPosition;
             //    DraggedControl.Invalidate();
             //}
-            //if (!handled && ActiveScreen != null)
-            //    handled = ActiveScreen.ProcessMouseMove();
             bool handled = false;
             if (FocusedControl != null)
                 handled = FocusedControl.ProcessMouseMove();
             if (!handled)
+                handled = HUD.ProcessMouseMove();
+            if (!handled)
                 for (int x = Children.Count - 1; x >= 0; x--)
                     handled = Children[x].ProcessMouseMove();
-            if (!handled)
-                handled = HUD.ProcessMouseMove();
         }
 
         internal void MouseDown()
         {
             bool handled = false;
+            if (FocusedControl != null)
+                handled = FocusedControl.ProcessMouseDown();
+            handled = HUD.ProcessMouseDown();
             if (!handled)
                 for (int x = Children.Count - 1; x >= 0; x--)
-                    handled = Children[x].ProcessMouseDown();
-            if (!handled)
-                handled = HUD.ProcessMouseDown();
+                    handled = Children[x].ProcessMouseDown();;
         }
 
         internal void MouseUp()
         {
             bool handled = false;
-            if (PressedControl != null)
+            handled = HUD.ProcessMouseUp();
+            if (!handled && PressedControl != null)
                 handled = PressedControl.ProcessMouseUp();
             if (!handled)
                 for (int x = Children.Count - 1; x >= 0; x--)
                     handled = Children[x].ProcessMouseUp();
-            if (!handled)
-                handled = HUD.ProcessMouseUp();
         }
 
         internal void KeyDown(Keys key)
         {
-            //if (FocusedControl != null)
-            //    FocusedControl.ProcessKeyDown(key);
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyDown(key);
         }
 
         internal void KeyPress(Keys key)
         {
-            //if (FocusedControl != null)
-            //    FocusedControl.ProcessKeyPress(key);
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyPress(key);
         }
 
         internal void KeyUp(Keys key)
         {
-            //if (FocusedControl != null)
-            //    FocusedControl.ProcessKeyUp(key);
+            if (FocusedControl != null)
+                FocusedControl.ProcessKeyUp(key);
         }
 #endif
 
