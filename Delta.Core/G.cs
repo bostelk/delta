@@ -15,10 +15,16 @@ using Delta.Collision;
 
 #if WINDOWS
 using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
+using Delta.Forms;
 #endif
 
 namespace Delta
 {
+    /// <summary>
+    /// Static game class wrapper for Delta games.
+    /// </summary>
     public class G : Game
     {
         internal const bool LETTERBOX = false;
@@ -54,6 +60,7 @@ namespace Delta
 
 #if WINDOWS
         public static Process Process { get; set; }
+        public static EditorForm EditorForm { get; set; }
 #endif
 
         public G(int screenWidth, int screenHeight)
@@ -64,6 +71,9 @@ namespace Delta
         public G(int screenWidth, int screenHeight, bool vSync)
             : base()
         {
+#if WINDOWS
+            EditorForm = new EditorForm();
+#endif
             _instance = this;
             Content = base.Content;
             Content.RootDirectory = "Content";
@@ -131,6 +141,10 @@ namespace Delta
                 UI.InternalUpdate(_time);
             }
             Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
+#if WINDOWS
+            if (G.Input.Keyboard.IsPressed(Microsoft.Xna.Framework.Input.Keys.F1))
+                EditorForm.Show();
+#endif
         }
 
         protected override void Draw(GameTime gameTime)
@@ -145,7 +159,7 @@ namespace Delta
             _graphicsDeviceManager.ToggleFullScreen();
         }
 
-        internal void OnDeviceReset(object sender, EventArgs e) 
+        void OnDeviceReset(object sender, EventArgs e) 
         {
             var pp = GraphicsDevice.PresentationParameters;
             int width = pp.BackBufferWidth;
@@ -169,7 +183,7 @@ namespace Delta
             World.Camera.Offset = World.Camera.Offset * increaseFactor;
         }
 
-        internal void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
             var pp = e.GraphicsDeviceInformation.PresentationParameters;
             if (pp.IsFullScreen)

@@ -79,6 +79,8 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
@@ -118,6 +120,12 @@
     <Compile Include="Collision\Shapes\CollisionShape.cs" />
     <Compile Include="Collision\Shapes\ConvexShape.cs" />
     <Compile Include="DeltaGameTime.cs" />
+    <Compile Include="Forms\EditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditorForm.Designer.cs">
+      <DependentUpon>EditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Entity.cs" />
@@ -228,6 +236,9 @@
     <EmbeddedResource Include="EmbeddedContent.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EmbeddedContent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditorForm.resx">
+      <DependentUpon>EditorForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

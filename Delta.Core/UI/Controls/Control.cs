@@ -248,6 +248,7 @@ namespace Delta.UI.Controls
         public Control()
             : base()
         {
+            IsScissored = true;
         }
 
         public void Focus()
