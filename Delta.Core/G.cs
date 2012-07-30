@@ -142,8 +142,11 @@ namespace Delta
             }
             Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
 #if WINDOWS
-            if (G.Input.Keyboard.IsPressed(Microsoft.Xna.Framework.Input.Keys.F1))
+            if (G.Input.Keyboard.IsPressed(Microsoft.Xna.Framework.Input.Keys.F12))
+            {
                 EditorForm.Show();
+                EditorForm.Focus();
+            }
 #endif
         }
 
