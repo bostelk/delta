@@ -240,11 +240,11 @@ namespace Delta
             }
         }
 
-        TimedRange _fadeRange;
+        TimedRange _fadeRange = TimedRange.Empty;
         /// <summary>
-        /// Gets or sets the fade range of the <see cref="TransformableEntity"/>.
+        /// Gets or sets the fade timed range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer]
+        [ContentSerializer, Description("The fade timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FadeRange
         {
             get { return _fadeRange; }
@@ -282,11 +282,11 @@ namespace Delta
             }
         }
 
-        TimedRange _flickerRange;
+        TimedRange _flickerRange = TimedRange.Empty;
         /// <summary>
         /// Gets or sets the flicker range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer]
+        [ContentSerializer, Description("The flicker timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FlickerRange
         {
             get { return _flickerRange; }
@@ -303,11 +303,11 @@ namespace Delta
             }
         }
 
-        TimedRange _blinkRange;
+        TimedRange _blinkRange = TimedRange.Empty;
         /// <summary>
         /// Gets or sets the blink range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer]
+        [ContentSerializer, Description("The blink timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange BlinkRange
         {
             get { return _blinkRange; }

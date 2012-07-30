@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.Xna.Framework.Content;
 
-namespace Delta.Structures
+namespace Delta
 {
     /// <summary>
     /// Defines a lower and upper bound.
@@ -22,7 +22,6 @@ namespace Delta.Structures
         //static Regex _steppedRangeRegex = new Regex(@"range\(\s*(?<value1>(\d*\.?\d+))\s*,\s*(?<value2>(\d*\.?\d+))\s*,\s*(?<step>(\d*\.?\d+))\s*,\s*(?<duration>(\d*\.?\d+)\s*)\)");
 
         public float Lower;
-
         public float Upper;
 
         public static Range Empty = new Range();

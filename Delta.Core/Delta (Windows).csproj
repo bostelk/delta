@@ -120,6 +120,10 @@
     <Compile Include="Collision\Shapes\CollisionShape.cs" />
     <Compile Include="Collision\Shapes\ConvexShape.cs" />
     <Compile Include="DeltaGameTime.cs" />
+    <Compile Include="Design\MathTypeConverter.cs" />
+    <Compile Include="Design\FieldPropertyDesciptor.cs" />
+    <Compile Include="Design\MemberPropertyDescriptor.cs" />
+    <Compile Include="Design\TimedRangeConverter.cs" />
     <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,7 +153,7 @@
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="IEntityCollection.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="Structures\TimedRange.cs" />
+    <Compile Include="TimedRange.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
@@ -193,7 +197,7 @@
     <Compile Include="Collision\Narrowphase\SeperatingAxisNarrowphase.cs" />
     <Compile Include="IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
-    <Compile Include="Structures\Range.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="ICustomizable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
