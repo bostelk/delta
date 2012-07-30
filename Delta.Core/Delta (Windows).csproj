@@ -187,7 +187,7 @@
     <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Structures\Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
-    <Compile Include="IImportable.cs" />
+    <Compile Include="ICustomizable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="Tweakable.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="UI\Controls\Label.cs" />
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
+    <Compile Include="UI\Controls\TweakerLabel.cs" />
     <Compile Include="UI\Controls\Window.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />

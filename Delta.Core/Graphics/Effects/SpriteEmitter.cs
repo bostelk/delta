@@ -79,7 +79,7 @@ namespace Delta.Graphics
             TimeScaleRange = new Range(1);
         }
 
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -102,7 +102,7 @@ namespace Delta.Graphics
                     SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.StartRandom : SpriteOptions;
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 
         public void Emit()

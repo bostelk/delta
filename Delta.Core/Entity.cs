@@ -42,7 +42,7 @@ namespace Delta
     /// <summary>
     /// Base class for all game entites.
     /// </summary>
-    public abstract class Entity : IRecyclable, IImportable, IEntity, IDisposable
+    public abstract class Entity : IRecyclable, ICustomizable, IEntity, IDisposable
     {
         /// <summary>
         /// Retrieves an <see cref="IEntity"/> by it's name.
@@ -220,13 +220,30 @@ namespace Delta
         }
 
 #if WINDOWS
-        /// <summary>
-        /// Sets a field's value by it's name.
-        /// </summary>
-        /// <param name="name">Value name.</param>
-        /// <param name="value">Value.</param>
-        /// <returns>A value indicating whether the field exists and that it's value was sucessfully set.</returns>
-        protected internal virtual bool SetField(string name, string value)
+        protected internal virtual string GetValue(string name)
+        {
+            switch (name)
+            {
+                case "visible":
+                case "isvisible":
+                    return IsVisible.ToString().ToLower();
+                case "enabled":
+                case "isenabled":
+                    return IsEnabled.ToString().ToLower();
+                case "depth":
+                case "layer":
+                case "order":
+                case "draworder":
+                case "updateorder":
+                    return Depth.ToString(CultureInfo.InvariantCulture);
+            }
+            return string.Empty;
+        }
+        string ICustomizable.GetValue(string name)
+        {
+            return GetValue(name);
+        }
+        protected internal virtual bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -248,9 +265,9 @@ namespace Delta
              }
             return false;
         }
-        bool IImportable.SetField(string name, string value)
+        bool ICustomizable.SetValue(string name, string value)
         {
-            return SetField(name, value);
+            return SetValue(name, value);
         }
 #endif
 

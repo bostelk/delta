@@ -43,7 +43,7 @@ namespace Delta.Tiled
                 entity.Name = node.Name;
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
-                    if (!entity.SetField(childNode.Name.ToLower(), childNode.InnerText))
+                    if (!entity.SetValue(childNode.Name.ToLower(), childNode.InnerText))
                         throw new Exception(String.Format("Could not import XML property '{0}', no such property exists for '{1}'.", childNode.Name.ToLower(), entity.GetType().Name));
                 }
                 ObjectStyles.Add(node.Name, entity);

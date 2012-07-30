@@ -99,7 +99,7 @@ namespace Delta.Graphics
         }
 
 #if WINDOWS
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -172,7 +172,7 @@ namespace Delta.Graphics
                     _animationFrameOffset = int.Parse(value, CultureInfo.InvariantCulture);
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 #endif
 

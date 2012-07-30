@@ -367,13 +367,7 @@ namespace Delta
         }
 
 #if WINDOWS
-        /// <summary>
-        /// Sets a field's value by it's name.
-        /// </summary>
-        /// <param name="name">Value name.</param>
-        /// <param name="value">Value.</param>
-        /// <returns>A value indicating whether the field exists and that it's value was sucessfully set.</returns>
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -414,7 +408,7 @@ namespace Delta
                     _blinkRange = TimedRange.Parse(value);
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 #endif
 

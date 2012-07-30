@@ -85,7 +85,7 @@ namespace Delta.Graphics
             Colors = new List<Color>();
         }
 
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -97,7 +97,7 @@ namespace Delta.Graphics
                     }
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 
         public void Emit()

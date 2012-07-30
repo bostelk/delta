@@ -85,7 +85,7 @@ namespace Delta.Graphics
             _blendString = "AlphaBlend";
         }
 
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -156,7 +156,7 @@ namespace Delta.Graphics
                     _blendString = value;
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 
         public override void Recycle()

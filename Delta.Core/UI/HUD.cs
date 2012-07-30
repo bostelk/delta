@@ -28,7 +28,7 @@ namespace Delta.UI
         internal bool ProcessMouseMove()
         {
             bool handled = false;
-            for (int x = 0; x < Children.Count; x++)
+            for (int x = Children.Count - 1; x >= 0; x--)
             {
                 handled = Children[x].ProcessMouseMove();
                 if (handled)
@@ -40,7 +40,7 @@ namespace Delta.UI
         internal bool ProcessMouseDown()
         {
             bool handled = false;
-            for (int x = 0; x < Children.Count; x++)
+            for (int x = Children.Count - 1; x >= 0; x--)
             {
                 handled = Children[x].ProcessMouseDown();
                 if (handled)
@@ -52,7 +52,7 @@ namespace Delta.UI
         internal bool ProcessMouseUp()
         {
             bool handled = false;
-            for (int x = 0; x < Children.Count; x++)
+            for (int x = Children.Count - 1; x >= 0; x--)
             {
                 handled = Children[x].ProcessMouseUp();
                 if (handled)
