@@ -104,7 +104,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is updated.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is updated."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -123,7 +123,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is drawn.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is drawn."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -142,7 +142,7 @@ namespace Delta
         /// Gets or sets the depth (update and draw order) of the <see cref="Entity"/> in the <see cref="ParentCollection"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="float"/> value of 0.0f.</remarks>
-        [ContentSerializer, Description("The layer depth of the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
+        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
         public float Depth
         {
             get { return _depth; }

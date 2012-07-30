@@ -54,7 +54,7 @@ namespace Delta
         /// Gets or sets the position of the <see cref="TransformableEntity"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="Vector2"/> value of {0,0}.</remarks>
-        [ContentSerializer, Description("The position of the game object expressed in pixels.\nDefault is (0,0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The position of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
         public virtual Vector2 Position
         {
             get { return _position; }
@@ -73,7 +73,7 @@ namespace Delta
         /// Gets or sets the positional offset of the <see cref="TransformableEntity"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="Vector2"/> value of {0,0}.</remarks>
-        [ContentSerializer, Description("The positional offset of the game object expressed in pixels.\nDefault is (0,0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The positional offset of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
         public virtual Vector2 Offset
         {
             get { return _offset; }
@@ -111,7 +111,7 @@ namespace Delta
         /// Gets or sets the scale of the <see cref="TransformableEntity"/> expressed in decimal percentage.
         /// </summary>
         /// <remarks>The default is 100% with a <see cref="Vector2"/> value of {1.0f,1.0f}.</remarks>
-        [ContentSerializer, Description("The scale of the game object expressed in decimal percentage.\nDefault is (1,1)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "1,1")]
+        [ContentSerializer, Description("The scale of the game object expressed in decimal percentage.\nDefault is (1, 1)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "1,1")]
         public virtual Vector2 Scale
         {
             get { return _scale; }
@@ -149,7 +149,7 @@ namespace Delta
         /// Gets or sets the positional origin of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="RenderSize"/>.
         /// </summary>
         /// <remarks>The default is 0% (the top left) with a <see cref="Vector2"/> value of {0.0f, 0.0f}.</remarks>
-        [ContentSerializer, Description("The positional origin of the game object expressed in decimal percentage.\nDefault is (0,0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The positional origin of the game object expressed in decimal percentage.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
         public Vector2 Origin
         {
             get { return _origin; }
@@ -244,40 +244,45 @@ namespace Delta
         /// <summary>
         /// Gets or sets the fade timed range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The fade timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The fade timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FadeRange
         {
             get { return _fadeRange; }
             set
             {
-                if (!value.IsEmpty())
+                if (_fadeRange != value)
                 {
                     _fadeRange = value;
                     if (_transformer != null)
                         _transformer.ClearSequence();
-                    if (FadeRandomly)
+                    if (!value.IsEmpty())
                     {
-                        // start the transformer off in a random position within the range.
-                        float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
-                        _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
-                        _transformer.OnTransformFinished(() =>
+                        if (FadeRandomly)
                         {
-                            // remove the start-up transform logic.
-                            _transformer.ClearSequence();
-                            _transformer.OnTransformFinished(null);
-                            // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
-                            if (G.Random.FiftyFifty())
-                                _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
-                            else
-                                _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                            // start the transformer off in a random position within the range.
+                            float startupAlpha = G.Random.Between(_fadeRange.Lower, _fadeRange.Upper);
+                            _transformer = Transformer.ThisEntity(this).FadeTo(startupAlpha, (startupAlpha / _fadeRange.Upper) * _fadeRange.Duration);
+                            _transformer.OnTransformFinished(() =>
+                            {
+                                // remove the start-up transform logic.
+                                _transformer.ClearSequence();
+                                _transformer.OnTransformFinished(null);
+                                // 50/50 chance to fade from lower to upper or from upper to lower. provides more fade varieties.
+                                if (G.Random.FiftyFifty())
+                                    _transformer.FadeTo(_fadeRange.Upper, _fadeRange.Duration).FadeTo(_fadeRange.Lower, _fadeRange.Duration);
+                                else
+                                    _transformer.FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
+                                _transformer.Loop();
+                            });
+                        }
+                        else
+                        {
+                            _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
                             _transformer.Loop();
-                        });
+                        }
                     }
                     else
-                    {
-                        _transformer = Transformer.ThisEntity(this).FadeTo(_fadeRange.Lower, _fadeRange.Duration).FadeTo(_fadeRange.Upper, _fadeRange.Duration);
-                        _transformer.Loop();
-                    }
+                        _transformer = null;
                 }
             }
         }
@@ -286,19 +291,24 @@ namespace Delta
         /// <summary>
         /// Gets or sets the flicker range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The flicker timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The flicker timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FlickerRange
         {
             get { return _flickerRange; }
             set
             {
-                if (!value.IsEmpty())
+                if (_flickerRange != value)
                 {
                     _flickerRange = value;
                     if (_transformer != null)
                         _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
-                    _transformer.Loop();
+                    if (!value.IsEmpty())
+                    {
+                        _transformer = Transformer.ThisEntity(this).FlickerFor(_flickerRange.Lower, _flickerRange.Upper, _flickerRange.Duration);
+                        _transformer.Loop();
+                    }
+                    else
+                        _transformer = null;
                 }
             }
         }
@@ -307,7 +317,7 @@ namespace Delta
         /// <summary>
         /// Gets or sets the blink range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The blink timed range of the game object."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The blink timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange BlinkRange
         {
             get { return _blinkRange; }
@@ -316,18 +326,15 @@ namespace Delta
                 if (_blinkRange != value)
                 {
                     _blinkRange = value;
+                    if (_transformer != null)
+                        _transformer.ClearSequence();
                     if (!value.IsEmpty())
                     {
-                        if (_transformer != null)
-                            _transformer.ClearSequence();
                         _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
                         _transformer.Loop();
                     }
                     else
-                    {
-                        _transformer.ClearSequence();
                         _transformer = null;
-                    }
                 }
             }
         }
