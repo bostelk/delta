@@ -15,18 +15,6 @@ namespace Delta.UI
             Add(new PerformanceMetrics());
         }
 
-        public void RegisterForTweaking(object obj)
-        {
-            Dictionary<string, Delta.Tweaker.ITweak> tweakables = Tweaker.FindTweakables(obj);
-            Label tweakingLabel = new Label();
-            tweakingLabel.Text.Append(String.Format("Object: {0}\n", obj.ToString()));
-            foreach(KeyValuePair<string, Delta.Tweaker.ITweak> tweakable in tweakables) {
-                tweakingLabel.Text.Append(String.Format("Variable: {0} Value {1}\n", tweakable.Value.VariableName, tweakable.Value.GetValue()));
-            }
-            tweakingLabel.Position = new Vector2(0, 120);
-            Add(tweakingLabel);
-        }
-
 #if WINDOWS
         internal bool ProcessMouseMove()
         {

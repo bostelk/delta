@@ -1,17 +1,55 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.Xna.Framework.Content;
 
 namespace Delta.Structures
 {
+    internal class TimedRangeConverter : ExpandableObjectConverter
+    {
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type t)
+        {
+            if (t == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, t);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo info, object value)
+        {
+            if (value is string)
+            {
+                try
+                {
+                    return TimedRange.Parse((string)value);
+                }
+                catch
+                {
+                    throw new ArgumentException("Invalid string format. Expected string format: 'a TimedRange formatted string'.");
+                }
+            }
+            return base.ConvertFrom(context, info, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
+        {
+            if (destType == typeof(string) && value is TimedRange)
+            {
+                TimedRange timedRange = (TimedRange)value;
+                return "a TimedRange formatted string";
+            }
+            return base.ConvertTo(context, culture, value, destType);
+        }
+    }
+
     /// <summary>
     /// Defines a timed range; starting at the lower bound reaching the upper bound when the duration has full elapsed.
     /// </summary>
-    public struct TimedRange : IEquatable<TimedRange> {
+    [TypeConverter(typeof(TimedRangeConverter))]
+    public struct TimedRange : IEquatable<TimedRange>
+    {
 
         /// <summary>
         /// Pull the lower, upper and duration values from strings in the format: range(lower, upper, duration).

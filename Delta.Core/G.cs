@@ -17,7 +17,7 @@ using Delta.Collision;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
-using Delta.Forms;
+using Delta.Editor;
 #endif
 
 namespace Delta
@@ -30,6 +30,7 @@ namespace Delta
         internal const bool LETTERBOX = false;
         internal const float ASPECT_RATIO_SD = 800f / 600f;
         internal const float ASPECT_RATIO_HD = 1920f / 1080f;
+        internal const Microsoft.Xna.Framework.Input.Keys EDITOR_KEY = Microsoft.Xna.Framework.Input.Keys.F12;
 
         internal static ResourceContentManager _embedded = null;
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
@@ -60,6 +61,7 @@ namespace Delta
 
 #if WINDOWS
         public static Process Process { get; set; }
+        public static Form GameForm { get; set; }
         public static EditorForm EditorForm { get; set; }
 #endif
 
@@ -71,9 +73,6 @@ namespace Delta
         public G(int screenWidth, int screenHeight, bool vSync)
             : base()
         {
-#if WINDOWS
-            EditorForm = new EditorForm();
-#endif
             _instance = this;
             Content = base.Content;
             Content.RootDirectory = "Content";
@@ -99,6 +98,9 @@ namespace Delta
             ScreenCenter = ScreenArea.Center.ToVector2();
 #if WINDOWS
             Process = Process.GetCurrentProcess();
+            GameForm = (Form)Control.FromHandle(Window.Handle);
+            EditorForm = new EditorForm();
+            EditorForm.Icon = GameForm.Icon;
 #endif
         }
 
@@ -135,14 +137,14 @@ namespace Delta
                 _lateInitialized = true;
                 LateInitialize();
             }
-            if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
-            {
+            //if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
+            //{
                 World.InternalUpdate(_time);
                 UI.InternalUpdate(_time);
-            }
+            //}
             Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
 #if WINDOWS
-            if (G.Input.Keyboard.IsPressed(Microsoft.Xna.Framework.Input.Keys.F12))
+            if (G.Input.Keyboard.IsPressed(EDITOR_KEY))
             {
                 EditorForm.Show();
                 EditorForm.Focus();

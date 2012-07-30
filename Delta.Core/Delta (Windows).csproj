@@ -120,10 +120,10 @@
     <Compile Include="Collision\Shapes\CollisionShape.cs" />
     <Compile Include="Collision\Shapes\ConvexShape.cs" />
     <Compile Include="DeltaGameTime.cs" />
-    <Compile Include="Forms\EditorForm.cs">
+    <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditorForm.Designer.cs">
+    <Compile Include="Editor\EditorForm.designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
@@ -198,8 +198,6 @@
     <Compile Include="ICustomizable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
-    <Compile Include="Tweakable.cs" />
-    <Compile Include="Tweaker.cs" />
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\Button.cs" />
     <Compile Include="UI\Controls\Label.cs" />
@@ -233,12 +231,12 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Editor\EditorForm.resx">
+      <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EmbeddedContent.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EmbeddedContent.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\EditorForm.resx">
-      <DependentUpon>EditorForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

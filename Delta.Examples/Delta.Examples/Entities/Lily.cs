@@ -15,7 +15,6 @@ namespace Delta.Examples.Entities
 {
     public class Lily : TransformableEntity
     {
-        [Tweakable]
         float SPEED = 30;
 
         SpriteEntity _sprite;

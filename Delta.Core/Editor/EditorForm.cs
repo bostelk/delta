@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Delta.Forms
+namespace Delta.Editor
 {
     public partial class EditorForm : Form
     {
@@ -26,6 +26,13 @@ namespace Delta.Forms
                     break;
             }
 
+        }
+
+        Delta.Graphics.SpriteEntity entity = new Delta.Graphics.SpriteEntity("hi");
+
+        private void EditorForm_Load(object sender, EventArgs e)
+        {
+            grdProperty.SelectedObject = entity;
         }
     }
 }
