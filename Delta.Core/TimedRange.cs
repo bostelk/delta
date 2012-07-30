@@ -53,6 +53,22 @@ namespace Delta
             return (Lower == other.Lower && Upper == other.Upper && Duration == other.Duration);
         }
 
+        public static bool operator ==(TimedRange x, TimedRange y)
+        {
+            if (Object.ReferenceEquals(x, null))
+            {
+                if (Object.ReferenceEquals(y, null))
+                    return true;
+                return false;
+            }
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(TimedRange x, TimedRange y)
+        {
+            return !(x == y);
+        }
+
         public static TimedRange Parse(string value)
         {
             TimedRange range = Empty;

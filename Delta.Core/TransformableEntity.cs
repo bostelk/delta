@@ -313,13 +313,21 @@ namespace Delta
             get { return _blinkRange; }
             set
             {
-                if (!value.IsEmpty())
+                if (_blinkRange != value)
                 {
                     _blinkRange = value;
-                    if (_transformer != null)
+                    if (!value.IsEmpty())
+                    {
+                        if (_transformer != null)
+                            _transformer.ClearSequence();
+                        _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
+                        _transformer.Loop();
+                    }
+                    else
+                    {
                         _transformer.ClearSequence();
-                    _transformer = Transformer.ThisEntity(this).BlinkFor(_blinkRange.Lower, _blinkRange.Duration);
-                    _transformer.Loop();
+                        _transformer = null;
+                    }
                 }
             }
         }
