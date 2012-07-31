@@ -43,11 +43,25 @@ namespace Delta
         /// </summary>
         [ContentSerializer, Browsable(false)]
         protected Color RenderColor { get; private set; }
+
+
+        bool _fadeRandomly = false;
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="TransformableEntity"/> fades randomly.
         /// </summary>
         [ContentSerializer, Description("Indicates whether the game object fades in/out randomly.\nDefault is 0."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(false)]
-        public bool FadeRandomly { get; set; }
+        public bool FadeRandomly
+        {
+            get { return _fadeRandomly; }
+            set
+            {
+                if (_fadeRandomly != value)
+                {
+                    _fadeRandomly = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         Vector2 _position = Vector2.Zero;
         /// <summary>
@@ -64,6 +78,7 @@ namespace Delta
                 {
                     _position = value;
                     OnPositionChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -83,6 +98,7 @@ namespace Delta
                 {
                     _offset = value;
                     OnPositionChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -121,6 +137,7 @@ namespace Delta
                 {
                     _scale = value;
                     OnScaleChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -140,6 +157,7 @@ namespace Delta
                 {
                     _rotation = value;
                     OnRotationChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -159,6 +177,7 @@ namespace Delta
                 {
                     _origin = value.Clamp(Vector2.Zero, Vector2.One);
                     OnOriginChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -178,6 +197,7 @@ namespace Delta
                 {
                     _pivot = value.Clamp(Vector2.Zero, Vector2.One);
                     OnPivotChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -198,6 +218,7 @@ namespace Delta
                 {
                     _tint = value;
                     OnTintChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -218,6 +239,7 @@ namespace Delta
                 {
                     _alpha = value;
                     OnAlphaChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -283,6 +305,7 @@ namespace Delta
                     }
                     else
                         _transformer = null;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -309,6 +332,7 @@ namespace Delta
                     }
                     else
                         _transformer = null;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -335,6 +359,7 @@ namespace Delta
                     }
                     else
                         _transformer = null;
+                    OnPropertyChanged();
                 }
             }
         }

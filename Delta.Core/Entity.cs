@@ -59,7 +59,7 @@ namespace Delta
         }
 
         bool _flaggedForRemoval = false;
-        
+
         /// <summary>
         /// Gets the <see cref="IEntityCollection"/> which is responsible for the <see cref="Entity"/>.
         /// </summary>
@@ -71,11 +71,24 @@ namespace Delta
             set { ParentCollection = value; }
         }
 
+        string _name = string.Empty;
         /// <summary>
         /// Gets the name of the <see cref="Entity"/>.
         /// </summary>
-        [ContentSerializer, Description("The name of the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue("")]
-        public string Name { get; set; }
+        [ContentSerializer, Description("The name of the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    if (HasInitialized) //oh, a property has changed? Let's poke at the UI to refresh the values. HEY UI. YA YOU. UPDATE THIS SHIT. IT'S BRAND NEW.
+                        G.EditorForm.grdProperty.Refresh(); //This /could/ be in a timer
+                }
+            }
+        }
         string IEntity.Name //explict interface property allows us to publicly set the Name from IEntity.
         {
             get { return Name; }
@@ -104,7 +117,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is updated.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Enabled"), Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -114,6 +127,7 @@ namespace Delta
                 {
                     _isEnabled = value;
                     OnIsEnabledChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -123,7 +137,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is drawn.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Visible"), Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -133,6 +147,7 @@ namespace Delta
                 {
                     _isVisible = value;
                     OnIsVisibleChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -153,6 +168,7 @@ namespace Delta
                     _depth = value;
                     if (ParentCollection != null)
                         ParentCollection.NeedsToSort = true;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -170,6 +186,7 @@ namespace Delta
                 if (_postEffects != value)
                 {
                     _postEffects = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -488,6 +505,15 @@ namespace Delta
         {
             OnAdded();
         }
+
+#if WINDOWS
+        protected internal void OnPropertyChanged()
+        {
+            //tell G that we are waiting for a PropertyGrid refresh. This implementaion prevents PropertyGrid.Refresh() to be called multiple times in short amount of time, potentitally improving performance.
+            G._refreshPropertyGrid = true;
+            G._refreshPropertyGridTimer = 0.1f;
+        }
+#endif
 
         /// <summary>
         /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.

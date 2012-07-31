@@ -52,8 +52,6 @@ namespace Delta.Graphics
         internal int _animationFrame = 0;
         internal float _frameDurationTimer = 0.0f;
 
-        [ContentSerializerIgnore, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(false)]
-        public bool IsAnimationPaused { get; set; }
         [ContentSerializerIgnore, Browsable(false)]
         public bool IsAnimationFinished { get; private set; }
         [ContentSerializerIgnore, Browsable(false)]
@@ -74,6 +72,7 @@ namespace Delta.Graphics
                 {
                     _spriteSheetName = value;
                     NeedsHeavyUpdate = true;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -89,6 +88,7 @@ namespace Delta.Graphics
                 {
                     _animationName = value;
                     NeedsHeavyUpdate = true;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -104,6 +104,7 @@ namespace Delta.Graphics
                 {
                     _animationOptions = value;
                     Reset();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -119,19 +120,59 @@ namespace Delta.Graphics
                 {
                     _animationFrameOffset = value;
                     Reset();
+                    OnPropertyChanged();
                 }
             }
         }
 
+        float _timeScale = 1.0f;
         [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(1.0f)]
-        public float TimeScale { get; set; }
+        public float TimeScale
+        {
+            get { return _timeScale; }
+            set
+            {
+                if (_timeScale != value)
+                {
+                    _timeScale = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        SpriteEffects _spriteEffects = SpriteEffects.None;
         [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(SpriteEffects.None)]
-        public SpriteEffects SpriteEffects { get; set; }
+        public SpriteEffects SpriteEffects
+        {
+            get { return _spriteEffects; }
+            set
+            {
+                if (_spriteEffects != value)
+                {
+                    _spriteEffects = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool _isAnimationPaused = false;
+        [ContentSerializerIgnore, DisplayName("AnimationPaused"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public bool IsAnimationPaused
+        {
+            get { return _isAnimationPaused; }
+            set
+            {
+                if (_isAnimationPaused != value)
+                {
+                    _isAnimationPaused = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public SpriteEntity()
             : base()
         {
-            TimeScale = 1.0f;
             IsAnimationFinished = true;
         }
 
@@ -139,7 +180,6 @@ namespace Delta.Graphics
             : base(id)
         {
             SpriteSheetName= spriteSheet;
-            TimeScale = 1.0f;
             IsAnimationFinished = true;
         }
 
@@ -155,9 +195,9 @@ namespace Delta.Graphics
             _animationName = string.Empty;
             _animationOptions = AnimationOptions.None;
             _animationFrameOffset = 0;
-            TimeScale = 1.0f;
-            SpriteEffects = SpriteEffects.None;
-            IsAnimationPaused = false;
+            _timeScale = 1.0f;
+            _spriteEffects = SpriteEffects.None;
+            _isAnimationPaused = false;
             IsAnimationFinished = true;
             SpriteSheetName = string.Empty;
             SpriteEffects = SpriteEffects.None;
@@ -329,11 +369,11 @@ namespace Delta.Graphics
 
         public void Play(string animation, AnimationOptions options, int frameOffset)
         {
-            _animationName = animation;
-            _animationOptions = options;
+            AnimationName = animation;
+            AnimationOptions = options;
             IsAnimationPaused = false;
             IsAnimationFinished = false;
-            _animationFrameOffset = frameOffset;
+            AnimationFrameOffset = frameOffset;
             if (_spriteSheet == null)
             {
                 _animation = null;

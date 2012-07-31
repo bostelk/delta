@@ -46,6 +46,7 @@ namespace Delta.Examples
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _supportedAnimations = mainSheet.Animations;
             sprite = new SpriteEntity("testSprite", @"Graphics\SpriteSheets\16x16");
+            G.EditorForm.grdProperty.SelectedObject = sprite;
             sprite.Play(_supportedAnimations[_animationIndex].Name);
             sprite.Position = G.ScreenCenter;
             base.LoadContent();

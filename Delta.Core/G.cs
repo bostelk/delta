@@ -32,6 +32,11 @@ namespace Delta
         internal const float ASPECT_RATIO_HD = 1920f / 1080f;
         internal const Microsoft.Xna.Framework.Input.Keys EDITOR_KEY = Microsoft.Xna.Framework.Input.Keys.F12;
 
+#if WINDOWS
+        internal static bool _refreshPropertyGrid = false;
+        internal static float _refreshPropertyGridTimer = 0;
+#endif
+
         internal static ResourceContentManager _embedded = null;
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
         internal static bool _lateInitialized = false;
@@ -149,6 +154,17 @@ namespace Delta
             {
                 EditorForm.Show();
                 EditorForm.Focus();
+            }
+            if (_refreshPropertyGrid)
+            {
+                if (_refreshPropertyGridTimer <= 0)
+                {
+                    G.EditorForm.grdProperty.Refresh();
+                    _refreshPropertyGridTimer = 0;
+                    _refreshPropertyGrid = false;
+                }
+                else
+                    _refreshPropertyGridTimer -= _time.ElapsedSeconds;
             }
 #endif
         }

@@ -28,11 +28,13 @@ namespace Delta.Editor
 
         }
 
-        Delta.Graphics.SpriteEntity entity = new Delta.Graphics.SpriteEntity("Game Object 1", "Sprite 1");
-
         private void EditorForm_Load(object sender, EventArgs e)
         {
-            grdProperty.SelectedObject = entity;
+        }
+
+        private void grdProperty_Enter(object sender, EventArgs e)
+        {
+            grdProperty.Refresh();
         }
     }
 }
