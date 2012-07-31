@@ -124,11 +124,15 @@
     <Compile Include="Design\FieldPropertyDesciptor.cs" />
     <Compile Include="Design\MemberPropertyDescriptor.cs" />
     <Compile Include="Design\TimedRangeConverter.cs" />
+    <Compile Include="Editor\FlagEnumUIEditor.cs" />
     <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Editor\EditorForm.designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\FlagCheckedListBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PostEffects.cs" />
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
@@ -238,6 +242,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Editor\EditorForm.resx">
       <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\FlagCheckedListBox.resx">
+      <DependentUpon>FlagCheckedListBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EmbeddedContent.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -11,23 +11,10 @@ namespace Delta.Graphics
     [Flags]
     public enum AnimationOptions
     {
-        None = 1 << 0,
-        /// <summary>
-        /// Play the animation again after it has finished.
-        /// </summary>
-        Looped = 1 << 1,
-        /// <summary>
-        /// Picks a random frame to start on.
-        /// </summary>
-        StartOnRandomFrame = 1 << 2,
-        /// <summary>
-        /// Restarts the animation if it is already playing.
-        /// </summary>
-        Force = 1 << 3,
-        /// <summary>
-        /// Remove the animation once it has finished animating.
-        /// </summary>
-        RemoveWhenFinished = 1 << 3,
+        None = 0x0,
+        Looped = 0x1,
+        StartOnRandomFrame = 0x2,
+        RemoveWhenFinished = 0x4
     }
 
     public class SpriteEntity : TransformableEntity, IRecyclable
@@ -94,7 +81,7 @@ namespace Delta.Graphics
         }
 
         AnimationOptions _animationOptions = AnimationOptions.None;
-        [ContentSerializer(ElementName = "PlayOptions"), DisplayName("PlayOptions"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(AnimationOptions.None)]
+        [ContentSerializer(ElementName = "PlayOptions"), DisplayName("PlayOptions"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(AnimationOptions.None), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public AnimationOptions AnimationOptions
         {
             get { return _animationOptions; }
@@ -141,7 +128,7 @@ namespace Delta.Graphics
         }
 
         SpriteEffects _spriteEffects = SpriteEffects.None;
-        [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(SpriteEffects.None)]
+        [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(SpriteEffects.None), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public SpriteEffects SpriteEffects
         {
             get { return _spriteEffects; }
