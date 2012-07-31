@@ -120,13 +120,35 @@ namespace Delta
         {
             InternalUpdate(time);
         }
+
+        /// <summary>
+        /// Updates the children in the <see cref="EntityParent{T}"/>.
+        /// </summary>
+        /// <param name="time">time</param>
+        protected internal virtual void UpdateChildren(DeltaGameTime time)
+        {
+            for (int i = 0; i < _children.Count; i++)
+                _children[i].Update(time);
+        }
+
         void IEntityCollection.Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             InternalDraw(time, spriteBatch);
         }
 
         /// <summary>
-        /// Sorts all the entities in the <see cref="EntityParent{T}"/>.
+        /// Draws the children in the <see cref="EntityParent{T}"/>.
+        /// </summary>
+        /// <param name="time">time</param>
+        /// <param name="spriteBatch">spriteBatch</param>
+        protected internal virtual void DrawChildren(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < _children.Count; i++)
+                _children[i].Draw(time, spriteBatch);
+        }
+
+        /// <summary>
+        /// Sorts all the children in the <see cref="EntityParent{T}"/>.
         /// </summary>
         protected virtual void Sort()
         {
@@ -144,22 +166,18 @@ namespace Delta
         protected override void OnEndUpdate(DeltaGameTime time)
         {
             base.OnEndUpdate(time);
-            if (NeedsToSort)
-                Sort();
-            for (int i = 0; i < _children.Count; i++)
-                _children[i].Update(time);
+            UpdateChildren(time);
         }
 
         /// <summary>
-        /// Called when the <see cref="EntityParent{T}"/> is finished drawing.
+        /// Called when the <see cref="Entity"/> is finished drawing.
         /// </summary>
         /// <param name="time">time</param>
         /// <param name="spriteBatch">spriteBatch</param>
         protected override void OnEndDraw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             base.OnEndDraw(time, spriteBatch);
-            for (int i = 0; i < _children.Count; i++)
-                _children[i].Draw(time, spriteBatch);
+            DrawChildren(time, spriteBatch);
         }
     }
 

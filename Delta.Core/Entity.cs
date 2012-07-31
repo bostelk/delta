@@ -157,6 +157,23 @@ namespace Delta
             }
         }
 
+        PostEffects _postEffects = PostEffects.None;
+        /// <summary>
+        /// Gets or sets the <see cref="PostEffects"/> of the <see cref="Entity"/> used when drawing.
+        /// </summary>
+        [ContentSerializer, Description("The post effects used when drawing the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
+        public PostEffects PostEffects
+        {
+            get { return _postEffects; }
+            set
+            {
+                if (_postEffects != value)
+                {
+                    _postEffects = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
@@ -210,14 +227,16 @@ namespace Delta
         {
             if (ParentCollection != null)
                 ParentCollection.UnsafeRemove(this);
-            Name = string.Empty;
             ParentCollection = null;
+            _flaggedForRemoval = false;
+            _isEnabled = true;
+            _isVisible = true;
+            _depth = 0;
+            _postEffects = PostEffects.None;
+            Name = string.Empty;
             HasInitialized = false;
             HasLoadedContent = false;
-            Depth = 0.0f;
-            IsEnabled = true;
-            IsVisible = true;
-            _flaggedForRemoval = false;
+            NeedsHeavyUpdate = false;
         }
 
 #if WINDOWS
@@ -237,6 +256,12 @@ namespace Delta
                 case "draworder":
                 case "updateorder":
                     return Depth.ToString(CultureInfo.InvariantCulture);
+                case "overlay":
+                case "isoverlay":
+                    if ((PostEffects & PostEffects.Overlay) != 0)
+                        return "true";
+                    else
+                        return "false";
             }
             return string.Empty;
         }
@@ -262,6 +287,10 @@ namespace Delta
                 case "draworder":
                 case "updateorder":
                     Depth = float.Parse(value, CultureInfo.InvariantCulture);
+                    return true;
+                case "overlay":
+                case "isoverlay":
+                    PostEffects |= PostEffects.Overlay;
                     return true;
              }
             return false;
@@ -368,12 +397,13 @@ namespace Delta
         /// <param name="time">time</param>
         /// <param name="spriteBatch">spriteBatch</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void InternalDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        public virtual void InternalDraw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             if (CanDraw())
             {
                 OnBeginDraw(time, spriteBatch);
-                Draw(time, spriteBatch);
+                if (G.CurrentPostEffects == PostEffects)
+                    Draw(time, spriteBatch);
                 OnEndDraw(time, spriteBatch);
             }
         }

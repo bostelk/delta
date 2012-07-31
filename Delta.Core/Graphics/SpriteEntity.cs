@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Delta.Structures;
+using System.ComponentModel;
 
 namespace Delta.Graphics
 {
     [Flags]
-    public enum AnimationPlayOptions
+    public enum AnimationOptions
     {
         None = 1 << 0,
         /// <summary>
@@ -16,9 +17,9 @@ namespace Delta.Graphics
         /// </summary>
         Looped = 1 << 1,
         /// <summary>
-        /// Pick a random frame to start on.
+        /// Picks a random frame to start on.
         /// </summary>
-        StartRandom = 1 << 2,
+        StartOnRandomFrame = 1 << 2,
         /// <summary>
         /// Restarts the animation if it is already playing.
         /// </summary>
@@ -33,43 +34,6 @@ namespace Delta.Graphics
     {
         static Pool<SpriteEntity> _pool;
 
-        [ContentSerializer(ElementName = "SpriteSheet")]
-        internal string _spriteSheetName = string.Empty;
-        internal SpriteSheet _spriteSheet = null;
-        internal Rectangle _sourceRectangle = Rectangle.Empty;
-        [ContentSerializer(ElementName = "Animation")]
-        internal string _animationName = string.Empty;
-        internal Animation _animation = null;
-        internal float _frameDurationTimer = 0f;
-        [ContentSerializer(ElementName = "Frame")]
-        internal int _animationFrame = 0;
-        //for rob
-        [ContentSerializer(ElementName = "FrameOffset")]
-        int _animationFrameOffset = 0;
-        [ContentSerializer(ElementName = "RandomStart")]
-        bool _startOnRandomFrame = false;
-        //for kyle
-        bool _animationRemove = false;
-
-        [ContentSerializer]
-        public SpriteEffects SpriteEffects { get; set; }
-        [ContentSerializer]
-        public bool IsAnimationLooped { get; private set; }
-        [ContentSerializer]
-        public bool IsAnimationPaused { get; set; }
-        [ContentSerializer]
-        public bool IsAnimationPlaying { get; private set; }
-        [ContentSerializer]
-        public bool IsAnimationFinished { get; private set; }
-        [ContentSerializer]
-        public bool IsOverlay { get; internal set; }
-        [ContentSerializer]
-        public bool IsOutlined { get; set; }
-        [ContentSerializerIgnore]
-        public Color OutlineColor { get; set; }
-        [ContentSerializerIgnore]
-        public float TimeScale = 1f;
-
         static SpriteEntity()
         {
             _pool = new Pool<SpriteEntity>(100);
@@ -78,24 +42,128 @@ namespace Delta.Graphics
         public static SpriteEntity Create(string spriteSheet)
         {
             SpriteEntity se = _pool.Fetch();
-            se._spriteSheetName = spriteSheet;
+            se.SpriteSheetName = spriteSheet;
             return se;
         }
+
+        SpriteSheet _spriteSheet = null;
+        Animation _animation = null;
+        Rectangle _sourceRectangle = Rectangle.Empty;
+        internal int _animationFrame = 0;
+        internal float _frameDurationTimer = 0.0f;
+
+        [ContentSerializerIgnore, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public bool IsAnimationPaused { get; set; }
+        [ContentSerializerIgnore, Browsable(false)]
+        public bool IsAnimationFinished { get; private set; }
+        [ContentSerializerIgnore, Browsable(false)]
+        public bool IsAnimationPlaying { get { return !IsAnimationFinished; } }
+        [ContentSerializerIgnore, Browsable(false)]
+        public bool IsOutlined { get; set; }
+        [ContentSerializerIgnore, Browsable(false)]
+        public Color OutlineColor { get; set; }
+
+        string _spriteSheetName = string.Empty;
+        [ContentSerializer(ElementName = "SpriteSheet"), DisplayName("SpriteSheet"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue("")]
+        public string SpriteSheetName
+        {
+            get { return _spriteSheetName; }
+            set
+            {
+                if (_spriteSheetName != value)
+                {
+                    _spriteSheetName = value;
+                    NeedsHeavyUpdate = true;
+                }
+            }
+        }
+
+        string _animationName = string.Empty;
+        [ContentSerializer(ElementName = "Animation"), DisplayName("Animation"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue("")]
+        public string AnimationName
+        {
+            get { return _animationName; }
+            set
+            {
+                if (_animationName != value)
+                {
+                    _animationName = value;
+                    NeedsHeavyUpdate = true;
+                }
+            }
+        }
+
+        AnimationOptions _animationOptions = AnimationOptions.None;
+        [ContentSerializer(ElementName = "PlayOptions"), DisplayName("PlayOptions"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(AnimationOptions.None)]
+        public AnimationOptions AnimationOptions
+        {
+            get { return _animationOptions; }
+            set
+            {
+                if (_animationOptions != value)
+                {
+                    _animationOptions = value;
+                    Reset();
+                }
+            }
+        }
+
+        int _animationFrameOffset = 0;
+        [ContentSerializer(ElementName = "FrameOffset"), Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(0)]
+        public int AnimationFrameOffset
+        {
+            get { return _animationFrameOffset; }
+            set
+            {
+                if (_animationFrameOffset != value)
+                {
+                    _animationFrameOffset = value;
+                    Reset();
+                }
+            }
+        }
+
+        [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(1.0f)]
+        public float TimeScale { get; set; }
+        [ContentSerializer, Description(""), Category("Sprite"), Browsable(true), ReadOnly(false), DefaultValue(SpriteEffects.None)]
+        public SpriteEffects SpriteEffects { get; set; }
 
         public SpriteEntity()
             : base()
         {
-        }
-
-        public SpriteEntity(string spriteSheet)
-            : this(String.Empty, spriteSheet) 
-        { 
+            TimeScale = 1.0f;
+            IsAnimationFinished = true;
         }
 
         public SpriteEntity(string id, string spriteSheet)
             : base(id)
         {
-            _spriteSheetName= spriteSheet;
+            SpriteSheetName= spriteSheet;
+            TimeScale = 1.0f;
+            IsAnimationFinished = true;
+        }
+
+        public override void Recycle()
+        {
+            base.Recycle();
+            _spriteSheet = null;
+            _animation = null;
+            _sourceRectangle = Rectangle.Empty;
+            _animationFrame = 0;
+            _frameDurationTimer = 0.0f;
+            _spriteSheetName = string.Empty;
+            _animationName = string.Empty;
+            _animationOptions = AnimationOptions.None;
+            _animationFrameOffset = 0;
+            TimeScale = 1.0f;
+            SpriteEffects = SpriteEffects.None;
+            IsAnimationPaused = false;
+            IsAnimationFinished = true;
+            SpriteSheetName = string.Empty;
+            SpriteEffects = SpriteEffects.None;
+            IsOutlined = false;
+            OutlineColor = Color.White;
+            _pool.Release(this);
         }
 
 #if WINDOWS
@@ -110,15 +178,6 @@ namespace Delta.Graphics
                 case "animation":
                 case "animationname":
                     _animationName = value;
-                    return true;
-                //temporary?
-                case "isshadow":
-                case "shadow":
-                case "islight":
-                case "light":
-                case "overlay":
-                case "isoverlay":
-                    IsOverlay = bool.Parse(value);
                     return true;
                 case "mirror":
                 case "flip":
@@ -159,7 +218,7 @@ namespace Delta.Graphics
                     break;
                 case "startrandom":
                 case "random":
-                    _startOnRandomFrame  = bool.Parse(value);
+                    _animationOptions |= AnimationOptions.StartOnRandomFrame;
                     return true;
                 case "ispaused":
                 case "paused":
@@ -180,8 +239,7 @@ namespace Delta.Graphics
         {
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            if(!IsAnimationPlaying)
-                Play(_animationName, AnimationPlayOptions.Looped);
+            Play(_animationName, _animationOptions);
             base.LoadContent();
         }
 
@@ -199,12 +257,11 @@ namespace Delta.Graphics
             {
                 _frameDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                if (!IsAnimationLooped && _animationFrame >= _animation.Frames.Count - 1)
+                if (((_animationOptions & AnimationOptions.Looped) == 0) && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     IsAnimationFinished = true;
-                    IsAnimationPlaying = false;
                     _frameDurationTimer = 0;
-                    if (_animationRemove)
+                    if ((_animationOptions & AnimationOptions.RemoveWhenFinished) != 0)
                         RemoveNextFrame();
                 }
                 UpdateSourceRectangle();
@@ -239,39 +296,43 @@ namespace Delta.Graphics
 
         protected override void Draw(DeltaGameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (IsOutlined)
-            {
-                spriteBatch.End();
-                G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
-                G.SimpleEffect.Color = OutlineColor;
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
-                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
-            }
+            //if (IsOutlined)
+            //{
+            //    spriteBatch.End();
+            //    G.SimpleEffect.SetTechnique(Effects.SimpleEffect.Technique.FillColor);
+            //    G.SimpleEffect.Color = OutlineColor;
+            //    spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, G.SimpleEffect, G.World.Camera.View);
+            //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition + Vector2.UnitY, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            //    spriteBatch.Draw(_spriteSheet.Texture, RenderPosition - Vector2.UnitX, _sourceRectangle, Tint, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            //    spriteBatch.End();
+            //    spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
+            //}
             spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, RenderColor, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+        }
+
+        public void Reset()
+        {
+            Play(_animationName, _animationOptions);
         }
 
         public void Play(string animation)
         {
-            Play(animation, AnimationPlayOptions.None, 0);
+            Play(animation, AnimationOptions.None, 0);
         }
  
-        public void Play(string animation, AnimationPlayOptions options)
+        public void Play(string animation, AnimationOptions options)
         {
             Play(animation, options, 0);
         }
 
-        public void Play(string animation, AnimationPlayOptions options, int frameOffset)
+        public void Play(string animation, AnimationOptions options, int frameOffset)
         {
             _animationName = animation;
+            _animationOptions = options;
             IsAnimationPaused = false;
-            IsAnimationLooped = ((options & AnimationPlayOptions.Looped) != 0);
-            _startOnRandomFrame = ((options & AnimationPlayOptions.StartRandom) != 0);
-            _animationRemove = ((options & AnimationPlayOptions.RemoveWhenFinished) != 0);
+            IsAnimationFinished = false;
             _animationFrameOffset = frameOffset;
             if (_spriteSheet == null)
             {
@@ -298,44 +359,18 @@ namespace Delta.Graphics
         protected internal virtual void OnAnimationChanged()
         {
             _animationFrame = _animationFrameOffset;
-            if (_startOnRandomFrame)
+            if ((AnimationOptions & AnimationOptions.StartOnRandomFrame) != 0)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _frameDurationTimer = _animation.FrameDuration;
             IsAnimationFinished = false;
-            IsAnimationPlaying = true;
             UpdateSourceRectangle();
         }
 
         protected internal override void OnRemoved()
         {
-            if (_animationRemove)
+            if ((_animationOptions & AnimationOptions.RemoveWhenFinished) != 0)
                 Recycle();
             base.OnRemoved();
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            _spriteSheet = null;
-            _spriteSheetName = string.Empty;
-            _animation = null;
-            _animationName = string.Empty;
-            _animationFrame = 0;
-            _sourceRectangle = Rectangle.Empty;
-            _frameDurationTimer = 0f;
-            _animationFrameOffset = 0;
-            _startOnRandomFrame = false;
-            _animationRemove = false;
-            SpriteEffects = SpriteEffects.None;
-            IsAnimationLooped = false;
-            IsAnimationPaused = false;
-            IsAnimationPlaying = false;
-            IsAnimationFinished = false;
-            IsOverlay = false;
-            IsOutlined = false;
-            OutlineColor = Color.White;
-            TimeScale = 1f;
-            _pool.Release(this);
         }
 
         public override string ToString()

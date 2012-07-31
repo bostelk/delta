@@ -41,7 +41,7 @@ namespace Delta.Examples.Entities
             _animation = "walkup";
             if (FacingDirection != IntercardinalDirection.North || _inIdle)
             {
-                _sprite.Play(_animation, AnimationPlayOptions.Force | AnimationPlayOptions.Looped);
+                _sprite.Play(_animation, AnimationOptions.Force | AnimationOptions.Looped);
                 _inIdle = false;
             }
             _sprite.SpriteEffects = SpriteEffects.None;
@@ -53,7 +53,7 @@ namespace Delta.Examples.Entities
             _animation = "walkdown";
             if (FacingDirection != IntercardinalDirection.South || _inIdle)
             {
-                _sprite.Play(_animation, AnimationPlayOptions.Force | AnimationPlayOptions.Looped);
+                _sprite.Play(_animation, AnimationOptions.Force | AnimationOptions.Looped);
                 _inIdle = false;
             }
             _sprite.SpriteEffects = SpriteEffects.None;
@@ -65,7 +65,7 @@ namespace Delta.Examples.Entities
             _animation = "walkright";
             if (FacingDirection != IntercardinalDirection.East || _inIdle)
             {
-                _sprite.Play(_animation, AnimationPlayOptions.Force | AnimationPlayOptions.Looped);
+                _sprite.Play(_animation, AnimationOptions.Force | AnimationOptions.Looped);
                 _inIdle = false;
             }
             _sprite.SpriteEffects = SpriteEffects.None;
@@ -77,7 +77,7 @@ namespace Delta.Examples.Entities
             _animation = "walkright";
             if (FacingDirection != IntercardinalDirection.West || _inIdle)
             {
-                _sprite.Play(_animation, AnimationPlayOptions.Force | AnimationPlayOptions.Looped);
+                _sprite.Play(_animation, AnimationOptions.Force | AnimationOptions.Looped);
                 _inIdle = false;
             }
             _sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
@@ -87,7 +87,7 @@ namespace Delta.Examples.Entities
         public void Idle()
         {
             _inIdle = true;
-            _sprite.Play(_animation, AnimationPlayOptions.Force);
+            _sprite.Play(_animation, AnimationOptions.Force);
             _sprite.Pause();
         }
 

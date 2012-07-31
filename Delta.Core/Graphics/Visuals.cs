@@ -24,7 +24,7 @@ namespace Delta.Graphics
             se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
-            se.Play(animation, AnimationPlayOptions.RemoveWhenFinished);
+            se.Play(animation, AnimationOptions.RemoveWhenFinished);
             se.Depth = position.Y;
             G.World.Ground.UnsafeAdd(se);
         }
@@ -87,7 +87,7 @@ namespace Delta.Graphics
                 see.InternalLoadContent();
                 see.Position = position;
                 see.Origin = new Vector2(0.5f, 0.5f);
-                see.Play(animation, AnimationPlayOptions.StartRandom);
+                see.Play(animation, AnimationOptions.StartOnRandomFrame);
                 see.Pause();
                 see.Depth = position.Y;
                 G.World.AboveGround.UnsafeAdd(see);

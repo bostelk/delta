@@ -28,7 +28,7 @@ namespace Delta.Editor
 
         }
 
-        Delta.Graphics.SpriteEntity entity = new Delta.Graphics.SpriteEntity("hi");
+        Delta.Graphics.SpriteEntity entity = new Delta.Graphics.SpriteEntity("Game Object 1", "Sprite 1");
 
         private void EditorForm_Load(object sender, EventArgs e)
         {

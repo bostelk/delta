@@ -48,6 +48,13 @@ namespace Delta
             Duration = duration;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is TimedRange)
+                return Equals((TimedRange)obj);
+            return base.Equals(obj);
+        }
+
         public bool Equals(TimedRange other)
         {
             return (Lower == other.Lower && Upper == other.Upper && Duration == other.Duration);

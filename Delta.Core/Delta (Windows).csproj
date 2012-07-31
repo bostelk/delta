@@ -130,6 +130,7 @@
     <Compile Include="Editor\EditorForm.designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PostEffects.cs" />
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Entity.cs" />

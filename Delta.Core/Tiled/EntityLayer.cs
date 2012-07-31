@@ -98,9 +98,11 @@ namespace Delta.Tiled
                 SpriteEntity sprite = entity as SpriteEntity;
                 if (sprite != null)
                 {
-                    if (sprite.IsOverlay)
+                    if (sprite.PostEffects != PostEffects.None)
                     {
-                        Map.Instance.PostEffects.Add(sprite);
+                        if (!Map.Instance.PostEffects.ContainsKey(sprite.PostEffects))
+                            Map.Instance.PostEffects.Add(sprite.PostEffects, new EntityParent<SpriteEntity>());
+                        Map.Instance.PostEffects[sprite.PostEffects].Add(sprite);
                         added = true;
                     }
                 }

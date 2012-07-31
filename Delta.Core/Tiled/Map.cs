@@ -54,13 +54,13 @@ namespace Delta.Tiled
         [ContentSerializer]
         private int AboveGroundIndex;
         [ContentSerializer]
-        public EntityParent<SpriteEntity> PostEffects { get; private set; }
+        public Dictionary<PostEffects, EntityParent<SpriteEntity>> PostEffects { get; private set; }
 
         public Map()
             : base()
         {
             Instance = this;
-            PostEffects = new EntityParent<SpriteEntity>();
+            PostEffects = new Dictionary<PostEffects, EntityParent<SpriteEntity>>();
         }
 
 #if WINDOWS

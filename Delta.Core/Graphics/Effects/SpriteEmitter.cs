@@ -50,7 +50,7 @@ namespace Delta.Graphics
         float _lastEmitTime;
 
         public Range TimeScaleRange;
-        public AnimationPlayOptions SpriteOptions;
+        public AnimationOptions SpriteOptions;
 
         static SpriteEmitter()
         {
@@ -95,11 +95,11 @@ namespace Delta.Graphics
                     TimeScaleRange = Range.TryParse(value);
                     return true;
                 case "looped":
-                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.Looped : SpriteOptions;
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationOptions.Looped : SpriteOptions;
                     return true;
                 case "startrandom":
                 case "random":
-                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.StartRandom : SpriteOptions;
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationOptions.StartOnRandomFrame : SpriteOptions;
                     return true;
             }
             return base.SetValue(name, value);
