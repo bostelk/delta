@@ -465,7 +465,7 @@ namespace Delta
         /// </summary>
         protected virtual void UpdateRenderPosition()
         {
-            RenderPosition = Position + Offset + RenderOrigin - (Origin * RenderSize);
+            RenderPosition = Position + Offset - (Origin * RenderSize) + (RenderOrigin * Scale); //Multiply the scale in for a correct position.
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Delta
         /// </summary>
         protected virtual void UpdateRenderOrigin()
         {
-            RenderOrigin = Pivot * RenderSize;
+            RenderOrigin = Pivot * Size; //don't multiply the scale! SpriteBatch automatically adds the scale in for us!
         }
 
         /// <summary>

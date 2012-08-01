@@ -19,12 +19,7 @@ namespace Delta.Graphics
 
     public class SpriteEntity : TransformableEntity, IRecyclable
     {
-        static Pool<SpriteEntity> _pool;
-
-        static SpriteEntity()
-        {
-            _pool = new Pool<SpriteEntity>(100);
-        }
+        static Pool<SpriteEntity> _pool = new Pool<SpriteEntity>(100);
 
         public static SpriteEntity Create(string spriteSheet)
         {
@@ -336,7 +331,7 @@ namespace Delta.Graphics
             //    spriteBatch.End();
             //    spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             //}
-            spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, RenderColor, Rotation, RenderOrigin, Scale, SpriteEffects, 0);
+            spriteBatch.Draw(_spriteSheet.Texture, RenderPosition, _sourceRectangle, RenderColor, RenderRotation, (Size * Pivot), Scale, SpriteEffects, 0);
         }
 
         public void Reset()

@@ -75,7 +75,7 @@ namespace Delta
         /// <summary>
         /// Gets the name of the <see cref="Entity"/>.
         /// </summary>
-        [ContentSerializer, Description("The name of the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
+        [ContentSerializer, Description("The name of the game object.\nDefault is null."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
         public string Name
         {
             get { return _name; }
@@ -177,7 +177,7 @@ namespace Delta
         /// <summary>
         /// Gets or sets the <see cref="PostEffects"/> of the <see cref="Entity"/> used when drawing.
         /// </summary>
-        [ContentSerializer, Description("The post effects used when drawing the game object."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
+        [ContentSerializer, Description("The post effects used when drawing the game object.\nDefault is PostEffects.None."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
         public PostEffects PostEffects
         {
             get { return _postEffects; }
