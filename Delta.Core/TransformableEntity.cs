@@ -208,7 +208,7 @@ namespace Delta
         /// Gets or sets the color of the <see cref="TransformableEntity"/> <b>before it's multipled with <see cref="Alpha"/></b>.
         /// </summary>
         /// <remarks>The default is white with a <see cref="Color"/> value of {255, 255, 255, 255}.</remarks>
-        [ContentSerializerIgnore, Description("The tint color of the game object.\nDefault is (255, 255, 255, 255)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Color), "255,255,255,255")]
+        [ContentSerializerIgnore, Description("The tint color of the game object.\nDefault is (255, 255, 255, 255)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Color), "255,255,255,255"), Editor(typeof(Delta.Editor.ColorUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public virtual Color Tint
         {
             get { return _tint; }

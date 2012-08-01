@@ -124,6 +124,19 @@
     <Compile Include="Design\FieldPropertyDesciptor.cs" />
     <Compile Include="Design\MemberPropertyDescriptor.cs" />
     <Compile Include="Design\TimedRangeConverter.cs" />
+    <Compile Include="Editor\ColorPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ColorPicker.designer.cs">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ColorUIEditor.cs" />
+    <Compile Include="Editor\ColorWheel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ColorWheel.Designer.cs">
+      <DependentUpon>ColorWheel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor\FlagEnumUIEditor.cs" />
     <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
@@ -134,6 +147,11 @@
     <Compile Include="Editor\FlagCheckedListBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Editor\GraphicsDeviceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\GraphicsDeviceService.cs" />
+    <Compile Include="Editor\ServiceContainer.cs" />
     <Compile Include="PostEffects.cs" />
     <Compile Include="Graphics\SpriteFrameEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
@@ -240,11 +258,20 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Editor\ColorPicker.resx">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ColorWheel.resx">
+      <DependentUpon>ColorWheel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\EditorForm.resx">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\FlagCheckedListBox.resx">
       <DependentUpon>FlagCheckedListBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\GraphicsDeviceControl.resx">
+      <DependentUpon>GraphicsDeviceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EmbeddedContent.resx">
       <Generator>ResXFileCodeGenerator</Generator>

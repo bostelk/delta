@@ -47,6 +47,11 @@
       <Importer>TmxImporter</Importer>
       <Processor>TmxProcessor</Processor>
     </Compile>
+    <Compile Include="ColorWheel.fx">
+      <Name>ColorWheel</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="objects.stylesheet">
       <Name>objects</Name>
       <Importer>StyleSheetImporter</Importer>
