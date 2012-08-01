@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Delta.Extensions;
 
 namespace Delta.Editor
 {
@@ -34,10 +35,7 @@ namespace Delta.Editor
         {
             _color = C;
 
-            this.redText.Text = ( (int)( C.X * 255 ) ).ToString();
-            this.greenText.Text = ( (int)( C.Y * 255 ) ).ToString();
-            this.blueText.Text = ( (int)( C.Z * 255 ) ).ToString();
-            this.alphaText.Text = "255";
+            this.colorHex.Text = ColorExtensions.ToHexadecimal(new Microsoft.Xna.Framework.Color(C), false);
 
             SetColorPreivew();
             this.Invalidate();
@@ -55,43 +53,14 @@ namespace Delta.Editor
             this.Invalidate();
         }
 
-        private void redText_TextChanged(object sender, EventArgs e)
+        private void colorHex_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                _color.X = Convert.ToSingle(redText.Text) / 255.0f;
+                _color = ColorExtensions.ToColor(colorHex.Text).ToVector4();
             }
             catch (Exception) { }
             SetColorPreivew();
-        }
-
-        private void greenText_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                _color.Y = Convert.ToSingle(greenText.Text) / 255.0f;
-            }
-            catch (Exception) { } 
-            SetColorPreivew();
-        }
-
-        private void blueText_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                _color.Z = Convert.ToSingle(blueText.Text) / 255.0f;
-            }
-            catch (Exception) { }
-            SetColorPreivew();
-        }
-
-        private void alphaText_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                _color.W = Convert.ToSingle(alphaText.Text) / 255.0f;
-            }
-            catch (Exception) { }
         }
 
     }

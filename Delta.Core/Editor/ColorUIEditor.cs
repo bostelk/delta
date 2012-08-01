@@ -29,6 +29,8 @@ namespace Delta.Editor
                 IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
                 if (editorService != null)
                 {
+                    Color c = (Color)Convert.ChangeType(value, context.PropertyDescriptor.PropertyType);
+                    _colorPicker.SelectedColor = c.ToVector4();
                     editorService.DropDownControl(_colorPicker);
                     return new Color(_colorPicker.SelectedColor);
                 }
