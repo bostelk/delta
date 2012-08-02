@@ -31,7 +31,7 @@ namespace Delta.Examples
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (G.Input.Keyboard.IsPressed(Keys.Escape))
+            if (G.Input.Keyboard.IsPressed(Keys.Escape) && G.GameForm.Focused)
                 Exit();
             if ((G.Input.Keyboard.IsDown(Keys.LeftAlt) || G.Input.Keyboard.IsDown(Keys.RightAlt)) && G.Input.Keyboard.IsPressed(Keys.Enter))
                 G.ToggleFullScreen();

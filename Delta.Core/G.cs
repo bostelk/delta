@@ -152,8 +152,15 @@ namespace Delta
 #if WINDOWS
             if (G.Input.Keyboard.IsPressed(EDITOR_KEY))
             {
-                EditorForm.Show();
-                EditorForm.Focus();
+                if (!EditorForm.Visible)
+                {
+                    EditorForm.Show();
+                    EditorForm.Focus();
+                }
+                else
+                {
+                    EditorForm.Hide();
+                }
             }
             if (_refreshPropertyGrid)
             {
