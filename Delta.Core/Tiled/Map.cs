@@ -23,12 +23,12 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : EntityParent<IEntity>
+    public class Map : EntityParent<Entity>
     {
         internal static Map Instance { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [ContentSerializer(FlattenContent = true, ElementName="Tileset")]
+        [ContentSerializer(FlattenContent = true, ElementName = "Tileset")]
         public List<Tileset> _tilesets = new List<Tileset>();
         [EditorBrowsable(EditorBrowsableState.Never)]
         [ContentSerializer(ElementName = "SpriteSheet")]
@@ -53,14 +53,11 @@ namespace Delta.Tiled
         private int GroundIndex;
         [ContentSerializer]
         private int AboveGroundIndex;
-        [ContentSerializer]
-        public Dictionary<PostEffects, EntityParent<SpriteEntity>> PostEffects { get; private set; }
 
         public Map()
             : base()
         {
             Instance = this;
-            PostEffects = new Dictionary<PostEffects, EntityParent<SpriteEntity>>();
         }
 
 #if WINDOWS
@@ -99,10 +96,10 @@ namespace Delta.Tiled
                     case "layer":
                         if (!layerIsVisible)
                             continue;
-                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Depth = layerOrder});
+                        Add(new TileLayer(fileName, layerNode, layerName) { Name = layerName, Depth = layerOrder });
                         break;
                     case "objectgroup":
-                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Depth = layerOrder }; 
+                        EntityLayer entityLayer = new EntityLayer(fileName, layerNode, layerIsVisible) { Name = layerName, Depth = layerOrder };
                         switch (layerName.ToLower())
                         {
                             case "delta.belowground":
@@ -156,19 +153,11 @@ namespace Delta.Tiled
             G.World.AboveGround = null;
             base.OnRemoved();
         }
-
-        public override string ToString()
-        {
-            string info = String.Empty;
-            foreach (IEntity gameComponent in _children)
-                info += gameComponent.ToString() + "\n";
-            return info;
-        }
     }
 
     internal static class MapHelper
     {
-        internal static void ImportTiledProperties(this ICustomizable customizable, XmlNode node)
+        internal static void ImportTiledProperties(this Entity entity, XmlNode node)
         {
             if (node == null)
                 return;
@@ -179,11 +168,11 @@ namespace Delta.Tiled
                 string name = propertyNode.Attributes["name"] == null ? string.Empty : propertyNode.Attributes["name"].Value.ToLower();
                 string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
-                    isFound = customizable.SetValue(name, value);
+                    isFound = entity.SetValue(name, value);
                 else
                     continue;
                 if (!isFound)
-                    throw new Exception(String.Format("Could not import Tiled XML property '{0}', no such property exists for '{1}'.", name, customizable.GetType().Name));
+                    throw new Exception(String.Format("Could not import Tiled XML property '{0}', no such property exists for '{1}'.", name, entity.GetType().Name));
             }
         }
     }

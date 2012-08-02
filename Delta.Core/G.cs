@@ -48,7 +48,7 @@ namespace Delta
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
         public static UIManager UI { get; private set; }
-        public static PostEffects CurrentPostEffects { get; set; }
+        public static PostEffects CurrentPostEffect { get; set; }
 
         public new static GraphicsDevice GraphicsDevice { get { return _instance.GraphicsDevice; } }
         public new static bool IsMouseVisible { get { return _instance.IsMouseVisible; } set { _instance.IsMouseVisible = value; } }

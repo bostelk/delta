@@ -15,8 +15,9 @@ namespace Delta.Examples.Entities
 
         Texture2D _texture;
 
-        public FuelAtom() : base("FuelAtmo")
+        public FuelAtom() : base()
         {
+            Name = "FuelAtom";
         }
 
         protected override void LoadContent()
