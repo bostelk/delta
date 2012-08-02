@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
-namespace Monoceros.Graphics
+namespace Delta.Graphics
 {
 #pragma warning disable 1591
     [EditorBrowsable(EditorBrowsableState.Never)]
