@@ -8,23 +8,92 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
+    internal class EntityHelper
+    {
+        internal static Dictionary<string, IEntity> _idReferences = new Dictionary<string, IEntity>();
+
+        internal static void AddIDReference(IEntity entity)
+        {
+            string id = entity.Name.ToLower();
+            if (_idReferences.ContainsKey(id)) //if the ID already exists, append a numerical increment
+            {
+                for (int x = 1; x < int.MaxValue; x++)
+                {
+                    string newID = id + x;
+                    if (!_idReferences.ContainsKey(newID))
+                    {
+                        id = newID;
+                        break;
+                    }
+                }
+            }
+            entity.Name = id;
+            _idReferences.Add(id, entity);
+        }
+
+        internal static void RemoveIDReference(IEntity entity)
+        {
+            string id = entity.Name.ToLower();
+            if (EntityHelper._idReferences.ContainsKey(id))
+                EntityHelper._idReferences.Remove(id);
+        }
+    }
+
     /// <summary>
     /// Base class for all game entites.
     /// </summary>
     [DefaultPropertyAttribute("Name")]
-    public abstract class Entity : IRecyclable, IDisposable
+    public abstract class Entity : IRecyclable, ICustomizable, IEntity, IDisposable
     {
         /// <summary>
         /// Retrieves an <see cref="IEntity"/> by it's name.
         /// </summary>
         /// <param name="name">The name of the <see cref="IEntity"/> to retrieve.</param>
         /// <returns>The <see cref="IEntity"/> with the specified name. Returns <see cref="null"/> if an <see cref="IEntity"/> with the specified name could not be found.</returns>
-        public static Entity Get(string name)
+        public static IEntity Get(string name)
         {
-            return EntityHelper.Get(name);
+            name = name.ToLower();
+            if (EntityHelper._idReferences.ContainsKey(name))
+                return EntityHelper._idReferences[name];
+            return null;
         }
 
         bool _flaggedForRemoval = false;
+
+        /// <summary>
+        /// Gets the <see cref="IEntityCollection"/> which is responsible for the <see cref="Entity"/>.
+        /// </summary>
+        [ContentSerializerIgnore]
+        protected internal IEntityCollection ParentCollection { get; internal set; }
+        IEntityCollection IEntity.ParentCollection //explict interface property allows us to publicly set the ParentCollection from IEntity.
+        {
+            get { return ParentCollection; }
+            set { ParentCollection = value; }
+        }
+
+        string _name = string.Empty;
+        /// <summary>
+        /// Gets the name of the <see cref="Entity"/>.
+        /// </summary>
+        [ContentSerializer, Description("The name of the game object.\nDefault is null."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    if (HasInitialized) //oh, a property has changed? Let's poke at the UI to refresh the values. HEY UI. YA YOU. UPDATE THIS SHIT. IT'S BRAND NEW.
+                        G.EditorForm.grdProperty.Refresh(); //This /could/ be in a timer
+                }
+            }
+        }
+        string IEntity.Name //explict interface property allows us to publicly set the Name from IEntity.
+        {
+            get { return Name; }
+            set { Name = value; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="Entity"/> has initialized.
@@ -43,78 +112,12 @@ namespace Delta
         [ContentSerializerIgnore, Browsable(false)]
         protected bool NeedsHeavyUpdate { get; set; }
 
-        /// <summary>
-        /// Called when the <see cref="Entity"/> has been added to an <see cref="IEntityCollection"/>.
-        /// </summary>
-        [ContentSerializerIgnore, Browsable(false)]
-        public Action Added { get; set; }
-        /// <summary>
-        /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.
-        /// </summary>
-        [ContentSerializerIgnore, Browsable(false)]
-        public Action Removed { get; set; }
-
-        Entity _parent = null;
-        /// <summary>
-        /// Gets or sets the <see cref="IEntity"/> which is responsible for the <see cref="Entity"/>.
-        /// </summary>
-        [ContentSerializerIgnore, Browsable(false)]
-        public Entity Parent
-        {
-            get { return _parent; }
-            set
-            {
-                if (_parent != value)
-                {
-                    _parent = value;
-                    OnParentChanged();
-                }
-            }
-        }
-
-        IEntityCollection _parentCollection = null;
-        /// <summary>
-        /// Gets the <see cref="IEntityCollection"/> which is responsible for the <see cref="Entity"/>.
-        /// </summary>
-        [ContentSerializerIgnore, Browsable(false)]
-        public IEntityCollection ParentCollection
-        {
-            get { return _parentCollection; }
-            set
-            {
-                if (_parentCollection != value)
-                {
-                    _parentCollection = value;
-                    OnParentCollectionChanged();
-                }
-            }
-        }
-
-        string _name = string.Empty;
-        /// <summary>
-        /// Gets the name of the <see cref="Entity"/>.
-        /// </summary>
-        [ContentSerializer, Description("The name of the game object."), Category("General"), DefaultValue("")]
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnNameChanged();
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         bool _isEnabled = true;
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is updated.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Enabled"), Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -134,7 +137,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is drawn.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Visible"), Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -154,7 +157,7 @@ namespace Delta
         /// Gets or sets the depth (update and draw order) of the <see cref="Entity"/> in the <see cref="ParentCollection"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="float"/> value of 0.0f.</remarks>
-        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), DefaultValue(0.0f)]
+        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
         public float Depth
         {
             get { return _depth; }
@@ -165,63 +168,24 @@ namespace Delta
                     _depth = value;
                     if (ParentCollection != null)
                         ParentCollection.NeedsToSort = true;
-                    OnDepthChanged();
                     OnPropertyChanged();
                 }
             }
         }
 
-        PostEffects _postEffect = PostEffects.None;
+        PostEffects _postEffects = PostEffects.None;
         /// <summary>
         /// Gets or sets the <see cref="PostEffects"/> of the <see cref="Entity"/> used when drawing.
         /// </summary>
-        [ContentSerializer, Description("The post effect used when drawing the game object.\nDefault is None."), Category("General"), DefaultValue(PostEffects.None)]
-        public PostEffects PostEffect
+        [ContentSerializer, Description("The post effects used when drawing the game object.\nDefault is PostEffects.None."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
+        public PostEffects PostEffects
         {
-            get { return _postEffect; }
+            get { return _postEffects; }
             set
             {
-                if (_postEffect != value)
+                if (_postEffects != value)
                 {
-                    _postEffect = value;
-                    OnPostEffectChanged();
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        float _timeScale = 1.0f;
-        /// <summary>
-        /// Gets or sets the time scale of the <see cref="Entity"/> expressed in decimal percentage.
-        /// </summary>
-        [ContentSerializer, Description("The time scale of the game object.\nDefault is 1."), Category("General"), DefaultValue(1.0f)]
-        public float TimeScale
-        {
-            get { return _timeScale; }
-            set
-            {
-                if (_timeScale != value)
-                {
-                    _timeScale = value;
-                    OnTimeScaleChanged();
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        float _absoluteTimeScale = 1.0f;
-        /// <summary>
-        /// Gets the time scale of the <see cref="Entity"/> expressed in decimal percentage with respect to it's <see cref="Parent"/>.
-        /// </summary>
-        [ContentSerializerIgnore, Description("The absolute time scale of the game object."), Category("Render & Absolute"), ReadOnly(true)]
-        public float AbsoluteTimeScale
-        {
-            get { return _absoluteTimeScale; }
-            internal set
-            {
-                if (_absoluteTimeScale != value)
-                {
-                    _absoluteTimeScale = value;
+                    _postEffects = value;
                     OnPropertyChanged();
                 }
             }
@@ -233,17 +197,29 @@ namespace Delta
         protected internal Entity()
             : base()
         {
+            IsVisible = true;
+            IsEnabled = true;
             NeedsHeavyUpdate = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="Entity"/>.</param>
+        public Entity(string name)
+            : this()
+        {
+            Name = name;
         }
 
         /// <summary>
         /// Finalizes this instance.
         /// </summary>
         ~Entity()
-        {
+        {      
             Dispose(false);
         }
-
+        
         /// <summary>
         /// Disposes the <see cref="Entity"/>.
         /// </summary>
@@ -252,15 +228,13 @@ namespace Delta
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
+  
         /// <summary>
         /// Disposes any resources the <see cref="Entity"/> is using.
         /// </summary>
         /// <param name="disposing">Indicates whether to dispose managed resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-                Recycle();
         }
 
         /// <summary>
@@ -270,34 +244,22 @@ namespace Delta
         {
             if (ParentCollection != null)
                 ParentCollection.UnsafeRemove(this);
-            _parent = null;
-            _parentCollection = null;
+            ParentCollection = null;
             _flaggedForRemoval = false;
-            _name = string.Empty;
             _isEnabled = true;
             _isVisible = true;
             _depth = 0;
-            _postEffect = PostEffects.None;
-            _timeScale = 1.0f;
-            _absoluteTimeScale = 1.0f;
+            _postEffects = PostEffects.None;
+            Name = string.Empty;
             HasInitialized = false;
             HasLoadedContent = false;
             NeedsHeavyUpdate = false;
         }
 
 #if WINDOWS
-        protected internal virtual void GetValues(ref Dictionary<string, string> values)
-        {
-            if (values == null)
-                values = new Dictionary<string, string>();
-            string[] valueNames = new string[] { "visible", "enabled", "depth", "overlay" };
-            foreach (string name in valueNames)
-                values.Add(name, GetValue(name));
-        }
-
         protected internal virtual string GetValue(string name)
         {
-            switch (name.ToLower())
+            switch (name)
             {
                 case "visible":
                 case "isvisible":
@@ -312,9 +274,17 @@ namespace Delta
                 case "updateorder":
                     return Depth.ToString(CultureInfo.InvariantCulture);
                 case "overlay":
-                    return ((PostEffect & PostEffects.Overlay) != 0).ToString().ToLower();
+                case "isoverlay":
+                    if ((PostEffects & PostEffects.Overlay) != 0)
+                        return "true";
+                    else
+                        return "false";
             }
             return string.Empty;
+        }
+        string ICustomizable.GetValue(string name)
+        {
+            return GetValue(name);
         }
         protected internal virtual bool SetValue(string name, string value)
         {
@@ -337,13 +307,14 @@ namespace Delta
                     return true;
                 case "overlay":
                 case "isoverlay":
-                    if (bool.Parse(value))
-                        PostEffect |= PostEffects.Overlay;
-                    else
-                        PostEffect &= ~PostEffects.Overlay;
+                    PostEffects |= PostEffects.Overlay;
                     return true;
-            }
+             }
             return false;
+        }
+        bool ICustomizable.SetValue(string name, string value)
+        {
+            return SetValue(name, value);
         }
 #endif
 
@@ -379,6 +350,11 @@ namespace Delta
         {
         }
 
+        void IEntity.LoadContent()
+        {
+            InternalLoadContent();
+        }
+
         /// <summary>
         /// Completely updates the <see cref="Entity"/>.
         /// </summary>
@@ -402,6 +378,10 @@ namespace Delta
                 OnEndUpdate(time);
             }
         }
+        void IEntity.Update(DeltaGameTime time)
+        {
+            InternalUpdate(time);
+        }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="Entity"/> is allowed to update.
@@ -418,7 +398,7 @@ namespace Delta
         /// <param name="time">time</param>
         protected virtual void LightUpdate(DeltaGameTime time)
         {
-        }
+        }  
 
         /// <summary>
         /// Updates the <see cref="Entity"/>. Override this method to add custom update logic which is too expensive to execute every frame.
@@ -426,16 +406,6 @@ namespace Delta
         /// <param name="time">time</param>
         protected internal virtual void HeavyUpdate(DeltaGameTime time)
         {
-        }
-
-        /// <summary>
-        /// Updates the <see cref="Entity"/>'s <see cref="AbsoluteTimeScale"/>.
-        /// </summary>
-        protected internal virtual void UpdateAbsoluteTimeScale()
-        {
-            _absoluteTimeScale = _timeScale;
-            if (_parent != null)
-                _absoluteTimeScale += _parent._absoluteTimeScale;
         }
 
         /// <summary>
@@ -449,10 +419,14 @@ namespace Delta
             if (CanDraw())
             {
                 OnBeginDraw(time, spriteBatch);
-                if (G.CurrentPostEffect == PostEffect)
+                if (G.CurrentPostEffects == PostEffects)
                     Draw(time, spriteBatch);
                 OnEndDraw(time, spriteBatch);
             }
+        }
+        void IEntity.Draw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+            InternalDraw(time, spriteBatch);
         }
 
         /// <summary>
@@ -461,7 +435,7 @@ namespace Delta
         /// <returns>A value indicating whether the <see cref="Entity"/> is allowed to draw.</returns>
         protected virtual bool CanDraw()
         {
-            return IsVisible;
+            return IsVisible; 
         }
 
         /// <summary>
@@ -470,6 +444,20 @@ namespace Delta
         /// <param name="time">time</param>
         /// <param name="spriteBatch">spriteBatch</param>
         protected virtual void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
+        {
+        }
+
+        /// <summary>
+        /// Called when the <see cref="Entity"/>'s <see cref="IsEnabled"/> has changed.
+        /// </summary>
+        protected internal virtual void OnIsEnabledChanged()
+        {
+        } 
+
+        /// <summary>
+        /// Called when the <see cref="Entity"/>'s <see cref="IsVisible"/> has changed.
+        /// </summary>
+        protected internal virtual void OnIsVisibleChanged()
         {
         }
 
@@ -512,77 +500,10 @@ namespace Delta
         /// </summary>
         protected internal virtual void OnAdded()
         {
-            if (Added != null)
-                Added();
         }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.
-        /// </summary>
-        protected internal virtual void OnRemoved()
+        void IEntity.OnAdded()
         {
-            _flaggedForRemoval = false;
-            ParentCollection = null;
-            if (Removed != null)
-                Removed();
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="Name"/> has changed.
-        /// </summary>
-        protected internal virtual void OnNameChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="IsEnabled"/> has changed.
-        /// </summary>
-        protected internal virtual void OnIsEnabledChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="IsVisible"/> has changed.
-        /// </summary>
-        protected internal virtual void OnIsVisibleChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="Depth"/> has changed.
-        /// </summary>
-        protected internal virtual void OnDepthChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="PostEffect"/> has changed.
-        /// </summary>
-        protected internal virtual void OnPostEffectChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="TimeScale"/> or <see cref="AbsoluteTimeScale"/> has changed.
-        /// </summary>
-        protected internal virtual void OnTimeScaleChanged()
-        {
-            UpdateAbsoluteTimeScale();
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="Parent"/> has changed.
-        /// </summary>
-        protected internal virtual void OnParentChanged()
-        {
-            UpdateAbsoluteTimeScale();
-        }
-
-        /// <summary>
-        /// Called when the <see cref="Entity"/>'s <see cref="ParentCollection"/> has changed.
-        /// </summary>
-        protected internal virtual void OnParentCollectionChanged()
-        {
+            OnAdded();
         }
 
 #if WINDOWS
@@ -593,6 +514,19 @@ namespace Delta
             G._refreshPropertyGridTimer = 0.1f;
         }
 #endif
+
+        /// <summary>
+        /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.
+        /// </summary>
+        protected internal virtual void OnRemoved()
+        {
+            _flaggedForRemoval = false;
+            ParentCollection = null;
+        }
+        void IEntity.OnRemoved()
+        {
+            OnRemoved();
+        }
 
         /// <summary>
         /// Flags the <see cref="Entity"/> to be removed from the <see cref="ParentCollection"/> upon the start of the next frame.

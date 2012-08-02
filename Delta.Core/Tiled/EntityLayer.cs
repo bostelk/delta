@@ -94,21 +94,21 @@ namespace Delta.Tiled
 
                 entity.ImportTiledProperties(objectNode["properties"]);
 
-                //bool added = false;
-                //AnimatedSpriteEntity sprite = entity as AnimatedSpriteEntity;
-                //if (sprite != null)
-                //{
-                //    if (sprite.PostEffect != PostEffects.None)
-                //    {
-                //        if (!Map.Instance.PostEffects.ContainsKey(sprite.PostEffect))
-                //            Map.Instance.PostEffects.Add(sprite.PostEffects, new EntityParent<AnimatedSpriteEntity>());
-                //        Map.Instance.PostEffects[sprite.PostEffects].Add(sprite);
-                //        added = true;
-                //    }
-                //}
+                bool added = false;
+                SpriteEntity sprite = entity as SpriteEntity;
+                if (sprite != null)
+                {
+                    if (sprite.PostEffects != PostEffects.None)
+                    {
+                        if (!Map.Instance.PostEffects.ContainsKey(sprite.PostEffects))
+                            Map.Instance.PostEffects.Add(sprite.PostEffects, new EntityParent<SpriteEntity>());
+                        Map.Instance.PostEffects[sprite.PostEffects].Add(sprite);
+                        added = true;
+                    }
+                }
 
-                //if (!added)
-                Add(entity);
+                if (!added)
+                    Add(entity);
             }
         }
 #endif

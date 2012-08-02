@@ -20,11 +20,11 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void Create(string spriteSheet, string animation, Vector2 position)
         {
-            AnimatedSpriteEntity se = AnimatedSpriteEntity.Create(spriteSheet);
+            SpriteEntity se = SpriteEntity.Create(spriteSheet);
             se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
-            se.Play(animation, AnimationOptions.Recycle);
+            se.Play(animation, AnimationOptions.RemoveWhenFinished);
             se.Depth = position.Y;
             G.World.Ground.UnsafeAdd(se);
         }
@@ -37,7 +37,7 @@ namespace Delta.Graphics
         /// <param name="position"></param>
         public static void CreateTrail(string spriteSheet, string animation, Vector2 position) 
         {
-            AnimatedSpriteEntity se = AnimatedSpriteEntity.Create(spriteSheet);
+            SpriteEntity se = SpriteEntity.Create(spriteSheet);
             se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
@@ -55,9 +55,9 @@ namespace Delta.Graphics
         /// <param name="spriteSheet"></param>
         /// <param name="animation"></param>
         /// <param name="position"></param>
-        public static void CreateTrail(AnimatedSpriteEntity sprite, Vector2 position)
+        public static void CreateTrail(SpriteEntity sprite, Vector2 position)
         {
-            SpriteEntity sfe = SpriteEntity.Create(sprite.SpriteSheetName, sprite.Animation.ImageName, sprite.Frame);
+            SpriteFrameEntity sfe = SpriteFrameEntity.Create(sprite);
             sfe.InternalLoadContent();
             sfe.Position = position;
             sfe.Origin = new Vector2(0.5f, 0.5f);
@@ -79,11 +79,11 @@ namespace Delta.Graphics
         public static void CreateShatter(string spriteSheet, string animation, Vector2 position, float radius) 
         {
             // pick a random frame from teh animation.
-            AnimatedSpriteEntity[] se = new AnimatedSpriteEntity[4];
+            SpriteEntity[] se = new SpriteEntity[4];
 
             for(int i = 0; i < 4; i++)
             {
-                AnimatedSpriteEntity see = se[i] = AnimatedSpriteEntity.Create(spriteSheet);
+                SpriteEntity see = se[i] = SpriteEntity.Create(spriteSheet);
                 see.InternalLoadContent();
                 see.Position = position;
                 see.Origin = new Vector2(0.5f, 0.5f);

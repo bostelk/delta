@@ -9,11 +9,12 @@ using Delta.Input;
 
 namespace Delta
 {
-    public class World : EntityParent<Entity>
+    public class World : EntityParent<IEntity>
     {
         static DeltaGameTime _time = new DeltaGameTime();
 
         public Camera Camera { get; private set; }
+        public float TimeScale { get; set; }
         public DeltaGameTime Time { get { return _time; } }
         public bool IsPaused { get; set; }
 
@@ -37,7 +38,7 @@ namespace Delta
 
         protected override void LightUpdate(DeltaGameTime time)
         {
-            _time.ElapsedSeconds = G._time.ElapsedSeconds * AbsoluteTimeScale;
+            _time.ElapsedSeconds = G._time.ElapsedSeconds * TimeScale;
             _time.TotalSeconds += _time.ElapsedSeconds;
             Camera.Update(_time);
             base.LightUpdate(time);

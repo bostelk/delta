@@ -107,18 +107,18 @@ namespace Delta.Examples.Entities
             set;
         }
 
-        //public override Vector2 Position
-        //{
-        //    get
-        //    {
-        //        return _bar.Center.ToVector2();
-        //    }
-        //    set
-        //    {
-        //        _bar.X = (int)value.X + _bar.Width / 2;
-        //        _bar.Y = (int)value.Y + _bar.Height / 2;
-        //    }
-        //}
+        public override Vector2 Position
+        {
+            get
+            {
+                return _bar.Center.ToVector2();
+            }
+            set
+            {
+                _bar.X = (int)value.X + _bar.Width / 2;
+                _bar.Y = (int)value.Y + _bar.Height / 2;
+            }
+        }
 
         public bool IsFull
         {

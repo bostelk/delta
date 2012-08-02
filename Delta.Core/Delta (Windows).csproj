@@ -165,10 +165,8 @@
     </Compile>
     <Compile Include="Editor\GraphicsDeviceService.cs" />
     <Compile Include="Editor\ServiceContainer.cs" />
-    <Compile Include="EntityHelper.cs" />
-    <Compile Include="Graphics\BaseSpriteEntity.cs" />
     <Compile Include="PostEffects.cs" />
-    <Compile Include="Graphics\SpriteEntity.cs" />
+    <Compile Include="Graphics\SpriteFrameEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions\BlendStateExtensions.cs" />
@@ -190,6 +188,7 @@
     <Compile Include="Input\States\KeyboardInputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="IEntityCollection.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="TimedRange.cs" />
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
@@ -207,7 +206,7 @@
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
-    <Compile Include="Graphics\AnimatedSpriteEntity.cs" />
+    <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Transformations\Interpolation.cs" />
     <Compile Include="Transformations\BlinkTransform.cs" />

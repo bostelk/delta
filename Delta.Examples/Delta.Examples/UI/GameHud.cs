@@ -48,9 +48,8 @@ namespace Delta.Examples.Entities
         public Color LeftBarColor;
         public Color RightBarColor;
 
-        public GameHud() : base()
+        public GameHud() : base("GameHud")
         {
-            Name = "GameHud";
             RightFillPercent = 0.0f;
             LeftFillPercent = 0.0f;
             RightBarColor = new Color(56, 136, 216).SetAlpha(0.95f);

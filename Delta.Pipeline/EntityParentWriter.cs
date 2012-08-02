@@ -9,7 +9,7 @@ namespace Delta
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     [ContentTypeWriter]
-    public class EntityParentWriter<T> : ContentTypeWriter<EntityParent<T>> where T : Entity
+    public class EntityParentWriter<T> : ContentTypeWriter<EntityParent<T>> where T : IEntity
     {
         protected override void Write(ContentWriter output, EntityParent<T> value)
         {

@@ -10,15 +10,15 @@ namespace Delta
         /// </summary>
         bool NeedsToSort { get; set; }
         /// <summary>
-        /// Adds an <see cref="Entity"/> to the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
+        /// Adds an <see cref="IEntity"/> to the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
         /// </summary>
-        /// <param name="item">The <see cref="Entity"/> to add to the <see cref="IEntityCollection"/>.</param>
-        void UnsafeAdd(Entity item);
+        /// <param name="item">The <see cref="IEntity"/> to add to the <see cref="IEntityCollection"/>.</param>
+        void UnsafeAdd(IEntity item);
         /// <summary>
-        /// Removes an <see cref="Entity"/> from the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
+        /// Removes an <see cref="IEntity"/> from the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
         /// </summary>
-        /// <param name="item">The <see cref="Entity"/> to remove the <see cref="IEntityCollection"/>.</param>
-        void UnsafeRemove(Entity item);
+        /// <param name="item">The <see cref="IEntity"/> to remove the <see cref="IEntityCollection"/>.</param>
+        void UnsafeRemove(IEntity item);
         /// <summary>
         /// Updates the <see cref="IEntityCollection"/>.
         /// </summary>

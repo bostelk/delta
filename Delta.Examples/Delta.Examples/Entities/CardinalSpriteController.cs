@@ -23,13 +23,13 @@ namespace Delta.Examples.Entities
             new Vector2(-INV_SQRT_2, -INV_SQRT_2),   // north west
         };
 
-        AnimatedSpriteEntity _sprite;
+        SpriteEntity _sprite;
         string _animation;
         bool _inIdle;
 
         public IntercardinalDirection FacingDirection { get; private set; }
     
-        public CardinalSpriteController(AnimatedSpriteEntity sprite)
+        public CardinalSpriteController(SpriteEntity sprite)
         {
             _sprite = sprite;
             WalkNorth();
