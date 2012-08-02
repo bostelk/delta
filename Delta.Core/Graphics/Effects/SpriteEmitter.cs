@@ -129,7 +129,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(DeltaGameTime time)
         {
-            if (G.World.SecondsPast(_lastEmitTime + Frequency))
+            if (G.World.SecondsPast(_lastEmitTime + _frequency))
             {
                 int quantity = (int) (QuantityRange.RandomWithin() + .5);
                 for (int i = 0; i < quantity; i++)
