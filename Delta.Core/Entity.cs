@@ -8,37 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    internal class EntityHelper
-    {
-        internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
-
-        internal static void AddIDReference(Entity entity)
-        {
-            string id = entity.Name.ToLower();
-            if (_idReferences.ContainsKey(id)) //if the ID already exists, append a numerical increment
-            {
-                for (int x = 1; x < int.MaxValue; x++)
-                {
-                    string newID = id + x;
-                    if (!_idReferences.ContainsKey(newID))
-                    {
-                        id = newID;
-                        break;
-                    }
-                }
-            }
-            entity.Name = id;
-            _idReferences.Add(id, entity);
-        }
-
-        internal static void RemoveIDReference(Entity entity)
-        {
-            string id = entity.Name.ToLower();
-            if (EntityHelper._idReferences.ContainsKey(id))
-                EntityHelper._idReferences.Remove(id);
-        }
-    }
-
     /// <summary>
     /// Base class for all game entites.
     /// </summary>
@@ -52,11 +21,13 @@ namespace Delta
         /// <returns>The <see cref="Entity"/> with the specified name. Returns <see cref="null"/> if an <see cref="Entity"/> with the specified name could not be found.</returns>
         public static Entity Get(string name)
         {
-            name = name.ToLower();
-            if (EntityHelper._idReferences.ContainsKey(name))
-                return EntityHelper._idReferences[name];
-            return null;
+            return EntityHelper.Get(name);
         }
+
+        /// <summary>
+        /// Retrieves the global <see cref="List{T}"/> of entities.
+        /// </summary>
+        public static List<Entity> GlobalEntities { get { return EntityHelper._globalEntityReferences; } }
 
         bool _flaggedForRemoval = false;
 

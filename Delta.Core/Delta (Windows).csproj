@@ -165,6 +165,7 @@
     </Compile>
     <Compile Include="Editor\GraphicsDeviceService.cs" />
     <Compile Include="Editor\ServiceContainer.cs" />
+    <Compile Include="EntityHelper.cs" />
     <Compile Include="Graphics\BlendStateReader.cs" />
     <Compile Include="Graphics\DepthStencilStateReader.cs" />
     <Compile Include="Graphics\RasterizerStateReader.cs" />
