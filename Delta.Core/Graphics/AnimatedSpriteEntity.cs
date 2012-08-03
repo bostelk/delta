@@ -76,6 +76,7 @@ namespace Delta.Graphics
                 if (_animationOptions != value)
                 {
                     _animationOptions = value;
+                    Play(_animationName, _animationOptions);
                     OnPropertyChanged();
                 }
             }
