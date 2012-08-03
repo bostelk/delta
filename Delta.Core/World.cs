@@ -9,7 +9,7 @@ using Delta.Input;
 
 namespace Delta
 {
-    public class World : EntityParent<IEntity>
+    public class World : EntityParent<Entity>
     {
         static DeltaGameTime _time = new DeltaGameTime();
 

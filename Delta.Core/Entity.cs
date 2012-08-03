@@ -10,9 +10,9 @@ namespace Delta
 {
     internal class EntityHelper
     {
-        internal static Dictionary<string, IEntity> _idReferences = new Dictionary<string, IEntity>();
+        internal static Dictionary<string, Entity> _idReferences = new Dictionary<string, Entity>();
 
-        internal static void AddIDReference(IEntity entity)
+        internal static void AddIDReference(Entity entity)
         {
             string id = entity.Name.ToLower();
             if (_idReferences.ContainsKey(id)) //if the ID already exists, append a numerical increment
@@ -31,7 +31,7 @@ namespace Delta
             _idReferences.Add(id, entity);
         }
 
-        internal static void RemoveIDReference(IEntity entity)
+        internal static void RemoveIDReference(Entity entity)
         {
             string id = entity.Name.ToLower();
             if (EntityHelper._idReferences.ContainsKey(id))
@@ -43,14 +43,14 @@ namespace Delta
     /// Base class for all game entites.
     /// </summary>
     [DefaultPropertyAttribute("Name")]
-    public abstract class Entity : IRecyclable, ICustomizable, IEntity, IDisposable
+    public abstract class Entity : IRecyclable, ICustomizable, IDisposable
     {
         /// <summary>
-        /// Retrieves an <see cref="IEntity"/> by it's name.
+        /// Retrieves an <see cref="Entity"/> by it's name.
         /// </summary>
-        /// <param name="name">The name of the <see cref="IEntity"/> to retrieve.</param>
-        /// <returns>The <see cref="IEntity"/> with the specified name. Returns <see cref="null"/> if an <see cref="IEntity"/> with the specified name could not be found.</returns>
-        public static IEntity Get(string name)
+        /// <param name="name">The name of the <see cref="Entity"/> to retrieve.</param>
+        /// <returns>The <see cref="Entity"/> with the specified name. Returns <see cref="null"/> if an <see cref="Entity"/> with the specified name could not be found.</returns>
+        public static Entity Get(string name)
         {
             name = name.ToLower();
             if (EntityHelper._idReferences.ContainsKey(name))
@@ -65,11 +65,6 @@ namespace Delta
         /// </summary>
         [ContentSerializerIgnore]
         protected internal IEntityCollection ParentCollection { get; internal set; }
-        IEntityCollection IEntity.ParentCollection //explict interface property allows us to publicly set the ParentCollection from IEntity.
-        {
-            get { return ParentCollection; }
-            set { ParentCollection = value; }
-        }
 
         string _name = string.Empty;
         /// <summary>
@@ -84,15 +79,9 @@ namespace Delta
                 if (_name != value)
                 {
                     _name = value;
-                    if (HasInitialized) //oh, a property has changed? Let's poke at the UI to refresh the values. HEY UI. YA YOU. UPDATE THIS SHIT. IT'S BRAND NEW.
-                        G.EditorForm.grdProperty.Refresh(); //This /could/ be in a timer
+                    OnPropertyChanged();
                 }
             }
-        }
-        string IEntity.Name //explict interface property allows us to publicly set the Name from IEntity.
-        {
-            get { return Name; }
-            set { Name = value; }
         }
 
         /// <summary>
@@ -350,11 +339,6 @@ namespace Delta
         {
         }
 
-        void IEntity.LoadContent()
-        {
-            InternalLoadContent();
-        }
-
         /// <summary>
         /// Completely updates the <see cref="Entity"/>.
         /// </summary>
@@ -377,10 +361,6 @@ namespace Delta
                 }
                 OnEndUpdate(time);
             }
-        }
-        void IEntity.Update(DeltaGameTime time)
-        {
-            InternalUpdate(time);
         }
 
         /// <summary>
@@ -423,10 +403,6 @@ namespace Delta
                     Draw(time, spriteBatch);
                 OnEndDraw(time, spriteBatch);
             }
-        }
-        void IEntity.Draw(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            InternalDraw(time, spriteBatch);
         }
 
         /// <summary>
@@ -501,10 +477,6 @@ namespace Delta
         protected internal virtual void OnAdded()
         {
         }
-        void IEntity.OnAdded()
-        {
-            OnAdded();
-        }
 
 #if WINDOWS
         protected internal void OnPropertyChanged()
@@ -522,10 +494,6 @@ namespace Delta
         {
             _flaggedForRemoval = false;
             ParentCollection = null;
-        }
-        void IEntity.OnRemoved()
-        {
-            OnRemoved();
         }
 
         /// <summary>

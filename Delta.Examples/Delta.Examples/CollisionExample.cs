@@ -31,7 +31,7 @@ namespace Delta.Examples
             //G.World.Add(player = new BoxLink());
             //G.World.Add(new WorldBounds());
             //_obstacles = EntitySpawner.OnAGrid<Obstacle>(Vector2.Zero, 10, 20, 32, 32, () => { return new Obstacle() { MoveAndRotate = true }; });
-            //G.World.AddRange(_obstacles.ToList<IEntity>(), 0);
+            //G.World.AddRange(_obstacles.ToList<Entity>(), 0);
         }
 
         protected override void Update(GameTime gameTime)

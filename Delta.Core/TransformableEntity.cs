@@ -13,7 +13,7 @@ namespace Delta
     /// <summary>
     /// Base class for all transformable game entities.
     /// </summary>
-    public abstract class TransformableEntity : Entity, IEntity
+    public abstract class TransformableEntity : Entity
     {
         Transformer _transformer;
 

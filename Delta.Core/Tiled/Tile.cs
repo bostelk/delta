@@ -11,25 +11,8 @@ using Delta;
 namespace Delta.Tiled
 {
     [EditorBrowsable( EditorBrowsableState.Never)]
-    public class Tile : IEntity
+    public class Tile
     {
-        string IEntity.Name
-        {
-            get { return string.Empty; }
-            set { }
-        }
-
-        float IEntity.Depth
-        {
-            get { return 0; }
-        }
-
-        IEntityCollection IEntity.ParentCollection
-        {
-            get { return null; }
-            set { }
-        }
-
         internal Rectangle _sourceRectangle = Rectangle.Empty;
         [ContentSerializer]
         internal int _tilesetIndex = -1;
@@ -77,26 +60,10 @@ namespace Delta.Tiled
 
         }
 #endif
-        void IEntity.LoadContent()
-        {
-        }
-
-        void IEntity.Update(DeltaGameTime time)
-        {
-        }
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Map.Instance._spriteSheet.Texture, _position, _sourceRectangle, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
-        }
-
-        void IEntity.OnAdded()
-        {
-        }
-
-        void IEntity.OnRemoved()
-        {
         }
 
     }

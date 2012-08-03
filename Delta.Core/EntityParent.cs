@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Delta
 {
-    internal class EntityComparer<T> : IComparer<T> where T : IEntity
+    internal class EntityComparer<T> : IComparer<T> where T : Entity
     {
         internal EntityComparer()
             : base()
@@ -25,7 +25,7 @@ namespace Delta
     /// Base class for all game entity parents.
     /// </summary>
     /// <typeparam name="T">The type of entities in the <see cref="EntityParent{T}"/>.</typeparam>
-    public class EntityParent<T> : Entity, IEntityCollection where T : IEntity
+    public class EntityParent<T> : Entity, IEntityCollection where T : Entity
     {
         IComparer<T> _defaultComparer = new EntityComparer<T>();
         internal List<T> _children = new List<T>();
@@ -70,7 +70,7 @@ namespace Delta
         /// <summary>
         /// Adds an <see cref="{T}"/> to the end of the <see cref="EntityParent{T}"/> and sets <see cref="NeedsToSort"/> to true.
         /// </summary>
-        /// <param name="item">The <see cref="IEntity"/> to add to the end of the <see cref="EntityParent{T}"/>.</param>
+        /// <param name="item">The <see cref="Entity"/> to add to the end of the <see cref="EntityParent{T}"/>.</param>
         public virtual void Add(T item)
         {
             if (_children.Contains(item)) 
@@ -82,7 +82,7 @@ namespace Delta
                 EntityHelper.AddIDReference(item);
             item.OnAdded();
         }
-        void IEntityCollection.UnsafeAdd(IEntity item)
+        void IEntityCollection.UnsafeAdd(Entity item)
         {
             Add((T)item);
         }
@@ -102,7 +102,7 @@ namespace Delta
                 EntityHelper.RemoveIDReference(item);
             item.OnRemoved();
         }
-        void IEntityCollection.UnsafeRemove(IEntity item)
+        void IEntityCollection.UnsafeRemove(Entity item)
         {
             Remove((T)item);
         }
@@ -113,7 +113,7 @@ namespace Delta
         protected override void LoadContent()
         {
             for (int i = 0; i < _children.Count; i++)
-                _children[i].LoadContent();
+                _children[i].InternalLoadContent();
         }
 
         void IEntityCollection.Update(DeltaGameTime time)
@@ -128,7 +128,7 @@ namespace Delta
         protected internal virtual void UpdateChildren(DeltaGameTime time)
         {
             for (int i = 0; i < _children.Count; i++)
-                _children[i].Update(time);
+                _children[i].InternalUpdate(time);
         }
 
         void IEntityCollection.Draw(DeltaGameTime time, SpriteBatch spriteBatch)
@@ -144,7 +144,7 @@ namespace Delta
         protected internal virtual void DrawChildren(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < _children.Count; i++)
-                _children[i].Draw(time, spriteBatch);
+                _children[i].InternalDraw(time, spriteBatch);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Delta
     /// </summary>
     /// <typeparam name="T">The type of entities in the <see cref="EntityParent{T}"/>.</typeparam>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class EntityParentReader<T> : ContentTypeReader<EntityParent<T>> where T : IEntity
+    public class EntityParentReader<T> : ContentTypeReader<EntityParent<T>> where T : Entity
     {
         /// <summary>
         /// Reads a <see cref="EntityParent{T}"/> from the current stream.

@@ -23,7 +23,7 @@ namespace Delta.Tiled
         Isometric,
     }
 
-    public class Map : EntityParent<IEntity>
+    public class Map : EntityParent<Entity>
     {
         internal static Map Instance { get; set; }
 
@@ -160,7 +160,7 @@ namespace Delta.Tiled
         public override string ToString()
         {
             string info = String.Empty;
-            foreach (IEntity gameComponent in _children)
+            foreach (Entity gameComponent in _children)
                 info += gameComponent.ToString() + "\n";
             return info;
         }
