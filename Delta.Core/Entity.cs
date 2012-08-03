@@ -43,7 +43,7 @@ namespace Delta
     /// Base class for all game entites.
     /// </summary>
     [DefaultPropertyAttribute("Name")]
-    public abstract class Entity : IRecyclable, ICustomizable, IDisposable
+    public abstract class Entity : IRecyclable, IDisposable
     {
         /// <summary>
         /// Retrieves an <see cref="Entity"/> by it's name.
@@ -261,10 +261,7 @@ namespace Delta
             }
             return string.Empty;
         }
-        string ICustomizable.GetValue(string name)
-        {
-            return GetValue(name);
-        }
+
         protected internal virtual bool SetValue(string name, string value)
         {
             switch (name)
@@ -285,15 +282,10 @@ namespace Delta
                     Depth = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "overlay":
-                case "isoverlay":
                     PostEffects |= PostEffects.Overlay;
                     return true;
              }
             return false;
-        }
-        bool ICustomizable.SetValue(string name, string value)
-        {
-            return SetValue(name, value);
         }
 #endif
 

@@ -238,7 +238,6 @@
     <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="Structures\PoolManager.cs" />
-    <Compile Include="ICustomizable.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="UI\Controls\Control.cs" />

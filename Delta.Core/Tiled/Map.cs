@@ -168,7 +168,7 @@ namespace Delta.Tiled
 
     internal static class MapHelper
     {
-        internal static void ImportTiledProperties(this ICustomizable customizable, XmlNode node)
+        internal static void ImportTiledProperties(this Entity entity, XmlNode node)
         {
             if (node == null)
                 return;
@@ -179,11 +179,11 @@ namespace Delta.Tiled
                 string name = propertyNode.Attributes["name"] == null ? string.Empty : propertyNode.Attributes["name"].Value.ToLower();
                 string value = propertyNode.Attributes["value"].Value;
                 if (!string.IsNullOrEmpty(name))
-                    isFound = customizable.SetValue(name, value);
+                    isFound = entity.SetValue(name, value);
                 else
                     continue;
                 if (!isFound)
-                    throw new Exception(String.Format("Could not import Tiled XML property '{0}', no such property exists for '{1}'.", name, customizable.GetType().Name));
+                    throw new Exception(String.Format("Could not import Tiled XML property '{0}', no such property exists for '{1}'.", name, entity.GetType().Name));
             }
         }
     }
