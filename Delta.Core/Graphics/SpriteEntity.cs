@@ -158,13 +158,6 @@ namespace Delta.Graphics
             IsAnimationFinished = true;
         }
 
-        public SpriteEntity(string id, string spriteSheet)
-            : base(id)
-        {
-            SpriteSheetName= spriteSheet;
-            IsAnimationFinished = true;
-        }
-
         public override void Recycle()
         {
             base.Recycle();

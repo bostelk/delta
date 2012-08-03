@@ -66,24 +66,6 @@ namespace Delta
         [ContentSerializerIgnore]
         protected internal IEntityCollection ParentCollection { get; internal set; }
 
-        string _name = string.Empty;
-        /// <summary>
-        /// Gets the name of the <see cref="Entity"/>.
-        /// </summary>
-        [ContentSerializer, Description("The name of the game object.\nDefault is null."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         /// <summary>
         /// Gets a value indicating whether the <see cref="Entity"/> has initialized.
         /// </summary>
@@ -101,12 +83,30 @@ namespace Delta
         [ContentSerializerIgnore, Browsable(false)]
         protected bool NeedsHeavyUpdate { get; set; }
 
+        string _name = string.Empty;
+        /// <summary>
+        /// Gets the name of the <see cref="Entity"/>.
+        /// </summary>
+        [ContentSerializer, Description("The name of the game object.\nDefault is null."), Category("General"), DefaultValue("")]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         bool _isEnabled = true;
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is updated.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, DisplayName("Enabled"), Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Enabled"), Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), DefaultValue(true)]
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -126,7 +126,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is drawn.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer, DisplayName("Visible"), Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
+        [ContentSerializer, DisplayName("Visible"), Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), DefaultValue(true)]
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -146,7 +146,7 @@ namespace Delta
         /// Gets or sets the depth (update and draw order) of the <see cref="Entity"/> in the <see cref="ParentCollection"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="float"/> value of 0.0f.</remarks>
-        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
+        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), DefaultValue(0.0f)]
         public float Depth
         {
             get { return _depth; }
@@ -166,7 +166,7 @@ namespace Delta
         /// <summary>
         /// Gets or sets the <see cref="PostEffects"/> of the <see cref="Entity"/> used when drawing.
         /// </summary>
-        [ContentSerializer, Description("The post effects used when drawing the game object.\nDefault is PostEffects.None."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
+        [ContentSerializer, Description("The post effects used when drawing the game object.\nDefault is None."), Category("General"), DefaultValue(PostEffects.None)]
         public PostEffects PostEffects
         {
             get { return _postEffects; }
@@ -189,16 +189,6 @@ namespace Delta
             IsVisible = true;
             IsEnabled = true;
             NeedsHeavyUpdate = true;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="name">The name of the <see cref="Entity"/>.</param>
-        public Entity(string name)
-            : this()
-        {
-            Name = name;
         }
 
         /// <summary>

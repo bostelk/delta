@@ -374,16 +374,6 @@ namespace Delta
         }
 
         /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="name">The name of the <see cref="TransformableEntity"/>.</param>
-        public TransformableEntity(string name)
-            : base(name)
-        {
-            RenderColor = Color.White;
-        }
-
-        /// <summary>
         /// Recycles the <see cref="TransformableEntity"/> so it may be re-used.
         /// </summary>
         public override void Recycle()

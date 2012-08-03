@@ -56,18 +56,6 @@ namespace Delta
         }
 
         /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="name">The name of the <see cref="EntityParent{T}"/>.</param>
-        public EntityParent(string name)
-            : base(name)
-        {
-            Children = new ReadOnlyCollection<T>(_children);
-            NeedsToSort = true;
-            Comparer = null;
-        }
-
-        /// <summary>
         /// Adds an <see cref="{T}"/> to the end of the <see cref="EntityParent{T}"/> and sets <see cref="NeedsToSort"/> to true.
         /// </summary>
         /// <param name="item">The <see cref="Entity"/> to add to the end of the <see cref="EntityParent{T}"/>.</param>
