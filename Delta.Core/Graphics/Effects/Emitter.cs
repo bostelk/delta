@@ -247,8 +247,11 @@ namespace Delta.Graphics
 
             public virtual void Recycle()
             {
-                Entity.Recycle();
-                Entity = null;
+                if (Entity != null)
+                {
+                    Entity.Recycle();
+                    Entity = null;
+                }
                 Life = 0;
                 Lifespan = 0;
                 Acceleration = Vector2.Zero;

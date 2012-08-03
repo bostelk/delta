@@ -41,8 +41,8 @@ namespace Delta
         public static void DrawStringOutline(this SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color color, Color outline)
         {
             spriteBatch.DrawString(font, text, position + new Vector2(1f, 1f), outline);
-			spriteBatch.DrawString(font, text, position + new Vector2(-1f, -1f), outline);
-			spriteBatch.DrawString(font, text, position + new Vector2(1f, -1f), outline);
+            spriteBatch.DrawString(font, text, position + new Vector2(-1f, -1f), outline);
+            spriteBatch.DrawString(font, text, position + new Vector2(1f, -1f), outline);
             spriteBatch.DrawString(font, text, position + new Vector2(-1f, 1f), outline);
             spriteBatch.DrawString(font, text, position, color);
         }
@@ -107,12 +107,17 @@ namespace Delta
 
         public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 position, Vector2 size, Color color)
         {
-            spriteBatch.Draw(G.PixelTexture, position, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0); 
+            spriteBatch.Draw(G.PixelTexture, position, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
         }
 
         public static void DrawPixel(this SpriteBatch spriteBatch, Vector2 position, Color color)
         {
             spriteBatch.Draw(G.PixelTexture, position, color);
+        }
+
+        public static void DrawTransformableEntity(this SpriteBatch spriteBatch, TransformableEntity transformableEntity, Texture2D texture, Rectangle sourceRectangle, SpriteEffects spriteEffects, float layerDepth)
+        {
+            spriteBatch.Draw(texture, transformableEntity.RenderPosition, sourceRectangle, transformableEntity.RenderColor, transformableEntity.RenderRotation, transformableEntity.RenderOrigin, transformableEntity.Scale, spriteEffects, layerDepth);
         }
 
     }

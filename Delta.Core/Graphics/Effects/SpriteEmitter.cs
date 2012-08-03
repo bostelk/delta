@@ -15,7 +15,7 @@ namespace Delta.Graphics
     public class SpriteEmitter : Emitter
     {
 
-        internal class SpriteParticle : Particle<SpriteEntity>
+        internal class SpriteParticle : Particle<AnimatedSpriteEntity>
         {
 
             public override void Update(DeltaGameTime time)
@@ -109,7 +109,7 @@ namespace Delta.Graphics
         {
             SpriteParticle newParticle = _particlePool.Fetch();
             newParticle.Emitter = this;
-            newParticle.Entity = SpriteEntity.Create(_spriteSheet);
+            newParticle.Entity = AnimatedSpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = _lifespanRange.RandomWithin();
             newParticle.Acceleration = Vector2Extensions.DirectionBetween(_accelerationAngleRange.Lower, _accelerationAngleRange.Upper) * _accelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = _rotationRange.RandomWithin();
