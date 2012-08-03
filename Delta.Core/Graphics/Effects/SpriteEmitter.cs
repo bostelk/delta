@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Delta.Transformations;
 using System.Globalization;
-using Delta.Graphics;
+using System.ComponentModel;
 
 namespace Delta.Graphics
 {
     public class SpriteEmitter : Emitter
     {
 
-        internal class SpriteParticle : Particle<AnimatedSpriteEntity>
+        internal class AnimatedSpriteParticle : Particle<AnimatedSpriteEntity>
         {
 
             public override void Update(DeltaGameTime time)
@@ -39,23 +39,33 @@ namespace Delta.Graphics
         }
 
         static Pool<SpriteEmitter> _pool;
-        static Pool<SpriteParticle> _particlePool;
+        static Pool<AnimatedSpriteParticle> _particlePool;
         
-        List<SpriteParticle> _particles;
+        List<AnimatedSpriteParticle> _particles;
+        float _lastEmitTime;
         
         [ContentSerializer]
         string _spriteSheet;
         [ContentSerializer]
         string _animationName;
-        float _lastEmitTime;
+        [ContentSerializer]
+        Range _timeScaleRange;
+        [ContentSerializer]
+        AnimationOptions _spriteOptions;
 
-        public Range TimeScaleRange;
-        public AnimationOptions SpriteOptions;
+        [ContentSerializerIgnore, DisplayName("Sprite Sheet"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public string SpriteSheet { get { return _spriteSheet; } set { _spriteSheet = value; } }
+        [ContentSerializerIgnore, DisplayName("Animation Name"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public string AnimationName { get { return _animationName; } set { _animationName = value; } }
+        [ContentSerializerIgnore, DisplayName("Time Scale"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range TimeScaleRange { get { return _timeScaleRange; } set { _timeScaleRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Animation Options"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public AnimationOptions SpriteOptions { get { return _spriteOptions; } set { _spriteOptions = value; } }
 
         static SpriteEmitter()
         {
             _pool = new Pool<SpriteEmitter>(200);
-            _particlePool = new Pool<SpriteParticle>(2000);
+            _particlePool = new Pool<AnimatedSpriteParticle>(2000);
         }
 
         public static SpriteEmitter Create(string spriteSheet, string animationName)
@@ -67,15 +77,15 @@ namespace Delta.Graphics
             return emitter;
         }
 
-        static SpriteParticle CreateParticle()
+        static AnimatedSpriteParticle CreateParticle()
         {
-            SpriteParticle particle = _particlePool.Fetch();
+            AnimatedSpriteParticle particle = _particlePool.Fetch();
             return particle;
         }
 
         public SpriteEmitter() : base()
         {
-            _particles = new List<SpriteParticle>(100);
+            _particles = new List<AnimatedSpriteParticle>(100);
             TimeScaleRange = new Range(1);
         }
 
@@ -107,19 +117,19 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            SpriteParticle newParticle = _particlePool.Fetch();
+            AnimatedSpriteParticle newParticle = _particlePool.Fetch();
             newParticle.Emitter = this;
             newParticle.Entity = AnimatedSpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
-            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
+            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower.ToRadians(), AccelerationAngleRange.Upper.ToRadians()) * AccelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower, VelocityAngleRange.Upper) * VelocityMagnitudeRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower.ToRadians(), VelocityAngleRange.Upper.ToRadians()) * VelocityMagnitudeRange.RandomWithin();
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Tint = Tint;
             newParticle.Entity.TimeScale = TimeScaleRange.RandomWithin();
             newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
-            newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
+            newParticle.Entity.Origin = Vector2.One * 0.5f;
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.InternalLoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.Entity.Play(_animationName, SpriteOptions);
@@ -139,7 +149,7 @@ namespace Delta.Graphics
 
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                AnimatedSpriteParticle particle = _particles[i];
                 particle.Update(time);
                 particle.Life += time.ElapsedSeconds;
                 particle.Velocity += particle.Acceleration * time.ElapsedSeconds;
@@ -152,7 +162,7 @@ namespace Delta.Graphics
                 if (particle.IsDead)
                 {
                     particle.Recycle();
-                    _particles.FastRemove<SpriteParticle>(i);
+                    _particles.FastRemove<AnimatedSpriteParticle>(i);
                     i--;
                 }
             }
@@ -165,7 +175,7 @@ namespace Delta.Graphics
             spriteBatch.Begin(SpriteSortMode.Deferred, Blend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                AnimatedSpriteParticle particle = _particles[i];
                 particle.Draw(time, spriteBatch);
             }
             spriteBatch.End();
@@ -183,7 +193,7 @@ namespace Delta.Graphics
 
             for (int i = 0; i < _particles.Count; i++)
             {
-                SpriteParticle particle = _particles[i];
+                AnimatedSpriteParticle particle = _particles[i];
                 particle.Recycle();
             }
 

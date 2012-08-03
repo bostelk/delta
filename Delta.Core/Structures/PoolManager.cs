@@ -37,7 +37,7 @@ namespace Delta.Structures
             _infoLbl.Text.Append(String.Format("Sound3DPool: {0}\n", Pool<Sound3D>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("TexturePool: {0}\n", Pool<TextureEntity>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("SpriteEmitterPool: {0}\n", Pool<SpriteEmitter>.PerformanceInfo));
-            _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.SpriteParticle>.PerformanceInfo));
+            _infoLbl.Text.Append(String.Format("SpriteParticlePool: {0}\n", Pool<SpriteEmitter.AnimatedSpriteParticle>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelEmitterPool: {0}\n", Pool<PixelEmitter>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("PixelParticlePool: {0}\n", Pool<PixelEmitter.PixelParticle>.PerformanceInfo));
             _infoLbl.Text.Append(String.Format("ColliderPool: {0}\n", Pool<CollisionBody>.PerformanceInfo));
