@@ -79,7 +79,7 @@ namespace Delta.Graphics
         public Range FadeOutRange { get { return _fadeOutRange; } set { _fadeOutRange = value; } }
 
         // fuck you for not serializing blendstates; the graphicsdevice isn't setup @ buildtime; warning will hardcrash visual studio
-        [ContentSerializerIgnore, DisplayName("Blend"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        [ContentSerializerIgnore, DisplayName("Blend"), Browsable(false)]
         public BlendState Blend
         {
             get
