@@ -137,6 +137,19 @@
     <Compile Include="Editor\ColorWheel.Designer.cs">
       <DependentUpon>ColorWheel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\RangeUIEditor.cs" />
+    <Compile Include="Editor\SliderBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\SliderBar.Designer.cs">
+      <DependentUpon>SliderBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\RangePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\RangePicker.designer.cs">
+      <DependentUpon>RangePicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor\FlagEnumUIEditor.cs" />
     <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
@@ -263,6 +276,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\ColorWheel.resx">
       <DependentUpon>ColorWheel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\SliderBar.resx">
+      <DependentUpon>SliderBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\RangePicker.resx">
+      <DependentUpon>RangePicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\EditorForm.resx">
       <DependentUpon>EditorForm.cs</DependentUpon>

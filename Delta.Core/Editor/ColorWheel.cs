@@ -38,7 +38,6 @@ namespace Delta.Editor
 
         ContentManager Content;
         Effect Effect;
-		VertexDeclaration VertexDeclaration;
 		VertexFormat[] QuadVertexBuffer = new VertexFormat[4];
         VertexFormat[] TriangleBuffer = new VertexFormat[3];
         Vector3[] Hues = new Vector3[7];
@@ -174,7 +173,7 @@ namespace Delta.Editor
         {
             try
             {
-                GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+                GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Gray);
 
                 Effect.CurrentTechnique = Effect.Techniques["DrawHueWheel"];
                 Effect.CurrentTechnique.Passes[0].Apply();

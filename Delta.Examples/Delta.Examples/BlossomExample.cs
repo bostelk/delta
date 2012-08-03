@@ -42,6 +42,7 @@ namespace Delta.Examples
 
             G.World.Add(_map);
             G.World.Camera.Follow(_player = TransformableEntity.Get("Lily") as TransformableEntity);
+            G.EditorForm.grdProperty.SelectedObject = Entity.Get("flowermagic") as SpriteEmitter;
 
             Label lblControls = new Label();
             lblControls.Text.Append(CONTROLS);

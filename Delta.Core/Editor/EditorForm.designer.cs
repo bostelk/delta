@@ -38,6 +38,7 @@
             this.grdProperty.Name = "grdProperty";
             this.grdProperty.Size = new System.Drawing.Size(450, 324);
             this.grdProperty.TabIndex = 0;
+            this.grdProperty.ToolbarVisible = false;
             this.grdProperty.Enter += new System.EventHandler(this.grdProperty_Enter);
             // 
             // EditorForm

@@ -242,6 +242,11 @@ namespace Delta.Graphics
                 case "random":
                     _animationOptions |= AnimationOptions.StartOnRandomFrame;
                     return true;
+                case "islooped":
+                case "looped":
+                case "loop":
+                    _animationOptions |= AnimationOptions.Looped;
+                    return true;
                 case "ispaused":
                 case "paused":
                 case "isstopped":
@@ -261,7 +266,7 @@ namespace Delta.Graphics
         {
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            Play(_animationName, _animationOptions);
+            Play(_animationName, _animationOptions | Graphics.AnimationOptions.Looped);
             base.LoadContent();
         }
 

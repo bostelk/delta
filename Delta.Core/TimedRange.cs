@@ -99,6 +99,11 @@ namespace Delta
         {
             return Lower == default(float) && Upper == default(float) && Duration == default(float);
         }
-    }
 
+        public override string ToString()
+        {
+            return String.Format("{0}:{1}:{3}", Lower, Upper, Duration);
+        }
+
+    }
 }

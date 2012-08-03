@@ -31,11 +31,11 @@ namespace Delta.Editor
             }
         }
 
-        private void SelectColor(Vector4 C)
+        private void SelectColor(Vector4 value)
         {
-            _color = C;
+            _color = value;
 
-            this.colorHex.Text = ColorExtensions.ToHexadecimal(new Microsoft.Xna.Framework.Color(C), false);
+            this.colorHex.Text = ColorExtensions.ToHexadecimal(new Microsoft.Xna.Framework.Color(value), false);
 
             SetColorPreivew();
             this.Invalidate();

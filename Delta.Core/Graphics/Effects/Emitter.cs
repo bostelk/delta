@@ -9,6 +9,7 @@ using System.Globalization;
 using Delta.Transformations;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
 
 namespace Delta.Graphics
 {
@@ -16,31 +17,71 @@ namespace Delta.Graphics
     {
         [ContentSerializer]
         string _fadeInMethodString;
+        Interpolation.InterpolationMethod _fadeInInterpolator;
         [ContentSerializer]
         string _fadeOutMethodString;
-        Interpolation.InterpolationMethod _fadeInInterpolator;
         Interpolation.InterpolationMethod _fadeOutInterpolator;
 
         [ContentSerializer]
         string _blendString;
         BlendState _blend;
 
-        public float Frequency;
-        public bool Explode;
-        public Range QuantityRange;
-        public Range LifespanRange;
-        public Range VelocityMagnitudeRange;
-        public Range AccelerationMagnitudeRange;
-        public Range RotationRange;
-        public Range VelocityAngleRange;
-        public Range AccelerationAngleRange;
-        public Range ScaleRange;
-        public Range FrameIntervalRange;
-        public Range FadeInRange;
-        public Range FadeOutRange;
+        [ContentSerializer]
+        protected float _frequency;
+        [ContentSerializer]
+        protected bool _explode;
+        [ContentSerializer]
+        protected Range _quantityRange;
+        [ContentSerializer]
+        protected Range _lifespanRange;
+        [ContentSerializer]
+        protected Range _velocityMagnitudeRange;
+        [ContentSerializer]
+        protected Range _accelerationMagnitudeRange;
+        [ContentSerializer]
+        protected Range _rotationRange;
+        [ContentSerializer]
+        protected Range _velocityAngleRange;
+        [ContentSerializer]
+        protected Range _accelerationAngleRange;
+        [ContentSerializer]
+        protected Range _scaleRange;
+        [ContentSerializer]
+        protected Range _frameIntervalRange;
+        [ContentSerializer]
+        protected Range _fadeInRange;
+        [ContentSerializer]
+        protected Range _fadeOutRange;
 
-        // fuck you for not serializing blendstates; warning will hardcrash visual studio
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, DisplayName("Frequency"),Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public float Frquency { get { return _frequency; } set { _frequency = value; } }
+        [ContentSerializerIgnore, DisplayName("Explode"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool Explode { get { return _explode; } set { _explode = value; } }
+        [ContentSerializerIgnore, DisplayName("Quantity"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range QuantityRange { get { return _quantityRange; } set { _quantityRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Lifespan"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range LifespanRange { get { return _lifespanRange; } set { _lifespanRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Velocity"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range VelocityMagnitudeRange { get { return _velocityMagnitudeRange; } set { _velocityMagnitudeRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Acceleration"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range AccelerationMagnitudeRange { get { return _accelerationMagnitudeRange; } set { _accelerationMagnitudeRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Rotation"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range RotationRange { get { return _rotationRange; } set { _rotationRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Velocity Angle"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range VelocityAngleRange { get { return _velocityAngleRange; } set { _velocityAngleRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Acceleration Angle"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range AccelerationAngleRange { get { return _accelerationAngleRange; } set { _accelerationAngleRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Scale"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range ScaleRange { get { return _scaleRange; } set { _scaleRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Frame Interval"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range FrameIntervalRange { get { return _frameIntervalRange; } set { _frameIntervalRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Fade In"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range FadeInRange { get { return _fadeInRange; } set { _fadeInRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Fade Out"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range FadeOutRange { get { return _fadeOutRange; } set { _fadeOutRange = value; } }
+
+        // fuck you for not serializing blendstates; the graphicsdevice isn't setup @ buildtime; warning will hardcrash visual studio
+        [ContentSerializerIgnore, Browsable(false)]
         public BlendState Blend
         {
             get
@@ -52,7 +93,7 @@ namespace Delta.Graphics
         }
 
         // fuck you for not serializing delegates
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, Browsable(false)]
         public Interpolation.InterpolationMethod FadeInInterpolator
         {
             get
@@ -64,7 +105,7 @@ namespace Delta.Graphics
         }
 
         // fuck you for not serializing delegates
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, Browsable(false)]
         public Interpolation.InterpolationMethod FadeOutInterpolator
         {
             get
@@ -77,9 +118,9 @@ namespace Delta.Graphics
 
         public Emitter()
         {
-            VelocityAngleRange = new Range(0, 360);
-            ScaleRange = new Range(1);
-            QuantityRange = new Range(1, 1);
+            _velocityAngleRange = new Range(0, 360);
+            _scaleRange = new Range(1);
+            _quantityRange = new Range(1, 1);
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
             _blendString = "AlphaBlend";
@@ -90,61 +131,61 @@ namespace Delta.Graphics
             switch (name)
             {
                 case "frequency":
-                    Frequency = float.Parse(value, CultureInfo.InvariantCulture);
+                    _frequency = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "lifespan":
-                    LifespanRange = Range.TryParse(value);
+                    _lifespanRange = Range.TryParse(value);
                     return true;
                 case "rotation":
                 case "rotationspeed":
-                    RotationRange = Range.TryParse(value);
-                    RotationRange.Lower = RotationRange.Lower.ToRadians();
-                    RotationRange.Upper = RotationRange.Upper.ToRadians();
+                    _rotationRange = Range.TryParse(value);
+                    _rotationRange.Lower = _rotationRange.Lower.ToRadians();
+                    _rotationRange.Upper = _rotationRange.Upper.ToRadians();
                     return true;
                 case "v":
                 case "vel":
                 case "velocity":
-                    VelocityMagnitudeRange = Range.TryParse(value);
+                    _velocityMagnitudeRange = Range.TryParse(value);
                     return true;
                 case "vangle":
                 case "velangle":
                 case "velocityangle":
-                    VelocityAngleRange = Range.TryParse(value);
-                    VelocityAngleRange.Lower = VelocityAngleRange.Lower.ToRadians();
-                    VelocityAngleRange.Upper = VelocityAngleRange.Upper.ToRadians();
+                    _velocityAngleRange = Range.TryParse(value);
+                    _velocityAngleRange.Lower = _velocityAngleRange.Lower.ToRadians();
+                    _velocityAngleRange.Upper = _velocityAngleRange.Upper.ToRadians();
                     return true;
                 case "a":
                 case "accel":
                 case "acceleration":
-                    AccelerationMagnitudeRange = Range.TryParse(value);
+                    _accelerationMagnitudeRange = Range.TryParse(value);
                     return true;
                 case "aangle":
                 case "accelangle":
                 case "accelerationangle":
-                    AccelerationAngleRange = Range.TryParse(value);
-                    AccelerationAngleRange.Lower = AccelerationAngleRange.Lower.ToRadians();
-                    AccelerationAngleRange.Upper = AccelerationAngleRange.Upper.ToRadians();
+                    _accelerationAngleRange = Range.TryParse(value);
+                    _accelerationAngleRange.Lower = _accelerationAngleRange.Lower.ToRadians();
+                    _accelerationAngleRange.Upper = _accelerationAngleRange.Upper.ToRadians();
                     return true;
                 case "scale":
                 case "size":
-                    ScaleRange = Range.TryParse(value);
+                    _scaleRange = Range.TryParse(value);
                     return true;
                 case "frameinterval":
                 case "frameduration":
-                    FrameIntervalRange = Range.TryParse(value);
+                    _frameIntervalRange = Range.TryParse(value);
                     return true;
                 case "explode":
-                    Explode = true;
-                    QuantityRange = Range.TryParse(value);
+                    _explode = true;
+                    _quantityRange = Range.TryParse(value);
                     return true;
                 case "quantity":
-                    QuantityRange = Range.TryParse(value);
+                    _quantityRange = Range.TryParse(value);
                     return true;
                 case "fadein":
-                    FadeInRange = Range.TryParse(value);
+                    _fadeInRange = Range.TryParse(value);
                     return true;
                 case "fadeout":
-                    FadeOutRange = Range.TryParse(value);
+                    _fadeOutRange = Range.TryParse(value);
                     return true;
                 case "fadeinmethod":
                     _fadeInMethodString = value;
@@ -162,18 +203,18 @@ namespace Delta.Graphics
         public override void Recycle()
         {
             base.Recycle();
-            Frequency = 0;
-            Explode = false;
-            QuantityRange = new Range(1, 1);
-            LifespanRange = Range.Empty;
-            RotationRange = Range.Empty;
-            VelocityMagnitudeRange = Range.Empty;
-            VelocityAngleRange = Range.Empty;
-            AccelerationMagnitudeRange = Range.Empty;
-            AccelerationAngleRange = Range.Empty;
-            ScaleRange = new Range(1, 1);
-            FadeInRange = Range.Empty;
-            FadeOutRange = Range.Empty;
+            _frequency = 0;
+            _explode = false;
+            _quantityRange = new Range(1, 1);
+            _lifespanRange = Range.Empty;
+            _rotationRange = Range.Empty;
+            _velocityMagnitudeRange = Range.Empty;
+            _velocityAngleRange = Range.Empty;
+            _accelerationMagnitudeRange = Range.Empty;
+            _accelerationAngleRange = Range.Empty;
+            _scaleRange = new Range(1, 1);
+            _fadeInRange = Range.Empty;
+            _fadeOutRange = Range.Empty;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
             _blendString = "AlphaBlend";

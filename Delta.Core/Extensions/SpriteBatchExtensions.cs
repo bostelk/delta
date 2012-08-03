@@ -16,7 +16,13 @@ namespace Delta
     {
         Left = 2 << 1,
         Right = 2 << 2,
+        /// <summary>
+        /// Align to X
+        /// </summary>
         Center = 2 << 3,
+        /// <summary>
+        /// Align to Y
+        /// </summary>
         Middle = 2 << 4,
         Top = 2 << 5,
         Bottom = 2 << 6,
@@ -48,13 +54,13 @@ namespace Delta
             if ((alignment & TextAlignment.Left) != 0)
                 offset.X = 0;
             else if ((alignment & TextAlignment.Center) != 0)
-                offset.X = -textSize.X / 2;
+                offset.X = -(int)textSize.X / 2; // cast to int to avoid aliasing.
             else if ((alignment & TextAlignment.Right) != 0)
                 offset.X = -textSize.X;
             if ((alignment & TextAlignment.Top) != 0)
                 offset.Y = 0;
             else if ((alignment & TextAlignment.Middle) != 0)
-                offset.Y = textSize.X;
+                offset.Y -= (int)textSize.Y / 2; // cast to int to avoid aliasing.
             else if ((alignment & TextAlignment.Bottom) != 0)
                 offset.Y = -textSize.Y;
             spriteBatch.DrawString(font, text, position + offset, color);
