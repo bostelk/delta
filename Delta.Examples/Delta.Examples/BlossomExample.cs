@@ -42,8 +42,7 @@ namespace Delta.Examples
 
             G.World.Add(_map);
             G.World.Camera.Follow(_player = TransformableEntity.Get("Lily") as TransformableEntity);
-            G.UI.HUD.RegisterForTweaking(_player);
-            Tweaker.FindTweakables(_player)["SPEED"].SetValue(35);
+            G.EditorForm.grdProperty.SelectedObject = Entity.Get("flowermagic") as SpriteEmitter;
 
             Label lblControls = new Label();
             lblControls.Text.Append(CONTROLS);
@@ -69,7 +68,7 @@ namespace Delta.Examples
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
             G.Collision.DrawDebug(ref view, ref projection);
-            PoolManager.DebugDraw();
+            //PoolManager.DebugDraw();
             //G.World.DebugDraw();
 #endif
         }

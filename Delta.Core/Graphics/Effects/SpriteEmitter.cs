@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +50,7 @@ namespace Delta.Graphics
         float _lastEmitTime;
 
         public Range TimeScaleRange;
-        public AnimationPlayOptions SpriteOptions;
+        public AnimationOptions SpriteOptions;
 
         static SpriteEmitter()
         {
@@ -79,7 +79,7 @@ namespace Delta.Graphics
             TimeScaleRange = new Range(1);
         }
 
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -95,14 +95,14 @@ namespace Delta.Graphics
                     TimeScaleRange = Range.TryParse(value);
                     return true;
                 case "looped":
-                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.Looped : SpriteOptions;
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationOptions.Looped : SpriteOptions;
                     return true;
                 case "startrandom":
                 case "random":
-                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationPlayOptions.StartRandom : SpriteOptions;
+                    SpriteOptions = bool.Parse(value) ? SpriteOptions | AnimationOptions.StartOnRandomFrame : SpriteOptions;
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 
         public void Emit()
@@ -129,7 +129,7 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(DeltaGameTime time)
         {
-            if (G.World.SecondsPast(_lastEmitTime + Frequency))
+            if (G.World.SecondsPast(_lastEmitTime + _frequency))
             {
                 int quantity = (int) (QuantityRange.RandomWithin() + .5);
                 for (int i = 0; i < quantity; i++)

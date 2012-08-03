@@ -46,8 +46,10 @@ namespace Delta.Examples
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _supportedAnimations = mainSheet.Animations;
             sprite = new SpriteEntity("testSprite", @"Graphics\SpriteSheets\16x16");
+            G.EditorForm.grdProperty.SelectedObject = sprite;
             sprite.Play(_supportedAnimations[_animationIndex].Name);
             sprite.Position = G.ScreenCenter;
+            sprite.Origin = Vector2.One * 0.5f;
             base.LoadContent();
         }
 
@@ -56,14 +58,12 @@ namespace Delta.Examples
             if (G.Input.Keyboard.IsPressed(Keys.Left))
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex - 1, 0, _supportedAnimations.Count - 1);
-                sprite.Play(_supportedAnimations[_animationIndex].Name);
-                sprite.Position = G.ScreenCenter + sprite.Size * 2;
+                sprite.Play(_supportedAnimations[_animationIndex].Name);;
             }
             if (G.Input.Keyboard.IsPressed(Keys.Right))
             {
                 _animationIndex = MathExtensions.Wrap(_animationIndex + 1, 0, _supportedAnimations.Count - 1);
                 sprite.Play(_supportedAnimations[_animationIndex].Name);
-                sprite.Position = G.ScreenCenter + sprite.Size * 2;
             }
             if (G.Input.Keyboard.IsPressed(Keys.Space))
             {

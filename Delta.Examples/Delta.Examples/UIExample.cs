@@ -18,6 +18,18 @@ namespace Delta.Examples
     {
         public UIExample() : base("UIExample")
         {
+            Panel pnl = new Panel();
+            pnl.BackColor = Color.White;
+            pnl.Alpha = 1;
+            pnl.Position = new Vector2(50, 50);
+            pnl.Size = new Vector2(50, 50);
+            Panel pnl2 = new Panel();
+            pnl2.BackColor = Color.Yellow;
+            pnl2.Alpha = 1;
+            pnl2.Position = new Vector2(75, 80);
+            pnl2.Size = new Vector2(50, 50);
+            G.UI.HUD.Add(pnl);
+            G.UI.HUD.Add(pnl2);
         }
 
         protected override void Initialize()

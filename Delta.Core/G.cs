@@ -15,15 +15,27 @@ using Delta.Collision;
 
 #if WINDOWS
 using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
+using Delta.Editor;
 #endif
 
 namespace Delta
 {
+    /// <summary>
+    /// Static game class wrapper for Delta games.
+    /// </summary>
     public class G : Game
     {
         internal const bool LETTERBOX = false;
         internal const float ASPECT_RATIO_SD = 800f / 600f;
         internal const float ASPECT_RATIO_HD = 1920f / 1080f;
+        internal const Microsoft.Xna.Framework.Input.Keys EDITOR_KEY = Microsoft.Xna.Framework.Input.Keys.F12;
+
+#if WINDOWS
+        internal static bool _refreshPropertyGrid = false;
+        internal static float _refreshPropertyGridTimer = 0;
+#endif
 
         internal static ResourceContentManager _embedded = null;
         internal static GraphicsDeviceManager _graphicsDeviceManager = null;
@@ -36,6 +48,7 @@ namespace Delta
         public static AudioManager Audio { get; private set; }
         public static World World { get; private set; }
         public static UIManager UI { get; private set; }
+        public static PostEffects CurrentPostEffects { get; set; }
 
         public new static GraphicsDevice GraphicsDevice { get { return _instance.GraphicsDevice; } }
         public new static bool IsMouseVisible { get { return _instance.IsMouseVisible; } set { _instance.IsMouseVisible = value; } }
@@ -54,6 +67,8 @@ namespace Delta
 
 #if WINDOWS
         public static Process Process { get; set; }
+        public static Form GameForm { get; set; }
+        public static EditorForm EditorForm { get; set; }
 #endif
 
         public G(int screenWidth, int screenHeight)
@@ -89,6 +104,9 @@ namespace Delta
             ScreenCenter = ScreenArea.Center.ToVector2();
 #if WINDOWS
             Process = Process.GetCurrentProcess();
+            GameForm = (Form)Control.FromHandle(Window.Handle);
+            EditorForm = new EditorForm();
+            EditorForm.Icon = GameForm.Icon;
 #endif
         }
 
@@ -125,12 +143,37 @@ namespace Delta
                 _lateInitialized = true;
                 LateInitialize();
             }
-            if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
-            {
+            //if (_lateInitialized) // only update after the game has late initialized, otherwise entities will lateinitialize first.
+            //{
                 World.InternalUpdate(_time);
                 UI.InternalUpdate(_time);
-            }
+            //}
             Collision.Simulate(_time.ElapsedSeconds); // simulate after the world update! otherwise simulating a previous frame's worldstate.
+#if WINDOWS
+            if (G.Input.Keyboard.IsPressed(EDITOR_KEY))
+            {
+                if (!EditorForm.Visible)
+                {
+                    EditorForm.Show();
+                    EditorForm.Focus();
+                }
+                else
+                {
+                    EditorForm.Hide();
+                }
+            }
+            if (_refreshPropertyGrid)
+            {
+                if (_refreshPropertyGridTimer <= 0)
+                {
+                    G.EditorForm.grdProperty.Refresh();
+                    _refreshPropertyGridTimer = 0;
+                    _refreshPropertyGrid = false;
+                }
+                else
+                    _refreshPropertyGridTimer -= _time.ElapsedSeconds;
+            }
+#endif
         }
 
         protected override void Draw(GameTime gameTime)
@@ -145,7 +188,7 @@ namespace Delta
             _graphicsDeviceManager.ToggleFullScreen();
         }
 
-        internal void OnDeviceReset(object sender, EventArgs e) 
+        void OnDeviceReset(object sender, EventArgs e) 
         {
             var pp = GraphicsDevice.PresentationParameters;
             int width = pp.BackBufferWidth;
@@ -169,7 +212,7 @@ namespace Delta
             World.Camera.Offset = World.Camera.Offset * increaseFactor;
         }
 
-        internal void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
             var pp = e.GraphicsDeviceInformation.PresentationParameters;
             if (pp.IsFullScreen)

@@ -5,11 +5,9 @@ namespace Delta.UI.Controls
 {
     public class Window : Panel
     {
- 
         public Window()
             : base()
         {
         }
-
     }
 }

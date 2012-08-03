@@ -28,7 +28,7 @@ namespace Delta.Entities
 
         public static SpriteFrameEntity Create(SpriteEntity sprite)
         {
-            return Create(sprite._spriteSheetName, sprite._animationName, sprite._animationFrame);
+            return Create(sprite.SpriteSheetName, sprite.AnimationName, sprite._animationFrame);
         }
 
         public static SpriteFrameEntity Create(string spriteSheet, string animation, int frame)
@@ -44,8 +44,8 @@ namespace Delta.Entities
 
         public SpriteFrameEntity(SpriteEntity sprite)
         {
-            _spriteSheetName = sprite._spriteSheetName;
-            _animationName = sprite._animationName;
+            _spriteSheetName = sprite.SpriteSheetName;
+            _animationName = sprite.AnimationName;
             _frame = sprite._animationFrame;
         }
 

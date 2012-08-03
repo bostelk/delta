@@ -42,7 +42,8 @@ namespace Delta
     /// <summary>
     /// Base class for all game entites.
     /// </summary>
-    public abstract class Entity : IRecyclable, IImportable, IEntity, IDisposable
+    [DefaultPropertyAttribute("Name")]
+    public abstract class Entity : IRecyclable, ICustomizable, IEntity, IDisposable
     {
         /// <summary>
         /// Retrieves an <see cref="IEntity"/> by it's name.
@@ -58,7 +59,7 @@ namespace Delta
         }
 
         bool _flaggedForRemoval = false;
-        
+
         /// <summary>
         /// Gets the <see cref="IEntityCollection"/> which is responsible for the <see cref="Entity"/>.
         /// </summary>
@@ -70,11 +71,24 @@ namespace Delta
             set { ParentCollection = value; }
         }
 
+        string _name = string.Empty;
         /// <summary>
         /// Gets the name of the <see cref="Entity"/>.
         /// </summary>
-        [ContentSerializer]
-        public string Name { get; internal set; }
+        [ContentSerializer, Description("The name of the game object.\nDefault is null."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(""), RefreshProperties(RefreshProperties.All)]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    if (HasInitialized) //oh, a property has changed? Let's poke at the UI to refresh the values. HEY UI. YA YOU. UPDATE THIS SHIT. IT'S BRAND NEW.
+                        G.EditorForm.grdProperty.Refresh(); //This /could/ be in a timer
+                }
+            }
+        }
         string IEntity.Name //explict interface property allows us to publicly set the Name from IEntity.
         {
             get { return Name; }
@@ -84,18 +98,18 @@ namespace Delta
         /// <summary>
         /// Gets a value indicating whether the <see cref="Entity"/> has initialized.
         /// </summary>
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, Browsable(false)]
         protected bool HasInitialized { get; private set; }
         /// <summary>
         /// Gets a value indicating whether the <see cref="Entity"/> has loaded it's content.
         /// </summary>
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, Browsable(false)]
         protected internal bool HasLoadedContent { get; private set; }
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="Entity"/> needs to perform a heavy update.
         /// </summary>
         /// <remarks>Once a heavy update starts, this value is automatically set to false.</remarks>
-        [ContentSerializerIgnore]
+        [ContentSerializerIgnore, Browsable(false)]
         protected bool NeedsHeavyUpdate { get; set; }
 
         bool _isEnabled = true;
@@ -103,7 +117,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is updated.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer]
+        [ContentSerializer, DisplayName("Enabled"), Description("Indicates whether the game object is updated.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -113,6 +127,7 @@ namespace Delta
                 {
                     _isEnabled = value;
                     OnIsEnabledChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -122,7 +137,7 @@ namespace Delta
         /// Gets or sets a value indicating whether the <see cref="Entity"/> is drawn.
         /// </summary>
         /// <remarks>The default is true with a <see cref="bool"/> value of true.</remarks>
-        [ContentSerializer]
+        [ContentSerializer, DisplayName("Visible"), Description("Indicates whether the game object is drawn.\nDefault is true."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(true)]
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -132,6 +147,7 @@ namespace Delta
                 {
                     _isVisible = value;
                     OnIsVisibleChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -141,7 +157,7 @@ namespace Delta
         /// Gets or sets the depth (update and draw order) of the <see cref="Entity"/> in the <see cref="ParentCollection"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="float"/> value of 0.0f.</remarks>
-        [ContentSerializer]
+        [ContentSerializer, Description("The layer depth of the game object.\nDefault is 0."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
         public float Depth
         {
             get { return _depth; }
@@ -152,6 +168,25 @@ namespace Delta
                     _depth = value;
                     if (ParentCollection != null)
                         ParentCollection.NeedsToSort = true;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        PostEffects _postEffects = PostEffects.None;
+        /// <summary>
+        /// Gets or sets the <see cref="PostEffects"/> of the <see cref="Entity"/> used when drawing.
+        /// </summary>
+        [ContentSerializer, Description("The post effects used when drawing the game object.\nDefault is PostEffects.None."), Category("General"), Browsable(true), ReadOnly(false), DefaultValue(PostEffects.None)]
+        public PostEffects PostEffects
+        {
+            get { return _postEffects; }
+            set
+            {
+                if (_postEffects != value)
+                {
+                    _postEffects = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -209,24 +244,49 @@ namespace Delta
         {
             if (ParentCollection != null)
                 ParentCollection.UnsafeRemove(this);
-            Name = string.Empty;
             ParentCollection = null;
+            _flaggedForRemoval = false;
+            _isEnabled = true;
+            _isVisible = true;
+            _depth = 0;
+            _postEffects = PostEffects.None;
+            Name = string.Empty;
             HasInitialized = false;
             HasLoadedContent = false;
-            Depth = 0.0f;
-            IsEnabled = true;
-            IsVisible = true;
-            _flaggedForRemoval = false;
+            NeedsHeavyUpdate = false;
         }
 
 #if WINDOWS
-        /// <summary>
-        /// Sets a field's value by it's name.
-        /// </summary>
-        /// <param name="name">Value name.</param>
-        /// <param name="value">Value.</param>
-        /// <returns>A value indicating whether the field exists and that it's value was sucessfully set.</returns>
-        protected internal virtual bool SetField(string name, string value)
+        protected internal virtual string GetValue(string name)
+        {
+            switch (name)
+            {
+                case "visible":
+                case "isvisible":
+                    return IsVisible.ToString().ToLower();
+                case "enabled":
+                case "isenabled":
+                    return IsEnabled.ToString().ToLower();
+                case "depth":
+                case "layer":
+                case "order":
+                case "draworder":
+                case "updateorder":
+                    return Depth.ToString(CultureInfo.InvariantCulture);
+                case "overlay":
+                case "isoverlay":
+                    if ((PostEffects & PostEffects.Overlay) != 0)
+                        return "true";
+                    else
+                        return "false";
+            }
+            return string.Empty;
+        }
+        string ICustomizable.GetValue(string name)
+        {
+            return GetValue(name);
+        }
+        protected internal virtual bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -245,12 +305,16 @@ namespace Delta
                 case "updateorder":
                     Depth = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
+                case "overlay":
+                case "isoverlay":
+                    PostEffects |= PostEffects.Overlay;
+                    return true;
              }
             return false;
         }
-        bool IImportable.SetField(string name, string value)
+        bool ICustomizable.SetValue(string name, string value)
         {
-            return SetField(name, value);
+            return SetValue(name, value);
         }
 #endif
 
@@ -350,12 +414,13 @@ namespace Delta
         /// <param name="time">time</param>
         /// <param name="spriteBatch">spriteBatch</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void InternalDraw(DeltaGameTime time, SpriteBatch spriteBatch)
+        public virtual void InternalDraw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             if (CanDraw())
             {
                 OnBeginDraw(time, spriteBatch);
-                Draw(time, spriteBatch);
+                if (G.CurrentPostEffects == PostEffects)
+                    Draw(time, spriteBatch);
                 OnEndDraw(time, spriteBatch);
             }
         }
@@ -440,6 +505,15 @@ namespace Delta
         {
             OnAdded();
         }
+
+#if WINDOWS
+        protected internal void OnPropertyChanged()
+        {
+            //tell G that we are waiting for a PropertyGrid refresh. This implementaion prevents PropertyGrid.Refresh() to be called multiple times in short amount of time, potentitally improving performance.
+            G._refreshPropertyGrid = true;
+            G._refreshPropertyGridTimer = 0.1f;
+        }
+#endif
 
         /// <summary>
         /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.

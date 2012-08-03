@@ -85,7 +85,7 @@ namespace Delta.Graphics
             Colors = new List<Color>();
         }
 
-        protected internal override bool SetField(string name, string value)
+        protected internal override bool SetValue(string name, string value)
         {
             switch (name)
             {
@@ -97,22 +97,22 @@ namespace Delta.Graphics
                     }
                     return true;
             }
-            return base.SetField(name, value);
+            return base.SetValue(name, value);
         }
 
         public void Emit()
         {
             PixelParticle newParticle = _particlePool.Fetch();
             newParticle.Emitter = this;
-            newParticle.Lifespan = LifespanRange.RandomWithin();
-            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
-            newParticle.AngularVelocity = RotationRange.RandomWithin();
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower, VelocityAngleRange.Upper) * VelocityMagnitudeRange.RandomWithin();
-            newParticle.FadeInPercent = FadeInRange.RandomWithin();
-            newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
+            newParticle.Lifespan = _lifespanRange.RandomWithin();
+            newParticle.Acceleration = Vector2Extensions.DirectionBetween(_accelerationAngleRange.Lower, _accelerationAngleRange.Upper) * _accelerationMagnitudeRange.RandomWithin();
+            newParticle.AngularVelocity = _rotationRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(_velocityAngleRange.Lower, _velocityAngleRange.Upper) * _velocityMagnitudeRange.RandomWithin();
+            newParticle.FadeInPercent = _fadeInRange.RandomWithin();
+            newParticle.FadeOutPercent = _fadeOutRange.RandomWithin();
             newParticle.Entity = PixelEntity.Create();
             newParticle.Entity.Tint = Colors[G.Random.Next(Colors.Count)];
-            newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
+            newParticle.Entity.Scale = G.Random.Between(new Vector2(_scaleRange.Lower), new Vector2(_scaleRange.Upper));
             newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.OnEmitted();
@@ -121,9 +121,9 @@ namespace Delta.Graphics
 
         protected override void LightUpdate(DeltaGameTime time)
         {
-            if (G.World.SecondsPast(_lastEmitTime + Frequency))
+            if (G.World.SecondsPast(_lastEmitTime + _frequency))
             {
-                int quantity = (int) (QuantityRange.RandomWithin() + .5);
+                int quantity = (int) (_quantityRange.RandomWithin() + .5);
                 for (int i = 0; i < quantity; i++)
                     Emit();
                 _lastEmitTime = time.TotalSeconds;

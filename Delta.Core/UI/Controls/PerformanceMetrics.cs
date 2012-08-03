@@ -10,11 +10,12 @@ namespace Delta.UI
 
     public class PerformanceMetrics : Label
     {
-        int _frames = 0;
+        int _frameCounter = 0;
+        float _timer = 0;
+
         long _previousManagedMemory = 0;
         long _managedMemory = 0;
         long _deltaManagedMemory = 0;
-        float _timer = 0;
         int _fps = 0;
 
         public PerformanceMetrics()
@@ -26,11 +27,11 @@ namespace Delta.UI
             _timer += time.ElapsedSeconds;
             if (_timer >= 1)
             {
-                _fps = (int)(_frames / _timer);
+                _fps = _frameCounter;
                 _previousManagedMemory = _managedMemory;
                 _managedMemory = GC.GetTotalMemory(false);
                 _deltaManagedMemory = _managedMemory - _previousManagedMemory;
-                _frames = 0;
+                _frameCounter = 0;
                 _timer = 0;
             }
             Text.Clear();
@@ -80,7 +81,7 @@ namespace Delta.UI
         protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
         {
             base.Draw(time, spriteBatch);
-            _frames++;
+            _frameCounter++;
         }
     }
 }
