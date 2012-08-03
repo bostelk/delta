@@ -11,11 +11,11 @@ namespace Delta.Examples.Entities
 {
     public class Barrel : TransformableEntity
     {
-        SpriteEntity _sprite;
+        AnimatedSpriteEntity _sprite;
 
         public Barrel()
         {
-            _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
+            _sprite = AnimatedSpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Play("barrel");
         }
 

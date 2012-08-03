@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Delta.Transformations;
 using System.Globalization;
-using Delta.Entities;
+using Delta.Graphics;
 
 namespace Delta.Graphics
 {

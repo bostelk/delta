@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Delta.Graphics;
 using Delta.Structures;
 
-namespace Delta.Entities
+namespace Delta.Graphics
 {
     public class TextureEntity : TransformableEntity
     {

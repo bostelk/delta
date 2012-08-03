@@ -8,6 +8,11 @@ using Delta.Transformations;
 using Delta.Structures;
 using Delta.Collision;
 
+#if WINDOWS
+using System.Drawing.Design;
+using Delta.Editor;
+#endif
+
 namespace Delta
 {
     /// <summary>
@@ -22,53 +27,34 @@ namespace Delta
         /// </summary>
         /// <remarks>To move this <see cref="TransformableEntity"/> see <see cref="Position"/> and <see cref="Offset"/></remarks>
         [ContentSerializerIgnore, Browsable(false)]
-        protected Vector2 RenderPosition { get; private set; }
+        protected internal Vector2 RenderPosition { get; private set; }
         /// <summary>
         /// Gets the origin used when rendering the <see cref="TransformableEntity"/>.
         /// </summary>
         [ContentSerializerIgnore, Browsable(false)]
-        protected Vector2 RenderOrigin { get; private set; }
+        protected internal Vector2 RenderOrigin { get; private set; }
         /// <summary>
         /// Gets the rotation used when rendering the <see cref="TransformableEntity"/> expressed in radians.
         /// </summary>
         [ContentSerializerIgnore, Browsable(false)]
-        protected float RenderRotation { get; private set; }
+        protected internal float RenderRotation { get; private set; }
         /// <summary>
         /// Gets the size used when rendering the <see cref="TransformableEntity"/>.
         /// </summary>
         [ContentSerializerIgnore, Browsable(false)]
-        protected Vector2 RenderSize { get; private set; }
+        protected internal Vector2 RenderSize { get; private set; }
         /// <summary>
         /// Gets the premultipled color used when rendering the <see cref="TransformableEntity"/>.
         /// </summary>
         [ContentSerializer, Browsable(false)]
-        protected Color RenderColor { get; private set; }
-
-
-        bool _fadeRandomly = false;
-        /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="TransformableEntity"/> fades randomly.
-        /// </summary>
-        [ContentSerializer, Description("Indicates whether the game object fades in/out randomly.\nDefault is 0."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(false)]
-        public bool FadeRandomly
-        {
-            get { return _fadeRandomly; }
-            set
-            {
-                if (_fadeRandomly != value)
-                {
-                    _fadeRandomly = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        protected internal Color RenderColor { get; private set; }
 
         Vector2 _position = Vector2.Zero;
         /// <summary>
         /// Gets or sets the position of the <see cref="TransformableEntity"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="Vector2"/> value of {0,0}.</remarks>
-        [ContentSerializer, Description("The position of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The position of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transform"), DefaultValue(typeof(Vector2), "0,0")]
         public virtual Vector2 Position
         {
             get { return _position; }
@@ -88,7 +74,7 @@ namespace Delta
         /// Gets or sets the positional offset of the <see cref="TransformableEntity"/>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="Vector2"/> value of {0,0}.</remarks>
-        [ContentSerializer, Description("The positional offset of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The positional offset of the game object expressed in pixels.\nDefault is (0, 0)."), Category("Transform"), DefaultValue(typeof(Vector2), "0,0")]
         public virtual Vector2 Offset
         {
             get { return _offset; }
@@ -108,7 +94,7 @@ namespace Delta
         /// Gets or sets the size of the <see cref="TransformableEntity"/> <b>before it's scaled</b>.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="Vector2"/> value of {0,0}.</remarks>
-        [ContentSerializer, Browsable(false)]
+        [ContentSerializer, Description("The size of the game object expressed in pixels before it's scaled.\nDefault is (0, 0)."), Category("Transform"), DefaultValue(typeof(Vector2), "0,0")]
         public virtual Vector2 Size
         {
             get { return _size; }
@@ -118,6 +104,7 @@ namespace Delta
                 {
                     _size = value;
                     OnSizeChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -127,7 +114,7 @@ namespace Delta
         /// Gets or sets the scale of the <see cref="TransformableEntity"/> expressed in decimal percentage.
         /// </summary>
         /// <remarks>The default is 100% with a <see cref="Vector2"/> value of {1.0f,1.0f}.</remarks>
-        [ContentSerializer, Description("The scale of the game object expressed in decimal percentage.\nDefault is (1, 1)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "1,1")]
+        [ContentSerializer, Description("The scale of the game object expressed in decimal percentage.\nDefault is (1, 1)."), Category("Transform"), DefaultValue(typeof(Vector2), "1,1")]
         public virtual Vector2 Scale
         {
             get { return _scale; }
@@ -147,7 +134,7 @@ namespace Delta
         /// Gets or sets the rotation of the <see cref="TransformableEntity"/> expressed in degrees.
         /// </summary>
         /// <remarks>The default is zero with a <see cref="float"/> value of 0.0f. <b>Positive</b> values result in a <b>clockwise</b> rotation. <b>Negative</b> values result in a <b>counter-clockwise</b> rotation.</remarks>
-        [ContentSerializer, Description("The rotation of the game object expressed in degrees.\nDefault is 0."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(0.0f)]
+        [ContentSerializer, Description("The rotation of the game object expressed in degrees.\nDefault is 0."), Category("Transform"), DefaultValue(0.0f)]
         public virtual float Rotation
         {
             get { return _rotation; }
@@ -167,7 +154,7 @@ namespace Delta
         /// Gets or sets the positional origin of the <see cref="TransformableEntity"/> expressed in decimal percetange relative to the <see cref="RenderSize"/>.
         /// </summary>
         /// <remarks>The default is 0% (the top left) with a <see cref="Vector2"/> value of {0.0f, 0.0f}.</remarks>
-        [ContentSerializer, Description("The positional origin of the game object expressed in decimal percentage.\nDefault is (0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0,0")]
+        [ContentSerializer, Description("The positional origin of the game object expressed in decimal percentage.\nDefault is (0, 0)."), Category("Transform"), DefaultValue(typeof(Vector2), "0,0")]
         public Vector2 Origin
         {
             get { return _origin; }
@@ -187,7 +174,7 @@ namespace Delta
         /// Gets or sets the positional pivot of the <see cref="TransformableEntity"/> expressed in decimal percentange relative to the <see cref="RenderSize"/>.
         /// </summary>
         /// <remarks>The default is 50% (the center) with a <see cref="Vector2"/> value of {0.5f, 0.5f}.</remarks>
-        [ContentSerializer, Description("The positional pivot of the game object expressed in decimal percentage.\nDefault is (0.5, 0.5)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Vector2), "0.5,0.5")]
+        [ContentSerializer, Description("The positional pivot of the game object expressed in decimal percentage.\nDefault is (0.5, 0.5)."), Category("Transform"), DefaultValue(typeof(Vector2), "0.5,0.5")]
         public Vector2 Pivot
         {
             get { return _pivot; }
@@ -208,7 +195,11 @@ namespace Delta
         /// Gets or sets the color of the <see cref="TransformableEntity"/> <b>before it's multipled with <see cref="Alpha"/></b>.
         /// </summary>
         /// <remarks>The default is white with a <see cref="Color"/> value of {255, 255, 255, 255}.</remarks>
-        [ContentSerializerIgnore, Description("The tint color of the game object.\nDefault is (255, 255, 255, 255)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(Color), "255,255,255,255"), Editor(typeof(Delta.Editor.ColorUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [ContentSerializerIgnore, Description("The tint color of the game object.\nDefault is (255, 255, 255, 255)."), Category("Transform"), DefaultValue(typeof(Color), "255,255,255,255"), 
+#if WINDOWS
+        Editor(typeof(ColorUIEditor), typeof(UITypeEditor))
+#endif
+        ]
         public virtual Color Tint
         {
             get { return _tint; }
@@ -228,7 +219,7 @@ namespace Delta
         /// Gets or sets the alpha component of the <see cref="TransformableEntity"/> expressed in decimal percentage. Used to premultiple the <see cref="Tint"/>.
         /// </summary>
         /// <remarks>The default is 100% with a <see cref="float"/> value of 1.0f.</remarks>
-        [ContentSerializer, Description("The alpha component of the game object expressed in decimal percentage.\nDefault is 1."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(1.0f)]
+        [ContentSerializer, Description("The alpha component of the game object expressed in decimal percentage.\nDefault is 1."), Category("Transform"), DefaultValue(1.0f)]
         public virtual float Alpha
         {
             get { return _alpha; }
@@ -262,11 +253,47 @@ namespace Delta
             }
         }
 
+        float _timeScale = 1.0f;
+        /// <summary>
+        /// Gets or sets the time scale of the <see cref="TransformableEntity"/> expressed in decimal percentage.
+        /// </summary>
+        [ContentSerializer, Description("The time scale the game object expressed in decimal percentage.\nDefault is 1."), Category("Transform"), DefaultValue(1.0f)]
+        public float TimeScale
+        {
+            get { return _timeScale; }
+            set
+            {
+                if (_timeScale != value)
+                {
+                    _timeScale = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool _fadeRandomly = false;
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="TransformableEntity"/> fades randomly.
+        /// </summary>
+        [ContentSerializer, Description("Indicates whether the game object fades in/out randomly.\nDefault is 0."), Category("Transform"), DefaultValue(false)]
+        public bool FadeRandomly
+        {
+            get { return _fadeRandomly; }
+            set
+            {
+                if (_fadeRandomly != value)
+                {
+                    _fadeRandomly = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         TimedRange _fadeRange = TimedRange.Empty;
         /// <summary>
         /// Gets or sets the fade timed range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The fade timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The fade timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transform"), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FadeRange
         {
             get { return _fadeRange; }
@@ -314,7 +341,7 @@ namespace Delta
         /// <summary>
         /// Gets or sets the flicker range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The flicker timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The flicker timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transform"), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange FlickerRange
         {
             get { return _flickerRange; }
@@ -341,7 +368,7 @@ namespace Delta
         /// <summary>
         /// Gets or sets the blink range of the <see cref="TransformableEntity"/>.
         /// </summary>
-        [ContentSerializer, Description("The blink timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transformable"), Browsable(true), ReadOnly(false), DefaultValue(typeof(TimedRange), "0,0,0")]
+        [ContentSerializer, Description("The blink timed range of the game object.\nDefault is (0, 0, 0)."), Category("Transform"), DefaultValue(typeof(TimedRange), "0,0,0")]
         public TimedRange BlinkRange
         {
             get { return _blinkRange; }

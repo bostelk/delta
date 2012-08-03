@@ -17,7 +17,7 @@ namespace Delta.Examples.Entities
     {
         float SPEED = 30;
 
-        SpriteEntity _sprite;
+        AnimatedSpriteEntity _sprite;
 
         public Vector2 Input { get; set; }
         public Vector2 Velocity;
@@ -31,7 +31,7 @@ namespace Delta.Examples.Entities
         {
             Name = "Lily";
 
-            _sprite = SpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
+            _sprite = AnimatedSpriteEntity.Create(@"Graphics\SpriteSheets\16x16");
             _sprite.Origin = new Vector2(0.5f, 0.5f);
             _sprite.Play("walkdown");
 

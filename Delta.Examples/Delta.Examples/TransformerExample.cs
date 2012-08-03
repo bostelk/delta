@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Transformations;
 using Delta.Structures;
-using Delta.Entities;
+using Delta.Graphics;
 
 namespace Delta.Examples
 {

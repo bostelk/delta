@@ -6,7 +6,7 @@ using Delta.Graphics;
 using Delta.Transformations;
 using Microsoft.Xna.Framework;
 using Delta.Audio;
-using Delta.Entities;
+using Delta.Graphics;
 using Delta.UI.Controls;
 using Delta.Collision;
 

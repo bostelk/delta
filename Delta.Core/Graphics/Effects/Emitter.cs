@@ -52,7 +52,7 @@ namespace Delta.Graphics
         protected Range _fadeOutRange;
 
         [ContentSerializerIgnore, DisplayName("Frequency"),Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
-        public float Frquency { get { return _frequency; } set { _frequency = value; } }
+        public float Frequency { get { return _frequency; } set { _frequency = value; } }
         [ContentSerializerIgnore, DisplayName("Explode"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool Explode { get { return _explode; } set { _explode = value; } }
         [ContentSerializerIgnore, DisplayName("Quantity"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]

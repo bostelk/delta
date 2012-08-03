@@ -115,5 +115,10 @@ namespace Delta
             spriteBatch.Draw(G.PixelTexture, position, color);
         }
 
+        public static void DrawTransformableEntity(this SpriteBatch spriteBatch, TransformableEntity transformableEntity, Texture2D texture, Rectangle sourceRectangle, SpriteEffects spriteEffects, float layerDepth)
+        {
+            spriteBatch.Draw(texture, transformableEntity.RenderPosition, sourceRectangle, transformableEntity.RenderColor, transformableEntity.RenderRotation, transformableEntity.RenderOrigin, transformableEntity.Scale, spriteEffects, layerDepth);
+        }
+
     }
 }

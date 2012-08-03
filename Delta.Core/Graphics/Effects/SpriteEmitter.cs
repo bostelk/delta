@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Delta.Transformations;
 using System.Globalization;
-using Delta.Entities;
+using Delta.Graphics;
 
 namespace Delta.Graphics
 {
     public class SpriteEmitter : Emitter
     {
 
-        internal class SpriteParticle : Particle<SpriteEntity>
+        internal class SpriteParticle : Particle<AnimatedSpriteEntity>
         {
 
             public override void Update(DeltaGameTime time)
@@ -109,7 +109,7 @@ namespace Delta.Graphics
         {
             SpriteParticle newParticle = _particlePool.Fetch();
             newParticle.Emitter = this;
-            newParticle.Entity = SpriteEntity.Create(_spriteSheet);
+            newParticle.Entity = AnimatedSpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
             newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();

@@ -1,93 +1,63 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Delta;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Delta.Graphics;
+using System.ComponentModel;
+using Microsoft.Xna.Framework.Content;
 using Delta.Structures;
 
-namespace Delta.Entities
+namespace Delta.Graphics
 {
-    public class SpriteFrameEntity : TransformableEntity
+    public class SpriteEntity : BaseSpriteEntity
     {
-        static Pool<SpriteFrameEntity> _pool;
+        static Pool<SpriteEntity> _pool = new Pool<SpriteEntity>(100);
 
-        string _spriteSheetName;
-        string _animationName;
-        int _frame;
-
-        Texture2D _texture;
-        Rectangle _sourceRectangle;
-
-        static SpriteFrameEntity()
+        public static SpriteEntity Create(AnimatedSpriteEntity sprite)
         {
-            _pool = new Pool<SpriteFrameEntity>(100);
+            return Create(sprite.SpriteSheetName, sprite.Animation.ImageName, sprite.Frame);
         }
 
-        public static SpriteFrameEntity Create(SpriteEntity sprite)
+        public static SpriteEntity Create(string spriteSheet, string externalImage, int frame)
         {
-            return Create(sprite.SpriteSheetName, sprite.AnimationName, sprite._animationFrame);
-        }
-
-        public static SpriteFrameEntity Create(string spriteSheet, string animation, int frame)
-        {
-            SpriteFrameEntity spriteFrame = _pool.Fetch();
-            spriteFrame._spriteSheetName = spriteSheet;
-            spriteFrame._animationName = animation;
-            spriteFrame._frame = frame;
+            SpriteEntity spriteFrame = _pool.Fetch();
+            spriteFrame.SpriteSheetName = spriteSheet;
+            spriteFrame.ExternalImageName = externalImage;
+            spriteFrame.Frame = frame;
             return spriteFrame;
         }
 
-        public SpriteFrameEntity() { }
-
-        public SpriteFrameEntity(SpriteEntity sprite)
+        string _externalImageName = string.Empty;
+        /// <summary>
+        /// Gets or sets the name of the external image used by the <see cref="SpriteEntity"/>.
+        /// </summary>
+        [ContentSerializer, Description("The name of the external image used by the game object."), Category("Sprite"), DefaultValue("")]
+        public string ExternalImageName
         {
-            _spriteSheetName = sprite.SpriteSheetName;
-            _animationName = sprite.AnimationName;
-            _frame = sprite._animationFrame;
+            get { return _externalImageName; }
+            set
+            {
+                if (_externalImageName != value)
+                {
+                    _externalImageName = value;
+                    UpdateSourceRectangle();
+                    OnPropertyChanged();
+                }
+            }
         }
 
-        public SpriteFrameEntity(string spriteSheet, string animation, int frame)
+        public SpriteEntity()
+            : base()
         {
-            _spriteSheetName = spriteSheet;
-            _animationName = animation;
-            _frame = frame;
         }
 
-        protected override void LoadContent()
+        protected override void UpdateSourceRectangle()
         {
-            SpriteSheet _spriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-            _texture = _spriteSheet.Texture;
-            _sourceRectangle = _spriteSheet.GetFrameSourceRectangle(_spriteSheet.GetAnimation(_animationName).ImageName, _frame);
-            Size = new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
-
-            Origin = new Vector2(0.5f, 0.5f);
-            base.LoadContent();
-        }
-
-        protected override void LightUpdate(DeltaGameTime time)
-        {
-            Depth = Position.Y;
-            base.LightUpdate(time);
-        }
-
-        protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Position, _sourceRectangle , Tint, Rotation, Origin, Scale, SpriteEffects.None, 0);
-            base.Draw(time, spriteBatch);
+            if (SpriteSheet == null)
+                return;
+            SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_externalImageName, Frame);
         }
 
         public override void Recycle()
         {
             base.Recycle();
-            _spriteSheetName = String.Empty;
-            _animationName = String.Empty;
-            _frame = 0;
-            _texture = null;
-            _sourceRectangle = Rectangle.Empty;
-
+            _externalImageName = string.Empty;
             _pool.Release(this);
         }
     }
