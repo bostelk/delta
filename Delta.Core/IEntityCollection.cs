@@ -12,13 +12,13 @@ namespace Delta
         /// <summary>
         /// Adds an <see cref="Entity"/> to the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
         /// </summary>
-        /// <param name="item">The <see cref="Entity"/> to add to the <see cref="IEntityCollection"/>.</param>
-        void UnsafeAdd(Entity item);
+        /// <param name="entity">The <see cref="Entity"/> to add to the <see cref="IEntityCollection"/>.</param>
+        void UnsafeAdd(Entity entity);
         /// <summary>
         /// Removes an <see cref="Entity"/> from the <see cref="IEntityCollection"/> without respecting if the <see cref="IEntityCollection"/> is strongly typed.
         /// </summary>
-        /// <param name="item">The <see cref="Entity"/> to remove the <see cref="IEntityCollection"/>.</param>
-        void UnsafeRemove(Entity item);
+        /// <param name="entity">The <see cref="Entity"/> to remove the <see cref="IEntityCollection"/>.</param>
+        void UnsafeRemove(Entity entity);
         /// <summary>
         /// Updates the <see cref="IEntityCollection"/>.
         /// </summary>

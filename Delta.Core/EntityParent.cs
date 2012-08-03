@@ -58,41 +58,45 @@ namespace Delta
         /// <summary>
         /// Adds an <see cref="{T}"/> to the end of the <see cref="EntityParent{T}"/> and sets <see cref="NeedsToSort"/> to true.
         /// </summary>
-        /// <param name="item">The <see cref="Entity"/> to add to the end of the <see cref="EntityParent{T}"/>.</param>
-        public virtual void Add(T item)
+        /// <param name="entity">The <see cref="Entity"/> to add to the end of the <see cref="EntityParent{T}"/>.</param>
+        public virtual void Add(T entity)
         {
-            if (_children.Contains(item)) 
+            if (_children.Contains(entity)) 
                 return;
-            _children.Add(item);
+            _children.Add(entity);
             NeedsToSort = true;
-            item.ParentCollection = this;
-            if (!string.IsNullOrEmpty(item.Name))
-                EntityHelper.AddIDReference(item);
-            item.OnAdded();
+            entity.ParentCollection = this;
+            if (!string.IsNullOrEmpty(entity.Name))
+                EntityHelper.AddIDReference(entity);
+            if (!EntityHelper._globalEntityReferences.Contains(entity))
+                EntityHelper._globalEntityReferences.Add(entity);
+            entity.OnAdded();
         }
-        void IEntityCollection.UnsafeAdd(Entity item)
+        void IEntityCollection.UnsafeAdd(Entity entity)
         {
-            Add((T)item);
+            Add((T)entity);
         }
 
         /// <summary>
         /// Removed an <see cref="{T}"/> to the end of the <see cref="EntityParent{T}"/> and sets <see cref="NeedsToSort"/> to true.
         /// </summary>
-        /// <param name="item"></param>
-        public virtual void Remove(T item)
+        /// <param name="entity"></param>
+        public virtual void Remove(T entity)
         {
-            if (!_children.Contains(item)) 
+            if (!_children.Contains(entity)) 
                 return;
-            _children.FastRemove<T>(item);
-            item.ParentCollection = null;
+            _children.FastRemove<T>(entity);
+            entity.ParentCollection = null;
             NeedsToSort = true;
-            if (!string.IsNullOrEmpty(item.Name))
-                EntityHelper.RemoveIDReference(item);
-            item.OnRemoved();
+            if (!string.IsNullOrEmpty(entity.Name))
+                EntityHelper.RemoveIDReference(entity);
+            if (EntityHelper._globalEntityReferences.Contains(entity))
+                EntityHelper._globalEntityReferences.Remove(entity);
+            entity.OnRemoved();
         }
-        void IEntityCollection.UnsafeRemove(Entity item)
+        void IEntityCollection.UnsafeRemove(Entity entity)
         {
-            Remove((T)item);
+            Remove((T)entity);
         }
 
         /// <summary>
