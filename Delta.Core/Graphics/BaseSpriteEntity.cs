@@ -102,7 +102,7 @@ namespace Delta.Graphics
             }
         }
 
-        internal int _frame = 0;
+        int _frame = 0;
         /// <summary>
         /// Gets or sets the frame index of the <see cref="BaseSpriteEntity"/>.
         /// </summary>
@@ -214,6 +214,9 @@ namespace Delta.Graphics
         }
 #endif
 
+        /// <summary>
+        /// Updates the source <see cref="Rectangle"/> used when drawing the <see cref="BaseSpriteEntity"/>.
+        /// </summary>
         protected abstract void UpdateSourceRectangle();
 
         /// <summary>
@@ -256,6 +259,8 @@ namespace Delta.Graphics
         /// </summary>
         protected virtual void OnSpriteSheetChanged()
         {
+            if (_sourceRectangle == Rectangle.Empty)
+                UpdateSourceRectangle();
         }
 
     }

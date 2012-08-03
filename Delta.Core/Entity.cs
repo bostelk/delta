@@ -325,7 +325,7 @@ namespace Delta
             return IsEnabled;
         }
 
-        /// <summary>o
+        /// <summary>
         /// Updates the <see cref="Entity"/>. Override this method to add custom update logic which is executed every frame.
         /// </summary>
         /// <param name="time">time</param>

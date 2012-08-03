@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Delta.Structures;
 using System.ComponentModel;
 
+#if WINDOWS
+using System.Drawing.Design;
+using Delta.Editor;
+#endif
+
 namespace Delta.Graphics
 {
     [Flags]
@@ -31,16 +36,32 @@ namespace Delta.Graphics
         int _animationFrame = 0;
         float _animationframeDurationTimer = 0.0f;
 
+        /// <summary>
+        /// Gets or sets the frame index of the <see cref="BaseSpriteEntity"/>.
+        /// </summary>
+        [ContentSerializerIgnore, Description("The frame index of the game object."), Category("Sprite"), ReadOnly(true)]
+        public new int Frame { get { return base.Frame; } }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="AnimatedSpriteEntity"/> is currently animating.
+        /// </summary>
         [ContentSerializerIgnore, Browsable(false)]
         public bool IsAnimating { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="AnimatedSpriteEntity"/> is finished animating.
+        /// </summary>
         [ContentSerializerIgnore, Browsable(false)]
         public bool IsAnimationFinished { get; private set; }
 
         Animation _animation = null;
+        /// <summary>
+        /// Gets the <see cref="Animation"/> used by the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
+        [ContentSerializerIgnore, Browsable(false)]
         public Animation Animation
         {
             get { return _animation; }
-            set
+            internal set
             {
                 if (_animation != value)
                 {
@@ -51,7 +72,10 @@ namespace Delta.Graphics
         }
 
         string _animationName = string.Empty;
-        [ContentSerializer(ElementName = "Animation"), DisplayName("Animation"), Description(""), Category("Animation"), Browsable(true), ReadOnly(false), DefaultValue("")]
+        /// <summary>
+        /// Gets or sets the name of the <see cref="Animation"/> used by the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
+        [ContentSerializer(ElementName = "Animation"), DisplayName("Animation"), Description("The name of the animation used by the game object."), Category("Animation"), DefaultValue("")]
         public string AnimationName
         {
             get { return _animationName; }
@@ -67,7 +91,14 @@ namespace Delta.Graphics
         }
 
         AnimationOptions _animationOptions = AnimationOptions.None;
-        [ContentSerializer(ElementName = "PlayOptions"), DisplayName("PlayOptions"), Description(""), Category("Animation"), Browsable(true), ReadOnly(false), DefaultValue(AnimationOptions.None), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        /// <summary>
+        /// Gets or sets the <see cref="AnimationOptions"/> used when playing the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
+        [ContentSerializer(ElementName = "AnimationOptions"), DisplayName("AnimationOptions"), Description("The options used by the game object when playing the animation."), Category("Animation"), DefaultValue(AnimationOptions.None), 
+#if WINDOWS
+        Editor(typeof(FlagEnumUIEditor), typeof(UITypeEditor))
+#endif
+        ]
         public AnimationOptions AnimationOptions
         {
             get { return _animationOptions; }
@@ -83,7 +114,10 @@ namespace Delta.Graphics
         }
 
         int _frameOffset = 0;
-        [ContentSerializer(ElementName = "FrameOffset"), Description(""), Category("Animation"), Browsable(true), ReadOnly(false), DefaultValue(0)]
+        /// <summary>
+        /// Gets or sets the <see cref="Frame"/> offset used when playing the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
+        [ContentSerializer(ElementName = "FrameOffset"), Description("The frame offset of the game object."), Category("Animation"), DefaultValue(0)]
         public int FrameOffset
         {
             get { return _frameOffset; }
@@ -98,7 +132,10 @@ namespace Delta.Graphics
         }
 
         bool _isAnimationPaused = false;
-        [ContentSerializerIgnore, DisplayName("AnimationPaused"), Description(""), Category("Animation"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="AnimatedSpriteEntity"/> is currently paused.
+        /// </summary>
+        [ContentSerializerIgnore, DisplayName("AnimationPaused"), Description("Indicates whether the game object is paused."), Category("Animation"), DefaultValue(false)]
         public bool IsAnimationPaused
         {
             get { return _isAnimationPaused; }
@@ -112,11 +149,17 @@ namespace Delta.Graphics
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
         public AnimatedSpriteEntity()
             : base()
         {
         }
 
+        /// <summary>
+        /// Recycles the <see cref="AnimatedSpriteEntity"/> so it may be re-used.
+        /// </summary>
         public override void Recycle()
         {
             base.Recycle();
@@ -160,6 +203,10 @@ namespace Delta.Graphics
         }
 #endif
 
+        /// <summary>
+        /// Updates the <see cref="AnimatedSpriteEntity"/>. Override this method to add custom update logic which is executed every frame.
+        /// </summary>
+        /// <param name="time">time</param>
         protected override void LightUpdate(DeltaGameTime time)
         {
             if (_animation != null && !IsAnimationFinished && !IsAnimationPaused)
@@ -167,6 +214,9 @@ namespace Delta.Graphics
             base.LightUpdate(time);
         }
 
+        /// <summary>
+        /// Updates the <see cref="Animation"/> used by the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
         protected virtual void UpdateAnimation()
         {
             if (SpriteSheet == null)
@@ -174,6 +224,10 @@ namespace Delta.Graphics
             Animation = SpriteSheet.GetAnimation(_animationName);
         }
 
+        /// <summary>
+        /// Updates the current animation frame of the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
+        /// <param name="time"></param>
         protected internal virtual void UpdateAnimationFrame(DeltaGameTime time)
         {
             _animationframeDurationTimer -= time.ElapsedSeconds * TimeScale;
@@ -181,7 +235,7 @@ namespace Delta.Graphics
             {
                 _animationframeDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                Frame = _animation.Frames[_animationFrame];
+                base.Frame = _animation.Frames[_animationFrame];
                 if (((_animationOptions & AnimationOptions.Looped) == 0) && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     IsAnimationFinished = true;
@@ -193,6 +247,9 @@ namespace Delta.Graphics
             }
         }
 
+        /// <summary>
+        /// Updates the source <see cref="Rectangle"/> used when drawing the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
         protected override void UpdateSourceRectangle()
         {
             if (SpriteSheet == null)
@@ -200,6 +257,10 @@ namespace Delta.Graphics
             SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame + _frameOffset);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="AnimatedSpriteEntity"/> is allowed to draw.
+        /// </summary>
+        /// <returns>A value indicating whether the <see cref="AnimatedSpriteEntity"/> is allowed to draw.</returns>
         protected override bool CanDraw()
         {
             if (_animation == null)
@@ -207,16 +268,31 @@ namespace Delta.Graphics
             return base.CanDraw();
         }
 
+        /// <summary>
+        /// Plays the <see cref="AnimationSpriteEntity"/>. 
+        /// </summary>
+        /// <param name="animation">The name of the <see cref="Animation"/> to play.</param>
         public void Play(string animation)
         {
             Play(animation, AnimationOptions.None, 0);
         }
 
+        /// <summary>
+        /// Plays the <see cref="AnimationSpriteEntity"/>. 
+        /// </summary>
+        /// <param name="animation">The name of the <see cref="Animation"/> to play.</param>
+        /// <param name="options">The <see cref="AnimationOptions"/> to use when playing the <see cref="AnimatedSpriteEntity"/>.</param>
         public void Play(string animation, AnimationOptions options)
         {
             Play(animation, options, 0);
         }
 
+        /// <summary>
+        /// Plays the <see cref="AnimationSpriteEntity"/>. 
+        /// </summary>
+        /// <param name="animation">The name of the <see cref="Animation"/> to play.</param>
+        /// <param name="options">The <see cref="AnimationOptions"/> to use when playing the <see cref="AnimatedSpriteEntity"/>.</param>
+        /// <param name="frameOffset">The frame offset used when playing the <see cref="AnimatedSpriteEntity"/>.</param>
         public void Play(string animation, AnimationOptions options, int frameOffset)
         {
             AnimationName = animation;
@@ -227,30 +303,41 @@ namespace Delta.Graphics
             FrameOffset = frameOffset;
         }
 
+        /// <summary>
+        /// Pauses the <see cref="AnimatedSpriteEntity"/>.
+        /// </summary>
         public void Pause()
         {
             IsAnimationPaused = true;
         }
 
+        /// <summary>
+        /// Called when the <see cref="AnimatedSpriteEntity"/>'s <see cref="SpriteSheet"/> has changed.
+        /// </summary>
         protected override void OnSpriteSheetChanged()
         {
-            base.OnSpriteSheetChanged();
             UpdateAnimation();
+            base.OnSpriteSheetChanged();
         }
 
+        /// <summary>
+        /// Called when the <see cref="AnimatedSpriteEntity"/>'s <see cref="Animation"/> has changed.
+        /// </summary>
         protected internal virtual void OnAnimationChanged()
         {
             if (_animation == null)
                 return;
             _animationFrame = _frameOffset;
-            Frame = _animation.Frames[_animationFrame];
+            base.Frame = _animation.Frames[_animationFrame];
             if ((AnimationOptions & AnimationOptions.StartOnRandomFrame) != 0)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _animationframeDurationTimer = _animation.FrameDuration;
             IsAnimationFinished = false;
-            UpdateSourceRectangle();
         }
 
+        /// <summary>
+        /// Called when the <see cref="AnimatedSpriteEntity"/> has been removed from an <see cref="IEntityCollection"/>.
+        /// </summary>
         protected internal override void OnRemoved()
         {
             if ((_animationOptions & AnimationOptions.Recycle) != 0)

@@ -172,7 +172,7 @@
     <Compile Include="Graphics\RasterizerStateReader.cs" />
     <Compile Include="Graphics\SamplerStateReader.cs" />
     <Compile Include="PostEffects.cs" />
-    <Compile Include="Graphics\SpriteFrameEntity.cs" />
+    <Compile Include="Graphics\SpriteEntity.cs" />
     <Compile Include="EntitySpawner.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions\BlendStateExtensions.cs" />
@@ -181,7 +181,6 @@
     <Compile Include="Graphics\Effects\PixelEmitter.cs" />
     <Compile Include="Graphics\Effects\SpriteEmitter.cs" />
     <Compile Include="Graphics\Effects\Emitter.cs" />
-    <Compile Include="Graphics\TextureEntity.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\PlayerInputCollection.cs" />
     <Compile Include="Input\States\GamePadInputState.cs" />

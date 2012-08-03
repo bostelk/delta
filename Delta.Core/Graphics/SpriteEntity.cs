@@ -25,9 +25,9 @@ namespace Delta.Graphics
 
         string _externalImageName = string.Empty;
         /// <summary>
-        /// Gets or sets the name of the external image used by the <see cref="SpriteEntity"/>.
+        /// Gets or sets the name of the <see cref="SpriteEntity"/>'s external image.
         /// </summary>
-        [ContentSerializer, Description("The name of the external image used by the game object."), Category("Sprite"), DefaultValue("")]
+        [ContentSerializer, Description("The name of the external image to use."), Category("Sprite"), DefaultValue("")]
         public string ExternalImageName
         {
             get { return _externalImageName; }
@@ -42,11 +42,17 @@ namespace Delta.Graphics
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
         public SpriteEntity()
             : base()
         {
         }
 
+        /// <summary>
+        /// Updates the source <see cref="Rectangle"/> used when drawing the <see cref="SpriteEntity"/>.
+        /// </summary>
         protected override void UpdateSourceRectangle()
         {
             if (SpriteSheet == null)
@@ -54,6 +60,9 @@ namespace Delta.Graphics
             SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_externalImageName, Frame);
         }
 
+        /// <summary>
+        /// Recycles the <see cref="BaseSpriteEntity"/> so it may be re-used.
+        /// </summary>
         public override void Recycle()
         {
             base.Recycle();

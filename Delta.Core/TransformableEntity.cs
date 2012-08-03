@@ -610,6 +610,10 @@ namespace Delta
             UpdateToWrappedBody();
         }
 
+        /// <summary>
+        /// Updates the <see cref="TransformableEntity"/>. Override this method to add custom update logic which is executed every frame.
+        /// </summary>
+        /// <param name="time">time</param>
         protected override void LightUpdate(DeltaGameTime time)
         {
             UpdateFromWrappedBody();
