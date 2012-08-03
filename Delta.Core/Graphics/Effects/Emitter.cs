@@ -23,9 +23,7 @@ namespace Delta.Graphics
         Interpolation.InterpolationMethod _fadeOutInterpolator;
 
         [ContentSerializer]
-        string _blendString;
-        BlendState _blend;
-
+        protected BlendState _blend;
         [ContentSerializer]
         protected float _frequency;
         [ContentSerializer]
@@ -81,14 +79,16 @@ namespace Delta.Graphics
         public Range FadeOutRange { get { return _fadeOutRange; } set { _fadeOutRange = value; } }
 
         // fuck you for not serializing blendstates; the graphicsdevice isn't setup @ buildtime; warning will hardcrash visual studio
-        [ContentSerializerIgnore, Browsable(false)]
+        [ContentSerializerIgnore, DisplayName("Blend"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
         public BlendState Blend
         {
             get
             {
-                if (_blend == null)
-                    _blend = BlendStateExtensions.Parse(_blendString);
                 return _blend;
+            }
+            set
+            {
+                _blend = value;
             }
         }
 
@@ -123,7 +123,7 @@ namespace Delta.Graphics
             _quantityRange = new Range(1, 1);
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
-            _blendString = "AlphaBlend";
+            _blend = BlendState.AlphaBlend;
         }
 
         protected internal override bool SetValue(string name, string value)
@@ -194,7 +194,7 @@ namespace Delta.Graphics
                     _fadeOutMethodString = value;
                     return true;
                 case "blend":
-                    _blendString = value;
+                    _blend = BlendStateExtensions.Parse(value);
                     return true;
             }
             return base.SetValue(name, value);
@@ -217,7 +217,7 @@ namespace Delta.Graphics
             _fadeOutRange = Range.Empty;
             _fadeInMethodString = "Linear";
             _fadeOutMethodString = "Linear";
-            _blendString = "AlphaBlend";
+            _blend = BlendState.AlphaBlend;
         }
 
         internal class Particle<T> : IRecyclable where T: TransformableEntity

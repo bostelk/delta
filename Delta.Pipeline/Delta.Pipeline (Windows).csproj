@@ -111,7 +111,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityParentWriter.cs" />
+    <Compile Include="Graphics\BlendStateSerializer.cs" />
+    <Compile Include="Graphics\BlendStateWriter.cs" />
+    <Compile Include="Graphics\DepthStencilStateSerializer.cs" />
+    <Compile Include="Graphics\DepthStencilStateWriter.cs" />
     <Compile Include="Graphics\ImageContent.cs" />
+    <Compile Include="Graphics\RasterizerStateSerializer.cs" />
+    <Compile Include="Graphics\RasterizerStateWriter.cs" />
+    <Compile Include="Graphics\SamplerStateSerializer.cs" />
+    <Compile Include="Graphics\SamplerStateWriter.cs" />
     <Compile Include="Graphics\SpriteSheetImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\SpriteSheetContent.cs" />
