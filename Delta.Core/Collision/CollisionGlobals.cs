@@ -32,6 +32,8 @@ namespace Delta.Collision
 
         public static Stack<CollisionResult> Results;
 
-        public static DebugViewFlags DebugViewOptions = DebugViewFlags.All;
+        public static DebugViewFlags ViewFlags = DebugViewFlags.All;
+        public static CollisionGroups ViewGroups = CollisionGroups.All;
     }
+
 }

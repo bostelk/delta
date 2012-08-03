@@ -9,11 +9,13 @@ namespace Delta.Collision
     public class BroadphaseProxy : IRecyclable
     {
         static Pool<BroadphaseProxy> _pool;
+        static CollisionGroups _defaultGroup = CollisionGroups.Group1; // belong to group 1.
+        static CollisionGroups _defaultMask = CollisionGroups.All; // collide with all groups.
 
         public AABB AABB;
         public CollisionGroups CollisionFilterGroup;
         public CollisionGroups CollisionFilterMask;
-        public Action<object> NeedsCollisionWith;
+        public Func<object, bool> NeedsCollisionWith;
         public object ClientObject;
 
         static BroadphaseProxy()
@@ -23,7 +25,7 @@ namespace Delta.Collision
 
         public static BroadphaseProxy Create(object client)
         {
-            return Create(client, CollisionGroups.Group1, CollisionGroups.All);
+            return Create(client, _defaultGroup, _defaultMask);
         }
 
         public static BroadphaseProxy Create(object client, CollisionGroups group, CollisionGroups mask)
@@ -46,7 +48,7 @@ namespace Delta.Collision
 
         public bool ShouldCollide(BroadphaseProxy other)
         {
-            return (CollisionFilterGroup & other.CollisionFilterMask) != 0;
+            return (CollisionFilterGroup & other.CollisionFilterMask) !=  CollisionGroups.None;
         }
 
         public void Recycle()

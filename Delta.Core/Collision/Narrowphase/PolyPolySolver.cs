@@ -12,14 +12,15 @@ namespace Delta.Collision
         public bool IsSolveable(CollisionBody colA, CollisionBody colB)
         {
             // we assume the calling function has checked for null shapes.
-            if (colA.Shape is Polygon && colB.Shape is Polygon) return true;
+            if (colA.Shape is ConvexShape && colB.Shape is ConvexShape) return true; // catch all.
             else return false;
         }
 
         public CollisionResult SolveCollision(CollisionBody colA, CollisionBody colB)
         {
-            Polygon polyA = (Polygon)colA.Shape;
-            Polygon polyB = (Polygon)colB.Shape;
+            // we want boxes and circles included too..
+            ConvexShape polyA = (ConvexShape)colA.Shape;
+            ConvexShape polyB = (ConvexShape)colB.Shape;
 
             float projectedDistance = 0;
             float minPenetration = float.MaxValue;

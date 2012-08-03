@@ -8,6 +8,16 @@ using Delta.Structures;
 
 namespace Delta.Collision
 {
+    [Flags]
+    public enum CollisionFlags
+    {
+        Solid,
+        Response,
+        /// <summary>
+        /// Stops the detection at the broadphase.
+        /// </summary>
+        Ignore,
+    }
 
     /// <summary>
     /// A Body that belongs in the CollisionWorld. Provides the detection of collisions between shapes.
@@ -19,6 +29,8 @@ namespace Delta.Collision
         public object Owner { get; set; }
 
         public BroadphaseProxy BroadphaseProxy { get; set; }
+
+        public CollisionFlags Flags { get; set; }
 
         private CollisionShape _shape;
         /// <summary>
@@ -198,7 +210,7 @@ namespace Delta.Collision
             Recycle(); // will also recycle the collider's broadphase proxy too.
         }
 
-        public void BelongsToGroup(CollisionGroups group)
+        public void SetGroup(CollisionGroups group)
         {
             BroadphaseProxy.CollisionFilterGroup = group;
         }
@@ -208,6 +220,11 @@ namespace Delta.Collision
             BroadphaseProxy.CollisionFilterMask = mask;
         }
 
+        public bool BelongsToGroup(CollisionGroups group)
+        {
+            return (BroadphaseProxy.CollisionFilterGroup & group) != CollisionGroups.None;
+        }
+        
         private bool HandleBeforeCollision(CollisionBody them)
         {
             if (BeforeCollisionEvent != null)

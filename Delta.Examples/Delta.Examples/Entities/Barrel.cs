@@ -23,8 +23,7 @@ namespace Delta.Examples.Entities
         {
             WrappedBody = CollisionBody.CreateBody(new Box(16, 16));
             WrappedBody.OnCollisionEvent += OnCollision;
-            WrappedBody.BelongsToGroup(CollisionGroups.Group2);
-            WrappedBody.CollidesWithGroup(CollisionGroups.Group2);
+            WrappedBody.SetGroup(CollisionGroups.Group2);
             base.Initialize();
         }
 

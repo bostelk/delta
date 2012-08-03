@@ -79,6 +79,22 @@ namespace Delta.Collision
             //orientation.Y = (float)Math.Sin(transform.Rotation);
         }
 
+        public void ProjectOnto(ref Vector2 axis, out float min, out float max)
+        {
+            Vector2.Dot(ref Vertices[0], ref axis, out min);
+            max = min;
+            float projected = 0;
+
+            for (int i = 1; i < Vertices.Length; i++)
+            {
+                Vector2.Dot(ref Vertices[i], ref axis, out projected);
+                if (projected > max)
+                    max = projected;
+                if (projected < min)
+                    min = projected;
+            }
+        }
+
         ///// <summary>
         ///// A less expensive check before we waste cycles on a narrow phase detection.
         ///// </summary>

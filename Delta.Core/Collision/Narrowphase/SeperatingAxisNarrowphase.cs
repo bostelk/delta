@@ -51,8 +51,10 @@ namespace Delta.Collision
                    CollisionGlobals.Results.Push(result);
     
                     // translate the body to a safe non-penetrating position.
-                    //result.Us.Position += colA.Mass * result.CollisionResponse;
-                    //result.Them.Position += -colB.Mass * result.CollisionResponse;
+                    if ((result.Us.Flags & CollisionFlags.Response) != 0)
+                        result.Us.Position += result.CollisionResponse;
+                    if ((result.Them.Flags & CollisionFlags.Response) != 0)
+                        result.Them.Position += -result.CollisionResponse;
 
                     // handle collision events
                     if (colA.OnCollision != null)

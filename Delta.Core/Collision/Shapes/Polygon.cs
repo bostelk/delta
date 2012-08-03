@@ -46,21 +46,5 @@ namespace Delta.Collision
             aabb.Max = transform.Origin + new Vector2(farthestX, farthestY);
         }
 
-        public void ProjectOnto(ref Vector2 axis, out float min, out float max)
-        {
-            Vector2.Dot(ref Vertices[0], ref axis, out min);
-            max = min;
-            float projected = 0;
-
-            for (int i = 1; i < Vertices.Length; i++)
-            {
-                Vector2.Dot(ref Vertices[i], ref axis, out projected);
-                if (projected > max)
-                    max = projected;
-                if (projected < min)
-                    min = projected;
-            }
-        }
-
     }
 }

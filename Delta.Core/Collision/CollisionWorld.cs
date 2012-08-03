@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 using Delta.Extensions;
+using Microsoft.Xna.Framework.Input;
 
 namespace Delta.Collision
 {
@@ -67,6 +68,19 @@ namespace Delta.Collision
         {
             if (CanSimulate())
                 InternalUpdate();
+#if DEBUG
+            if (G.Input.Keyboard.IsDown(Keys.LeftControl))
+            {
+                if (G.Input.Keyboard.IsPressed(Keys.D1))
+                    CollisionGlobals.ViewGroups = CollisionGroups.Group1;
+                else if (G.Input.Keyboard.IsPressed(Keys.D2))
+                    CollisionGlobals.ViewGroups = CollisionGroups.Group2;
+                else if (G.Input.Keyboard.IsPressed(Keys.D3))
+                    CollisionGlobals.ViewGroups = CollisionGroups.Group3;
+                else if (G.Input.Keyboard.IsPressed(Keys.D4))
+                    CollisionGlobals.ViewGroups = CollisionGroups.Group4;
+            }
+#endif
             CollisionGlobals.BroadphaseDetections = _broadphase.CollisionPairs.Count();
         }
 
@@ -117,11 +131,11 @@ namespace Delta.Collision
             for (int i = 0; i < _colliders.Count; i++)
             {
                 CollisionBody col = _colliders[i];
-                if (col.Shape == null)
+                if (col.Shape == null || !col.BelongsToGroup(CollisionGlobals.ViewGroups))
                     continue;
 
                 Matrix3 transform = col.WorldTransform;
-                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.Shape))
+                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.Shape))
                 {
                     Vector2[] transformedVerts = col.Shape.VerticesCopy;
                     for (int j = 0; j < transformedVerts.Length; j++)
@@ -129,7 +143,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawPolygon(transformedVerts, transformedVerts.Length, CollisionGlobals.ShapeColor);
                 }
 
-                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.Extents))
+                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.Extents))
                 {
                     if (col.Shape is Box)
                     {
@@ -148,7 +162,7 @@ namespace Delta.Collision
                     }
                 }
 
-                if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.AABB))
+                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.AABB))
                 {
                     AABB aabb;
                     col.Shape.CalculateAABB(ref transform, out aabb);
@@ -158,7 +172,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Min.Y), new Vector2(aabb.Min.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                 }
             }
-            if (CollisionGlobals.DebugViewOptions.HasFlagFast(DebugViewFlags.CollisionResponse))
+            if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.CollisionResponse))
             {
                 while (CollisionGlobals.Results.Count > 0)
                 {
@@ -177,13 +191,15 @@ namespace Delta.Collision
         {
             get
             {
-                return String.Format("Total Colliders:{0}\nTotal Proxies:{1}\nBroadphase Collisions:{2}\nNarrowphase Collisions:{3}\nUpdated AABBs:{4}\nProxies In Cells:{5}\n", new object[] {
+                return String.Format("Total Colliders:{0}\nTotal Proxies:{1}\nBroadphase Collisions:{2}\nNarrowphase Collisions:{3}\nUpdated AABBs:{4}\nProxies In Cells:{5}\nViewing Collision Groups:{6}\n Viewing Flags:{7}\n", new object[] {
                     CollisionGlobals.TotalColliders, 
                     CollisionGlobals.TotalProxies,
                     CollisionGlobals.BroadphaseDetections, 
                     CollisionGlobals.NarrowphaseDetections,
                     CollisionGlobals.UpdatedAABBs,
                     CollisionGlobals.ProxiesInCells,
+                    CollisionGlobals.ViewGroups,
+                    CollisionGlobals.ViewFlags,
                 });
             }
         }

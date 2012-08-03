@@ -40,6 +40,7 @@ namespace Delta.Examples.Entities
         protected override void Initialize()
         {
             WrappedBody = CollisionBody.CreateBody(new Box(16, 16));
+            WrappedBody.Flags = CollisionFlags.Response;
             base.Initialize();
         }
 
@@ -57,6 +58,13 @@ namespace Delta.Examples.Entities
 
         protected override void LightUpdate(DeltaGameTime time)
         {
+
+            base.LightUpdate(time);
+
+            _sprite.Position = WrappedBody.SimulationPosition;
+            _sprite.InternalUpdate(time);
+            Depth = Position.Y;
+
             if (G.Input.Keyboard.IsDown(Keys.Q))
                 Rotation = (Rotation + (0.5f));
             else if (G.Input.Keyboard.IsDown(Keys.E))
@@ -78,12 +86,6 @@ namespace Delta.Examples.Entities
             //    Visuals.CreateTrail(@"Graphics\SpriteSheets\16x16", _spriteController.ToString(), Position);
             //    _trailTime = (float)time.TotalSeconds;
             //}
-
-            _sprite.Position = Position;
-            _sprite.InternalUpdate(time);
-            Depth = Position.Y;
-
-            base.LightUpdate(time);
         }
 
         protected override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)

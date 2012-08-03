@@ -6,16 +6,6 @@ using Microsoft.Xna.Framework;
 
 namespace Delta.Collision
 {
-    [Flags]
-    public enum CollisionFlags
-    {
-        Solid,
-        Response,
-        /// <summary>
-        /// Stops the detection at the broadphase.
-        /// </summary>
-        Ignore,
-    }
 
     /// <summary>
     /// Defines either a RigidBody or a CollisionBody.
@@ -54,7 +44,10 @@ namespace Delta.Collision
         /// The shape is colliding with another. Narrowpahse detection.
         /// </summary>
         Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
-        void BelongsToGroup(CollisionGroups group);
+
+        // temp
+        void SetGroup(CollisionGroups group);
         void CollidesWithGroup(CollisionGroups mask);
+        CollisionFlags Flags { get; set; }
     }
 }

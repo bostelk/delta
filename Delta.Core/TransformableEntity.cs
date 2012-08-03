@@ -559,6 +559,12 @@ namespace Delta
             UpdateToWrappedBody();
         }
 
+        protected override void LightUpdate(DeltaGameTime time)
+        {
+            UpdateFromWrappedBody();
+            base.LightUpdate(time);
+        }
+
         /// <summary>
         /// Called when the <see cref="Entity"/> has been removed from an <see cref="IEntityCollection"/>.
         /// </summary>
