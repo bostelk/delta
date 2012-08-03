@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using Delta.Transformations;
 using System.Globalization;
 using Delta.Entities;
+using System.ComponentModel;
 
 namespace Delta.Graphics
 {
@@ -42,15 +43,25 @@ namespace Delta.Graphics
         static Pool<SpriteParticle> _particlePool;
         
         List<SpriteParticle> _particles;
+        float _lastEmitTime;
         
         [ContentSerializer]
         string _spriteSheet;
         [ContentSerializer]
         string _animationName;
-        float _lastEmitTime;
+        [ContentSerializer]
+        Range _timeScaleRange;
+        [ContentSerializer]
+        AnimationOptions _spriteOptions;
 
-        public Range TimeScaleRange;
-        public AnimationOptions SpriteOptions;
+        [ContentSerializerIgnore, DisplayName("Sprite Sheet"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public string SpriteSheet { get { return _spriteSheet; } set { _spriteSheet = value; } }
+        [ContentSerializerIgnore, DisplayName("Animation Name"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
+        public string AnimationName { get { return _animationName; } set { _animationName = value; } }
+        [ContentSerializerIgnore, DisplayName("Time Scale"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Range TimeScaleRange { get { return _timeScaleRange; } set { _timeScaleRange = value; } }
+        [ContentSerializerIgnore, DisplayName("Animation Options"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public AnimationOptions SpriteOptions { get { return _spriteOptions; } set { _spriteOptions = value; } }
 
         static SpriteEmitter()
         {
@@ -111,15 +122,15 @@ namespace Delta.Graphics
             newParticle.Emitter = this;
             newParticle.Entity = SpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
-            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower, AccelerationAngleRange.Upper) * AccelerationMagnitudeRange.RandomWithin();
+            newParticle.Acceleration = Vector2Extensions.DirectionBetween(AccelerationAngleRange.Lower.ToRadians(), AccelerationAngleRange.Upper.ToRadians()) * AccelerationMagnitudeRange.RandomWithin();
             newParticle.AngularVelocity = RotationRange.RandomWithin();
-            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower, VelocityAngleRange.Upper) * VelocityMagnitudeRange.RandomWithin();
+            newParticle.Velocity = Vector2Extensions.DirectionBetween(VelocityAngleRange.Lower.ToRadians(), VelocityAngleRange.Upper.ToRadians()) * VelocityMagnitudeRange.RandomWithin();
             newParticle.FadeInPercent = FadeInRange.RandomWithin();
             newParticle.FadeOutPercent = FadeOutRange.RandomWithin();
             newParticle.Entity.Tint = Tint;
             newParticle.Entity.TimeScale = TimeScaleRange.RandomWithin();
             newParticle.Entity.Scale = G.Random.Between(new Vector2(ScaleRange.Lower), new Vector2(ScaleRange.Upper));
-            newParticle.Entity.Origin = new Vector2(0.5f, 0.5f);
+            newParticle.Entity.Origin = Vector2.One * 0.5f;
             newParticle.Entity.Position = G.Random.Between(Position, Position + Size); // tiled gives up the position as top-let
             newParticle.Entity.InternalLoadContent(); // otherwise the sprite will not play because the spritessheet has not been loaded.
             newParticle.Entity.Play(_animationName, SpriteOptions);

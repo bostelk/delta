@@ -45,8 +45,6 @@ namespace Delta.Graphics
         [ContentSerializer]
         protected Range _scaleRange;
         [ContentSerializer]
-        protected Range _frameIntervalRange;
-        [ContentSerializer]
         protected Range _fadeInRange;
         [ContentSerializer]
         protected Range _fadeOutRange;
@@ -71,8 +69,6 @@ namespace Delta.Graphics
         public Range AccelerationAngleRange { get { return _accelerationAngleRange; } set { _accelerationAngleRange = value; } }
         [ContentSerializerIgnore, DisplayName("Scale"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Range ScaleRange { get { return _scaleRange; } set { _scaleRange = value; } }
-        [ContentSerializerIgnore, DisplayName("Frame Interval"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public Range FrameIntervalRange { get { return _frameIntervalRange; } set { _frameIntervalRange = value; } }
         [ContentSerializerIgnore, DisplayName("Fade In"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Range FadeInRange { get { return _fadeInRange; } set { _fadeInRange = value; } }
         [ContentSerializerIgnore, DisplayName("Fade Out"), Description(""), Category("Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.RangeUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
@@ -139,8 +135,6 @@ namespace Delta.Graphics
                 case "rotation":
                 case "rotationspeed":
                     _rotationRange = Range.TryParse(value);
-                    _rotationRange.Lower = _rotationRange.Lower.ToRadians();
-                    _rotationRange.Upper = _rotationRange.Upper.ToRadians();
                     return true;
                 case "v":
                 case "vel":
@@ -151,8 +145,6 @@ namespace Delta.Graphics
                 case "velangle":
                 case "velocityangle":
                     _velocityAngleRange = Range.TryParse(value);
-                    _velocityAngleRange.Lower = _velocityAngleRange.Lower.ToRadians();
-                    _velocityAngleRange.Upper = _velocityAngleRange.Upper.ToRadians();
                     return true;
                 case "a":
                 case "accel":
@@ -163,16 +155,10 @@ namespace Delta.Graphics
                 case "accelangle":
                 case "accelerationangle":
                     _accelerationAngleRange = Range.TryParse(value);
-                    _accelerationAngleRange.Lower = _accelerationAngleRange.Lower.ToRadians();
-                    _accelerationAngleRange.Upper = _accelerationAngleRange.Upper.ToRadians();
                     return true;
                 case "scale":
                 case "size":
                     _scaleRange = Range.TryParse(value);
-                    return true;
-                case "frameinterval":
-                case "frameduration":
-                    _frameIntervalRange = Range.TryParse(value);
                     return true;
                 case "explode":
                     _explode = true;
