@@ -253,6 +253,7 @@ namespace Delta
                     Depth = float.Parse(value, CultureInfo.InvariantCulture);
                     return true;
                 case "overlay":
+                case "isoverlay":
                     PostEffects |= PostEffects.Overlay;
                     return true;
              }
