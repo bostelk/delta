@@ -241,6 +241,7 @@
     <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
+    <Compile Include="UI\Controls\ScrollingBackground.cs" />
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\Button.cs" />
     <Compile Include="UI\Controls\Label.cs" />

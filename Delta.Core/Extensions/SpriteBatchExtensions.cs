@@ -120,5 +120,24 @@ namespace Delta
             spriteBatch.Draw(texture, transformableEntity.RenderPosition, sourceRectangle, transformableEntity.RenderColor, transformableEntity.RenderRotation, transformableEntity.RenderOrigin, transformableEntity.Scale, spriteEffects, layerDepth);
         }
 
+        /// <summary>
+        /// Repeat the texture to fill the destination area.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="texture">Texture to tile.</param>
+        /// <param name="position"></param>
+        /// <param name="src">Texture source region</param>
+        /// <param name="dst">Fill this area the texture tile.</param>
+        public static void DrawTiledArea(this SpriteBatch spriteBatch, Texture2D texture, Vector2 position, Rectangle src, Rectangle dst)
+        {
+            for (int y = dst.Y + (int)position.Y; y < dst.Y + dst.Height; y += src.Height)
+            {
+                for (int x = dst.X + (int)position.X; x < dst.X + dst.Width; x += src.Width)
+                {
+                    spriteBatch.Draw(texture, new Vector2(x, y), src, Color.White);
+                }
+            }
+        }
+
     }
 }

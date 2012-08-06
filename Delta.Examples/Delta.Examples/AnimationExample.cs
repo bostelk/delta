@@ -14,6 +14,7 @@ using Delta.Graphics;
 using Delta.Examples.Entities;
 using Delta.Input;
 using System.Collections.ObjectModel;
+using Delta.UI.Controls;
 
 namespace Delta.Examples
 {
@@ -29,10 +30,12 @@ namespace Delta.Examples
 
         ReadOnlyCollection<Animation> _supportedAnimations;
         int _animationIndex = 0;
+        ScrollingBackground _bg;
 
         public AnimationExample() : base("AnimationExample")
         {
             ClearColor = Color.Gray;
+            _bg = new ScrollingBackground();
         }
 
         protected override void Initialize()
@@ -43,6 +46,9 @@ namespace Delta.Examples
 
         protected override void LoadContent()
         {
+            _bg.LowerBackground = Content.Load<Texture2D>(@"Graphics\Background1");
+            _bg.UpperBackground = Content.Load<Texture2D>(@"Graphics\Background2");
+
             mainSheet = Content.Load<SpriteSheet>(@"Graphics\SpriteSheets\16x16");
             _supportedAnimations = mainSheet.Animations;
             sprite = new AnimatedSpriteEntity();
@@ -79,6 +85,7 @@ namespace Delta.Examples
                 mainSheet.Texture.SaveAsPng(new System.IO.FileStream("sheet.png", System.IO.FileMode.OpenOrCreate), mainSheet.Texture.Width, mainSheet.Texture.Height);
             }
             sprite.InternalUpdate(G.World.Time);
+            _bg.InternalUpdate(G.World.Time);
             base.Update(gameTime);
         }
 
@@ -86,8 +93,9 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             G.SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null);
+            _bg.InternalDraw(G.World.Time, G.SpriteBatch);
             sprite.InternalDraw(G.World.Time, G.SpriteBatch);
-            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.Orange, TextAlignment.Center);
+            G.SpriteBatch.DrawString(G.Font, CONTROLS, new Vector2(G.ScreenCenter.X, 0), Color.White, TextAlignment.Center);
             SpriteBatch.DrawString(G.Font, InfoText, new Vector2(0, 50), Color.White);
             G.SpriteBatch.DrawPixel(G.ScreenCenter, Color.White);
             G.SpriteBatch.End();
