@@ -29,7 +29,7 @@ namespace Delta.Transformations
 
         static Transformer Create(TransformableEntity entity)
         {
-            Transformer transformer = Pool.Fetch<Transformer>();
+            Transformer transformer = Pool.Acquire<Transformer>();
             transformer._entity = entity;
             return transformer;
         }

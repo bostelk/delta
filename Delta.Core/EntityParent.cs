@@ -179,7 +179,7 @@ namespace Delta
         protected override EntityParent<T> Read(ContentReader input, EntityParent<T> existingInstance)
         {
             if (existingInstance == null)
-                existingInstance = Pool.Fetch<EntityParent<T>>();
+                existingInstance = Pool.Acquire<EntityParent<T>>();
             input.ReadRawObject<Entity>(existingInstance as Entity);
             List<T> gameComponents = input.ReadObject<List<T>>();
             foreach (var item in gameComponents)

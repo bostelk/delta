@@ -15,7 +15,7 @@ namespace Delta.Transformations
 
         public static FlickerTransform Create(TransformableEntity entity, float min, float max, float duration)
         {
-            FlickerTransform transform = Pool.Fetch<FlickerTransform>();
+            FlickerTransform transform = Pool.Acquire<FlickerTransform>();
             transform._entity = entity;
             transform._minAlpha = MathExtensions.Clamp(min, 0f, max);
             transform._maxAlpha = MathExtensions.Clamp(max, min, 1f);

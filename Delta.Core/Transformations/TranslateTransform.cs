@@ -15,7 +15,7 @@ namespace Delta.Transformations
         
         public static TranslateTransform Create(TransformableEntity entity, Vector2 goalPosition, float duration)
         {
-            TranslateTransform transform = Pool.Fetch<TranslateTransform>();
+            TranslateTransform transform = Pool.Acquire<TranslateTransform>();
             transform._entity = entity;
             transform._goalPosition = goalPosition;
             transform.Duration = duration;

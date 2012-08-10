@@ -15,7 +15,7 @@ namespace Delta.Transformations
 
         public static ScaleTransform Create(TransformableEntity entity, Vector2 goalScale, float duration)
         {
-            ScaleTransform transform = Pool.Fetch<ScaleTransform>();
+            ScaleTransform transform = Pool.Acquire<ScaleTransform>();
             transform._entity = entity;
             transform._goalScale = goalScale;
             transform.Duration = duration;

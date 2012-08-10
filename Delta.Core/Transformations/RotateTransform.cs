@@ -15,7 +15,7 @@ namespace Delta.Transformations
 
         public static RotateTransform Create(TransformableEntity entity, float goalRotation, float duration)
         {
-            RotateTransform transform = Pool.Fetch<RotateTransform>();
+            RotateTransform transform = Pool.Acquire<RotateTransform>();
             transform._entity = entity;
             transform._goalRotation = goalRotation;
             transform.Duration = duration;

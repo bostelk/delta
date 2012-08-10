@@ -58,7 +58,7 @@ namespace Delta.Graphics
 
         public static SpriteEmitter Create(string spriteSheet, string animationName)
         {
-            SpriteEmitter emitter = Pool.Fetch<SpriteEmitter>();
+            SpriteEmitter emitter = Pool.Acquire<SpriteEmitter>();
             emitter._spriteSheet = spriteSheet;
             emitter._animationName = animationName;
             G.World.AboveGround.UnsafeAdd(emitter);
@@ -67,7 +67,7 @@ namespace Delta.Graphics
 
         static AnimatedSpriteParticle CreateParticle()
         {
-            AnimatedSpriteParticle particle = Pool.Fetch<AnimatedSpriteParticle>();
+            AnimatedSpriteParticle particle = Pool.Acquire<AnimatedSpriteParticle>();
             return particle;
         }
 
@@ -124,7 +124,7 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            AnimatedSpriteParticle newParticle = Pool.Fetch<AnimatedSpriteParticle>();
+            AnimatedSpriteParticle newParticle = Pool.Acquire<AnimatedSpriteParticle>();
             newParticle.Emitter = this;
             newParticle.Entity = AnimatedSpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();

@@ -35,7 +35,7 @@ namespace Delta.Audio
 
         public static Sound3D Create(string name, Cue cue, TransformableEntity source, TransformableEntity dest, Action<string> onFinished)
         {
-            Sound3D freshSound = Pool.Fetch<Sound3D>();
+            Sound3D freshSound = Pool.Acquire<Sound3D>();
             freshSound.Name = name;
             freshSound._cue = cue;
             freshSound._source = source;

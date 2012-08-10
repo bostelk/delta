@@ -30,7 +30,7 @@ namespace Delta.Audio
 
         public static Sound1D Create(string name, Cue cue, Action<string> onFinished)
         {
-            Sound1D freshSound = Pool.Fetch<Sound1D>();
+            Sound1D freshSound = Pool.Acquire<Sound1D>();
             freshSound.Name = name;
             freshSound._cue = cue;
             freshSound.OnFinished = onFinished;

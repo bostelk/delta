@@ -15,7 +15,7 @@ namespace Delta.Transformations
 
         public static BlinkTransform Create(TransformableEntity entity, float rate, float duration)
         {
-            BlinkTransform transform = Pool.Fetch<BlinkTransform>();
+            BlinkTransform transform = Pool.Acquire<BlinkTransform>();
             transform._entity = entity;
             transform._blinkRate = transform._nextBlink = MathExtensions.Clamp(rate, 0f, duration);
             transform.Duration = duration;

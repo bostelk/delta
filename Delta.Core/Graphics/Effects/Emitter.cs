@@ -233,7 +233,6 @@ namespace Delta.Graphics
 
             protected override void Recycle(bool isReleasing)
             {
-                base.Recycle(isReleasing);
                 if (isReleasing)
                     Entity.Recycle();
                 Entity = null;
@@ -244,6 +243,7 @@ namespace Delta.Graphics
                 AngularVelocity = 0;
                 FadeOutPercent = 0;
                 FadeInPercent = 0;
+                base.Recycle(isReleasing);
             }
 
             public virtual void Update(DeltaGameTime time)

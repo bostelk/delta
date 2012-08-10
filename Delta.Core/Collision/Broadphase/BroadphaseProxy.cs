@@ -28,7 +28,7 @@ namespace Delta.Collision
 
         public static BroadphaseProxy Create(object client, CollisionGroups group, CollisionGroups mask)
         {
-            BroadphaseProxy proxy = Pool.Fetch<BroadphaseProxy>();
+            BroadphaseProxy proxy = Pool.Acquire<BroadphaseProxy>();
             proxy.ClientObject = client;
             proxy.CollisionFilterGroup = group;
             proxy.CollisionFilterMask = mask;

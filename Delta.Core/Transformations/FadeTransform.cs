@@ -13,7 +13,7 @@ namespace Delta.Transformations
 
         public static FadeTransform Create(TransformableEntity entity, float goalAlpha, float duration)
         {
-            FadeTransform transform = Pool.Fetch<FadeTransform>();
+            FadeTransform transform = Pool.Acquire<FadeTransform>();
             transform._entity = entity;
             transform._goalAlpha = MathExtensions.Clamp(goalAlpha, 0f, 1f);
             transform.Duration = duration;

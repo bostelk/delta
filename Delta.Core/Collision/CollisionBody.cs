@@ -164,7 +164,7 @@ namespace Delta.Collision
 
         public static CollisionBody Create(TransformableEntity entity, CollisionShape shape)
         {
-            CollisionBody collider = Pool.Fetch<CollisionBody>();
+            CollisionBody collider = Pool.Acquire<CollisionBody>();
             collider.Owner = entity;
             collider.Shape = shape;
             collider.OnCollision += collider.HandleOnCollision;

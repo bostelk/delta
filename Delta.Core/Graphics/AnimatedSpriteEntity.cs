@@ -149,7 +149,7 @@ namespace Delta.Graphics
 
         public static AnimatedSpriteEntity Create(string spriteSheet)
         {
-            AnimatedSpriteEntity se = Pool.Fetch<AnimatedSpriteEntity>();
+            AnimatedSpriteEntity se = Pool.Acquire<AnimatedSpriteEntity>();
             se.SpriteSheetName = spriteSheet;
             return se;
         }
@@ -346,7 +346,7 @@ namespace Delta.Graphics
         protected override AnimatedSpriteEntity Read(ContentReader input, AnimatedSpriteEntity existingInstance)
         {
             if (existingInstance == null)
-                existingInstance = Pool.Fetch<AnimatedSpriteEntity>();
+                existingInstance = Pool.Acquire<AnimatedSpriteEntity>();
             input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
             existingInstance.AnimationName = input.ReadString();
             existingInstance.AnimationOptions = input.ReadObject<AnimationOptions>();

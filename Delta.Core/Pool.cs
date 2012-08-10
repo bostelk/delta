@@ -6,7 +6,7 @@ namespace Delta
 
     public static class Pool
     {
-        static Dictionary<Type, InternalPool> _pools = new Dictionary<Type, InternalPool>();
+        public static Dictionary<Type, InternalPool> _pools = new Dictionary<Type, InternalPool>();
 
         internal static object Fetch(Type type)
         {
@@ -24,7 +24,7 @@ namespace Delta
 
         public static bool Release<T>(this T obj) where T : IPoolable
         {
-            Type type = typeof(T);
+            Type type = obj.GetType();
             if (!_pools.ContainsKey(type))
                 return false;
             _pools[type].Release(obj);
@@ -33,7 +33,7 @@ namespace Delta
 
     }
 
-    internal class InternalPool
+    public class InternalPool
     {
         Type _type = null;
         Stack<object> _items = new Stack<object>();
@@ -48,7 +48,7 @@ namespace Delta
                 _items.Push(Activator.CreateInstance(_type, true));
         }
 
-        public object Fetch()
+        internal object Fetch()
         {
             object newObj = null;
             if (_items.Count == 0)
@@ -59,10 +59,15 @@ namespace Delta
             return newObj;
         }
 
-        public void Release(object obj)
+        internal void Release(object obj)
         {
             _items.Push(obj);
             _objectsInUse--;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Available Objects: {0}, Used Objects: {1}", _items.Count, _objectsInUse);
         }
     }
 }

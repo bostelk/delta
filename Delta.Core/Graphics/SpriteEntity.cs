@@ -40,7 +40,7 @@ namespace Delta.Graphics
 
         public static SpriteEntity Create(string spriteSheet, string externalImage, int frame)
         {
-            SpriteEntity spriteFrame = Pool.Fetch<SpriteEntity>();
+            SpriteEntity spriteFrame = Pool.Acquire<SpriteEntity>();
             spriteFrame.SpriteSheetName = spriteSheet;
             spriteFrame.ExternalImageName = externalImage;
             spriteFrame.Frame = frame;
@@ -70,7 +70,7 @@ namespace Delta.Graphics
         protected override SpriteEntity Read(ContentReader input, SpriteEntity existingInstance)
         {
             if (existingInstance == null)
-                existingInstance = Pool.Fetch<SpriteEntity>();
+                existingInstance = Pool.Acquire<SpriteEntity>();
              input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
             existingInstance.ExternalImageName = input.ReadString();
             return existingInstance;

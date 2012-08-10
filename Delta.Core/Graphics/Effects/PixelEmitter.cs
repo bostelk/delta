@@ -18,7 +18,7 @@ namespace Delta.Graphics
         {
             public static PixelEntity Create()
             {
-                return Pool.Fetch<PixelEntity>();
+                return Pool.Acquire<PixelEntity>();
             }
         }
 
@@ -39,14 +39,14 @@ namespace Delta.Graphics
 
         public static PixelEmitter Create()
         {
-            PixelEmitter emitter = Pool.Fetch<PixelEmitter>();
+            PixelEmitter emitter = Pool.Acquire<PixelEmitter>();
             G.World.AboveGround.UnsafeAdd(emitter);
             return emitter;
         }
 
         static PixelParticle CreateParticle()
         {
-            PixelParticle particle = Pool.Fetch<PixelParticle>();
+            PixelParticle particle = Pool.Acquire<PixelParticle>();
             return particle;
         }
 
@@ -87,7 +87,7 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            PixelParticle newParticle = Pool.Fetch<PixelParticle>();
+            PixelParticle newParticle = Pool.Acquire<PixelParticle>();
             newParticle.Emitter = this;
             newParticle.Lifespan = _lifespanRange.RandomWithin();
             newParticle.Acceleration = Vector2Extensions.DirectionBetween(_accelerationAngleRange.Lower.ToRadians(), _accelerationAngleRange.Upper.ToRadians()) * _accelerationMagnitudeRange.RandomWithin();
