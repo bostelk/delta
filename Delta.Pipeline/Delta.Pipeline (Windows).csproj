@@ -110,9 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimatedSpriteEntityWriter.cs" />
     <Compile Include="EntityParentWriter.cs" />
-    <Compile Include="Graphics\SpriteEntityWriter.cs" />
     <Compile Include="Graphics\BlendStateSerializer.cs" />
     <Compile Include="Graphics\BlendStateWriter.cs" />
     <Compile Include="Graphics\DepthStencilStateSerializer.cs" />

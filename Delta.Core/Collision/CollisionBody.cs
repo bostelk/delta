@@ -147,7 +147,7 @@ namespace Delta.Collision
 
         public Func<IWrappedBody, bool> BeforeCollisionEvent { get; set; }
 
-        public Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
+        public Func<IWrappedBody, Vector2, bool> Collision { get; set; }
         
         // shortcut
         public static IWrappedBody CreateBody(CollisionShape shape)
@@ -241,8 +241,8 @@ namespace Delta.Collision
 
         private bool HandleOnCollision(CollisionBody them, Vector2 normal)
         {
-            if (OnCollisionEvent != null)
-                return OnCollisionEvent(them as IWrappedBody, normal);
+            if (Collision != null)
+                return Collision(them as IWrappedBody, normal);
             return true;
         }
 

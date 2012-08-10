@@ -63,17 +63,4 @@ namespace Delta.Graphics
             SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_externalImageName, Frame);
         }
     }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class SpriteEntityReader : ContentTypeReader<SpriteEntity>
-    {
-        protected override SpriteEntity Read(ContentReader input, SpriteEntity existingInstance)
-        {
-            if (existingInstance == null)
-                existingInstance = Pool.Acquire<SpriteEntity>();
-             input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
-            existingInstance.ExternalImageName = input.ReadString();
-            return existingInstance;
-        }
-    }
 }

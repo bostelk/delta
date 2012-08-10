@@ -84,11 +84,11 @@ namespace Delta.Graphics
         /// <summary>
         /// Gets or sets the <see cref="AnimationOptions"/> used when playing the <see cref="AnimatedSpriteEntity"/>.
         /// </summary>
-        [ContentSerializer(ElementName = "AnimationOptions"), DisplayName("AnimationOptions"), Description("The options used by the game object when playing the animation."), Category("Animation"), DefaultValue(AnimationOptions.None), 
+        [ContentSerializer(ElementName = "AnimationOptions"), DisplayName("AnimationOptions"), Description("The options used by the game object when playing the animation."), Category("Animation"), DefaultValue(AnimationOptions.None),
 #if WINDOWS
-        Editor(typeof(FlagEnumUIEditor), typeof(UITypeEditor))
+ Editor(typeof(FlagEnumUIEditor), typeof(UITypeEditor))
 #endif
-        ]
+]
         public AnimationOptions AnimationOptions
         {
             get { return _animationOptions; }
@@ -337,21 +337,6 @@ namespace Delta.Graphics
             if ((_animationOptions & AnimationOptions.Recycle) != 0)
                 Recycle();
             base.OnRemoved();
-        }
-    }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class AnimatedSpriteReader : ContentTypeReader<AnimatedSpriteEntity>
-    {
-        protected override AnimatedSpriteEntity Read(ContentReader input, AnimatedSpriteEntity existingInstance)
-        {
-            if (existingInstance == null)
-                existingInstance = Pool.Acquire<AnimatedSpriteEntity>();
-            input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
-            existingInstance.AnimationName = input.ReadString();
-            existingInstance.AnimationOptions = input.ReadObject<AnimationOptions>();
-            existingInstance.FrameOffset = input.ReadInt32();
-            return existingInstance;
         }
     }
 
