@@ -257,7 +257,7 @@ namespace Delta
 
         internal void InternalLoadContent()
         {
-            if (!HasLoadedContent)
+            if (!HasLoadedContent && HasInitialized)
             {
                 LoadContent();
                 HasLoadedContent = true;

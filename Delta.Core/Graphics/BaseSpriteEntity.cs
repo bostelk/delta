@@ -55,7 +55,8 @@ namespace Delta.Graphics
                 if (_spriteSheetName != value)
                 {
                     _spriteSheetName = value;
-                    LoadSpriteSheet();
+                    if (HasInitialized)
+                        UpdateSpriteSheet();
                     OnPropertyChanged();
                 }
             }
@@ -145,19 +146,8 @@ namespace Delta.Graphics
         /// </summary>
         protected override void LoadContent()
         {
-            LoadSpriteSheet();
+            UpdateSpriteSheet();
             base.LoadContent();
-        }
-        
-        /// <summary>
-        /// Loads the <see cref="SpriteSheet"/> of the <see cref="BaseSpriteEntity"/>.
-        /// </summary>
-        protected void LoadSpriteSheet()
-        {
-            if (!HasInitialized)
-                return;
-            if (!string.IsNullOrEmpty(_spriteSheetName))
-                SpriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
         }
 
 #if WINDOWS
@@ -210,6 +200,15 @@ namespace Delta.Graphics
             return base.SetValue(name, value);
         }
 #endif
+
+        /// <summary>
+        /// Updates the <see cref="SpriteSheet"/> of the <see cref="BaseSpriteEntity"/>.
+        /// </summary>
+        protected void UpdateSpriteSheet()
+        {
+            if (!string.IsNullOrEmpty(_spriteSheetName))
+                SpriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
+        }
 
         /// <summary>
         /// Updates the source <see cref="Rectangle"/> used when drawing the <see cref="BaseSpriteEntity"/>.

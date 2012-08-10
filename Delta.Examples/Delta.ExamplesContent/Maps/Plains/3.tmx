@@ -113,7 +113,6 @@
  <objectgroup color="#a40000" name="Delta.Collision" width="40" height="40">
   <object type="Delta.Examples.Entities.Obstacle" x="80" y="16" width="112" height="224"/>
   <object type="Delta.Examples.Entities.Obstacle" x="608" y="48" width="32" height="256"/>
-  <object type="Delta.Examples.Entities.Obstacle" x="144" y="272" width="336" height="64"/>
   <object type="Delta.Examples.Entities.Obstacle" x="464" y="320" width="96" height="64"/>
   <object type="Delta.Examples.Entities.Obstacle" x="592" y="320" width="48" height="64"/>
  </objectgroup>

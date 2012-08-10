@@ -245,9 +245,10 @@ namespace Delta.Graphics
         /// </summary>
         protected override void UpdateSourceRectangle()
         {
-            if (SpriteSheet == null)
-                return;
-            SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame + _frameOffset);
+            if (SpriteSheet == null || _animation == null)
+                SourceRectangle = Rectangle.Empty;
+            else
+                SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame + _frameOffset);
         }
 
         /// <summary>

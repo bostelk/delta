@@ -20,10 +20,10 @@ namespace Delta.Graphics
         public static void Create(string spriteSheet, string animation, Vector2 position)
         {
             AnimatedSpriteEntity se = AnimatedSpriteEntity.Create(spriteSheet);
-            se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Play(animation, AnimationOptions.Recycle);
+            se.OnAnimationChanged();
             se.Depth = position.Y;
             G.World.Ground.UnsafeAdd(se);
         }
@@ -37,7 +37,6 @@ namespace Delta.Graphics
         public static void CreateTrail(string spriteSheet, string animation, Vector2 position) 
         {
             AnimatedSpriteEntity se = AnimatedSpriteEntity.Create(spriteSheet);
-            se.InternalLoadContent();
             se.Position = position;
             se.Origin = new Vector2(0.5f, 0.5f);
             se.Alpha = 0.5f;
@@ -57,13 +56,11 @@ namespace Delta.Graphics
         public static void CreateTrail(AnimatedSpriteEntity sprite, Vector2 position)
         {
             SpriteEntity sfe = SpriteEntity.Create(sprite);
-            sfe.InternalLoadContent();
             sfe.Position = position;
             sfe.Origin = new Vector2(0.5f, 0.5f);
             sfe.Alpha = 0.5f;
             sfe.Depth = position.Y;
             G.World.BelowGround.UnsafeAdd(sfe);
-
             Transformer.ThisEntity(sfe).FadeTo(0, 0.3f).OnSequenceFinished(() => { sfe.Recycle(); });
         }
 
@@ -83,7 +80,6 @@ namespace Delta.Graphics
             for(int i = 0; i < 4; i++)
             {
                 AnimatedSpriteEntity see = se[i] = AnimatedSpriteEntity.Create(spriteSheet);
-                see.InternalLoadContent();
                 see.Position = position;
                 see.Origin = new Vector2(0.5f, 0.5f);
                 see.Play(animation, AnimationOptions.StartOnRandomFrame);
