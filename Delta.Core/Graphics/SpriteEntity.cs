@@ -28,7 +28,7 @@ namespace Delta.Graphics
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public SpriteEntity()
+        protected SpriteEntity()
             : base()
         {
         }
@@ -61,6 +61,19 @@ namespace Delta.Graphics
             if (SpriteSheet == null)
                 return;
             SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_externalImageName, Frame);
+        }
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class SpriteEntityReader : ContentTypeReader<SpriteEntity>
+    {
+        protected override SpriteEntity Read(ContentReader input, SpriteEntity existingInstance)
+        {
+            if (existingInstance == null)
+                existingInstance = Pool.Fetch<SpriteEntity>();
+             input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
+            existingInstance.ExternalImageName = input.ReadString();
+            return existingInstance;
         }
     }
 }

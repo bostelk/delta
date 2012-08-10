@@ -625,6 +625,5 @@ namespace Delta
                 WrappedBody.RemoveFromSimulation();
             base.OnRemoved();
         }
-
     }
 }

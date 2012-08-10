@@ -125,7 +125,7 @@ namespace Delta.Graphics
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public BaseSpriteEntity()
+        protected BaseSpriteEntity()
             : base()
         { 
         }

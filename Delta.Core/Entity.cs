@@ -154,7 +154,7 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public Entity()
+        protected Entity()
             : base()
         {
             IsVisible = true;

@@ -251,7 +251,6 @@
     <Compile Include="UI\Controls\Window.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
-    <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />

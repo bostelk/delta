@@ -142,7 +142,7 @@ namespace Delta.Graphics
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public AnimatedSpriteEntity()
+        protected AnimatedSpriteEntity()
             : base()
         {
         }
@@ -337,6 +337,21 @@ namespace Delta.Graphics
             if ((_animationOptions & AnimationOptions.Recycle) != 0)
                 Recycle();
             base.OnRemoved();
+        }
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class AnimatedSpriteReader : ContentTypeReader<AnimatedSpriteEntity>
+    {
+        protected override AnimatedSpriteEntity Read(ContentReader input, AnimatedSpriteEntity existingInstance)
+        {
+            if (existingInstance == null)
+                existingInstance = Pool.Fetch<AnimatedSpriteEntity>();
+            input.ReadRawObject<BaseSpriteEntity>(existingInstance as BaseSpriteEntity);
+            existingInstance.AnimationName = input.ReadString();
+            existingInstance.AnimationOptions = input.ReadObject<AnimationOptions>();
+            existingInstance.FrameOffset = input.ReadInt32();
+            return existingInstance;
         }
     }
 

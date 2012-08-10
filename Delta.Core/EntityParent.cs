@@ -47,7 +47,7 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        protected internal EntityParent()
+        protected EntityParent()
             : base()
         {
             Children = new ReadOnlyCollection<T>(_children);
@@ -173,28 +173,18 @@ namespace Delta
         }
     }
 
-    /// <summary>
-    /// Custom <see cref="ContentTypeReader{T}"/> for <see cref="EntityParent{T}"/>s.
-    /// </summary>
-    /// <typeparam name="T">The type of entities in the <see cref="EntityParent{T}"/>.</typeparam>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class EntityParentReader<T> : ContentTypeReader<EntityParent<T>> where T : Entity
     {
-        /// <summary>
-        /// Reads a <see cref="EntityParent{T}"/> from the current stream.
-        /// </summary>
-        /// <param name="input">The <see cref="ContentReader"/> used to read the <see cref="EntityParent{T}"/>.</param>
-        /// <param name="value">An existing <see cref="EntityParent{T}"/> to read into.</param>
-        /// <returns>The <see cref="EntityParent{T}"/> that was read.</returns>
-        protected override EntityParent<T> Read(ContentReader input, EntityParent<T> value)
+        protected override EntityParent<T> Read(ContentReader input, EntityParent<T> existingInstance)
         {
-            if (value == null)
-                value = new EntityParent<T>();
-            input.ReadRawObject<Entity>(value as Entity);
+            if (existingInstance == null)
+                existingInstance = Pool.Fetch<EntityParent<T>>();
+            input.ReadRawObject<Entity>(existingInstance as Entity);
             List<T> gameComponents = input.ReadObject<List<T>>();
             foreach (var item in gameComponents)
-                value.Add(item);
-            return value;
+                existingInstance.Add(item);
+            return existingInstance;
         }
     }
 }

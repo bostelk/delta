@@ -8,14 +8,18 @@ namespace Delta
     {
         static Dictionary<Type, InternalPool> _pools = new Dictionary<Type, InternalPool>();
 
-        public static T Fetch<T>() where T : IPoolable
+        internal static object Fetch(Type type)
         {
-            Type type = typeof(T);
-            T obj = default(T);
+            object obj = null;
             if (!_pools.ContainsKey(type))
                 _pools.Add(type, new InternalPool(type, 50));
-            obj = (T)_pools[type].Fetch();
+            obj = _pools[type].Fetch();
             return obj;
+        }
+
+        public static T Acquire<T>() where T : IPoolable
+        {
+            return (T)Fetch(typeof(T));
         }
 
         public static bool Release<T>(this T obj) where T : IPoolable

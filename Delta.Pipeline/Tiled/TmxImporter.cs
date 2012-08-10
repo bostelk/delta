@@ -49,14 +49,7 @@ namespace Delta.Tiled
                         break;
                     case ".stylesheet":
                         context.AddDependency(file.FullName);
-                        StyleSheet styleSheet = new StyleSheet(file.FullName); //don't built it as XNB. We just want this when building, nothing else.
-                        foreach (var objectStyle in styleSheet.ObjectStyles)
-                        {
-                            if (!StyleSheet._globalObjectStyles.ContainsKey(objectStyle.Key))
-                                StyleSheet._globalObjectStyles.Add(objectStyle.Key, objectStyle.Value);
-                            else
-                                StyleSheet._globalObjectStyles[objectStyle.Key] = objectStyle.Value;
-                        }
+                        Map.LoadStyleSheet(file.FullName);
                         break;
                     default:
                         _filesToRemove.Add(file);
