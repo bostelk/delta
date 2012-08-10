@@ -177,6 +177,11 @@ namespace Delta.Graphics
                 case "animationname":
                     _animationName = value;
                     return true;
+                case "islooped":
+                case "looped":
+                case "loop":
+                    _animationOptions |= AnimationOptions.Looped;
+                    return true;
                 case "startrandom":
                 case "random":
                     _animationOptions |= AnimationOptions.StartOnRandomFrame;
@@ -228,7 +233,7 @@ namespace Delta.Graphics
             {
                 _animationframeDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                base.Frame = _animation.Frames[_animationFrame];
+                base.Frame = _animation.Frames[_animationFrame] + _frameOffset;
                 if (((_animationOptions & AnimationOptions.Looped) == 0) && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     IsAnimationFinished = true;
@@ -248,7 +253,7 @@ namespace Delta.Graphics
             if (SpriteSheet == null || _animation == null)
                 SourceRectangle = Rectangle.Empty;
             else
-                SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame + _frameOffset);
+                SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame);
         }
 
         /// <summary>
@@ -321,8 +326,7 @@ namespace Delta.Graphics
         {
             if (_animation == null)
                 return;
-            _animationFrame = _frameOffset;
-            base.Frame = _animation.Frames[_animationFrame];
+            base.Frame = _animation.Frames[_animationFrame] + _frameOffset;
             if ((AnimationOptions & AnimationOptions.StartOnRandomFrame) != 0)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _animationframeDurationTimer = _animation.FrameDuration;
