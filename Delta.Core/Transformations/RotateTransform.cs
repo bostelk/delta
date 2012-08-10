@@ -3,27 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 
 namespace Delta.Transformations
 {
     internal class RotateTransform : BaseTransform
     {
-        static Pool<RotateTransform> _pool;
-
         float _startRotation;
         float _goalRotation;
-
-        static RotateTransform()
-        {
-            _pool = new Pool<RotateTransform>(100);
-        }
 
         public RotateTransform() { }
 
         public static RotateTransform Create(TransformableEntity entity, float goalRotation, float duration)
         {
-            RotateTransform transform = _pool.Fetch();
+            RotateTransform transform = Pool.Fetch<RotateTransform>();
             transform._entity = entity;
             transform._goalRotation = goalRotation;
             transform.Duration = duration;
@@ -46,13 +38,11 @@ namespace Delta.Transformations
             _entity.Rotation = _goalRotation;
         }
 
-        public override void Recycle()
+        protected override void Recycle(bool isReleasing)
         {
             _startRotation = 0;
             _goalRotation = 0;
-            base.Recycle();
-
-            _pool.Release(this);
+            base.Recycle(isReleasing);
         }
 
     }

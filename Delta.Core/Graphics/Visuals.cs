@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Structures;
 using Microsoft.Xna.Framework;
 using Delta.Transformations;
 using Delta.Graphics;

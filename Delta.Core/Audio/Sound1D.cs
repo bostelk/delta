@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Delta.Structures;
 
 namespace Delta.Audio
 {
-    public class Sound1D : ISound, IRecyclable
+    public class Sound1D : Poolable, ISound
     {
-        private static Pool<Sound1D> _pool;
-
         private Cue _cue;
 
         public string Name
@@ -26,20 +23,27 @@ namespace Delta.Audio
             set;
         }
 
-        static Sound1D()
-        {
-            _pool = new Pool<Sound1D>();
+        internal Sound1D() 
+            : base()
+        { 
         }
-
-        public Sound1D() { }
 
         public static Sound1D Create(string name, Cue cue, Action<string> onFinished)
         {
-            Sound1D freshSound = _pool.Fetch();
+            Sound1D freshSound = Pool.Fetch<Sound1D>();
             freshSound.Name = name;
             freshSound._cue = cue;
             freshSound.OnFinished = onFinished;
             return freshSound;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            Name = String.Empty;
+            OnFinished = null;
+            if (isReleasing)
+                _cue.Dispose();
+            base.Recycle(isReleasing);
         }
 
         public void Play()
@@ -99,15 +103,6 @@ namespace Delta.Audio
                 return false;
             }
             return true;
-        }
-
-        public void Recycle()
-        {
-            Name = String.Empty;
-            OnFinished = null;
-            _cue.Dispose();
-
-            _pool.Release(this);
         }
 
     }

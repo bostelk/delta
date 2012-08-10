@@ -129,6 +129,17 @@ namespace Delta.Graphics
         { 
         }
 
+        protected override void Recycle(bool isReleasing)
+        {
+            _spriteSheet = null;
+            _spriteSheetName = string.Empty;
+            _sourceRectangle = Rectangle.Empty;
+            _spriteEffects = SpriteEffects.None;
+            //IsOutlined = false;
+            //OutlineColor = Color.White;
+            base.Recycle(isReleasing);
+        }
+
         /// <summary>
         /// Loads content handled by the <see cref="BaseSpriteEntity"/>.
         /// </summary>
@@ -147,20 +158,6 @@ namespace Delta.Graphics
                 return;
             if (!string.IsNullOrEmpty(_spriteSheetName))
                 SpriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-        }
-
-        /// <summary>
-        /// Recycles the <see cref="BaseSpriteEntity"/> so it may be re-used.
-        /// </summary>
-        public override void Recycle()
-        {
-            base.Recycle();
-            _spriteSheet = null;
-            _spriteSheetName = string.Empty;
-            _sourceRectangle = Rectangle.Empty;
-            _spriteEffects = SpriteEffects.None;
-            //IsOutlined = false;
-            //OutlineColor = Color.White;
         }
 
 #if WINDOWS

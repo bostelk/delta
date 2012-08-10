@@ -14,7 +14,6 @@ using Delta.Examples.Entities;
 using System.Collections.ObjectModel;
 using Delta.Audio;
 using Delta.Transformations;
-using Delta.Structures;
 using Delta.Graphics;
 
 namespace Delta.Examples
@@ -74,8 +73,6 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-
-            PoolManager.DebugDraw();
         }
     }
 }

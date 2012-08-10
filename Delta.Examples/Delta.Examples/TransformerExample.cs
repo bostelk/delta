@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Delta.Examples.Entities;
 using Delta.Transformations;
-using Delta.Structures;
 using Delta.Graphics;
 
 namespace Delta.Examples
@@ -101,7 +100,6 @@ namespace Delta.Examples
         {
             G.GraphicsDevice.Clear(ClearColor);
             base.Draw(gameTime);
-            PoolManager.DebugDraw();
         }
     }
 

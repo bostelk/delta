@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 
 namespace Delta.Transformations
 {
-    public abstract class BaseTransform : ITransform, IRecyclable
+    public abstract class BaseTransform : Poolable, ITransform
     {
         protected TransformableEntity _entity;
 
@@ -26,18 +25,19 @@ namespace Delta.Transformations
             protected set;
         }
 
-        public Interpolation.InterpolationMethod InterpolationMethod = Interpolation.Linear;
-
-        public virtual void Begin() { }
-        public virtual void Update(float seconds) { }
-        public virtual void End() { }
-
-        public virtual void Recycle()
+        protected override void Recycle(bool isReleasing)
         {
             _entity = null;
             Duration = 0;
             PercentFinished = 0;
             InterpolationMethod = MathHelper.Lerp;
+            base.Recycle(isReleasing);
         }
+
+        public Interpolation.InterpolationMethod InterpolationMethod = Interpolation.Linear;
+
+        public virtual void Begin() { }
+        public virtual void Update(float seconds) { }
+        public virtual void End() { }
     }
 }

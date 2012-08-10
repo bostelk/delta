@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 using Delta.Extensions;
 using System.Globalization;
 using Delta.Transformations;
@@ -122,6 +121,26 @@ namespace Delta.Graphics
             _blend = BlendState.AlphaBlend;
         }
 
+        protected override void Recycle(bool isReleasing)
+        {
+            _frequency = 0;
+            _explode = false;
+            _quantityRange = new Range(1, 1);
+            _lifespanRange = Range.Empty;
+            _rotationRange = Range.Empty;
+            _velocityMagnitudeRange = Range.Empty;
+            _velocityAngleRange = Range.Empty;
+            _accelerationMagnitudeRange = Range.Empty;
+            _accelerationAngleRange = Range.Empty;
+            _scaleRange = new Range(1, 1);
+            _fadeInRange = Range.Empty;
+            _fadeOutRange = Range.Empty;
+            _fadeInMethodString = "Linear";
+            _fadeOutMethodString = "Linear";
+            _blend = BlendState.AlphaBlend;
+            base.Recycle(isReleasing);
+        }
+
         protected internal override bool SetValue(string name, string value)
         {
             switch (name)
@@ -186,27 +205,7 @@ namespace Delta.Graphics
             return base.SetValue(name, value);
         }
 
-        public override void Recycle()
-        {
-            base.Recycle();
-            _frequency = 0;
-            _explode = false;
-            _quantityRange = new Range(1, 1);
-            _lifespanRange = Range.Empty;
-            _rotationRange = Range.Empty;
-            _velocityMagnitudeRange = Range.Empty;
-            _velocityAngleRange = Range.Empty;
-            _accelerationMagnitudeRange = Range.Empty;
-            _accelerationAngleRange = Range.Empty;
-            _scaleRange = new Range(1, 1);
-            _fadeInRange = Range.Empty;
-            _fadeOutRange = Range.Empty;
-            _fadeInMethodString = "Linear";
-            _fadeOutMethodString = "Linear";
-            _blend = BlendState.AlphaBlend;
-        }
-
-        internal class Particle<T> : IRecyclable where T: TransformableEntity
+        internal class Particle<T> : Poolable where T: TransformableEntity
         {
             public Emitter Emitter;
 
@@ -231,9 +230,12 @@ namespace Delta.Graphics
 
             public bool IsDead { get { return Life >= Lifespan; } }
 
-            public virtual void Recycle()
+
+            protected override void Recycle(bool isReleasing)
             {
-                Entity.Recycle();
+                base.Recycle(isReleasing);
+                if (isReleasing)
+                    Entity.Recycle();
                 Entity = null;
                 Life = 0;
                 Lifespan = 0;

@@ -3,7 +3,6 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Delta.Structures;
 using System.ComponentModel;
 
 #if WINDOWS
@@ -24,15 +23,6 @@ namespace Delta.Graphics
 
     public class AnimatedSpriteEntity : BaseSpriteEntity
     {
-        static Pool<AnimatedSpriteEntity> _pool = new Pool<AnimatedSpriteEntity>(100);
-
-        public static AnimatedSpriteEntity Create(string spriteSheet)
-        {
-            AnimatedSpriteEntity se = _pool.Fetch();
-            se.SpriteSheetName = spriteSheet;
-            return se;
-        }
-
         int _animationFrame = 0;
         float _animationframeDurationTimer = 0.0f;
 
@@ -157,12 +147,15 @@ namespace Delta.Graphics
         {
         }
 
-        /// <summary>
-        /// Recycles the <see cref="AnimatedSpriteEntity"/> so it may be re-used.
-        /// </summary>
-        public override void Recycle()
+        public static AnimatedSpriteEntity Create(string spriteSheet)
         {
-            base.Recycle();
+            AnimatedSpriteEntity se = Pool.Fetch<AnimatedSpriteEntity>();
+            se.SpriteSheetName = spriteSheet;
+            return se;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
             _animation = null;
             _animationFrame = 0;
             _animationframeDurationTimer = 0.0f;
@@ -172,7 +165,7 @@ namespace Delta.Graphics
             _isAnimationPaused = false;
             IsAnimating = false;
             IsAnimationFinished = false;
-            _pool.Release(this);
+            base.Recycle(isReleasing);
         }
 
 #if WINDOWS

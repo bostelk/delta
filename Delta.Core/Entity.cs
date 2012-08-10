@@ -12,7 +12,7 @@ namespace Delta
     /// Base class for all game entites.
     /// </summary>
     [DefaultPropertyAttribute("Name")]
-    public abstract class Entity : IRecyclable, IDisposable
+    public abstract class Entity : Poolable
     {
         /// <summary>
         /// Retrieves an <see cref="Entity"/> by it's name.
@@ -154,7 +154,7 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        protected internal Entity()
+        public Entity()
             : base()
         {
             IsVisible = true;
@@ -163,37 +163,14 @@ namespace Delta
         }
 
         /// <summary>
-        /// Finalizes this instance.
-        /// </summary>
-        ~Entity()
-        {      
-            Dispose(false);
-        }
-        
-        /// <summary>
-        /// Disposes the <see cref="Entity"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-  
-        /// <summary>
-        /// Disposes any resources the <see cref="Entity"/> is using.
-        /// </summary>
-        /// <param name="disposing">Indicates whether to dispose managed resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-        }
-
-        /// <summary>
         /// Recycles the <see cref="Entity"/> so it may be re-used.
         /// </summary>
-        public virtual void Recycle()
+        /// <param name="isReleasing">Indicates whether the <see cref="Entity"/> is being released back to the <see cref="Pool"/>.</param>
+        protected override void Recycle(bool isReleasing)
         {
-            if (ParentCollection != null)
-                ParentCollection.UnsafeRemove(this);
+            if (isReleasing)
+                if (ParentCollection != null)
+                    ParentCollection.UnsafeRemove(this);
             ParentCollection = null;
             _flaggedForRemoval = false;
             _isEnabled = true;
@@ -204,6 +181,7 @@ namespace Delta
             HasInitialized = false;
             HasLoadedContent = false;
             NeedsHeavyUpdate = false;
+            base.Recycle(isReleasing);
         }
 
 #if WINDOWS

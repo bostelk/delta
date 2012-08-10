@@ -12,7 +12,6 @@ using Delta.Examples.Entities;
 using Delta.Collision;
 using Delta.Graphics;
 using Delta.Tiled;
-using Delta.Structures;
 using Delta.UI.Controls;
 
 namespace Delta.Examples
