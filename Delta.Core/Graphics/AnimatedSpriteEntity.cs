@@ -3,7 +3,6 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Delta.Structures;
 using System.ComponentModel;
 
 #if WINDOWS
@@ -24,15 +23,6 @@ namespace Delta.Graphics
 
     public class AnimatedSpriteEntity : BaseSpriteEntity
     {
-        static Pool<AnimatedSpriteEntity> _pool = new Pool<AnimatedSpriteEntity>(100);
-
-        public static AnimatedSpriteEntity Create(string spriteSheet)
-        {
-            AnimatedSpriteEntity se = _pool.Fetch();
-            se.SpriteSheetName = spriteSheet;
-            return se;
-        }
-
         int _animationFrame = 0;
         float _animationframeDurationTimer = 0.0f;
 
@@ -94,11 +84,11 @@ namespace Delta.Graphics
         /// <summary>
         /// Gets or sets the <see cref="AnimationOptions"/> used when playing the <see cref="AnimatedSpriteEntity"/>.
         /// </summary>
-        [ContentSerializer(ElementName = "AnimationOptions"), DisplayName("AnimationOptions"), Description("The options used by the game object when playing the animation."), Category("Animation"), DefaultValue(AnimationOptions.None), 
+        [ContentSerializer(ElementName = "AnimationOptions"), DisplayName("AnimationOptions"), Description("The options used by the game object when playing the animation."), Category("Animation"), DefaultValue(AnimationOptions.None),
 #if WINDOWS
-        Editor(typeof(FlagEnumUIEditor), typeof(UITypeEditor))
+ Editor(typeof(FlagEnumUIEditor), typeof(UITypeEditor))
 #endif
-        ]
+]
         public AnimationOptions AnimationOptions
         {
             get { return _animationOptions; }
@@ -152,17 +142,20 @@ namespace Delta.Graphics
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public AnimatedSpriteEntity()
+        protected AnimatedSpriteEntity()
             : base()
         {
         }
 
-        /// <summary>
-        /// Recycles the <see cref="AnimatedSpriteEntity"/> so it may be re-used.
-        /// </summary>
-        public override void Recycle()
+        public static AnimatedSpriteEntity Create(string spriteSheet)
         {
-            base.Recycle();
+            AnimatedSpriteEntity se = Pool.Acquire<AnimatedSpriteEntity>();
+            se.SpriteSheetName = spriteSheet;
+            return se;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
             _animation = null;
             _animationFrame = 0;
             _animationframeDurationTimer = 0.0f;
@@ -172,7 +165,7 @@ namespace Delta.Graphics
             _isAnimationPaused = false;
             IsAnimating = false;
             IsAnimationFinished = false;
-            _pool.Release(this);
+            base.Recycle(isReleasing);
         }
 
 #if WINDOWS
@@ -183,6 +176,11 @@ namespace Delta.Graphics
                 case "animation":
                 case "animationname":
                     _animationName = value;
+                    return true;
+                case "islooped":
+                case "looped":
+                case "loop":
+                    _animationOptions |= AnimationOptions.Looped;
                     return true;
                 case "startrandom":
                 case "random":
@@ -235,7 +233,7 @@ namespace Delta.Graphics
             {
                 _animationframeDurationTimer = _animation.FrameDuration;
                 _animationFrame = (_animationFrame + 1).Wrap(0, _animation.Frames.Count - 1);
-                base.Frame = _animation.Frames[_animationFrame];
+                base.Frame = _animation.Frames[_animationFrame] + _frameOffset;
                 if (((_animationOptions & AnimationOptions.Looped) == 0) && _animationFrame >= _animation.Frames.Count - 1)
                 {
                     IsAnimationFinished = true;
@@ -252,9 +250,10 @@ namespace Delta.Graphics
         /// </summary>
         protected override void UpdateSourceRectangle()
         {
-            if (SpriteSheet == null)
-                return;
-            SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame + _frameOffset);
+            if (SpriteSheet == null || _animation == null)
+                SourceRectangle = Rectangle.Empty;
+            else
+                SourceRectangle = SpriteSheet.GetFrameSourceRectangle(_animation.ImageName, Frame);
         }
 
         /// <summary>
@@ -327,8 +326,7 @@ namespace Delta.Graphics
         {
             if (_animation == null)
                 return;
-            _animationFrame = _frameOffset;
-            base.Frame = _animation.Frames[_animationFrame];
+            base.Frame = _animation.Frames[_animationFrame] + _frameOffset;
             if ((AnimationOptions & AnimationOptions.StartOnRandomFrame) != 0)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
             _animationframeDurationTimer = _animation.FrameDuration;

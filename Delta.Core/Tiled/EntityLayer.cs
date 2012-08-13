@@ -13,10 +13,8 @@ using Delta.Graphics;
 namespace Delta.Tiled
 {
 
-    public class EntityLayer : EntityParent<TransformableEntity>
+    public class EntityLayer : EntityParent<Entity>
     {
-        public string Name { get; set; }
-
         public EntityLayer()
             : base()
         {
@@ -30,18 +28,23 @@ namespace Delta.Tiled
             {
                 string type = objectNode.Attributes["type"] == null ? String.Empty : objectNode.Attributes["type"].Value;
                 if (String.IsNullOrEmpty(type)) continue;
-                TransformableEntity entity = StyleSheet.Load(objectNode.Attributes["type"].Value);
+                Entity entity = Map.LoadObject(objectNode.Attributes["type"].Value);
                 if (entity == null) continue;
                 entity.IsVisible = layerIsVisible;
                 entity.Name = objectNode.Attributes["name"] == null ? String.Empty : objectNode.Attributes["name"].Value;
-                entity.Position = new Vector2(
-                    objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture),
-                    objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
-                );
-                entity.Size = new Vector2(
-                    objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
-                    objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
-                );
+
+                TransformableEntity transformable = entity as TransformableEntity;
+                if (transformable != null)
+                {
+                    transformable.Position = new Vector2(
+                        objectNode.Attributes["x"] == null ? 0 : float.Parse(objectNode.Attributes["x"].Value, CultureInfo.InvariantCulture),
+                        objectNode.Attributes["y"] == null ? 0 : float.Parse(objectNode.Attributes["y"].Value, CultureInfo.InvariantCulture)
+                    );
+                    transformable.Size = new Vector2(
+                        objectNode.Attributes["width"] == null ? 0 : float.Parse(objectNode.Attributes["width"].Value, CultureInfo.InvariantCulture),
+                        objectNode.Attributes["height"] == null ? 0 : float.Parse(objectNode.Attributes["height"].Value, CultureInfo.InvariantCulture)
+                    );
+                }
 
                 //// the distinction between polygon and polyline is determined by the entity type.
                 //bool IsPolygon;

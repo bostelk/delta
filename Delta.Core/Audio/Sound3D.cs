@@ -4,15 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Delta.Structures;
-
 
 namespace Delta.Audio
 {
-    public class Sound3D : ISound, IRecyclable
+    public class Sound3D : Poolable, ISound
     {
-        private static Pool<Sound3D> _pool;
-
         private Cue _cue;
         private TransformableEntity _source;
         private TransformableEntity _dest;
@@ -31,12 +27,7 @@ namespace Delta.Audio
             set;
         }
 
-        static Sound3D()
-        {
-            _pool = new Pool<Sound3D>();
-        }
-
-        public Sound3D()
+        internal Sound3D()
         {
             _audioEmitter = new AudioEmitter();
             _audioListener = new AudioListener();
@@ -44,13 +35,26 @@ namespace Delta.Audio
 
         public static Sound3D Create(string name, Cue cue, TransformableEntity source, TransformableEntity dest, Action<string> onFinished)
         {
-            Sound3D freshSound = _pool.Fetch();
+            Sound3D freshSound = Pool.Acquire<Sound3D>();
             freshSound.Name = name;
             freshSound._cue = cue;
             freshSound._source = source;
             freshSound._dest = dest;
             freshSound.OnFinished = onFinished;
             return freshSound;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            Name = String.Empty;
+            OnFinished = null;
+            _source = null;
+            _dest = null;
+            _audioEmitter = null;
+            _audioListener = null;
+            if (isReleasing)
+                _cue.Dispose();
+            base.Recycle(isReleasing);
         }
 
         private Vector2 CalculateForward(Vector2 source, Vector2 dest)
@@ -130,19 +134,6 @@ namespace Delta.Audio
             }
             Apply3D();
             return true;
-        }
-
-        public void Recycle()
-        {
-            Name = String.Empty;
-            OnFinished = null;
-            _cue.Dispose();
-            _source = null;
-            _dest = null;
-            _audioEmitter = null;
-            _audioListener = null;
-
-            _pool.Release(this);
         }
     }
 

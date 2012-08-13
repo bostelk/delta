@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Delta.Structures;
 
 namespace Delta.Audio
 {
-    public interface ISound : IRecyclable
+    public interface ISound : IPoolable
     {
         string Name
         {

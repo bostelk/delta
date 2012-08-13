@@ -102,6 +102,9 @@
     <Compile Include="Audio\ISound.cs" />
     <Compile Include="Audio\Sound1D.cs" />
     <Compile Include="Audio\Sound3D.cs" />
+    <Compile Include="IPoolable.cs" />
+    <Compile Include="Pool.cs" />
+    <Compile Include="Poolable.cs" />
     <Compile Include="Collision\Broadphase\BroadphaseProxy.cs" />
     <Compile Include="Collision\Broadphase\BruteForceBroadphase.cs" />
     <Compile Include="Collision\Broadphase\OverlappingPair.cs" />
@@ -197,7 +200,6 @@
     <Compile Include="TEMP\BuildNumber.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CardinalDirection.cs" />
-    <Compile Include="IRecyclable.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\FloatExtensions.cs" />
@@ -238,7 +240,6 @@
     <Compile Include="IWrappedBody.cs" />
     <Compile Include="TEMP\Settings.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="Structures\PoolManager.cs" />
     <Compile Include="Tiled\EntityLayer.cs" />
     <Compile Include="Tiled\Map.cs" />
     <Compile Include="UI\Controls\ScrollingBackground.cs" />
@@ -250,7 +251,6 @@
     <Compile Include="UI\Controls\Window.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\Controls\PerformanceMetrics.cs" />
-    <Compile Include="Tiled\StyleSheet.cs" />
     <Compile Include="Tiled\Tile.cs" />
     <Compile Include="Tiled\TileLayer.cs" />
     <Compile Include="Tiled\Tileset.cs" />
@@ -269,8 +269,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EmbeddedContent.resx</DependentUpon>
     </Compile>
-    <Compile Include="Structures\IPool.cs" />
-    <Compile Include="Structures\Pool.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

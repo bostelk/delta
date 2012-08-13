@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Structures;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -17,42 +16,20 @@ namespace Delta.Graphics
 
         internal class PixelEntity : TransformableEntity 
         {
-            static Pool<PixelEntity> _pool;
-
-            static PixelEntity()
-            {
-                _pool = new Pool<PixelEntity>(100);
-            }
-
             public static PixelEntity Create()
             {
-                return _pool.Fetch();
-            }
-
-            public override void Recycle()
-            {
-                base.Recycle();
-                _pool.Release(this);
+                return Pool.Acquire<PixelEntity>();
             }
         }
 
         internal class PixelParticle : Particle<PixelEntity>
         {
-            public override void Recycle()
-            {
-                base.Recycle();
-                _particlePool.Release(this);
-            }
-
             public override void Draw(DeltaGameTime time, SpriteBatch spriteBatch)
             {
                 spriteBatch.Draw(G.PixelTexture, Entity.Position, null , Entity.Tint, Entity.Rotation, Entity.Origin * Entity.Size, Entity.Scale, SpriteEffects.None, 0);
                 base.Draw(time, spriteBatch);
             }
         }
-
-        static Pool<PixelEmitter> _pool;
-        static Pool<PixelParticle> _particlePool;
         
         List<PixelParticle> _particles;
         float _lastEmitTime;
@@ -60,22 +37,16 @@ namespace Delta.Graphics
         [ContentSerializer, DisplayName("Colors"),Description(""), Category("Pixel Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false)]
         public List<Color> Colors { get; set; }
 
-        static PixelEmitter()
-        {
-            _pool = new Pool<PixelEmitter>(200);
-            _particlePool = new Pool<PixelParticle>(2000);
-        }
-
         public static PixelEmitter Create()
         {
-            PixelEmitter emitter = _pool.Fetch();
+            PixelEmitter emitter = Pool.Acquire<PixelEmitter>();
             G.World.AboveGround.UnsafeAdd(emitter);
             return emitter;
         }
 
         static PixelParticle CreateParticle()
         {
-            PixelParticle particle = _particlePool.Fetch();
+            PixelParticle particle = Pool.Acquire<PixelParticle>();
             return particle;
         }
 
@@ -83,6 +54,20 @@ namespace Delta.Graphics
         {
             _particles = new List<PixelParticle>(100);
             Colors = new List<Color>();
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            _lastEmitTime = 0;
+            if (isReleasing)
+            {
+                for (int i = 0; i < _particles.Count; i++)
+                {
+                    PixelParticle particle = _particles[i];
+                    particle.Recycle();
+                }
+            }
+            base.Recycle(isReleasing);
         }
 
         protected internal override bool SetValue(string name, string value)
@@ -102,7 +87,7 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            PixelParticle newParticle = _particlePool.Fetch();
+            PixelParticle newParticle = Pool.Acquire<PixelParticle>();
             newParticle.Emitter = this;
             newParticle.Lifespan = _lifespanRange.RandomWithin();
             newParticle.Acceleration = Vector2Extensions.DirectionBetween(_accelerationAngleRange.Lower.ToRadians(), _accelerationAngleRange.Upper.ToRadians()) * _accelerationMagnitudeRange.RandomWithin();
@@ -163,20 +148,6 @@ namespace Delta.Graphics
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             base.Draw(time, spriteBatch);
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            _lastEmitTime = 0;
-
-            for (int i = 0; i < _particles.Count; i++)
-            {
-                PixelParticle particle = _particles[i];
-                particle.Recycle();
-            }
-
-            _pool.Release(this);
         }
 
         protected internal override void OnRemoved()

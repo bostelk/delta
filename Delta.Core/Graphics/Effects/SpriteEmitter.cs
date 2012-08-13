@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delta.Structures;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -18,6 +17,10 @@ namespace Delta.Graphics
         internal class AnimatedSpriteParticle : Particle<AnimatedSpriteEntity>
         {
 
+            public AnimatedSpriteParticle()
+            {
+            }
+
             public override void Update(DeltaGameTime time)
             {
                 Entity.InternalUpdate(time);
@@ -30,17 +33,8 @@ namespace Delta.Graphics
                 base.Draw(time, spriteBatch);
             }
 
-            public override void Recycle()
-            {
-                base.Recycle();
-                _particlePool.Release(this);
-            }
-
         }
 
-        static Pool<SpriteEmitter> _pool;
-        static Pool<AnimatedSpriteParticle> _particlePool;
-        
         List<AnimatedSpriteParticle> _particles;
         float _lastEmitTime;
         
@@ -62,15 +56,9 @@ namespace Delta.Graphics
         [ContentSerializerIgnore, DisplayName("Animation Options"), Description(""), Category("Sprite Emitter"), Browsable(true), ReadOnly(false), DefaultValue(false), Editor(typeof(Delta.Editor.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public AnimationOptions SpriteOptions { get { return _spriteOptions; } set { _spriteOptions = value; } }
 
-        static SpriteEmitter()
-        {
-            _pool = new Pool<SpriteEmitter>(200);
-            _particlePool = new Pool<AnimatedSpriteParticle>(2000);
-        }
-
         public static SpriteEmitter Create(string spriteSheet, string animationName)
         {
-            SpriteEmitter emitter = _pool.Fetch();
+            SpriteEmitter emitter = Pool.Acquire<SpriteEmitter>();
             emitter._spriteSheet = spriteSheet;
             emitter._animationName = animationName;
             G.World.AboveGround.UnsafeAdd(emitter);
@@ -79,7 +67,7 @@ namespace Delta.Graphics
 
         static AnimatedSpriteParticle CreateParticle()
         {
-            AnimatedSpriteParticle particle = _particlePool.Fetch();
+            AnimatedSpriteParticle particle = Pool.Acquire<AnimatedSpriteParticle>();
             return particle;
         }
 
@@ -88,6 +76,25 @@ namespace Delta.Graphics
             _particles = new List<AnimatedSpriteParticle>(100);
             TimeScaleRange = new Range(1);
         }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            _spriteSheet = String.Empty;
+            _animationName = String.Empty;
+            _lastEmitTime = 0;
+            TimeScaleRange = new Range(1);
+
+            if (isReleasing)
+            {
+                for (int i = 0; i < _particles.Count; i++)
+                {
+                    AnimatedSpriteParticle particle = _particles[i];
+                    particle.Recycle();
+                }
+            }
+            base.Recycle(isReleasing);
+        }
+
 
         protected internal override bool SetValue(string name, string value)
         {
@@ -117,7 +124,7 @@ namespace Delta.Graphics
 
         public void Emit()
         {
-            AnimatedSpriteParticle newParticle = _particlePool.Fetch();
+            AnimatedSpriteParticle newParticle = Pool.Acquire<AnimatedSpriteParticle>();
             newParticle.Emitter = this;
             newParticle.Entity = AnimatedSpriteEntity.Create(_spriteSheet);
             newParticle.Lifespan = LifespanRange.RandomWithin();
@@ -181,23 +188,6 @@ namespace Delta.Graphics
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, G.World.Camera.View);
             base.Draw(time, spriteBatch);
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            _spriteSheet = String.Empty;
-            _animationName = String.Empty;
-            _lastEmitTime = 0;
-            TimeScaleRange = new Range(1);
-
-            for (int i = 0; i < _particles.Count; i++)
-            {
-                AnimatedSpriteParticle particle = _particles[i];
-                particle.Recycle();
-            }
-
-            _pool.Release(this);
         }
 
         protected internal override void OnRemoved()

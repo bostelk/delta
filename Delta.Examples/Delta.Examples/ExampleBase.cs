@@ -22,7 +22,7 @@ namespace Delta.Examples
         public Color ClearColor { get; set; }
 
         public ExampleBase(string exampleName) 
-            : base(1280, 720, true)
+            : base(1280, 720, true, "Content")
         {
             Window.Title = exampleName;
             ClearColor = Color.Black;

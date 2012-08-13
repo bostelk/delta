@@ -4,7 +4,6 @@ using System.Collections;
 using System.Globalization;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using Delta.Structures;
 using Microsoft.Xna.Framework.Design;
 using System.Diagnostics.CodeAnalysis;
 

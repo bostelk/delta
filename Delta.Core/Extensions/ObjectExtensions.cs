@@ -30,41 +30,23 @@ namespace Delta
         {
             if (instance == null)
                 return null;
-            return Copy(instance, DeduceInstance(instance));
+            object newInstance = null;
+            Type type = instance.GetType();
+            if (instance is IPoolable)
+                newInstance = Pool.Fetch(type);
+            else
+                newInstance = Activator.CreateInstance(type, true);
+            return Copy(instance, newInstance);
         }
 
-        internal static object Copy(this object instance, object copy)
+        static object Copy(object instance, object copy) 
         {
             if (instance == null)
                 return null;
-            if (copy == null)
-                throw new ArgumentNullException("The copy instance cannot be null");
             return Clone(instance, new VisitedGraph(), copy);
         }
 
-        private static object Clone(this object instance, VisitedGraph visited)
-        {
-            if (instance == null)
-                return null;
-
-            Type instanceType = instance.GetType();
-
-            if (instanceType.IsValueType || instanceType == typeof(string))
-                return instance; // Value types and strings are immutable
-            else if (instanceType.IsArray)
-            {
-                int length = ((Array)instance).Length;
-                Array copied = (Array)Activator.CreateInstance(instanceType, length);
-                visited.Add(instance, copied);
-                for (int i = 0; i < length; ++i)
-                    copied.SetValue(((Array)instance).GetValue(i).Clone(visited), i);
-                return copied;
-            }
-            else
-                return Clone(instance, visited, DeduceInstance(instance));
-        }
-
-        private static object Clone(this object instance, VisitedGraph visited, object copy)
+        static object Clone(this object instance, VisitedGraph visited, object copy)
         {
             visited.Add(instance, copy);
             List<FieldInfo> fields = new List<FieldInfo>();
@@ -89,17 +71,24 @@ namespace Delta
                 FindFields(fields, baseType);
         }
 
-        private static object DeduceInstance(object instance)
+        static object Clone(this object instance, VisitedGraph visited)
         {
+            if (instance == null)
+                return null;
             Type instanceType = instance.GetType();
-            try
+            if (instanceType.IsValueType || instanceType == typeof(string))
+                return instance; // Value types and strings are immutable
+            else if (instanceType.IsArray)
             {
-                return Activator.CreateInstance(instanceType);
+                int length = ((Array)instance).Length;
+                Array copied = (Array)Activator.CreateInstance(instanceType, length);
+                visited.Add(instance, copied);
+                for (int i = 0; i < length; ++i)
+                    copied.SetValue(((Array)instance).GetValue(i).Clone(visited), i);
+                return copied;
             }
-            catch
-            {
-                throw new ArgumentException(string.Format("Object of type {0} cannot be cloned because it does not have a parameterless constructor.", instanceType.FullName));
-            }
+            else
+                return Clone(instance, visited, Activator.CreateInstance(instanceType));
         }
     }
 }

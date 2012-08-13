@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 
 namespace Delta.Transformations
 {
@@ -13,7 +12,6 @@ namespace Delta.Transformations
     /// </summary>
     public class Transformer : Entity
     {
-        static Pool<Transformer> _pool;
         float _elapsed;
         int _repeat;
         TransformableEntity _entity;
@@ -23,11 +21,6 @@ namespace Delta.Transformations
 
         public bool IsPaused { get; private set; }
 
-        static Transformer()
-        {
-            _pool = new Pool<Transformer>(100);
-        }
-
         public Transformer() 
         { 
             _transforms = new Queue<ITransform>();
@@ -36,7 +29,7 @@ namespace Delta.Transformations
 
         static Transformer Create(TransformableEntity entity)
         {
-            Transformer transformer = _pool.Fetch();
+            Transformer transformer = Pool.Acquire<Transformer>();
             transformer._entity = entity;
             return transformer;
         }
@@ -51,6 +44,18 @@ namespace Delta.Transformations
             Transformer transform = Create(entity);
             G.World.Add(transform);
             return transform;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            _elapsed = 0;
+            _repeat = 0;
+            _entity = null;
+            _onTransformFinished = null;
+            _onSequenceFinished = null;
+            if (isReleasing)
+                _transforms.Clear();
+            base.Recycle(isReleasing);
         }
 
         /// <summary>
@@ -288,9 +293,9 @@ namespace Delta.Transformations
                         _transforms.Enqueue(oldTransform);
                         _repeat--;
                     }
-                    else if (oldTransform is IRecyclable)
+                    else if (oldTransform is IPoolable)
                     {
-                        (oldTransform as IRecyclable).Recycle();
+                        (oldTransform as IPoolable).Recycle();
                     }
 
                     // the transform has finished.
@@ -313,19 +318,6 @@ namespace Delta.Transformations
                 }
             }
             base.LightUpdate(time);
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            _elapsed = 0;
-            _repeat = 0;
-            _entity = null;
-            _onTransformFinished = null;
-            _onSequenceFinished = null;
-            _transforms.Clear();
-
-            _pool.Release(this);
         }
 
         protected internal override void OnRemoved()

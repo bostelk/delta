@@ -27,6 +27,50 @@ namespace Delta.Tiled
     {
         internal static Map Instance { get; set; }
 
+#if WINDOWS
+        public static Dictionary<string, Entity> GlobalObjectStyles = new Dictionary<string, Entity>();
+
+        public static void LoadStyleSheet(string fileName)
+        {
+            XmlDocument document = new XmlDocument(); document.Load(fileName);
+            foreach (XmlNode node in document.DocumentElement.ChildNodes)
+            {
+                if (node.NodeType == XmlNodeType.Comment)
+                    continue;
+                string typeName = node.Attributes["Type"] == null ? string.Empty : node.Attributes["Type"].Value;
+                if (string.IsNullOrEmpty(typeName))
+                    continue;
+                Entity entity = LoadObject(typeName);
+                if (entity == null)
+                    continue;
+                foreach (XmlNode childNode in node.ChildNodes)
+                {
+                    if (!entity.SetValue(childNode.Name.ToLower(), childNode.InnerText))
+                        throw new Exception(String.Format("Could not import XML property '{0}', no such property exists for '{1}'.", childNode.Name.ToLower(), entity.GetType().Name));
+                }
+                if (!GlobalObjectStyles.ContainsKey(node.Name))
+                    GlobalObjectStyles.Add(node.Name, entity);
+                else
+                    GlobalObjectStyles[node.Name] = entity;
+            }
+        }
+
+        public static Entity LoadObject(string name)
+        {
+            if (GlobalObjectStyles.ContainsKey(name))
+                return GlobalObjectStyles[name].Copy() as Entity;
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type type = assembly.GetType(name, false, true);
+                if (type != null)
+                    return Activator.CreateInstance(type, true) as Entity;
+            }
+            return null;
+        }
+
+
+#endif
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [ContentSerializer(FlattenContent = true, ElementName="Tileset")]
         public List<Tileset> _tilesets = new List<Tileset>();

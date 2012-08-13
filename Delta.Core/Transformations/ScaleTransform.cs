@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 
 namespace Delta.Transformations
 {
     internal class ScaleTransform : BaseTransform
     {
-        static Pool<ScaleTransform> _pool;
-
         Vector2 _startScale;
         Vector2 _goalScale;
-
-        static ScaleTransform()
-        {
-            _pool = new Pool<ScaleTransform>(100);
-        }
 
         public ScaleTransform() { }
 
         public static ScaleTransform Create(TransformableEntity entity, Vector2 goalScale, float duration)
         {
-            ScaleTransform transform = _pool.Fetch();
+            ScaleTransform transform = Pool.Acquire<ScaleTransform>();
             transform._entity = entity;
             transform._goalScale = goalScale;
             transform.Duration = duration;
             return transform;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            _startScale = Vector2.Zero;
+            _goalScale = Vector2.Zero;
+            base.Recycle(isReleasing);
         }
 
         public override void Begin()
@@ -47,15 +46,6 @@ namespace Delta.Transformations
         public override void End()
         {
             _entity.Scale = _goalScale;
-        }
-
-        public override void Recycle()
-        {
-            base.Recycle();
-            _startScale = Vector2.Zero;
-            _goalScale = Vector2.Zero;
-
-            _pool.Release(this);
         }
 
     }

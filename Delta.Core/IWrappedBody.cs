@@ -40,10 +40,11 @@ namespace Delta.Collision
         /// The shape is about to collide with another. Broadphase detection.
         /// </summary>
         //Func<CollisionShape, bool> BeforeCollision { get; set; }
+
         /// <summary>
         /// The shape is colliding with another. Narrowpahse detection.
         /// </summary>
-        Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
+        Func<IWrappedBody, Vector2, bool> Collision { get; set; }
 
         // temp
         void SetGroup(CollisionGroups group);

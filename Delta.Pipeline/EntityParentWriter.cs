@@ -7,15 +7,14 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace Delta
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [ContentTypeWriter]
+    [ContentTypeWriter, EditorBrowsable(EditorBrowsableState.Never)]
     public class EntityParentWriter<T> : ContentTypeWriter<EntityParent<T>> where T : Entity
     {
-        protected override void Write(ContentWriter output, EntityParent<T> value)
+        protected override void Write(ContentWriter output, EntityParent<T> existingInstance)
         {
-            output.WriteRawObject<Entity>(value as Entity);
+            output.WriteRawObject<Entity>(existingInstance as Entity);
             List<T> gameComponents = new List<T>();
-            foreach (var gameComponent in value.Children)
+            foreach (var gameComponent in existingInstance.Children)
                 gameComponents.Add(gameComponent);
             output.WriteObject<List<T>>(gameComponents);
         }

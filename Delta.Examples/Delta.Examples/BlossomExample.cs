@@ -12,7 +12,6 @@ using Delta.Examples.Entities;
 using Delta.Collision;
 using Delta.Graphics;
 using Delta.Tiled;
-using Delta.Structures;
 using Delta.UI.Controls;
 
 namespace Delta.Examples
@@ -60,6 +59,8 @@ namespace Delta.Examples
             base.Update(gameTime);
         }
 
+        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(ClearColor);
@@ -67,6 +68,14 @@ namespace Delta.Examples
 #if DEBUG
             Matrix view = G.World.Camera.View;
             Matrix projection = G.World.Camera.Projection;
+            stringBuilder.Clear();
+            foreach (var pool in Pool._pools)
+            {
+                stringBuilder.AppendLine(pool.ToString());
+            }
+            G.SpriteBatch.Begin();
+            G.SpriteBatch.DrawString(G.Font, stringBuilder, Vector2.One * 50, Color.White);
+            G.SpriteBatch.End();
             G.Collision.DrawDebug(ref view, ref projection);
             //PoolManager.DebugDraw();
             //G.World.DebugDraw();

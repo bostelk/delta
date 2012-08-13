@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Delta.Transformations;
-using Delta.Structures;
 using Delta.Collision;
 
 #if WINDOWS
@@ -394,18 +393,14 @@ namespace Delta
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        protected internal TransformableEntity()
+        public TransformableEntity()
             : base()
         {
             RenderColor = Color.White;
         }
 
-        /// <summary>
-        /// Recycles the <see cref="TransformableEntity"/> so it may be re-used.
-        /// </summary>
-        public override void Recycle()
+        protected override void Recycle(bool isReleasing)
         {
-            base.Recycle();
             RenderPosition = Vector2.Zero;
             RenderOrigin = Vector2.Zero;
             RenderRotation = 0.0f;
@@ -421,6 +416,7 @@ namespace Delta
             _size = Vector2.Zero;
             _tint = Color.White;
             _wrappedBody = null;
+            base.Recycle(isReleasing);
         }
 
 #if WINDOWS
@@ -629,6 +625,5 @@ namespace Delta
                 WrappedBody.RemoveFromSimulation();
             base.OnRemoved();
         }
-
     }
 }

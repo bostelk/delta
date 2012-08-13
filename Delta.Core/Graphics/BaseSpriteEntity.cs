@@ -55,7 +55,8 @@ namespace Delta.Graphics
                 if (_spriteSheetName != value)
                 {
                     _spriteSheetName = value;
-                    LoadSpriteSheet();
+                    if (HasInitialized)
+                        UpdateSpriteSheet();
                     OnPropertyChanged();
                 }
             }
@@ -124,9 +125,20 @@ namespace Delta.Graphics
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public BaseSpriteEntity()
+        protected BaseSpriteEntity()
             : base()
         { 
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            _spriteSheet = null;
+            _spriteSheetName = string.Empty;
+            _sourceRectangle = Rectangle.Empty;
+            _spriteEffects = SpriteEffects.None;
+            //IsOutlined = false;
+            //OutlineColor = Color.White;
+            base.Recycle(isReleasing);
         }
 
         /// <summary>
@@ -134,33 +146,8 @@ namespace Delta.Graphics
         /// </summary>
         protected override void LoadContent()
         {
-            LoadSpriteSheet();
+            UpdateSpriteSheet();
             base.LoadContent();
-        }
-        
-        /// <summary>
-        /// Loads the <see cref="SpriteSheet"/> of the <see cref="BaseSpriteEntity"/>.
-        /// </summary>
-        protected void LoadSpriteSheet()
-        {
-            if (!HasInitialized)
-                return;
-            if (!string.IsNullOrEmpty(_spriteSheetName))
-                SpriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
-        }
-
-        /// <summary>
-        /// Recycles the <see cref="BaseSpriteEntity"/> so it may be re-used.
-        /// </summary>
-        public override void Recycle()
-        {
-            base.Recycle();
-            _spriteSheet = null;
-            _spriteSheetName = string.Empty;
-            _sourceRectangle = Rectangle.Empty;
-            _spriteEffects = SpriteEffects.None;
-            //IsOutlined = false;
-            //OutlineColor = Color.White;
         }
 
 #if WINDOWS
@@ -213,6 +200,15 @@ namespace Delta.Graphics
             return base.SetValue(name, value);
         }
 #endif
+
+        /// <summary>
+        /// Updates the <see cref="SpriteSheet"/> of the <see cref="BaseSpriteEntity"/>.
+        /// </summary>
+        protected void UpdateSpriteSheet()
+        {
+            if (!string.IsNullOrEmpty(_spriteSheetName))
+                SpriteSheet = G.Content.Load<SpriteSheet>(_spriteSheetName);
+        }
 
         /// <summary>
         /// Updates the source <see cref="Rectangle"/> used when drawing the <see cref="BaseSpriteEntity"/>.

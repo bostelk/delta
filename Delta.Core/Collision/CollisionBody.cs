@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Delta.Collision;
 using Microsoft.Xna.Framework;
-using Delta.Structures;
 
 namespace Delta.Collision
 {
@@ -22,10 +21,8 @@ namespace Delta.Collision
     /// <summary>
     /// A Body that belongs in the CollisionWorld. Provides the detection of collisions between shapes.
     /// </summary>
-    public sealed class CollisionBody : ICollideable, IWrappedBody, IRecyclable
+    public sealed class CollisionBody : Poolable, ICollideable, IWrappedBody
     {
-        static Pool<CollisionBody> _pool;
-
         public object Owner { get; set; }
 
         public BroadphaseProxy BroadphaseProxy { get; set; }
@@ -150,7 +147,7 @@ namespace Delta.Collision
 
         public Func<IWrappedBody, bool> BeforeCollisionEvent { get; set; }
 
-        public Func<IWrappedBody, Vector2, bool> OnCollisionEvent { get; set; }
+        public Func<IWrappedBody, Vector2, bool> Collision { get; set; }
         
         // shortcut
         public static IWrappedBody CreateBody(CollisionShape shape)
@@ -165,14 +162,9 @@ namespace Delta.Collision
         }
         #endregion
 
-        static CollisionBody()
-        {
-            _pool = new Pool<CollisionBody>(200);
-        }
-
         public static CollisionBody Create(TransformableEntity entity, CollisionShape shape)
         {
-            CollisionBody collider = _pool.Fetch();
+            CollisionBody collider = Pool.Acquire<CollisionBody>();
             collider.Owner = entity;
             collider.Shape = shape;
             collider.OnCollision += collider.HandleOnCollision;
@@ -190,6 +182,21 @@ namespace Delta.Collision
         public CollisionBody() 
         {
             WorldTransform = Matrix3.Identity;
+        }
+
+        protected override void Recycle(bool isReleasing)
+        {
+            if (isReleasing)
+                BroadphaseProxy.Recycle();
+            WorldTransform = Matrix3.Identity;
+            RemoveNextUpdate = false;
+            Owner = null;
+            Shape = null;
+            BeforeCollision = null;
+            OnCollision = null;
+            AfterCollision = null;
+            OnSeparation = null;
+            base.Recycle(isReleasing);
         }
 
         public void AddToSimulation()
@@ -234,24 +241,9 @@ namespace Delta.Collision
 
         private bool HandleOnCollision(CollisionBody them, Vector2 normal)
         {
-            if (OnCollisionEvent != null)
-                return OnCollisionEvent(them as IWrappedBody, normal);
+            if (Collision != null)
+                return Collision(them as IWrappedBody, normal);
             return true;
-        }
-
-        public void Recycle()
-        {
-            BroadphaseProxy.Recycle();
-            WorldTransform = Matrix3.Identity;
-            RemoveNextUpdate = false;
-            Owner = null;
-            Shape = null;
-            BeforeCollision = null;
-            OnCollision = null;
-            AfterCollision = null;
-            OnSeparation = null;
-
-            _pool.Release(this);
         }
 
         public override int GetHashCode()
