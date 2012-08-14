@@ -326,6 +326,7 @@ namespace Delta.Graphics
         {
             if (_animation == null)
                 return;
+            _animationFrame = 0;
             base.Frame = _animation.Frames[_animationFrame] + _frameOffset;
             if ((AnimationOptions & AnimationOptions.StartOnRandomFrame) != 0)
                 _animationFrame = G.Random.Next(0, _animation.Frames.Count - 1);
