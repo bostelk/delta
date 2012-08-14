@@ -20,7 +20,7 @@ Features
 
 History
 =======
-Delta is the underlying library behind the game, *Blossom Tales*. It is the result of the need to replace
+Delta is the underlying library behind the game, [Blossom Tales](http://2headedgames.com/). It is the result of the need to replace
 the pre-existing library with a cleaner and more extendable one. It grew over the summer of 2012 from the
 collboration of Lucas and Kyle.
 
@@ -28,6 +28,6 @@ collboration of Lucas and Kyle.
 Contact
 =======
 If you have any questions or comments, then don't be afraid to give us a shout:  
-Kyle - <bostelk@gmail.com>  
+Kyle - <bostelk@gmail.com> or [@bostelk](http://twitter.com/bostelk)  
 Lucas - <lithiumtoast@live.com>  
 
