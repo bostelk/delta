@@ -7,15 +7,15 @@ only the components that suit your needs. If you make something cool, share it w
 
 Features
 ========
-Collision Engine; for finely-tuned movement.
-Entity based gameobject model.
-Create levels using Tiled tilemaps.
-Automaticly pack sprites.
-Object pooling to avoid GC hitches.
-Effects like blending, motion trails, and outlines.
-Numerous examples showing how each component may be used.
-Particles!
-Edit entities in-game live.
+*Collision Engine; for finely-tuned movement.
+*Entity based gameobject model.
+*Create levels using Tiled tilemaps.
+*Automaticly pack sprites.
+*Object pooling to avoid GC hitches.
+*Effects like blending, motion trails, and outlines.
+*Numerous examples showing how each component may be used.
+*Particles!
+*Edit entities in-game live.
 
 
 History
