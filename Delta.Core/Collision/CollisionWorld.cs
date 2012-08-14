@@ -135,7 +135,7 @@ namespace Delta.Collision
                     continue;
 
                 Matrix3 transform = col.WorldTransform;
-                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.Shape))
+                if ((CollisionGlobals.ViewFlags & DebugViewFlags.Shape) != 0)
                 {
                     Vector2[] transformedVerts = col.Shape.VerticesCopy;
                     for (int j = 0; j < transformedVerts.Length; j++)
@@ -143,7 +143,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawPolygon(transformedVerts, transformedVerts.Length, CollisionGlobals.ShapeColor);
                 }
 
-                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.Extents))
+                if ((CollisionGlobals.ViewFlags & DebugViewFlags.Extents) != 0)
                 {
                     if (col.Shape is Box)
                     {
@@ -162,7 +162,7 @@ namespace Delta.Collision
                     }
                 }
 
-                if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.AABB))
+                if ((CollisionGlobals.ViewFlags & DebugViewFlags.AABB) != 0)
                 {
                     AABB aabb;
                     col.Shape.CalculateAABB(ref transform, out aabb);
@@ -172,7 +172,7 @@ namespace Delta.Collision
                     G.PrimitiveBatch.DrawSegment(new Vector2(aabb.Min.X, aabb.Min.Y), new Vector2(aabb.Min.X, aabb.Max.Y), CollisionGlobals.BoundingColor);
                 }
             }
-            if (CollisionGlobals.ViewFlags.HasFlagFast(DebugViewFlags.CollisionResponse))
+            if ((CollisionGlobals.ViewFlags & DebugViewFlags.CollisionResponse) != 0)
             {
                 while (CollisionGlobals.Results.Count > 0)
                 {

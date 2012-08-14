@@ -165,7 +165,7 @@ namespace Delta
             }
             if (_flashDuration > _flashElapsed)
             {
-                Color temp = _flashColor.SetAlpha(_flashElapsed / _flashDuration);
+                Color temp = _flashColor *= _flashElapsed / _flashDuration;
                 spriteBatch.Draw(G.PixelTexture, G.ScreenArea, temp);
             }
         }

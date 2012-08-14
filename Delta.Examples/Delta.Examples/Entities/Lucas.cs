@@ -171,9 +171,9 @@ namespace Delta.Examples.Entities
             Vector2 direction = Velocity;
             direction.Normalize();
             if (_isLeftCooldown)
-                spriteBatch.DrawLine(Position, _rotation, 500, Color.DarkGreen.SetAlpha(HUD.LeftFillPercent), HUD.LeftFillPercent * 20);
+                spriteBatch.DrawLine(Position, _rotation, 500, Color.DarkGreen * HUD.LeftFillPercent, HUD.LeftFillPercent * 20);
             else if (_isRightCooldown)
-                spriteBatch.DrawLine(Position, _rotation, 500, Color.DarkGreen.SetAlpha(HUD.RightFillPercent), HUD.RightFillPercent * 20);
+                spriteBatch.DrawLine(Position, _rotation, 500, Color.DarkGreen * HUD.RightFillPercent, HUD.RightFillPercent * 20);
         }
 
     }

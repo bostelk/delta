@@ -53,8 +53,8 @@ namespace Delta.Examples.Entities
             Name = "GameHud";
             RightFillPercent = 0.0f;
             LeftFillPercent = 0.0f;
-            RightBarColor = new Color(56, 136, 216).SetAlpha(0.95f);
-            LeftBarColor = new Color(208, 48, 208).SetAlpha(0.95f);
+            RightBarColor = new Color(56, 136, 216) * 0.95f;
+            LeftBarColor = new Color(208, 48, 208) * 0.95f;
         }
 
         protected override void LoadContent()
@@ -70,10 +70,10 @@ namespace Delta.Examples.Entities
         {
             //spriteBatch.DrawRectangleOutline(new Rectangle((int)_leftPosition.X + 5, (int)(_leftPosition.Y + 2 + (1 - _leftFillPercent) * 60.0f), 8, (int)(60.0f * _leftFillPercent)), LeftBarColor.SetAlpha(Alpha), true);
             //spriteBatch.DrawRectangleOutline(new Rectangle((int)_rightPosition.X + 5, (int)(_rightPosition.Y + 2 + (1 - _rightFillPercent) * 60.0f), 8, (int)(60.0f * _rightFillPercent)), RightBarColor.SetAlpha(Alpha), true);
-            spriteBatch.Draw(_healthBar, _leftPosition, Color.White.SetAlpha(Alpha));
-            spriteBatch.Draw(_ammoBar, _rightPosition, Color.White.SetAlpha(Alpha));
-            spriteBatch.DrawString(G.Font, (int)(_leftFillPercent * 100.0f) + "%", new Vector2(_leftPosition.X + 10, _leftPosition.Y + 2 + 30), Color.White.SetAlpha(Alpha), TextAlignment.Center);
-            spriteBatch.DrawString(G.Font, (int)(_rightFillPercent * 100.0f) + "%", new Vector2(_rightPosition.X + 10, _rightPosition.Y + 2 + 30), Color.White.SetAlpha(Alpha), TextAlignment.Center);
+            spriteBatch.Draw(_healthBar, _leftPosition, Color.White * Alpha);
+            spriteBatch.Draw(_ammoBar, _rightPosition, Color.White * Alpha);
+            spriteBatch.DrawString(G.Font, (int)(_leftFillPercent * 100.0f) + "%", new Vector2(_leftPosition.X + 10, _leftPosition.Y + 2 + 30), Color.White * Alpha, TextAlignment.Center);
+            spriteBatch.DrawString(G.Font, (int)(_rightFillPercent * 100.0f) + "%", new Vector2(_rightPosition.X + 10, _rightPosition.Y + 2 + 30), Color.White * Alpha, TextAlignment.Center);
         }
         
     }

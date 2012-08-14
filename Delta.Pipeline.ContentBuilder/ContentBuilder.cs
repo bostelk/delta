@@ -31,7 +31,7 @@ namespace Delta
             if (fileInfo.Extension != ".contentproj")
                 throw new NotSupportedException(string.Format("The file '{0}' is not a XNA content project.", _contentProjectFile));
             if (!fileInfo.Exists)
-                throw new FileNotFoundException(String.Format("The file '{0}' does not exist.", _contentProjectFile, _contentProjectFile);
+                throw new FileNotFoundException(String.Format("The file '{0}' does not exist.", _contentProjectFile, _contentProjectFile));
             GraphicsProfile = graphicsProfile;
             TargetPlatform = targetPlatform;
             CompressContent = compressContent;
