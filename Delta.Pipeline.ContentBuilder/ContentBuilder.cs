@@ -12,6 +12,8 @@ namespace Delta
 {
     public class ContentBuilder
     {
+        static Dictionary<string, string> _globalProperties = new Dictionary<string, string>();
+
         string _contentProjectFile = string.Empty;
 
         public string OutputPath { get; set; }
@@ -21,21 +23,6 @@ namespace Delta
         public TargetPlatform TargetPlatform { get; set; }
         public bool CompressContent { get; set; }
         public bool RebuildContent { get; set; }
-
-        //TODO: Have fancy smuff happen with targets file.
-        //public static string DebuggingTargets
-        //{
-        //    get
-        //    {
-        //        if (String.IsNullOrEmpty(SingleItem))
-        //        {
-        //            return String.Empty;
-        //        }
-
-        //        string targetsPath = @"Targets\Debugging.targets";
-        //        return Path.Combine(BuildToolDirectory, targetsPath);
-        //    }
-        //}
 
         public ContentBuilder(string contentProjectFile, GraphicsProfile graphicsProfile = GraphicsProfile.HiDef, TargetPlatform targetPlatform = TargetPlatform.Windows, bool compressContent = true, LoggerVerbosity loggerVerbosity = LoggerVerbosity.Normal, bool rebuildContent = false)
         {
@@ -50,20 +37,28 @@ namespace Delta
             CompressContent = compressContent;
             LoggerVerbosity = loggerVerbosity;
             RebuildContent = rebuildContent;
+            if (!_globalProperties.ContainsKey("XnaProfile"))
+                _globalProperties.Add("XnaProfile", GraphicsProfile.ToString());
+            if (!_globalProperties.ContainsKey("XNAContentPipelineTargetPlatform"))
+                _globalProperties.Add("XNAContentPipelineTargetPlatform", TargetPlatform.ToString());
+            if (!_globalProperties.ContainsKey("XnaCompressContent"))
+                _globalProperties.Add("XnaCompressContent", CompressContent.ToString());
+            if (!_globalProperties.ContainsKey("OutputhPath"))
+                _globalProperties.Add("OutputPath", OutputPath);
+            if (!_globalProperties.ContainsKey("ContentRootDirectory"))
+                _globalProperties.Add("ContentRootDirectory", ContentRootDirectory);
         }
 
         public bool Build()
         {
             string originalWorkingDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Path.GetDirectoryName(_contentProjectFile);
-            var globalProperties = new Dictionary<string, string>();
-            globalProperties.Add("XnaProfile", GraphicsProfile.ToString());
-            globalProperties.Add("XNAContentPipelineTargetPlatform", TargetPlatform.ToString());
-            globalProperties.Add("XnaCompressContent", CompressContent.ToString());
-            globalProperties.Add("OutputPath", OutputPath);
-            globalProperties.Add("ContentRootDirectory", ContentRootDirectory);
-            //globalProperties.Add("CustomAfterMicrosoftCommonTargets", DebuggingTargets);
-            var project = ProjectCollection.GlobalProjectCollection.LoadProject(_contentProjectFile, globalProperties, "4.0");
+            _globalProperties["XnaProfile"] = GraphicsProfile.ToString();
+            _globalProperties["XNAContentPipelineTargetPlatform"] = TargetPlatform.ToString();
+            _globalProperties["XnaCompressContent"] = CompressContent.ToString();
+            _globalProperties["OutputPath"] = OutputPath;
+            _globalProperties["ContentRootDirectory"] = ContentRootDirectory;
+            var project = ProjectCollection.GlobalProjectCollection.LoadProject(_contentProjectFile, _globalProperties, "4.0");
             ConsoleLogger logger = new ConsoleLogger(LoggerVerbosity);
             bool buildSucceeded = false;
             if (!RebuildContent)
